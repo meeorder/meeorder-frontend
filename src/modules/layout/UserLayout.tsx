@@ -2,21 +2,21 @@ import WireFrame from "@/modules/Mock/components/WireFrame";
 import styled from "@emotion/styled";
 
 type UserLayoutProps = {
-  topNavNode?: React.ReactNode;
   mainNode?: React.ReactNode;
-  bottomNavNode?: React.ReactNode;
 };
 
 const UserLayout: React.FC<UserLayoutProps> = ({
-  topNavNode = <WireFrame contentNode="Top Nav" cardColor="blue" />,
   mainNode = <WireFrame contentNode="Main" cardColor="red" height={"100vh"} />,
-  bottomNavNode = <WireFrame contentNode="Bottom Nav" cardColor="purple" />,
 }) => {
   return (
     <UserLayoutContainer>
-      <UserTopNav>{topNavNode}</UserTopNav>
+      <UserTopNavContainer>
+        <WireFrame contentNode="TopNav" cardColor="green" height={"64px"} />
+      </UserTopNavContainer>
       <UserMain>{mainNode}</UserMain>
-      <UserBottomNav>{bottomNavNode}</UserBottomNav>
+      <UserBottomNavContainer>
+        <WireFrame contentNode="BottomNav" cardColor="blue" height={"64px"} />
+      </UserBottomNavContainer>
     </UserLayoutContainer>
   );
 };
@@ -29,7 +29,7 @@ const UserLayoutContainer = styled.div`
   margin: 0 auto;
 `;
 
-const UserTopNav = styled.nav`
+const UserTopNavContainer = styled.nav`
   position: sticky;
   top: 0;
   z-index: 1;
@@ -40,7 +40,7 @@ const UserTopNav = styled.nav`
 
 const UserMain = styled.main``;
 
-const UserBottomNav = styled.nav`
+const UserBottomNavContainer = styled.nav`
   position: sticky;
   bottom: 0;
   z-index: 1;
