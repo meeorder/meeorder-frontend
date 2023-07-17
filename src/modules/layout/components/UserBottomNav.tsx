@@ -74,7 +74,7 @@ const AutoIcon: React.FC<AutoIconProps> = ({
   matchState,
 }) => {
   const {
-    token: { colorPrimary, colorPrimaryBg },
+    token: { colorPrimary },
   } = theme.useToken();
 
   console.log("matchState", matchState);

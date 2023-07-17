@@ -1,5 +1,5 @@
 import UserBottomNav from "@/modules/layout/components/UserBottomNav";
-import WireFrame from "@/modules/mock/components/WireFrame";
+import WireFrame from "@/modules/mocks/components/WireFrame";
 import styled from "@emotion/styled";
 
 type UserLayoutProps = {
