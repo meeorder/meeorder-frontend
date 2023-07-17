@@ -1,8 +1,8 @@
 import AppLayout from "@/modules/layout/AppLayout";
+import { type LayoutType } from "@/modules/layout/types";
+import { Button, Typography } from "antd";
 import Head from "next/head";
 import { useState } from "react";
-import { Button, Typography } from "antd";
-import { type LayoutType } from "@/modules/layout/types";
 
 export default function Home() {
   const [layoutType, setLayoutType] = useState<LayoutType>("user");
