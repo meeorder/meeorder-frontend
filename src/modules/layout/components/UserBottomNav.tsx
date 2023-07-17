@@ -9,7 +9,7 @@ const UserBottomNav = () => {
   const [selected, setSelected] = useState<AllPath>(home.path);
 
   useEffect(() => {
-    console.log("selected", selected);
+    console.log("selected page: ", selected);
   }, [selected]);
 
   return (
@@ -19,41 +19,17 @@ const UserBottomNav = () => {
         setSelected(value as AllPath);
       }}
       block
-      options={[
-        {
-          label: (
-            <AutoIcon
-              Component={home.Icon}
-              label={home.label}
-              matchKey={home.path}
-              matchState={selected}
-            />
-          ),
-          value: home.path,
-        },
-        {
-          label: (
-            <AutoIcon
-              Component={basket.Icon}
-              label={basket.label}
-              matchKey={basket.path}
-              matchState={selected}
-            />
-          ),
-          value: basket.path,
-        },
-        {
-          label: (
-            <AutoIcon
-              Component={orders.Icon}
-              label={orders.label}
-              matchKey={orders.path}
-              matchState={selected}
-            />
-          ),
-          value: orders.path,
-        },
-      ]}
+      options={[home, basket, orders].map((page) => ({
+        label: (
+          <AutoIcon
+            Component={page.Icon}
+            label={page.label}
+            matchKey={page.path}
+            matchState={selected}
+          />
+        ),
+        value: page.path,
+      }))}
     />
   );
 };
@@ -77,20 +53,19 @@ const AutoIcon: React.FC<AutoIconProps> = ({
     token: { colorPrimary },
   } = theme.useToken();
 
-  console.log("matchState", matchState);
-  console.log("key", matchKey);
-  console.log("colorPrimary", colorPrimary);
+  const isMatch = matchState === matchKey;
+
   return (
     <IconContainer>
       <Component
         key={matchKey}
         size={32}
-        fill={matchState === matchKey ? colorPrimary : undefined}
-        weight={matchState === matchKey ? "fill" : undefined}
+        fill={isMatch ? colorPrimary : undefined}
+        weight={isMatch ? "fill" : undefined}
       />
       <Typography.Text
         style={{
-          color: matchState === matchKey ? colorPrimary : undefined,
+          color: isMatch ? colorPrimary : undefined,
         }}
       >
         {label}
@@ -110,6 +85,7 @@ const StyledSegmented = styled(Segmented)`
     border: none;
   }
 `;
+
 const IconContainer = styled.div`
   display: flex;
   flex-direction: column;
