@@ -21,6 +21,7 @@ export default function Home() {
             height: "100%",
             minHeight: "100vh",
             overflow: "hidden",
+            backgroundColor: "#69C0FF",
           }}
           size="large"
           type="primary"
