@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import WireFrame from "@/modules/mock/components/WireFrame";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -6,8 +6,8 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Button, theme } from "antd";
-import WireFrame from "@/modules/Mock/components/WireFrame";
+import { Button, Layout, Menu, theme } from "antd";
+import React, { useState } from "react";
 
 type AdminLayoutProps = {
   mainNode?: React.ReactNode;

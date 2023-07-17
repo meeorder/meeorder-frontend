@@ -1,4 +1,5 @@
-import WireFrame from "@/modules/Mock/components/WireFrame";
+import UserBottomNav from "@/modules/layout/components/UserBottomNav";
+import WireFrame from "@/modules/mock/components/WireFrame";
 import styled from "@emotion/styled";
 
 type UserLayoutProps = {
@@ -15,7 +16,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
       </UserTopNavContainer>
       <UserMain>{mainNode}</UserMain>
       <UserBottomNavContainer>
-        <WireFrame contentNode="BottomNav" cardColor="blue" height={"64px"} />
+        <UserBottomNav />
       </UserBottomNavContainer>
     </UserLayoutContainer>
   );

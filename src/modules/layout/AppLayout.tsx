@@ -1,6 +1,6 @@
 import AdminLayout from "@/modules/layout/AdminLayout";
 import UserLayout from "@/modules/layout/UserLayout";
-import { type LayoutType } from "@/modules/layout/type";
+import { type LayoutType } from "@/modules/layout/types";
 import React from "react";
 
 type AppLayoutProps = {
