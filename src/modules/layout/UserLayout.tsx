@@ -1,4 +1,5 @@
 import UserBottomNav from "@/modules/layout/components/UserBottomNav";
+import UserTopNav from "@/modules/layout/components/UserTopNav";
 import WireFrame from "@/modules/mock/components/WireFrame";
 import styled from "@emotion/styled";
 
@@ -12,7 +13,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   return (
     <UserLayoutContainer>
       <UserTopNavContainer>
-        <WireFrame contentNode="TopNav" cardColor="green" height={"64px"} />
+        <UserTopNav />
       </UserTopNavContainer>
       <UserMain>{mainNode}</UserMain>
       <UserBottomNavContainer>
@@ -35,8 +36,12 @@ const UserTopNavContainer = styled.nav`
   top: 0;
   z-index: 1;
   width: 100%;
-  background: inherit;
   height: 64px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 `;
 
 const UserMain = styled.main``;
