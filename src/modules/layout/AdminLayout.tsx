@@ -1,4 +1,4 @@
-import WireFrame from "@/modules/mocks/components/WireFrame";
+import WireFrame from "@/modules/mock/components/WireFrame";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
