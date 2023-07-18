@@ -3,18 +3,18 @@ import AppLayout from "@/modules/layout/AppLayout";
 import WireFrame from "@/modules/mock/components/WireFrame";
 import Head from "next/head";
 
-export default function Home() {
+export default function Orders() {
   return (
     <>
       <Head>
-        <title>MeeOrder | Menu</title>
+        <title>MeeOrder | Orders</title>
         <meta name="description" content="MeeOrder Application" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AppLayout layoutType="user" nowPageId={pages.home.id}>
+      <AppLayout layoutType="user" nowPageId={pages.orders.id}>
         <WireFrame
-          contentNode="Menu"
-          cardColor="red"
+          contentNode="Orders"
+          cardColor="blue"
           height={"calc(100vh - 64px - 64px)"}
         />
       </AppLayout>

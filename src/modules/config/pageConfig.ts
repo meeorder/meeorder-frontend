@@ -37,4 +37,6 @@ export const pages = {
   },
 } as const satisfies Record<string, PageMetaData>;
 
-export type AllPath = (typeof pages)[keyof typeof pages]["path"];
+export type PagePath = (typeof pages)[keyof typeof pages]["path"];
+
+export type PageId = keyof typeof pages;

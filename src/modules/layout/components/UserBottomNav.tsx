@@ -1,36 +1,45 @@
-import { pages, type AllPath } from "@/modules/config/pageConfig";
+import { pages, type PageId } from "@/modules/config/pageConfig";
 import styled from "@emotion/styled";
 import { type Icon } from "@phosphor-icons/react";
-import { Segmented, Typography, theme } from "antd";
-import { useEffect, useState } from "react";
+import { ConfigProvider, Segmented, Typography, theme } from "antd";
+import Link from "next/link";
 
-const UserBottomNav = () => {
+type UserBottomNavProps = {
+  nowPageId: PageId;
+};
+
+const UserBottomNav: React.FC<UserBottomNavProps> = ({ nowPageId }) => {
   const { home, basket, orders } = pages;
-  const [selected, setSelected] = useState<AllPath>(home.path);
-
-  useEffect(() => {
-    console.log("selected page: ", selected);
-  }, [selected]);
 
   return (
-    <StyledSegmented
-      defaultValue={selected}
-      onChange={(value) => {
-        setSelected(value as AllPath);
+    <ConfigProvider
+      theme={{
+        components: {
+          Segmented: {
+            itemSelectedBg: "#ffffff",
+            itemActiveBg: "#ffffff",
+            colorBgLayout: "#ffffff",
+            boxShadowTertiary: "none",
+          },
+        },
       }}
-      block
-      options={[home, basket, orders].map((page) => ({
-        label: (
-          <AutoIcon
-            Component={page.Icon}
-            label={page.label}
-            matchKey={page.path}
-            matchState={selected}
-          />
-        ),
-        value: page.path,
-      }))}
-    />
+    >
+      <StyledSegmented
+        defaultValue={nowPageId}
+        block
+        options={[home, basket, orders].map((page) => ({
+          label: (
+            <AutoIcon
+              Component={page.Icon}
+              label={page.label}
+              matchPageId={page.id}
+              nowPageId={nowPageId}
+            />
+          ),
+          value: page.id,
+        }))}
+      />
+    </ConfigProvider>
   );
 };
 
@@ -39,26 +48,26 @@ export default UserBottomNav;
 type AutoIconProps = {
   Component: Icon;
   label: string;
-  matchKey?: string;
-  matchState?: string;
+  matchPageId: PageId;
+  nowPageId: PageId;
 };
 
 const AutoIcon: React.FC<AutoIconProps> = ({
   Component,
   label,
-  matchKey,
-  matchState,
+  matchPageId,
+  nowPageId,
 }) => {
   const {
     token: { colorPrimary },
   } = theme.useToken();
 
-  const isMatch = matchState === matchKey;
+  const isMatch = nowPageId === matchPageId;
 
   return (
-    <IconContainer>
+    <IconContainer href={pages?.[matchPageId]?.path}>
       <Component
-        key={matchKey}
+        key={matchPageId}
         size={32}
         fill={isMatch ? colorPrimary : undefined}
         weight={isMatch ? "fill" : undefined}
@@ -75,22 +84,23 @@ const AutoIcon: React.FC<AutoIconProps> = ({
 };
 
 const StyledSegmented = styled(Segmented)`
-  height: 100%;
-  border: none;
-  border-radius: 0;
-
-  .ant-segmented-item-label {
+  &,
+  .ant-segmented-item-label,
+  .ant-segmented-item {
     width: 100%;
     height: 100%;
     border: none;
+    border-radius: 0;
+    padding: 0;
   }
 `;
 
-const IconContainer = styled.div`
+const IconContainer = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
+  padding: 0;
 `;
