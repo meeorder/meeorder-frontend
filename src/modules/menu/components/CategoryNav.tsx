@@ -30,11 +30,11 @@ const CategoryNav: React.FC<CategoryNavProps> = ({ categories }) => {
             replace={true}
             offsetTop={64}
             targetOffset={64 + 48}
-            items={categories.map((data) => {
+            items={categories.map((category) => {
               return {
-                title: data.name,
-                key: data.key,
-                href: `#${data.key}`,
+                title: category.name,
+                key: category.key,
+                href: `#${category.key}`,
               };
             })}
           />
