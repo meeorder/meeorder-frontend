@@ -1,3 +1,4 @@
+import { type PageId } from "@/modules/config/pageConfig";
 import UserBottomNav from "@/modules/layout/components/UserBottomNav";
 import UserTopNav from "@/modules/layout/components/UserTopNav";
 import WireFrame from "@/modules/mock/components/WireFrame";
@@ -5,19 +6,21 @@ import styled from "@emotion/styled";
 
 type UserLayoutProps = {
   mainNode?: React.ReactNode;
+  currentPageId: PageId;
 };
 
 const UserLayout: React.FC<UserLayoutProps> = ({
   mainNode = <WireFrame contentNode="Main" cardColor="red" height={"100vh"} />,
+  currentPageId,
 }) => {
   return (
     <UserLayoutContainer>
       <UserTopNavContainer>
         <UserTopNav />
       </UserTopNavContainer>
-      <UserMain>{mainNode}</UserMain>
+      <UserMainContainer>{mainNode}</UserMainContainer>
       <UserBottomNavContainer>
-        <UserBottomNav />
+        <UserBottomNav currentPageId={currentPageId} />
       </UserBottomNavContainer>
     </UserLayoutContainer>
   );
@@ -44,7 +47,9 @@ const UserTopNavContainer = styled.nav`
   overflow: hidden;
 `;
 
-const UserMain = styled.main``;
+const UserMainContainer = styled.main`
+  height: calc(100vh - 64px - 64px);
+`;
 
 const UserBottomNavContainer = styled.nav`
   position: sticky;
