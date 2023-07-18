@@ -5,10 +5,10 @@ import { ConfigProvider, Segmented, Typography, theme } from "antd";
 import Link from "next/link";
 
 type UserBottomNavProps = {
-  nowPageId: PageId;
+  currentPageId: PageId;
 };
 
-const UserBottomNav: React.FC<UserBottomNavProps> = ({ nowPageId }) => {
+const UserBottomNav: React.FC<UserBottomNavProps> = ({ currentPageId }) => {
   const { home, basket, orders } = pages;
 
   return (
@@ -25,15 +25,15 @@ const UserBottomNav: React.FC<UserBottomNavProps> = ({ nowPageId }) => {
       }}
     >
       <StyledSegmented
-        defaultValue={nowPageId}
+        defaultValue={currentPageId}
         block
         options={[home, basket, orders].map((page) => ({
           label: (
             <AutoIcon
               Component={page.Icon}
               label={page.label}
-              matchPageId={page.id}
-              nowPageId={nowPageId}
+              iconId={page.id}
+              currentPageId={currentPageId}
             />
           ),
           value: page.id,
@@ -48,26 +48,26 @@ export default UserBottomNav;
 type AutoIconProps = {
   Component: Icon;
   label: string;
-  matchPageId: PageId;
-  nowPageId: PageId;
+  iconId: PageId;
+  currentPageId: PageId;
 };
 
 const AutoIcon: React.FC<AutoIconProps> = ({
   Component,
   label,
-  matchPageId,
-  nowPageId,
+  iconId,
+  currentPageId: currentPageId,
 }) => {
   const {
     token: { colorPrimary },
   } = theme.useToken();
 
-  const isMatch = nowPageId === matchPageId;
+  const isMatch = currentPageId === iconId;
 
   return (
-    <IconContainer href={pages?.[matchPageId]?.path}>
+    <IconContainer href={pages?.[iconId]?.path}>
       <Component
-        key={matchPageId}
+        key={iconId}
         size={32}
         fill={isMatch ? colorPrimary : undefined}
         weight={isMatch ? "fill" : undefined}

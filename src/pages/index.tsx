@@ -11,7 +11,7 @@ export default function Home() {
         <meta name="description" content="MeeOrder Application" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AppLayout layoutType="user" nowPageId={pages.home.id}>
+      <AppLayout layoutType="user" currentPageId={pages.home.id}>
         <WireFrame
           contentNode="Menu"
           cardColor="red"

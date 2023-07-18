@@ -6,12 +6,12 @@ import styled from "@emotion/styled";
 
 type UserLayoutProps = {
   mainNode?: React.ReactNode;
-  nowPageId: PageId;
+  currentPageId: PageId;
 };
 
 const UserLayout: React.FC<UserLayoutProps> = ({
   mainNode = <WireFrame contentNode="Main" cardColor="red" height={"100vh"} />,
-  nowPageId,
+  currentPageId,
 }) => {
   return (
     <UserLayoutContainer>
@@ -20,7 +20,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
       </UserTopNavContainer>
       <UserMainContainer>{mainNode}</UserMainContainer>
       <UserBottomNavContainer>
-        <UserBottomNav nowPageId={nowPageId} />
+        <UserBottomNav currentPageId={currentPageId} />
       </UserBottomNavContainer>
     </UserLayoutContainer>
   );

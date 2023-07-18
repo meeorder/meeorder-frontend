@@ -11,7 +11,7 @@ export default function Basket() {
         <meta name="description" content="MeeOrder Application" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AppLayout layoutType="user" nowPageId={pages.basket.id}>
+      <AppLayout layoutType="user" currentPageId={pages.basket.id}>
         <WireFrame
           contentNode="Basket"
           cardColor="green"

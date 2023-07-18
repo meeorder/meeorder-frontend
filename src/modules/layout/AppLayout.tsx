@@ -6,22 +6,22 @@ import React from "react";
 
 type AppLayoutProps = {
   layoutType: LayoutType;
-  nowPageId: PageId;
+  currentPageId: PageId;
   children?: React.ReactNode;
 };
 
 const AppLayout: React.FC<AppLayoutProps> = ({
   layoutType = "user",
-  nowPageId,
+  currentPageId,
   children,
 }) => {
   switch (layoutType) {
     case "admin":
       return <AdminLayout mainNode={children} />;
     case "user":
-      return <UserLayout mainNode={children} nowPageId={nowPageId} />;
+      return <UserLayout mainNode={children} currentPageId={currentPageId} />;
     default:
-      return <UserLayout mainNode={children} nowPageId={nowPageId} />;
+      return <UserLayout mainNode={children} currentPageId={currentPageId} />;
   }
 };
 
