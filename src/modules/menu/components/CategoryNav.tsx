@@ -4,7 +4,7 @@ import { MagnifyingGlass } from "@phosphor-icons/react";
 import { Anchor, Button, ConfigProvider } from "antd";
 
 type CategoryNavProps = {
-  categories: Category[];
+  categories: readonly Category[];
 };
 
 const CategoryNav: React.FC<CategoryNavProps> = ({ categories }) => {
@@ -33,8 +33,8 @@ const CategoryNav: React.FC<CategoryNavProps> = ({ categories }) => {
             items={categories.map((category) => {
               return {
                 title: category.name,
-                key: category.key,
-                href: `#${category.key}`,
+                key: category.id,
+                href: `#${category.id}`,
               };
             })}
           />
