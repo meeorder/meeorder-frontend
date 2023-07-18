@@ -5,7 +5,7 @@ const RecommendedCategory: React.FC<CategoryProps> = ({ foods, category }) => {
   return (
     <>
       <Card
-        title={category.name}
+        title={category?.name}
         id={category?.id}
         style={{
           scrollMarginTop: "112px", // very important for anchor to work
