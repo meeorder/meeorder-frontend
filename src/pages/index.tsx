@@ -1,8 +1,9 @@
 import { pages } from "@/modules/config/pageConfig";
 import AppLayout from "@/modules/layout/AppLayout";
+import Category from "@/modules/menu/components/Category";
 import CategoryNav from "@/modules/menu/components/CategoryNav";
 import { categories } from "@/modules/mock/categories";
-import WireFrame from "@/modules/mock/components/WireFrame";
+import { foods } from "@/modules/mock/foods";
 import Head from "next/head";
 
 export default function Home() {
@@ -15,18 +16,10 @@ export default function Home() {
       </Head>
       <AppLayout layoutType="user" currentPageId={pages.home.id}>
         <CategoryNav categories={categories} />
-        {categories.map((category, idx) => {
+
+        {categories.map((category) => {
           return (
-            <WireFrame
-              style={{
-                scrollMarginTop: "112px",
-              }}
-              id={category.key}
-              key={category.key}
-              contentNode={category.name + " menu"}
-              cardColor={`hsl(${idx * 50 + 50}, 100%, 30%)`}
-              height={"calc(100vh - 110px - 64px)"}
-            />
+            <Category key={category?.id} category={category} foods={foods} />
           );
         })}
       </AppLayout>

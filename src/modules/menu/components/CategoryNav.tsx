@@ -33,8 +33,8 @@ const CategoryNav: React.FC<CategoryNavProps> = ({ categories }) => {
             items={categories.map((category) => {
               return {
                 title: category.name,
-                key: category.key,
-                href: `#${category.key}`,
+                key: category.id,
+                href: `#${category.id}`,
               };
             })}
           />
