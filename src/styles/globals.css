@@ -2,8 +2,19 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    Fira Sans,
+    Droid Sans,
+    Helvetica Neue,
+    sans-serif;
+  background-color: gray;
 }
 
 a {
@@ -16,12 +27,14 @@ a {
 }
 
 /* Works on Firefox */
+
 * {
   scrollbar-width: thin;
   scrollbar-color: blue orange;
 }
 
 /* Works on Chrome, Edge, and Safari */
+
 *::-webkit-scrollbar {
   width: 12px;
 }
