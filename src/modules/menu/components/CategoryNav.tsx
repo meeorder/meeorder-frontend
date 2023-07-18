@@ -4,7 +4,7 @@ import { MagnifyingGlass } from "@phosphor-icons/react";
 import { Anchor, Button, ConfigProvider } from "antd";
 
 type CategoryNavProps = {
-  categories: readonly Category[];
+  categories: Category[];
 };
 
 const CategoryNav: React.FC<CategoryNavProps> = ({ categories }) => {

@@ -14,7 +14,7 @@ const Category: React.FC<CategoryProps> = ({ category, foods }) => {
       return <RecommendedCategory category={category} foods={foods} />;
     default:
       return (
-        <SimpleCategory category={category} foods={[...foods, ...foods]} />
+        <SimpleCategory category={category} foods={[...foods, ...foods]} /> // just to make the list longer
       );
   }
 };

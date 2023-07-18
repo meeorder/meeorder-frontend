@@ -3,13 +3,13 @@ export type Category = {
   id: string;
 };
 
-export const categories: readonly Category[] = [
+export const categories: Category[] = [
   { name: "Recommended", id: "recommended" },
   { name: "On Sale", id: "on-sale" },
   { name: "Drinks", id: "drinks" },
   { name: "Sour lover", id: "sour-lover" },
   { name: "Spice up!", id: "spice-up" },
   { name: "Sweet", id: "sweet-tooth" },
-] as const;
+];
 
 export const RECOMMEND_CATEGORY_ID = "recommended";
