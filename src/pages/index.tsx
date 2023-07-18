@@ -1,5 +1,6 @@
 import { pages } from "@/modules/config/pageConfig";
 import AppLayout from "@/modules/layout/AppLayout";
+import CategoryNav from "@/modules/menu/components/CategoryNav";
 import WireFrame from "@/modules/mock/components/WireFrame";
 import Head from "next/head";
 
@@ -12,10 +13,16 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppLayout layoutType="user" currentPageId={pages.home.id}>
+        <CategoryNav />
         <WireFrame
           contentNode="Menu"
           cardColor="red"
-          height={"calc(100vh - 64px - 64px)"}
+          height={"calc(100vh - 110px - 64px)"}
+        />
+        <WireFrame
+          contentNode="Menu"
+          cardColor="red"
+          height={"calc(100vh - 110px - 64px)"}
         />
       </AppLayout>
     </>
