@@ -32,6 +32,7 @@ const UserLayoutContainer = styled.div`
   min-height: 100vh;
   max-width: 500px;
   margin: 0 auto;
+  background-color: white;
 `;
 
 const UserTopNavContainer = styled.nav`
@@ -47,9 +48,7 @@ const UserTopNavContainer = styled.nav`
   overflow: hidden;
 `;
 
-const UserMainContainer = styled.main`
-  height: calc(100vh - 64px - 64px);
-`;
+const UserMainContainer = styled.main``;
 
 const UserBottomNavContainer = styled.nav`
   position: sticky;

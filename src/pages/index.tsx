@@ -1,5 +1,7 @@
 import { pages } from "@/modules/config/pageConfig";
 import AppLayout from "@/modules/layout/AppLayout";
+import CategoryNav from "@/modules/menu/components/CategoryNav";
+import { categories } from "@/modules/mock/categories";
 import WireFrame from "@/modules/mock/components/WireFrame";
 import Head from "next/head";
 
@@ -12,11 +14,21 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppLayout layoutType="user" currentPageId={pages.home.id}>
-        <WireFrame
-          contentNode="Menu"
-          cardColor="red"
-          height={"calc(100vh - 64px - 64px)"}
-        />
+        <CategoryNav categories={categories} />
+        {categories.map((category, idx) => {
+          return (
+            <WireFrame
+              style={{
+                scrollMarginTop: "112px",
+              }}
+              id={category.key}
+              key={category.key}
+              contentNode={category.name + " menu"}
+              cardColor={`hsl(${idx * 50 + 50}, 100%, 30%)`}
+              height={"calc(100vh - 110px - 64px)"}
+            />
+          );
+        })}
       </AppLayout>
     </>
   );

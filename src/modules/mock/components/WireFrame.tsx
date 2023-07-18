@@ -6,6 +6,8 @@ type WireFrameProps = {
   cardColor?: React.CSSProperties["color"];
   width?: React.CSSProperties["width"];
   height?: React.CSSProperties["height"];
+  id?: string;
+  style?: React.CSSProperties;
 };
 
 const WireFrame: React.FC<WireFrameProps> = ({
@@ -13,9 +15,17 @@ const WireFrame: React.FC<WireFrameProps> = ({
   cardColor = "#ff92dc",
   width,
   height,
+  id,
+  style,
 }) => {
   return (
-    <StyledCard cardColor={cardColor} height={height} width={width}>
+    <StyledCard
+      cardColor={cardColor}
+      height={height}
+      width={width}
+      id={id}
+      style={style}
+    >
       {contentNode}
     </StyledCard>
   );
