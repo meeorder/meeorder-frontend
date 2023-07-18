@@ -1,42 +1,45 @@
+import { type Category } from "@/modules/mock/categories";
 import styled from "@emotion/styled";
 import { MagnifyingGlass } from "@phosphor-icons/react";
-import { Button, Tabs } from "antd";
-import { useEffect, useState } from "react";
+import { Anchor, Button, ConfigProvider } from "antd";
 
-const CategoryNav = () => {
-  const [activeTab, setActiveTab] = useState("Recommend");
+type CategoryNavProps = {
+  categories: Category[];
+};
 
-  useEffect(() => {
-    console.log(activeTab);
-  }, [activeTab]);
-
-  const category = [
-    { name: "Recommend" },
-    { name: "On Sale" },
-    { name: "Drinks" },
-    { name: "Sour lover" },
-    { name: "Spice up!" },
-  ];
-
+const CategoryNav: React.FC<CategoryNavProps> = ({ categories }) => {
   return (
     <CategoryNavContainer>
       <StyledButton
         shape="circle"
         icon={<MagnifyingGlass width={14} height={14} />}
       />
-      <TabsContainer>
-        <StyledTabs
-          onTabClick={(key) => setActiveTab(key)}
-          tabBarGutter={20}
-          tabPosition="top"
-          items={category.map((data) => {
-            return {
-              label: data.name,
-              key: data.name,
-            };
-          })}
-        />
-      </TabsContainer>
+
+      <AnchorContainer>
+        <ConfigProvider
+          theme={{
+            components: {
+              Anchor: {
+                linkPaddingInlineStart: 40,
+              },
+            },
+          }}
+        >
+          <StyledAnchor
+            direction="horizontal"
+            replace={true}
+            offsetTop={64}
+            targetOffset={64 + 48}
+            items={categories.map((data) => {
+              return {
+                title: data.name,
+                key: data.key,
+                href: `#${data.key}`,
+              };
+            })}
+          />
+        </ConfigProvider>
+      </AnchorContainer>
     </CategoryNavContainer>
   );
 };
@@ -44,29 +47,28 @@ const CategoryNav = () => {
 export default CategoryNav;
 
 const CategoryNavContainer = styled.nav`
+  height: 48px;
   position: sticky;
   top: 64px;
   z-index: 1;
   background-color: white;
-  display: flex;
-  justify-content: flex-start;
 `;
 
 const StyledButton = styled(Button)`
   position: absolute;
   height: 32px;
   width: 32px;
-  margin: 8px 7px 8px 7px;
+  margin: 8px;
+  margin-right: 0;
   border: none;
   box-shadow: none;
 `;
 
-const TabsContainer = styled.div`
+const AnchorContainer = styled.div`
   position: relative;
   width: calc(100% - 46px);
-  top: 0px;
+  margin-block: auto;
   left: 46px;
-
   overflow: hidden;
   overflow-x: auto;
   -ms-overflow-style: none;
@@ -76,12 +78,8 @@ const TabsContainer = styled.div`
   }
 `;
 
-const StyledTabs = styled(Tabs)`
-  .ant-tabs-nav-more,
-  .ant-tabs-nav-operations {
-    visibility: hidden;
-    display: none;
-  }
-  margin-left: 8px;
-  margin-right: 12px;
+const StyledAnchor = styled(Anchor)`
+  position: relative;
+  margin-right: 16px;
+  margin-block: auto;
 `;
