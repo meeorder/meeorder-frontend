@@ -23,8 +23,6 @@ const config = {
       {
         protocol: "https",
         hostname: "fakeimg.pl",
-        port: "",
-        pathname: "/account123/**",
       },
     ],
   },
