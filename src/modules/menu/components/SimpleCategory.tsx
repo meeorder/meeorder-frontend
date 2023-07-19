@@ -7,6 +7,7 @@ const SimpleCategory: React.FC<CategoryProps> = ({ category, foods }) => {
     <List
       style={{
         scrollMarginTop: "112px", // very important for anchor to work
+        overflow: "hidden",
       }}
       id={category?.id}
       header={<div>{category?.name}</div>}
