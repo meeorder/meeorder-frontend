@@ -1,7 +1,9 @@
 import { type CategoryProps } from "@/modules/menu/components/Category";
-import { Card, Col, Row } from "antd";
+import RecommendedFoodCard from "@/modules/menu/components/RecommendedFoodCard";
+import styled from "@emotion/styled";
+import { Card, Row } from "antd";
 
-const RecommendedCategory: React.FC<CategoryProps> = ({ foods, category }) => {
+const RecommendedCategory: React.FC<CategoryProps> = ({ category, foods }) => {
   return (
     <>
       <Card
@@ -11,45 +13,16 @@ const RecommendedCategory: React.FC<CategoryProps> = ({ foods, category }) => {
           scrollMarginTop: "112px", // very important for anchor to work
         }}
       >
-        <Row>
-          <Col
-            span={12}
-            style={{
-              overflow: "hidden",
-            }}
-          >
-            <pre>{JSON.stringify(foods?.[0], null, 2)}</pre>
-          </Col>
-          <Col
-            span={12}
-            style={{
-              overflow: "hidden",
-            }}
-          >
-            <pre>{JSON.stringify(foods?.[1], null, 2)}</pre>
-          </Col>
-        </Row>
-        <Row>
-          <Col
-            span={12}
-            style={{
-              overflow: "hidden",
-            }}
-          >
-            <pre>{JSON.stringify(foods?.[2], null, 2)}</pre>
-          </Col>
-          <Col
-            span={12}
-            style={{
-              overflow: "hidden",
-            }}
-          >
-            <pre>{JSON.stringify(foods?.[3], null, 2)}</pre>
-          </Col>
-        </Row>
+        <StyledRow gutter={[8, 4]}>
+          {foods.map((food) => (
+            <RecommendedFoodCard key={food.id} food={food} />
+          ))}
+        </StyledRow>
       </Card>
     </>
   );
 };
 
 export default RecommendedCategory;
+
+const StyledRow = styled(Row)``;
