@@ -13,12 +13,14 @@ const RecommendedFoodCard: React.FC<RecommendedFoodCardProps> = ({ food }) => {
     name = "RecommededFoodImage",
     price,
     description,
-    image = "",
+    imagePath,
   } = food;
 
   return (
     <Col span={12}>
-      <StyledImage src={image} alt={name} width={217} height={217} />
+      {imagePath && (
+        <StyledImage src={imagePath} alt={name} width={217} height={217} />
+      )}
       <ConfigProvider
         theme={{
           components: {
@@ -49,11 +51,9 @@ const StyledImage = styled(Image)`
   align-self: stretch;
 
   width: 100%;
-  /* height: 100%; */
+  height: 100%;
   object-fit: cover;
   object-position: center;
-
-  /* height: 100%; */
 
   border-radius: 12px;
   background:
