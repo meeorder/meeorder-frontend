@@ -58,7 +58,7 @@ export const ordersData: OrdersData = {
   orders: orders,
   priceData: {
     orderPrice: 112,
-    discountPrice: 13,
-    totalPrice: 99,
+    discountPrice: 99,
+    totalPrice: 13,
   },
 };
