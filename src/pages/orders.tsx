@@ -32,7 +32,9 @@ export default function Orders() {
 }
 
 const OrderContainer = styled.div`
-  background: var(--neutral-2, #fafafa);
+  background: #fafafa;
+  min-height: calc(100vh - 128px);
+  height: 100%;
   padding: 24px;
 `;
 
