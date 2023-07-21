@@ -1,6 +1,7 @@
 import { OrderStatus, type Order } from "@/modules/mock/orders";
 import styled from "@emotion/styled";
-import { Card, Image, Tag, Typography } from "antd";
+import { Card, Tag, Typography } from "antd";
+import Image from "next/image";
 
 type OrderCardProps = {
   order: Order;
@@ -20,9 +21,9 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
         </FlexBetweenCol>
         <ImageContainer>
           <StyledImage
-            width={114.545}
-            height={70}
-            src={order.food.image}
+            width={250}
+            height={100}
+            src={order.food.image ?? ""}
             alt={order.food.name}
           />
         </ImageContainer>
@@ -51,6 +52,8 @@ const ImageContainer = styled.div`
 
 const StyledImage = styled(Image)`
   border-radius: 8px;
+  width: 114.545px;
+  height: 70px;
 `;
 
 const FlexBetweenRow = styled.div`
