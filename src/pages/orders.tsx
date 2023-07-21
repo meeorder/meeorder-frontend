@@ -32,7 +32,7 @@ export default function Orders() {
 }
 
 const OrderContainer = styled.div`
-  background: #fafafa;
+  background-color: ${(props) => props.theme.antd.colorBgLayout};
   min-height: calc(100vh - 128px);
   height: 100%;
   padding: 24px;
@@ -48,14 +48,14 @@ const OrderTitle = styled.div`
 `;
 
 const StyleMyOrderText = styled(Typography.Text)`
-  color: rgba(0, 0, 0, 0.85);
+  color: ${(props) => props.theme.antd.colorText};
   font-size: 20px;
   font-weight: 500;
   line-height: 28px;
 `;
 
 const StyleMyTableText = styled(Typography.Text)`
-  color: rgba(0, 0, 0, 0.45);
+  color: ${(props) => props.theme.antd.colorTextSecondary};
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;

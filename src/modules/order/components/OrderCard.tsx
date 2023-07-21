@@ -1,4 +1,4 @@
-import { type Order, type OrderStatus } from "@/modules/mock/orders";
+import { type Order } from "@/modules/mock/orders";
 import styled from "@emotion/styled";
 import { Card, Tag, Typography } from "antd";
 import Image from "next/image";
@@ -8,7 +8,7 @@ type OrderCardProps = {
 };
 
 const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
-  const colorTag = GetColorByStatus(order.status);
+  const colorTag = mapStatusToColor[order.status];
   return (
     <StyledCard>
       <FlexBetweenRow>
@@ -73,32 +73,25 @@ const FlexBetweenCol = styled.div`
 `;
 
 const StyledTextFoodName = styled(Typography.Text)`
-  color: rgba(0, 0, 0, 0.85);
+  color: ${(props) => props.theme.antd.colorText};
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
 `;
 
 const StyledTextFoodPrice = styled(Typography.Text)`
-  color: rgba(0, 0, 0, 0.45);
+  color: ${(props) => props.theme.antd.colorTextSecondary};
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
 `;
 
-function GetColorByStatus(status: OrderStatus) {
-  switch (status) {
-    case "in queue":
-      return "cyan";
-    case "preparing":
-      return "blue";
-    case "ready to serve":
-      return "geekblue";
-    case "success":
-      return "green";
-    case "cancel":
-      return "red";
-  }
-}
+const mapStatusToColor = {
+  "in queue": "cyan",
+  preparing: "blue",
+  "ready to serve": "geekblue",
+  success: "green",
+  cancel: "red",
+};
 
 export default OrderCard;
