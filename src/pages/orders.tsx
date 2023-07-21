@@ -32,7 +32,7 @@ export default function Orders() {
 }
 
 const OrderContainer = styled.div`
-  background: var(--neutral-2, #fafafa);
+  background: #fafafa;
   padding: 24px;
 `;
 
