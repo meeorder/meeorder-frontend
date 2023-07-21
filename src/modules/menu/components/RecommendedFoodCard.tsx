@@ -33,7 +33,7 @@ const RecommendedFoodCard: React.FC<RecommendedFoodCardProps> = ({ food }) => {
         <FoodNameText>{name}</FoodNameText>
       </ConfigProvider>
       <PriceTag>
-        <PriceText>{price}฿</PriceText>
+        <PriceText>{price} Baht</PriceText>
       </PriceTag>
     </Col>
   );
