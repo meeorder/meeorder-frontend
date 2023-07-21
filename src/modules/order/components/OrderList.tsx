@@ -8,7 +8,7 @@ type OrderListProps = {
 
 const OrderList: React.FC<OrderListProps> = ({ orders }) => {
   return (
-    <Space direction="vertical" size="middle" style={{ display: "flex" }}>
+    <Space direction="vertical" size={8} style={{ display: "flex" }}>
       {orders.map((order) => {
         return <OrderCard key={order.id} order={order} />;
       })}

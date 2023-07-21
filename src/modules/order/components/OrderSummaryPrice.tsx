@@ -8,17 +8,17 @@ type OrderSummaryPriceProps = {
 
 const OrderSummaryPrice: React.FC<OrderSummaryPriceProps> = ({ priceData }) => {
   return (
-    <Space direction="vertical" size="middle" style={{ display: "flex" }}>
-      <Divider />
+    <Space direction="vertical" size={8} style={{ display: "flex" }}>
+      <Divider style={{ margin: "16px" }} />
       <FlexBetween>
         <StyledText>Order Price</StyledText>
         <StyledText>{priceData.orderPrice.toFixed(2)} THB</StyledText>
       </FlexBetween>
       <FlexBetween>
         <StyledText>Discount</StyledText>
-        <StyledText>{priceData.discountPrice.toFixed(2)} THB</StyledText>
+        <StyledText>-{priceData.discountPrice.toFixed(2)} THB</StyledText>
       </FlexBetween>
-      <Divider />
+      <Divider style={{ margin: "0px" }} />
       <FlexBetween>
         <StyledText strong>Bill Total</StyledText>
         <StyledText strong>{priceData.totalPrice.toFixed(2)} THB</StyledText>
