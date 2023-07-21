@@ -1,4 +1,4 @@
-import { OrderStatus, type Order } from "@/modules/mock/orders";
+import { type Order, type OrderStatus } from "@/modules/mock/orders";
 import styled from "@emotion/styled";
 import { Card, Tag, Typography } from "antd";
 import Image from "next/image";
@@ -73,14 +73,14 @@ const FlexBetweenCol = styled.div`
 `;
 
 const StyledTextFoodName = styled(Typography.Text)`
-  color: var(--character-title-85, rgba(0, 0, 0, 0.85));
+  color: rgba(0, 0, 0, 0.85);
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
 `;
 
 const StyledTextFoodPrice = styled(Typography.Text)`
-  color: var(--character-secondary-45, rgba(0, 0, 0, 0.45));
+  color: rgba(0, 0, 0, 0.45);
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
