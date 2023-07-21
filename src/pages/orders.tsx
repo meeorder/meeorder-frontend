@@ -46,14 +46,14 @@ const OrderTitle = styled.div`
 `;
 
 const StyleMyOrderText = styled(Typography.Text)`
-  color: var(--character-primary-85, rgba(0, 0, 0, 0.85));
+  color: rgba(0, 0, 0, 0.85);
   font-size: 20px;
   font-weight: 500;
   line-height: 28px;
 `;
 
 const StyleMyTableText = styled(Typography.Text)`
-  color: var(--character-secondary-45, rgba(0, 0, 0, 0.45));
+  color: rgba(0, 0, 0, 0.45);
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;
