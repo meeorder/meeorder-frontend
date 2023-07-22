@@ -59,7 +59,6 @@ const FlexBetweenRow = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 `;
 
 const FlexBetweenCol = styled.div`
@@ -68,12 +67,13 @@ const FlexBetweenCol = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 16px;
+  gap: 8px;
 `;
 
 const StyledTextFoodName = styled(Typography.Text)`
   color: ${(props) => props.theme.antd.colorText};
   font-size: 16px;
-  font-weight: 400;
+  font-weight: ${(props) => props.theme.antd.fontWeightStrong};
   line-height: 24px;
 `;
 
@@ -81,7 +81,7 @@ const StyledTextFoodPrice = styled(Typography.Text)`
   color: ${(props) => props.theme.antd.colorTextSecondary};
   font-size: 14px;
   font-weight: 400;
-  line-height: 22px;
+  line-height: 24px;
 `;
 
 const mapStatusToColor: Record<OrderStatus, TagProps["color"]> = {
