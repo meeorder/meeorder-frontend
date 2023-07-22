@@ -1,8 +1,10 @@
+import BasketFoodList from "@/modules/basket/components/BasketFoodList";
+import BasketSummaryNav from "@/modules/basket/components/BasketSummaryNav";
 import { pages } from "@/modules/config/pageConfig";
 import AppLayout from "@/modules/layout/AppLayout";
-import WireFrame from "@/modules/mock/components/WireFrame";
+import { inBasketOrders } from "@/modules/mock/orders";
+import styled from "@emotion/styled";
 import Head from "next/head";
-
 export default function Basket() {
   return (
     <>
@@ -12,12 +14,18 @@ export default function Basket() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppLayout layoutType="user" currentPageId={pages.basket.id}>
-        <WireFrame
-          contentNode="Basket"
-          cardColor="green"
-          height={"calc(100vh - 64px - 64px)"}
-        />
+        <BasketMainContentWrapper>
+          <BasketFoodList orders={inBasketOrders} />
+          <BasketSummaryNav totalPrice={999} />
+        </BasketMainContentWrapper>
       </AppLayout>
     </>
   );
 }
+
+const BasketMainContentWrapper = styled.div`
+  padding-bottom: 80px;
+  .ant-list-header {
+    padding: 16px 24px;
+  }
+`;
