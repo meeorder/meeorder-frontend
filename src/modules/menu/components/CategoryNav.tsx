@@ -51,7 +51,7 @@ const CategoryNavContainer = styled.nav`
   position: sticky;
   top: 64px;
   z-index: 1;
-  background-color: white;
+  background-color: ${(props) => props.theme.antd.colorBgBase};
 `;
 
 const StyledButton = styled(Button)`

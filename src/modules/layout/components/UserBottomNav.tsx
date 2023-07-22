@@ -11,14 +11,16 @@ type UserBottomNavProps = {
 const UserBottomNav: React.FC<UserBottomNavProps> = ({ currentPageId }) => {
   const { home, basket, orders } = pages;
 
+  const { token } = theme.useToken();
+
   return (
     <ConfigProvider
       theme={{
         components: {
           Segmented: {
-            itemSelectedBg: "#ffffff",
-            itemActiveBg: "#ffffff",
-            colorBgLayout: "#ffffff",
+            itemSelectedBg: token.colorBgBase,
+            itemActiveBg: token.colorBgBase,
+            colorBgLayout: token.colorBgBase,
             boxShadowTertiary: "none",
           },
         },
