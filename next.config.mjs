@@ -26,6 +26,9 @@ const config = {
       },
     ],
   },
+  compiler: {
+    emotion: true,
+  },
 };
 
 export default config;

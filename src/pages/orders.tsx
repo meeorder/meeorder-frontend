@@ -7,7 +7,7 @@ import styled from "@emotion/styled";
 import { Typography } from "antd";
 import Head from "next/head";
 
-const tableNumber = 1; // from session
+const tableNumber = 10; // from session
 
 export default function Orders() {
   return (
@@ -20,8 +20,8 @@ export default function Orders() {
       <AppLayout layoutType="user" currentPageId={pages.orders.id}>
         <OrderContainer>
           <OrderTitle>
-            <Typography.Title level={3}>Orders</Typography.Title>
-            <Typography.Title level={5}>Table {tableNumber}</Typography.Title>
+            <StyleMyOrderText>My Order</StyleMyOrderText>
+            <StyleMyTableText>Table {tableNumber}</StyleMyTableText>
           </OrderTitle>
           <OrderList orders={ordersData.orders} />
           <OrderSummaryPrice priceData={ordersData.priceData} />
@@ -32,6 +32,9 @@ export default function Orders() {
 }
 
 const OrderContainer = styled.div`
+  background-color: ${(props) => props.theme.antd.colorBgLayout};
+  min-height: calc(100vh - 128px);
+  height: 100%;
   padding: 24px;
 `;
 
@@ -39,4 +42,21 @@ const OrderTitle = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  padding-inline: 16px;
+  padding-top: 24px;
+  padding-bottom: 8px;
+`;
+
+const StyleMyOrderText = styled(Typography.Text)`
+  color: ${(props) => props.theme.antd.colorText};
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+`;
+
+const StyleMyTableText = styled(Typography.Text)`
+  color: ${(props) => props.theme.antd.colorTextSecondary};
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
 `;

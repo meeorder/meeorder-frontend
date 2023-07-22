@@ -1,4 +1,3 @@
-import { transientOptions } from "@/modules/common/transientOptions";
 import styled from "@emotion/styled";
 import { User } from "@phosphor-icons/react";
 import { Button, theme } from "antd";
@@ -6,7 +5,7 @@ import Image from "next/image";
 
 const UserTopNav = () => {
   const {
-    token: { colorPrimary, colorPrimaryBg },
+    token: { colorPrimary },
   } = theme.useToken();
 
   return (
@@ -22,7 +21,6 @@ const UserTopNav = () => {
         alt="logo"
       />
       <StyledButton
-        $colorPrimaryBg={colorPrimaryBg}
         type="default"
         shape="circle"
         icon={<User size={22} color={colorPrimary} weight="duotone" />}
@@ -33,11 +31,7 @@ const UserTopNav = () => {
 
 export default UserTopNav;
 
-type StyledButtonProps = {
-  $colorPrimaryBg: string;
-};
-
-const StyledButton = styled(Button, transientOptions)<StyledButtonProps>`
+const StyledButton = styled(Button)`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,5 +41,5 @@ const StyledButton = styled(Button, transientOptions)<StyledButtonProps>`
   width: 44px !important;
   height: 44px;
   border: none;
-  background-color: ${(props) => props.$colorPrimaryBg};
+  background-color: ${(props) => props.theme.antd.colorPrimaryBg};
 `;

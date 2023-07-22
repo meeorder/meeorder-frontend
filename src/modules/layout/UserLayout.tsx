@@ -32,7 +32,7 @@ const UserLayoutContainer = styled.div`
   min-height: 100vh;
   max-width: 500px;
   margin: 0 auto;
-  background-color: white;
+  background-color: ${(props) => props.theme.antd.colorBgBase};
 `;
 
 const UserTopNavContainer = styled.nav`
@@ -41,19 +41,21 @@ const UserTopNavContainer = styled.nav`
   z-index: 1;
   width: 100%;
   height: 64px;
-  background-color: white;
+  background-color: ${(props) => props.theme.antd.colorBgBase};
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
 `;
 
-const UserMainContainer = styled.main``;
+const UserMainContainer = styled.main`
+  background-color: ${(props) => props.theme.antd.colorBgBase};
+`;
 
 const UserBottomNavContainer = styled.nav`
   position: sticky;
   bottom: 0;
   z-index: 1;
-  background: inherit;
+  background-color: ${(props) => props.theme.antd.colorBgBase};
   height: 64px;
 `;
