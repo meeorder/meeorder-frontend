@@ -50,10 +50,13 @@ const UserTopNavContainer = styled.nav`
 
 const UserMainContainer = styled.main`
   background-color: ${(props) => props.theme.antd.colorBgBase};
+  padding-bottom: 64px;
 `;
 
 const UserBottomNavContainer = styled.nav`
-  position: sticky;
+  position: fixed;
+  max-width: 500px;
+  width: 100%;
   bottom: 0;
   z-index: 1;
   background-color: ${(props) => props.theme.antd.colorBgBase};
