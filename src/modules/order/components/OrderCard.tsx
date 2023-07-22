@@ -19,14 +19,12 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
             <StyledStatusTag color={colorTag}>{order.status}</StyledStatusTag>
           </StyledTextFoodPrice>
         </FlexBetweenCol>
-        <ImageContainer>
-          <StyledImage
-            width={250}
-            height={100}
-            src={order.food.image ?? ""}
-            alt={order.food.name}
-          />
-        </ImageContainer>
+        <StyledImage
+          width={900}
+          height={900}
+          src={order.food.imagePath ?? ""}
+          alt={order.food.name}
+        />
       </FlexBetweenRow>
     </StyledCard>
   );
@@ -35,8 +33,8 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
 const StyledCard = styled(Card)`
   width: 100%;
   .ant-card-body {
-    padding: 0px;
-    height: 86px;
+    height: 96px;
+    padding: 8px;
   }
 `;
 
@@ -45,15 +43,12 @@ const StyledStatusTag = styled(Tag)`
   border-radius: 12px;
 `;
 
-const ImageContainer = styled.div`
-  right: 7.45px;
-  position: absolute;
-`;
-
 const StyledImage = styled(Image)`
-  border-radius: 8px;
-  width: 114.545px;
-  height: 70px;
+  height: 100%;
+  width: 120px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 12px;
 `;
 
 const FlexBetweenRow = styled.div`
