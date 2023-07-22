@@ -5,7 +5,8 @@ import AppLayout from "@/modules/layout/AppLayout";
 import { inBasketOrders } from "@/modules/mock/orders";
 import styled from "@emotion/styled";
 import Head from "next/head";
-export default function Basket() {
+
+const Basket = () => {
   return (
     <>
       <Head>
@@ -21,7 +22,9 @@ export default function Basket() {
       </AppLayout>
     </>
   );
-}
+};
+
+export default Basket;
 
 const BasketMainContentWrapper = styled.div`
   padding-bottom: 80px;

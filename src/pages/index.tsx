@@ -6,7 +6,7 @@ import { categories } from "@/modules/mock/categories";
 import { foods } from "@/modules/mock/foods";
 import Head from "next/head";
 
-export default function Home() {
+const Home = () => {
   return (
     <>
       <Head>
@@ -25,4 +25,6 @@ export default function Home() {
       </AppLayout>
     </>
   );
-}
+};
+
+export default Home;

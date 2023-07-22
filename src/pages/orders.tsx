@@ -9,7 +9,7 @@ import Head from "next/head";
 
 const tableNumber = 10; // from session
 
-export default function Orders() {
+const Orders = () => {
   return (
     <>
       <Head>
@@ -29,7 +29,9 @@ export default function Orders() {
       </AppLayout>
     </>
   );
-}
+};
+
+export default Orders;
 
 const OrderContainer = styled.div`
   background-color: ${(props) => props.theme.antd.colorBgLayout};
