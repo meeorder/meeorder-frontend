@@ -1,6 +1,6 @@
-import { type Order } from "@/modules/mock/orders";
+import { type Order, type OrderStatus } from "@/modules/mock/orders";
 import styled from "@emotion/styled";
-import { Card, Tag, Typography } from "antd";
+import { Card, Tag, Typography, type TagProps } from "antd";
 import Image from "next/image";
 
 type OrderCardProps = {
@@ -15,7 +15,9 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
         <FlexBetweenCol>
           <StyledTextFoodName>{order.food.name}</StyledTextFoodName>
           <StyledTextFoodPrice>
-            {order.food.price.toFixed(2)} THB
+            <span style={{ marginRight: "14px" }}>
+              {order.food.price.toFixed(2)} THB
+            </span>
             <StyledStatusTag color={colorTag}>{order.status}</StyledStatusTag>
           </StyledTextFoodPrice>
         </FlexBetweenCol>
@@ -32,23 +34,24 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
 
 const StyledCard = styled(Card)`
   width: 100%;
+  border-radius: 12px;
   .ant-card-body {
-    height: 96px;
-    padding: 8px;
+    padding: 0px;
+    margin: 0px;
   }
 `;
 
 const StyledStatusTag = styled(Tag)`
-  margin-left: 14px;
   border-radius: 12px;
 `;
 
 const StyledImage = styled(Image)`
-  height: 100%;
+  height: calc(100% - 8px - 8px);
   width: 120px;
   object-fit: cover;
   object-position: center;
-  border-radius: 12px;
+  border-radius: 8px;
+  margin: 8px;
 `;
 
 const FlexBetweenRow = styled.div`
@@ -81,12 +84,12 @@ const StyledTextFoodPrice = styled(Typography.Text)`
   line-height: 22px;
 `;
 
-const mapStatusToColor = {
-  "in queue": "cyan",
-  preparing: "blue",
-  "ready to serve": "geekblue",
-  success: "green",
-  cancel: "red",
+const mapStatusToColor: Record<OrderStatus, TagProps["color"]> = {
+  "In queue": "orange",
+  Preparing: "geekblue",
+  Ready: "blue",
+  Success: "green",
+  Cancel: "red",
 };
 
 export default OrderCard;

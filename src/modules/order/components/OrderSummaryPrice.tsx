@@ -30,6 +30,7 @@ const OrderSummaryPrice: React.FC<OrderSummaryPriceProps> = ({ priceData }) => {
 export default OrderSummaryPrice;
 
 const FlexBetween = styled.div`
+  padding-inline: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;

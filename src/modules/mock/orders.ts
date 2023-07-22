@@ -1,11 +1,11 @@
 import { foods, type Food } from "@/modules/mock/foods";
 
 export type OrderStatus =
-  | "in queue"
-  | "preparing"
-  | "ready to serve"
-  | "success"
-  | "cancel";
+  | "In queue"
+  | "Preparing"
+  | "Ready"
+  | "Success"
+  | "Cancel";
 
 export type Order = {
   id: string;
@@ -17,27 +17,27 @@ export const orders: Order[] = [
   {
     id: "1",
     food: foods[0] as Food,
-    status: "in queue",
+    status: "In queue",
   },
   {
     id: "2",
     food: foods[1] as Food,
-    status: "preparing",
+    status: "Preparing",
   },
   {
     id: "3",
     food: foods[2] as Food,
-    status: "ready to serve",
+    status: "Ready",
   },
   {
     id: "4",
     food: foods[3] as Food,
-    status: "success",
+    status: "Success",
   },
   {
     id: "5",
     food: foods[0] as Food,
-    status: "cancel",
+    status: "Cancel",
   },
 ];
 
