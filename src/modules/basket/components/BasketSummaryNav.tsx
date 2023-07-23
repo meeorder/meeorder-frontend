@@ -88,7 +88,7 @@ const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
         </ConfigProvider>
       </BasketSummaryNavWrapper>
       <Modal
-        centered={true}
+        centered
         open={isModalOpen}
         maskClosable={false}
         closable={false}
