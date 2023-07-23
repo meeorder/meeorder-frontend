@@ -1,54 +1,32 @@
 import { type CategoryProps } from "@/modules/menu/components/Category";
-import { Card, Col, Row } from "antd";
+import RecommendedFoodCard from "@/modules/menu/components/RecommendedFoodCard";
+import { Row, Typography } from "antd";
 
-const RecommendedCategory: React.FC<CategoryProps> = ({ foods, category }) => {
+const RecommendedCategory: React.FC<CategoryProps> = ({ category, foods }) => {
   return (
-    <>
-      <Card
-        title={category?.name}
-        id={category?.id}
+    <div
+      id={category?.id}
+      style={{
+        scrollMarginTop: "112px", // very important for anchor to work
+      }}
+    >
+      <Typography.Title
+        level={4}
         style={{
-          scrollMarginTop: "112px", // very important for anchor to work
+          marginTop: "0px",
+          marginBottom: "12px",
+          marginLeft: "8px",
         }}
       >
-        <Row>
-          <Col
-            span={12}
-            style={{
-              overflow: "hidden",
-            }}
-          >
-            <pre>{JSON.stringify(foods?.[0], null, 2)}</pre>
-          </Col>
-          <Col
-            span={12}
-            style={{
-              overflow: "hidden",
-            }}
-          >
-            <pre>{JSON.stringify(foods?.[1], null, 2)}</pre>
-          </Col>
-        </Row>
-        <Row>
-          <Col
-            span={12}
-            style={{
-              overflow: "hidden",
-            }}
-          >
-            <pre>{JSON.stringify(foods?.[2], null, 2)}</pre>
-          </Col>
-          <Col
-            span={12}
-            style={{
-              overflow: "hidden",
-            }}
-          >
-            <pre>{JSON.stringify(foods?.[3], null, 2)}</pre>
-          </Col>
-        </Row>
-      </Card>
-    </>
+        {category?.name}
+      </Typography.Title>
+
+      <Row gutter={[8, 8]}>
+        {foods.map((food) => (
+          <RecommendedFoodCard key={food.id} food={food} />
+        ))}
+      </Row>
+    </div>
   );
 };
 
