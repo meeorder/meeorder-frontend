@@ -30,29 +30,29 @@ a {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: blue orange;
+  scrollbar-color: rgb(0, 0, 0, 20%) rgb(0, 0, 0, 10%);
 }
 
 /* Works on Chrome, Edge, and Safari */
 
 *::-webkit-scrollbar {
-  width: 12px;
+  width: 10px;
+  border-radius: 10px;
 }
 
 *::-webkit-scrollbar-track {
-  background: orange;
+  background: rgb(0, 0, 0, 10%);
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: blue;
-  border-radius: 20px;
-  border: 3px solid orange;
+  background-color: rgb(0, 0, 0, 20%);
+  border-radius: 10px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: red;
+  background: rgb(0, 0, 0, 30%);
 }
 
 *::-webkit-scrollbar-thumb:active {
-  background-color: darkred;
+  background-color: rgb(0, 0, 0, 40%);
 }

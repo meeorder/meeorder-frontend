@@ -22,9 +22,12 @@ const config = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "fakeimg.pl",
+        hostname: "placekitten.com",
       },
     ],
+  },
+  compiler: {
+    emotion: true,
   },
 };
 

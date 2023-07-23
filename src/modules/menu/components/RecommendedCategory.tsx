@@ -1,6 +1,5 @@
 import { type CategoryProps } from "@/modules/menu/components/Category";
 import RecommendedFoodCard from "@/modules/menu/components/RecommendedFoodCard";
-import styled from "@emotion/styled";
 import { Card, Row } from "antd";
 
 const RecommendedCategory: React.FC<CategoryProps> = ({ category, foods }) => {
@@ -13,11 +12,11 @@ const RecommendedCategory: React.FC<CategoryProps> = ({ category, foods }) => {
           scrollMarginTop: "112px", // very important for anchor to work
         }}
       >
-        <StyledRow gutter={[8, 4]}>
+        <Row gutter={[8, 8]}>
           {foods.map((food) => (
             <RecommendedFoodCard key={food.id} food={food} />
           ))}
-        </StyledRow>
+        </Row>
       </Card>
     </>
   );

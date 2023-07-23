@@ -1,6 +1,6 @@
 import { type Order, type OrderStatus } from "@/modules/mock/orders";
 import styled from "@emotion/styled";
-import { Card, Tag, Typography } from "antd";
+import { Card, Tag, Typography, type TagProps } from "antd";
 import Image from "next/image";
 
 type OrderCardProps = {
@@ -8,25 +8,25 @@ type OrderCardProps = {
 };
 
 const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
-  const colorTag = GetColorByStatus(order.status);
+  const colorTag = mapStatusToColor[order.status];
   return (
     <StyledCard>
       <FlexBetweenRow>
         <FlexBetweenCol>
           <StyledTextFoodName>{order.food.name}</StyledTextFoodName>
           <StyledTextFoodPrice>
-            {order.food.price.toFixed(2)} THB
+            <span style={{ marginRight: "14px" }}>
+              {order.food.price.toFixed(2)} THB
+            </span>
             <StyledStatusTag color={colorTag}>{order.status}</StyledStatusTag>
           </StyledTextFoodPrice>
         </FlexBetweenCol>
-        <ImageContainer>
-          <StyledImage
-            width={250}
-            height={100}
-            src={order.food.image ?? ""}
-            alt={order.food.name}
-          />
-        </ImageContainer>
+        <StyledImage
+          width={900}
+          height={900}
+          src={order.food.imagePath ?? ""}
+          alt={order.food.name}
+        />
       </FlexBetweenRow>
     </StyledCard>
   );
@@ -34,26 +34,24 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
 
 const StyledCard = styled(Card)`
   width: 100%;
+  border-radius: 12px;
   .ant-card-body {
     padding: 0px;
-    height: 86px;
+    margin: 0px;
   }
 `;
 
 const StyledStatusTag = styled(Tag)`
-  margin-left: 14px;
   border-radius: 12px;
 `;
 
-const ImageContainer = styled.div`
-  right: 7.45px;
-  position: absolute;
-`;
-
 const StyledImage = styled(Image)`
+  height: calc(100% - 8px - 8px);
+  width: 120px;
+  object-fit: cover;
+  object-position: center;
   border-radius: 8px;
-  width: 114.545px;
-  height: 70px;
+  margin: 8px;
 `;
 
 const FlexBetweenRow = styled.div`
@@ -61,7 +59,6 @@ const FlexBetweenRow = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 `;
 
 const FlexBetweenCol = styled.div`
@@ -70,35 +67,29 @@ const FlexBetweenCol = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 16px;
+  gap: 8px;
 `;
 
 const StyledTextFoodName = styled(Typography.Text)`
-  color: rgba(0, 0, 0, 0.85);
+  color: ${(props) => props.theme.antd.colorText};
   font-size: 16px;
-  font-weight: 400;
+  font-weight: ${(props) => props.theme.antd.fontWeightStrong};
   line-height: 24px;
 `;
 
 const StyledTextFoodPrice = styled(Typography.Text)`
-  color: rgba(0, 0, 0, 0.45);
+  color: ${(props) => props.theme.antd.colorTextSecondary};
   font-size: 14px;
   font-weight: 400;
-  line-height: 22px;
+  line-height: 24px;
 `;
 
-function GetColorByStatus(status: OrderStatus) {
-  switch (status) {
-    case "in queue":
-      return "cyan";
-    case "preparing":
-      return "blue";
-    case "ready to serve":
-      return "geekblue";
-    case "success":
-      return "green";
-    case "cancel":
-      return "red";
-  }
-}
+const mapStatusToColor: Record<OrderStatus, TagProps["color"]> = {
+  "In queue": "orange",
+  Preparing: "geekblue",
+  Ready: "blue",
+  Success: "green",
+  Cancel: "red",
+};
 
 export default OrderCard;
