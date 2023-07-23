@@ -19,10 +19,12 @@ const Orders = () => {
       </Head>
       <AppLayout layoutType="user" currentPageId={pages.orders.id}>
         <OrderContainer>
-          <OrderTitle>
-            <StyleMyOrderText>My Order</StyleMyOrderText>
-            <StyleMyTableText>Table {tableNumber}</StyleMyTableText>
-          </OrderTitle>
+          <OrderHeader>
+            <Typography.Title level={4}>My Order</Typography.Title>
+            <Typography.Title level={5} type="secondary">
+              Table {tableNumber}
+            </Typography.Title>
+          </OrderHeader>
           <OrderList orders={ordersData.orders} />
           <OrderSummaryPrice priceData={ordersData.priceData} />
         </OrderContainer>
@@ -40,25 +42,10 @@ const OrderContainer = styled.div`
   padding: 24px;
 `;
 
-const OrderTitle = styled.div`
+const OrderHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   padding-inline: 16px;
-  padding-top: 24px;
   padding-bottom: 8px;
-`;
-
-const StyleMyOrderText = styled(Typography.Text)`
-  color: ${(props) => props.theme.antd.colorText};
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 28px;
-`;
-
-const StyleMyTableText = styled(Typography.Text)`
-  color: ${(props) => props.theme.antd.colorTextSecondary};
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 24px;
 `;

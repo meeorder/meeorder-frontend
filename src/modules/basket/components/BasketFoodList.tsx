@@ -14,7 +14,7 @@ const BasketFoodList: React.FC<BasketFoodListProp> = ({ orders }) => {
       dataSource={orders}
       renderItem={(order) => (
         <List.Item>
-          <BasketFoodCard order={order} key={order.id} />
+          <BasketFoodCard order={order} />
         </List.Item>
       )}
       style={{ marginInline: "20px" }}

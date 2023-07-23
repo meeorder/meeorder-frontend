@@ -13,13 +13,13 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
     <StyledCard>
       <FlexBetweenRow>
         <FlexBetweenCol>
-          <StyledTextFoodName>{order.food.name}</StyledTextFoodName>
-          <StyledTextFoodPrice>
+          <Typography.Title level={5}>{order.food.name}</Typography.Title>
+          <Typography.Text type="secondary">
             <span style={{ marginRight: "14px" }}>
               {order.food.price.toFixed(2)} THB
             </span>
             <StyledStatusTag color={colorTag}>{order.status}</StyledStatusTag>
-          </StyledTextFoodPrice>
+          </Typography.Text>
         </FlexBetweenCol>
         <StyledImage
           width={900}
@@ -46,8 +46,8 @@ const StyledStatusTag = styled(Tag)`
 `;
 
 const StyledImage = styled(Image)`
-  height: calc(100% - 8px - 8px);
-  width: 120px;
+  height: 100px;
+  width: 100px;
   object-fit: cover;
   object-position: center;
   border-radius: 8px;
@@ -68,20 +68,6 @@ const FlexBetweenCol = styled.div`
   justify-content: space-between;
   padding: 16px;
   gap: 8px;
-`;
-
-const StyledTextFoodName = styled(Typography.Text)`
-  color: ${(props) => props.theme.antd.colorText};
-  font-size: 16px;
-  font-weight: ${(props) => props.theme.antd.fontWeightStrong};
-  line-height: 24px;
-`;
-
-const StyledTextFoodPrice = styled(Typography.Text)`
-  color: ${(props) => props.theme.antd.colorTextSecondary};
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 24px;
 `;
 
 const mapStatusToColor: Record<OrderStatus, TagProps["color"]> = {
