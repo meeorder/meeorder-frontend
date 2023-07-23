@@ -1,5 +1,5 @@
 import { type CategoryProps } from "@/modules/menu/components/Category";
-import { Food } from "@/modules/mock/foods";
+import { type Food } from "@/modules/mock/foods";
 import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import { Button, Col, Image, List } from "antd";
@@ -17,13 +17,18 @@ const SimpleCategory: React.FC<CategoryProps> = ({ category, foods }) => {
       bordered
       dataSource={foods}
       renderItem={(item) => {
-        const food = item as Food
+        const food = item as Food;
         return (
           <List.Item
             key={food.id}
             extra={
               <Col>
-                <StyledImage preview={false} width={100} alt="pic" src={food.imagePath} />
+                <StyledImage
+                  preview={false}
+                  width={100}
+                  alt="pic"
+                  src={food.imagePath}
+                />
                 <StyledButton
                   type="primary"
                   shape="circle"
@@ -50,7 +55,7 @@ const StyledList = styled(List)`
     padding: 0px;
     min-height: 117px;
     align-items: flex-start;
-    border: 1px solid  ${(props) => props.theme.antd.colorBorder};
+    border: 1px solid ${(props) => props.theme.antd.colorBorder};
     background: ${(props) => props.theme.antd.colorBgBase};
   }
   .ant-list-item-meta {
@@ -74,5 +79,5 @@ const StyledButton = styled(Button)`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  background: ${(props) => props.theme.antd.colorPrimary};//var(--primary-6, #1890ff);
+  background: ${(props) => props.theme.antd.colorPrimary};
 `;
