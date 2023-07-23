@@ -1,8 +1,8 @@
 import { type CategoryProps } from "@/modules/menu/components/Category";
-import { type Food } from "@/modules/mock/foods";
-import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
-import { Button, Col, Image, List } from "antd";
+import SimpleFoodCard from "@/modules/menu/components/SimpleFoodCard";
+import { type Food } from "@/modules/mock/foods";
+import { List,Typography } from "antd";
 import React from "react";
 
 const SimpleCategory: React.FC<CategoryProps> = ({ category, foods }) => {
@@ -13,33 +13,12 @@ const SimpleCategory: React.FC<CategoryProps> = ({ category, foods }) => {
         overflow: "hidden",
       }}
       id={category?.id}
-      header={<div>{category?.name}</div>}
+      header={<Typography.Title level={4}>{category?.name}</Typography.Title>}
       bordered
       dataSource={foods}
       renderItem={(item) => {
         const food = item as Food;
-        return (
-          <List.Item
-            key={food.id}
-            extra={
-              <Col>
-                <StyledImage
-                  preview={false}
-                  width={100}
-                  alt="pic"
-                  src={food.imagePath}
-                />
-                <StyledButton
-                  type="primary"
-                  shape="circle"
-                  icon={<PlusOutlined />}
-                />
-              </Col>
-            }
-          >
-            <List.Item.Meta title={food.name} description={`\$${food.price}`} />
-          </List.Item>
-        );
+        return <SimpleFoodCard key={food.id} food={food} />;
       }}
     />
   );
@@ -48,6 +27,7 @@ const SimpleCategory: React.FC<CategoryProps> = ({ category, foods }) => {
 export default SimpleCategory;
 
 const StyledList = styled(List)`
+  margin-top: 16px;
   .ant-list-bordered {
     padding: 0px;
   }
@@ -58,26 +38,13 @@ const StyledList = styled(List)`
     border: 1px solid ${(props) => props.theme.antd.colorBorder};
     background: ${(props) => props.theme.antd.colorBgBase};
   }
+  .ant-col {
+    padding-top:8px;
+    padding-right:8px;
+  }
   .ant-list-item-meta {
     width: 240px;
     padding: 24px;
     gap: 8px;
   }
-  .ant-image {
-    right: 8px;
-    top: 8px;
-  }
-`;
-const StyledImage = styled(Image)`
-  border-radius: 5.667px;
-`;
-const StyledButton = styled(Button)`
-  position: absolute;
-  right: 11px;
-  top: 73px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  background: ${(props) => props.theme.antd.colorPrimary};
 `;
