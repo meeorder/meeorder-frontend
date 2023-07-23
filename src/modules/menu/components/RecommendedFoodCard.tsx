@@ -31,7 +31,10 @@ const StyledImage = styled(Image)`
   height: 100%;
   object-fit: cover;
   object-position: center;
+  position: relative;
   border-radius: 12px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  filter: brightness(0.8);
 `;
 
 const FoodNameText = styled(Typography.Text)`
