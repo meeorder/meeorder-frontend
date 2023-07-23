@@ -43,15 +43,12 @@ const StyledList = styled(List)`
 
   .ant-list-item {
     padding: 0px;
-    min-height: 117px;
     align-items: flex-start;
-    background: ${(props) => props.theme.antd.colorBgBase};
   }
 
   .ant-list-item-meta {
     width: 240px;
     padding: 24px;
-    gap: 8px;
   }
 
   .ant-list-item-meta-title {
