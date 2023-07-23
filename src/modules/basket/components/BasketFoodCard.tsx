@@ -1,6 +1,6 @@
 import { type BasketOrder } from "@/modules/mock/orders";
 import styled from "@emotion/styled";
-import { Typography, theme } from "antd";
+import { Button, Typography, theme } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -33,18 +33,23 @@ const BasketFoodCard: React.FC<BasketFoodCardProps> = ({ order }) => {
           Edit
         </Link>
       </FoodDetails>
-      <Image
-        src={order.food.imagePath ?? ""}
-        alt={order.food.name}
-        width={900}
-        height={900}
-        style={{
-          objectFit: "cover",
-          borderRadius: "8px",
-          width: "100px",
-          height: "100px",
-        }}
-      />
+      <ImageContainer>
+        <Image
+          src={order.food.imagePath ?? ""}
+          alt={order.food.name}
+          width={900}
+          height={900}
+          style={{
+            objectFit: "cover",
+            borderRadius: "8px",
+            width: "100px",
+            height: "100px",
+          }}
+        />
+        <QuantityButton shape="circle" type="primary" ghost>
+          {order.quantity}
+        </QuantityButton>
+      </ImageContainer>
     </BasketCardContainer>
   );
 };
@@ -66,4 +71,17 @@ const FoodDetails = styled.div`
 const ContentGroup = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const ImageContainer = styled.div`
+  position: relative;
+  width: 100px;
+  height: 100px;
+`;
+
+const QuantityButton = styled(Button)`
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background-color: ${(props) => props.theme.antd.colorBgBase} !important;
 `;
