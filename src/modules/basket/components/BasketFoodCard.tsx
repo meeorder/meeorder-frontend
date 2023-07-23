@@ -1,6 +1,6 @@
 import { type BasketOrder } from "@/modules/mock/orders";
 import styled from "@emotion/styled";
-import { Typography } from "antd";
+import { Typography, theme } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,6 +9,7 @@ type BasketFoodCardProps = {
 };
 
 const BasketFoodCard: React.FC<BasketFoodCardProps> = ({ order }) => {
+  const { token } = theme.useToken();
   return (
     <BasketCardContainer>
       <FoodDetails>
@@ -28,8 +29,8 @@ const BasketFoodCard: React.FC<BasketFoodCardProps> = ({ order }) => {
           ))}
         </ContentGroup>
         {/* TODO navigate to edit link */}
-        <Link href={"#"}>
-          <Typography.Link>Edit</Typography.Link>
+        <Link href={"#"} style={{ color: token.colorPrimary }}>
+          Edit
         </Link>
       </FoodDetails>
       <Image
