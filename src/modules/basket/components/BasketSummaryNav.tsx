@@ -1,16 +1,23 @@
+import { type APIStatus } from "@/modules/common/types";
 import styled from "@emotion/styled";
 import { PaperPlaneRight } from "@phosphor-icons/react";
 import { Button, ConfigProvider, Modal, Result, Typography, theme } from "antd";
+import { type ResultStatusType } from "antd/es/result";
 import { useState } from "react";
 type BasketSummaryNavProps = {
   totalPrice: number;
 };
 
+type ModalProps = {
+  title: string;
+  modalStatus: ResultStatusType | undefined;
+};
+
+type MapStatusToModalProps = Record<APIStatus, ModalProps>;
+
 const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalStatus, setModalStatus] = useState<
-    "idle" | "pending" | "success" | "error"
-  >("idle");
+  const [modalAPIStatus, setModalStatus] = useState<APIStatus>("idle");
   const {
     token: { colorPrimary, colorBgBase },
   } = theme.useToken();
@@ -18,14 +25,32 @@ const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
     setModalStatus("idle");
     setIsModalOpen(true);
   };
-  const handleOk = () => {
+  const mapStatusToModalProps: MapStatusToModalProps = {
+    error: {
+      title: "Something went wrong! Please try again.",
+      modalStatus: "error",
+    },
+    success: {
+      title: "Order send!",
+      modalStatus: "success",
+    },
+    pending: {
+      title: `Sending order of ${totalPrice} Baht...`,
+      modalStatus: "info",
+    },
+    idle: {
+      title: `Send order of ${totalPrice} Baht?`,
+      modalStatus: "info",
+    },
+  };
+  const handleSubmitOrder = () => {
     console.log("handleOk");
     setModalStatus("pending");
     // TODO send order to server
     setTimeout(() => {
       // TODO show response message before close modal
-      setModalStatus("success");
-      // setModalStatus("error");
+      // setModalStatus("success");
+      setModalStatus("error");
       setTimeout(() => {
         setIsModalOpen(false);
       }, 1000);
@@ -67,40 +92,24 @@ const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
         open={isModalOpen}
         maskClosable={false}
         closable={false}
-        onOk={handleOk}
+        onOk={handleSubmitOrder}
         onCancel={() => {
-          if (modalStatus == "pending") return;
           setIsModalOpen(false);
         }}
-        confirmLoading={modalStatus == "pending"}
+        cancelButtonProps={{
+          disabled: modalAPIStatus === "pending",
+          style: { display: modalAPIStatus === "success" ? "none" : undefined },
+        }}
+        confirmLoading={modalAPIStatus === "pending"}
       >
-        {(modalStatus == "idle" || modalStatus == "pending") && (
-          <Result
-            title={
-              <Typography.Title
-                level={4}
-              >{`Send order of ${totalPrice} Baht?`}</Typography.Title>
-            }
-          />
-        )}
-        {modalStatus == "success" && (
-          <Result
-            status="success"
-            title={
-              <Typography.Title level={4}>{"Order send!"}</Typography.Title>
-            }
-          />
-        )}
-        {modalStatus == "error" && (
-          <Result
-            status="error"
-            title={
-              <Typography.Title level={4}>
-                {"Something went wrong! Please try again."}
-              </Typography.Title>
-            }
-          />
-        )}
+        <Result
+          status={mapStatusToModalProps?.[modalAPIStatus]?.modalStatus}
+          title={
+            <Typography.Title level={4}>
+              {mapStatusToModalProps?.[modalAPIStatus]?.title ?? ""}
+            </Typography.Title>
+          }
+        />
       </Modal>
     </>
   );
