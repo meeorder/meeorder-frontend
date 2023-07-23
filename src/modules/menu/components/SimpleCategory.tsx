@@ -1,8 +1,8 @@
 import { type CategoryProps } from "@/modules/menu/components/Category";
-import styled from "@emotion/styled";
 import SimpleFoodCard from "@/modules/menu/components/SimpleFoodCard";
 import { type Food } from "@/modules/mock/foods";
-import { List,Typography } from "antd";
+import styled from "@emotion/styled";
+import { List, Typography } from "antd";
 import React from "react";
 
 const SimpleCategory: React.FC<CategoryProps> = ({ category, foods }) => {
@@ -37,8 +37,8 @@ const StyledList = styled(List)`
     background: ${(props) => props.theme.antd.colorBgBase};
   }
   .ant-col {
-    padding-top:8px;
-    padding-right:8px;
+    padding-top: 8px;
+    padding-right: 8px;
   }
   .ant-list-item-meta {
     width: 240px;
