@@ -12,8 +12,17 @@ const SimpleCategory: React.FC<CategoryProps> = ({ category, foods }) => {
         scrollMarginTop: "112px", // very important for anchor to work
       }}
       id={category?.id}
-      header={<Typography.Title level={4}>{category?.name}</Typography.Title>}
-      bordered
+      header={
+        <Typography.Title
+          level={4}
+          style={{
+            margin: "0px",
+            marginLeft: "8px",
+          }}
+        >
+          {category?.name}
+        </Typography.Title>
+      }
       dataSource={foods}
       renderItem={(item) => {
         const food = item as Food;
@@ -27,6 +36,10 @@ export default SimpleCategory;
 
 const StyledList = styled(List)`
   margin-top: 16px;
+  .ant-list-header {
+    padding-block: 12px;
+  }
+
   .ant-list-bordered {
     padding: 0px;
   }
