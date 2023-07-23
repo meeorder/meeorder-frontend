@@ -36,23 +36,18 @@ export default SimpleCategory;
 
 const StyledList = styled(List)`
   margin-top: 16px;
+
   .ant-list-header {
     padding-block: 12px;
   }
 
-  .ant-list-bordered {
-    padding: 0px;
-  }
   .ant-list-item {
     padding: 0px;
     min-height: 117px;
     align-items: flex-start;
     background: ${(props) => props.theme.antd.colorBgBase};
   }
-  .ant-col {
-    padding-top: 8px;
-    padding-right: 8px;
-  }
+
   .ant-list-item-meta {
     width: 240px;
     padding: 24px;

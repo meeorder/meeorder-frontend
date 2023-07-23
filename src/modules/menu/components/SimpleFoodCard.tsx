@@ -41,6 +41,7 @@ const StyledImage = styled(Image)`
   width: 100px;
   height: 100px;
 `;
+
 const StyledButton = styled(Button)`
   position: absolute;
   right: 12px;
