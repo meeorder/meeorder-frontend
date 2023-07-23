@@ -11,50 +11,59 @@ type BasketSummaryNavProps = {
 type ModalProps = {
   title: string;
   modalStatus: ResultStatusType | undefined;
+  onOk?: () => void;
+  onCancel?: () => void;
 };
 
 type MapStatusToModalProps = Record<APIStatus, ModalProps>;
 
 const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalAPIStatus, setModalStatus] = useState<APIStatus>("idle");
+  const [basketAPIStatus, setBasketAPIStatus] = useState<APIStatus>("idle");
   const {
     token: { colorPrimary, colorBgBase },
   } = theme.useToken();
   const openModal = () => {
-    setModalStatus("idle");
+    setBasketAPIStatus("idle");
     setIsModalOpen(true);
   };
+  const handleSubmitOrder = () => {
+    setBasketAPIStatus("pending");
+    // TODO send order to server
+    setTimeout(() => {
+      // TODO show response message before close modal
+      setBasketAPIStatus("success");
+      // setBasketAPIStatus("error");
+    }, 2000);
+  };
+  const handleCancelSendOrder = () => {
+    setBasketAPIStatus("idle");
+    setIsModalOpen(false);
+  };
   const mapStatusToModalProps: MapStatusToModalProps = {
-    error: {
-      title: "Something went wrong! Please try again.",
-      modalStatus: "error",
-    },
-    success: {
-      title: "Order send!",
-      modalStatus: "success",
+    idle: {
+      title: `Send order of ${totalPrice} Baht?`,
+      modalStatus: "info",
+      onOk: handleSubmitOrder,
+      onCancel: handleCancelSendOrder,
     },
     pending: {
       title: `Sending order of ${totalPrice} Baht...`,
       modalStatus: "info",
+      onOk: () => {
+        return;
+      },
     },
-    idle: {
-      title: `Send order of ${totalPrice} Baht?`,
-      modalStatus: "info",
+    success: {
+      title: "Order send!",
+      modalStatus: "success",
+      onOk: handleCancelSendOrder,
     },
-  };
-  const handleSubmitOrder = () => {
-    console.log("handleOk");
-    setModalStatus("pending");
-    // TODO send order to server
-    setTimeout(() => {
-      // TODO show response message before close modal
-      // setModalStatus("success");
-      setModalStatus("error");
-      setTimeout(() => {
-        setIsModalOpen(false);
-      }, 1000);
-    }, 2000);
+    error: {
+      title: "Something went wrong! Please try again.",
+      modalStatus: "error",
+      onOk: handleCancelSendOrder,
+    },
   };
 
   return (
@@ -92,21 +101,29 @@ const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
         open={isModalOpen}
         maskClosable={false}
         closable={false}
-        onOk={handleSubmitOrder}
-        onCancel={() => {
-          setIsModalOpen(false);
-        }}
+        onOk={mapStatusToModalProps?.[basketAPIStatus]?.onOk}
+        onCancel={mapStatusToModalProps?.[basketAPIStatus]?.onCancel}
         cancelButtonProps={{
-          disabled: modalAPIStatus === "pending",
-          style: { display: modalAPIStatus === "success" ? "none" : undefined },
+          style: {
+            display: mapStatusToModalProps?.[basketAPIStatus]?.onCancel
+              ? undefined
+              : "none",
+          },
         }}
-        confirmLoading={modalAPIStatus === "pending"}
+        okButtonProps={{
+          style: {
+            display: mapStatusToModalProps?.[basketAPIStatus]?.onOk
+              ? undefined
+              : "none",
+          },
+        }}
+        confirmLoading={basketAPIStatus === "pending"}
       >
         <Result
-          status={mapStatusToModalProps?.[modalAPIStatus]?.modalStatus}
+          status={mapStatusToModalProps?.[basketAPIStatus]?.modalStatus}
           title={
             <Typography.Title level={4}>
-              {mapStatusToModalProps?.[modalAPIStatus]?.title ?? ""}
+              {mapStatusToModalProps?.[basketAPIStatus]?.title ?? ""}
             </Typography.Title>
           }
         />
