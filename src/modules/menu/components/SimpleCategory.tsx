@@ -53,4 +53,8 @@ const StyledList = styled(List)`
     padding: 24px;
     gap: 8px;
   }
+
+  .ant-list-item-meta-title {
+    margin-bottom: 8px !important;
+  }
 `;
