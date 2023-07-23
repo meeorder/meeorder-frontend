@@ -5,6 +5,7 @@ import { Row, Typography } from "antd";
 const RecommendedCategory: React.FC<CategoryProps> = ({ category, foods }) => {
   return (
     <div
+      id={category?.id}
       style={{
         scrollMarginTop: "112px", // very important for anchor to work
       }}
