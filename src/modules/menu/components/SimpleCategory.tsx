@@ -10,7 +10,6 @@ const SimpleCategory: React.FC<CategoryProps> = ({ category, foods }) => {
     <StyledList
       style={{
         scrollMarginTop: "112px", // very important for anchor to work
-        overflow: "hidden",
       }}
       id={category?.id}
       header={<Typography.Title level={4}>{category?.name}</Typography.Title>}
@@ -35,7 +34,6 @@ const StyledList = styled(List)`
     padding: 0px;
     min-height: 117px;
     align-items: flex-start;
-    border: 1px solid ${(props) => props.theme.antd.colorBorder};
     background: ${(props) => props.theme.antd.colorBgBase};
   }
   .ant-col {

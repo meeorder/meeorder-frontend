@@ -33,12 +33,12 @@ const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ food }) => {
 export default SimpleFoodCard;
 
 const StyledImage = styled(Image)`
-  border-radius: 5.667px;
+  border-radius: 8px;
 `;
 const StyledButton = styled(Button)`
   position: absolute;
   right: 11px;
-  top: 73px;
+  bottom: 9px;
   display: flex;
   justify-content: center;
   align-items: center;
