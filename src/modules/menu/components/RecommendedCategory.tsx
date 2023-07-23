@@ -23,5 +23,3 @@ const RecommendedCategory: React.FC<CategoryProps> = ({ category, foods }) => {
 };
 
 export default RecommendedCategory;
-
-const StyledRow = styled(Row)``;
