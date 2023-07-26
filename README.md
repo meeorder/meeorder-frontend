@@ -26,3 +26,26 @@ You can check out the [create-t3-app GitHub repository](https://github.com/t3-os
 ## How do I deploy this?
 
 Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+
+## Developing locally with backend image
+
+### Login to ghcr
+
+1. [Create Personal Access Token (PAT) (classic)](https://github.com/settings/tokens) with `read:packages` scope
+1. Login to ghcr with your PAT
+
+```bash
+$ docker login ghcr.io -u meeorder -p <your_pat>
+```
+
+### Run Docker Compose
+
+```bash
+$ docker compose -f docker-compose.dev.yaml up -d
+```
+
+### Backend URL
+
+```
+http://localhost:4000
+```
