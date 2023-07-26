@@ -1,6 +1,8 @@
+import TextPrice from "@/modules/common/components/TextPrice";
+import { H5, Text } from "@/modules/common/components/Typography";
 import { type Order, type OrderStatus } from "@/modules/mock/orders";
 import styled from "@emotion/styled";
-import { Card, Tag, Typography, type TagProps } from "antd";
+import { Card, Tag, type TagProps } from "antd";
 import Image from "next/image";
 
 type OrderCardProps = {
@@ -13,13 +15,11 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
     <StyledCard>
       <FlexBetweenRow>
         <FlexBetweenCol>
-          <Typography.Title level={5}>{order.food.name}</Typography.Title>
-          <Typography.Text type="secondary">
-            <span style={{ marginRight: "14px" }}>
-              {order.food.price.toFixed(2)} THB
-            </span>
+          <H5>{order.food.name}</H5>
+          <Text type="secondary">
+            <TextPrice price={order.food.price} />
             <StyledStatusTag color={colorTag}>{order.status}</StyledStatusTag>
-          </Typography.Text>
+          </Text>
         </FlexBetweenCol>
         <StyledImage
           width={900}
@@ -43,6 +43,7 @@ const StyledCard = styled(Card)`
 
 const StyledStatusTag = styled(Tag)`
   border-radius: 12px;
+  margin-left: 12px;
 `;
 
 const StyledImage = styled(Image)`

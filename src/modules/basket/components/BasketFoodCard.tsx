@@ -1,6 +1,8 @@
+import TextPrice from "@/modules/common/components/TextPrice";
+import { H5, Text } from "@/modules/common/components/Typography";
 import { type BasketOrder } from "@/modules/mock/orders";
 import styled from "@emotion/styled";
-import { Button, Typography, theme } from "antd";
+import { Button, theme } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,18 +16,15 @@ const BasketFoodCard: React.FC<BasketFoodCardProps> = ({ order }) => {
     <BasketCardContainer>
       <FoodDetails>
         <ContentGroup>
-          <Typography.Title style={{ margin: "0px" }} level={5}>
-            {order.food.name}
-          </Typography.Title>
-          <Typography.Text type="secondary">
-            {order.food.price} Baht
-          </Typography.Text>
+          <H5>{order.food.name}</H5>
+          {/* TODO calculate price from food and addons */}
+          <TextPrice price={order.food.price} color={token.colorText} />
         </ContentGroup>
         <ContentGroup>
           {order.addons?.map((addon) => (
-            <Typography.Text key={addon.id} type="secondary">
+            <Text key={addon.id} type="secondary">
               {addon.name}
-            </Typography.Text>
+            </Text>
           ))}
         </ContentGroup>
         {/* TODO navigate to edit link */}

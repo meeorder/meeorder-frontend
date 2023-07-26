@@ -1,6 +1,8 @@
+import TextPrice from "@/modules/common/components/TextPrice";
+import { H5 } from "@/modules/common/components/Typography";
 import { type Food } from "@/modules/mock/foods";
 import styled from "@emotion/styled";
-import { Col, Tag, Typography } from "antd";
+import { Col } from "antd";
 import Image from "next/image";
 
 type RecommendedFoodCardProps = {
@@ -18,8 +20,8 @@ const RecommendedFoodCard: React.FC<RecommendedFoodCardProps> = ({ food }) => {
           height={200}
         />
       </AspectRatioSquare>
-      <FoodNameText level={5}>{food.name}</FoodNameText>
-      <PriceTag>{food.price} Baht</PriceTag>
+      <FoodNameText bold>{food.name}</FoodNameText>
+      <StyledTextPrice price={food.price} />
     </Col>
   );
 };
@@ -47,28 +49,20 @@ const AspectRatioSquare = styled.div`
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 `;
 
-const FoodNameText = styled(Typography.Title)`
+const FoodNameText = styled(H5)`
   position: absolute;
-  padding: 0px;
-  margin: 0px;
   left: 10px;
   top: 10px;
   color: #ffffff !important;
-  font-weight: 700 !important;
 `;
 
-const PriceTag = styled(Tag)`
+const StyledTextPrice = styled(TextPrice)`
   position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   right: calc(16px + 4px);
   bottom: 16px;
-  padding: 1px 8px;
   margin: 0px;
+  padding: 1px 8px;
   border-radius: 12px;
   border: 1px solid ${(props) => props.theme.antd.colorBorder};
-  background: ${(props) => props.theme.antd.colorBgBase};
-  color: ${(props) => props.theme.antd.colorTextSecondary};
-  font-size: 14px;
+  background: ${(props) => props.theme.antd.colorBgLayout};
 `;
