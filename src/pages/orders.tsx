@@ -39,7 +39,7 @@ const OrderContainer = styled.div`
   background-color: ${(props) => props.theme.antd.colorBgLayout};
   min-height: calc(100vh - 128px);
   height: 100%;
-  padding: 24px;
+  padding: 20px;
 `;
 
 const OrderHeader = styled.div`
