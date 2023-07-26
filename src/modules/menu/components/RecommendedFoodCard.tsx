@@ -60,7 +60,6 @@ const StyledTextPrice = styled(TextPrice)`
   position: absolute;
   right: calc(16px + 4px);
   bottom: 16px;
-  margin: 0px;
   padding: 1px 8px;
   border-radius: 12px;
   border: 1px solid ${(props) => props.theme.antd.colorBorder};
