@@ -86,8 +86,7 @@ const AnchorContainer = styled.div`
 const StyledAnchor = styled(Anchor)`
   position: fixed;
   top: 64px;
-  left: 36px;
-  margin-block: auto;
+  margin: 0 auto;
   width: calc(100% - 40px);
   max-width: calc(500px - 40px);
   .ant-anchor {
