@@ -41,7 +41,7 @@ $ docker login ghcr.io -u meeorder -p <your_pat>
 ### Run Docker Compose
 
 ```bash
-$ docker compose up -d
+$ docker compose -f docker-compose.dev.yaml up -d
 ```
 
 ### Backend URL
