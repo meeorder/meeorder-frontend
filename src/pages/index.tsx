@@ -36,4 +36,5 @@ const MenuContainer = styled.div`
   min-height: calc(100vh - 128px);
   height: 100%;
   padding-inline: 20px;
+  padding-top: 48px;
 `;

@@ -1,7 +1,8 @@
+import { H4, Text } from "@/modules/common/components/Typography";
 import { type APIStatus } from "@/modules/common/types";
 import styled from "@emotion/styled";
 import { PaperPlaneRight } from "@phosphor-icons/react";
-import { Button, ConfigProvider, Modal, Result, Typography, theme } from "antd";
+import { Button, Modal, Result, theme } from "antd";
 import { type ResultStatusType } from "antd/es/result";
 import { useState } from "react";
 type BasketSummaryNavProps = {
@@ -42,13 +43,13 @@ const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
   };
   const mapStatusToModalProps: MapStatusToModalProps = {
     idle: {
-      title: `Send order of ${totalPrice} Baht?`,
+      title: `Send order of ${totalPrice} THB?`,
       modalStatus: "info",
       onOk: handleSubmitOrder,
       onCancel: handleCancelSendOrder,
     },
     pending: {
-      title: `Sending order of ${totalPrice} Baht...`,
+      title: `Sending order of ${totalPrice} THB...`,
       modalStatus: "info",
       onOk: () => {
         return;
@@ -69,32 +70,16 @@ const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
   return (
     <>
       <BasketSummaryNavWrapper style={{ backgroundColor: colorPrimary }}>
-        <Typography.Title
-          style={{ color: colorBgBase, margin: 0, marginLeft: "8px" }}
-          level={4}
+        <H4 style={{ color: colorBgBase, marginLeft: "8px" }}>
+          Total {totalPrice} THB
+        </H4>
+        <OrderButton
+          size="large"
+          icon={<PaperPlaneRight color={colorPrimary} size={14} />}
+          onClick={openModal}
         >
-          Total {totalPrice} Baht
-        </Typography.Title>
-        <ConfigProvider
-          theme={{
-            components: {
-              Button: {
-                borderRadiusLG: 12,
-                paddingContentHorizontal: 20,
-              },
-            },
-          }}
-        >
-          <OrderButton
-            size="large"
-            icon={<PaperPlaneRight color={colorPrimary} size={14} />}
-            onClick={openModal}
-          >
-            <Typography.Text style={{ color: colorPrimary }}>
-              Order
-            </Typography.Text>
-          </OrderButton>
-        </ConfigProvider>
+          <Text style={{ color: colorPrimary }}>Order</Text>
+        </OrderButton>
       </BasketSummaryNavWrapper>
       <Modal
         centered
@@ -122,9 +107,7 @@ const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
         <Result
           status={mapStatusToModalProps?.[basketAPIStatus]?.modalStatus}
           title={
-            <Typography.Title level={4}>
-              {mapStatusToModalProps?.[basketAPIStatus]?.title ?? ""}
-            </Typography.Title>
+            <H4>{mapStatusToModalProps?.[basketAPIStatus]?.title ?? ""}</H4>
           }
         />
       </Modal>
@@ -150,9 +133,15 @@ const BasketSummaryNavWrapper = styled.div`
 `;
 
 const OrderButton = styled(Button)`
+  border-radius: 12px !important;
+  padding-inline: 20px !important;
+  border: 1px solid ${(props) => props.theme.antd.colorPrimary} !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   /* increase space between icon and Text */
   .ant-btn-icon {
-    margin-inline-end: 10px !important;
     margin-inline-start: 4px;
   }
 `;

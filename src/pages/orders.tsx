@@ -1,10 +1,10 @@
+import { H4, H5 } from "@/modules/common/components/Typography";
 import { pages } from "@/modules/config/pageConfig";
 import AppLayout from "@/modules/layout/AppLayout";
 import { ordersData } from "@/modules/mock/orders";
 import OrderList from "@/modules/order/components/OrderList";
 import OrderSummaryPrice from "@/modules/order/components/OrderSummaryPrice";
 import styled from "@emotion/styled";
-import { Typography } from "antd";
 import Head from "next/head";
 
 const tableNumber = 10; // from session
@@ -20,10 +20,8 @@ const Orders = () => {
       <AppLayout layoutType="user" currentPageId={pages.orders.id}>
         <OrderContainer>
           <OrderHeader>
-            <Typography.Title level={4}>My Order</Typography.Title>
-            <Typography.Title level={5} type="secondary">
-              Table {tableNumber}
-            </Typography.Title>
+            <H4>My Order</H4>
+            <H5 type="secondary">Table {tableNumber}</H5>
           </OrderHeader>
           <OrderList orders={ordersData.orders} />
           <OrderSummaryPrice priceData={ordersData.priceData} />

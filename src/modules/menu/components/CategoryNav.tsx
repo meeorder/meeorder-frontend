@@ -48,7 +48,9 @@ export default CategoryNav;
 
 const CategoryNavContainer = styled.nav`
   height: 48px;
-  position: sticky;
+  max-width: 500px;
+  margin: 0 auto;
+  position: fixed;
   top: 64px;
   z-index: 1;
   background-color: ${(props) => props.theme.antd.colorBgBase};

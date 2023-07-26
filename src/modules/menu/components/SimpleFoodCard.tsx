@@ -1,3 +1,4 @@
+import TextPrice from "@/modules/common/components/TextPrice";
 import { type Food } from "@/modules/mock/foods";
 import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
@@ -26,7 +27,10 @@ const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ food }) => {
         </>
       }
     >
-      <List.Item.Meta title={food.name} description={`${food.price} Bath`} />
+      <List.Item.Meta
+        title={food.name}
+        description={<TextPrice price={food.price} />}
+      />
     </List.Item>
   );
 };
