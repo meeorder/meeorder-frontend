@@ -14,7 +14,6 @@ const RecommendedCategory: React.FC<CategoryProps> = ({ category, foods }) => {
       <H4
         medium
         style={{
-          marginTop: "0px",
           marginBottom: "12px",
           marginLeft: "8px",
         }}

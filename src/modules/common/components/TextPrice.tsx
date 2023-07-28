@@ -1,12 +1,9 @@
-import {
-  Text,
-  type TypographyTextProps,
-} from "@/modules/common/components/Typography";
+import { Text, type TextProps } from "@/modules/common/components/Typography";
 import { transientOptions } from "@/modules/common/transientOptions";
 import styled from "@emotion/styled";
 import { type CSSProperties } from "react";
 
-type TextPriceProps = TypographyTextProps & {
+type TextPriceProps = TextProps & {
   price: number;
   color?: CSSProperties["color"];
 };
