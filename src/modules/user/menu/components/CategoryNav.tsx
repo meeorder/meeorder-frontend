@@ -1,4 +1,4 @@
-import { type Category } from "@/modules/mock/categories";
+import { type Category } from "@/modules/user/mock/categories";
 import styled from "@emotion/styled";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { Anchor, Button, ConfigProvider } from "antd";

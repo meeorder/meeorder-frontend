@@ -1,8 +1,9 @@
-import { type PageId } from "@/modules/config/pageConfig";
-import AdminLayout from "@/modules/layout/AdminLayout";
-import UserLayout from "@/modules/layout/UserLayout";
-import { type LayoutType } from "@/modules/layout/types";
+import AdminLayout from "@/modules/admin/layout/AdminLayout";
+import { type PageId } from "@/modules/pageConfig";
+import UserLayout from "@/modules/user/layout/UserLayout";
 import React from "react";
+
+export type LayoutType = "user" | "admin";
 
 type AppLayoutProps = {
   layoutType: LayoutType;
@@ -17,10 +18,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
 }) => {
   switch (layoutType) {
     case "admin":
-      return <AdminLayout mainNode={children} />;
+      return <AdminLayout mainNode={children} currentPageId={currentPageId} />;
     case "user":
-      return <UserLayout mainNode={children} currentPageId={currentPageId} />;
-    default:
       return <UserLayout mainNode={children} currentPageId={currentPageId} />;
   }
 };

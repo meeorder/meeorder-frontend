@@ -1,6 +1,6 @@
 import { H4 } from "@/modules/common/components/Typography";
-import { type CategoryProps } from "@/modules/menu/components/Category";
-import SimpleFoodCard from "@/modules/menu/components/SimpleFoodCard";
+import { type CategoryProps } from "@/modules/user/menu/components/Category";
+import SimpleFoodCard from "@/modules/user/menu/components/SimpleFoodCard";
 import styled from "@emotion/styled";
 import { List } from "antd";
 import React from "react";

@@ -1,6 +1,6 @@
 import TextPrice from "@/modules/common/components/TextPrice";
 import { H5 } from "@/modules/common/components/Typography";
-import { type Food } from "@/modules/mock/foods";
+import { type Food } from "@/modules/user/mock/foods";
 import styled from "@emotion/styled";
 import { Col } from "antd";
 import Image from "next/image";

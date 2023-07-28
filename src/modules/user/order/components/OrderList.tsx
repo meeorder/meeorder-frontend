@@ -1,5 +1,5 @@
-import { type Order } from "@/modules/mock/orders";
-import OrderCard from "@/modules/order/components/OrderCard";
+import { type Order } from "@/modules/user/mock/orders";
+import OrderCard from "@/modules/user/order/components/OrderCard";
 import { Space } from "antd";
 
 type OrderListProps = {

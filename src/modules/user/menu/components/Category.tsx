@@ -1,7 +1,10 @@
-import RecommendedCategory from "@/modules/menu/components/RecommendedCategory";
-import SimpleCategory from "@/modules/menu/components/SimpleCategory";
-import { Category, RECOMMEND_CATEGORY_ID } from "@/modules/mock/categories";
-import { type Food } from "@/modules/mock/foods";
+import RecommendedCategory from "@/modules/user/menu/components/RecommendedCategory";
+import SimpleCategory from "@/modules/user/menu/components/SimpleCategory";
+import {
+  Category,
+  RECOMMEND_CATEGORY_ID,
+} from "@/modules/user/mock/categories";
+import { type Food } from "@/modules/user/mock/foods";
 
 export type CategoryProps = {
   category: Category;

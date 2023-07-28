@@ -1,6 +1,6 @@
 import { H4 } from "@/modules/common/components/Typography";
-import { type CategoryProps } from "@/modules/menu/components/Category";
-import RecommendedFoodCard from "@/modules/menu/components/RecommendedFoodCard";
+import { type CategoryProps } from "@/modules/user/menu/components/Category";
+import RecommendedFoodCard from "@/modules/user/menu/components/RecommendedFoodCard";
 import { Row } from "antd";
 
 const RecommendedCategory: React.FC<CategoryProps> = ({ category, foods }) => {
