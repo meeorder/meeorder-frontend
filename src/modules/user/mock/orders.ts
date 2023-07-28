@@ -1,4 +1,4 @@
-import { foods, type Food } from "@/modules/mock/foods";
+import { foods, type Food } from "@/modules/user/mock/foods";
 
 export type OrderStatus =
   | "In queue"

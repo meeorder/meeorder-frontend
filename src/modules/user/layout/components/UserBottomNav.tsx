@@ -1,5 +1,5 @@
 import { Text } from "@/modules/common/components/Typography";
-import { pages, type PageId } from "@/modules/config/pageConfig";
+import { pages, type PageId } from "@/modules/pageConfig";
 import styled from "@emotion/styled";
 import { type Icon } from "@phosphor-icons/react";
 import { ConfigProvider, Segmented, theme } from "antd";

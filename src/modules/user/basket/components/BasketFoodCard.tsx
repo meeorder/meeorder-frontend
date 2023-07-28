@@ -1,6 +1,6 @@
 import TextPrice from "@/modules/common/components/TextPrice";
 import { H5, Text } from "@/modules/common/components/Typography";
-import { type BasketOrder } from "@/modules/mock/orders";
+import { type BasketOrder } from "@/modules/user/mock/orders";
 import styled from "@emotion/styled";
 import { Button, theme } from "antd";
 import Image from "next/image";

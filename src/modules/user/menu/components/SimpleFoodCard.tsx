@@ -1,5 +1,5 @@
 import TextPrice from "@/modules/common/components/TextPrice";
-import { type Food } from "@/modules/mock/foods";
+import { type Food } from "@/modules/user/mock/foods";
 import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import { Button, List } from "antd";

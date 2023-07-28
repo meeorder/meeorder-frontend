@@ -1,7 +1,7 @@
-import { type PageId } from "@/modules/config/pageConfig";
-import UserBottomNav from "@/modules/layout/components/UserBottomNav";
-import UserTopNav from "@/modules/layout/components/UserTopNav";
 import WireFrame from "@/modules/mock/components/WireFrame";
+import { type PageId } from "@/modules/pageConfig";
+import UserBottomNav from "@/modules/user/layout/components/UserBottomNav";
+import UserTopNav from "@/modules/user/layout/components/UserTopNav";
 import styled from "@emotion/styled";
 
 type UserLayoutProps = {

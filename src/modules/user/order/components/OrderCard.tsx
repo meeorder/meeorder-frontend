@@ -1,6 +1,6 @@
 import TextPrice from "@/modules/common/components/TextPrice";
 import { H5, Text } from "@/modules/common/components/Typography";
-import { type Order, type OrderStatus } from "@/modules/mock/orders";
+import { type Order, type OrderStatus } from "@/modules/user/mock/orders";
 import styled from "@emotion/styled";
 import { Card, Tag, type TagProps } from "antd";
 import Image from "next/image";

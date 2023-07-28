@@ -1,5 +1,5 @@
 import { Text } from "@/modules/common/components/Typography";
-import { type PriceData } from "@/modules/mock/orders";
+import { type PriceData } from "@/modules/user/mock/orders";
 import styled from "@emotion/styled";
 import { Divider, Space } from "antd";
 

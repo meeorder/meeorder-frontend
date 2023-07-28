@@ -1,9 +1,9 @@
+import AppLayout from "@/modules/AppLayout";
 import { H4, H5 } from "@/modules/common/components/Typography";
-import { pages } from "@/modules/config/pageConfig";
-import AppLayout from "@/modules/layout/AppLayout";
-import { ordersData } from "@/modules/mock/orders";
-import OrderList from "@/modules/order/components/OrderList";
-import OrderSummaryPrice from "@/modules/order/components/OrderSummaryPrice";
+import { pages } from "@/modules/pageConfig";
+import { ordersData } from "@/modules/user/mock/orders";
+import OrderList from "@/modules/user/order/components/OrderList";
+import OrderSummaryPrice from "@/modules/user/order/components/OrderSummaryPrice";
 import styled from "@emotion/styled";
 import Head from "next/head";
 

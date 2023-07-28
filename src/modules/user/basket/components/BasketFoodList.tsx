@@ -1,6 +1,6 @@
-import BasketFoodCard from "@/modules/basket/components/BasketFoodCard";
 import { H4 } from "@/modules/common/components/Typography";
-import { type BasketOrder } from "@/modules/mock/orders";
+import BasketFoodCard from "@/modules/user/basket/components/BasketFoodCard";
+import { type BasketOrder } from "@/modules/user/mock/orders";
 import { List } from "antd";
 
 type BasketFoodListProp = {
