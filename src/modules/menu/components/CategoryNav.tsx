@@ -27,7 +27,7 @@ const CategoryNav: React.FC<CategoryNavProps> = ({ categories }) => {
         >
           <StyledAnchor
             direction="horizontal"
-            replace={true}
+            replace
             offsetTop={64}
             targetOffset={64 + 48}
             items={categories.map((category) => {
@@ -48,14 +48,19 @@ export default CategoryNav;
 
 const CategoryNavContainer = styled.nav`
   height: 48px;
-  position: sticky;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  position: fixed;
   top: 64px;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: ${(props) => props.theme.antd.colorBgBase};
 `;
 
 const StyledButton = styled(Button)`
-  position: absolute;
   height: 32px;
   width: 32px;
   margin: 8px;
@@ -66,9 +71,9 @@ const StyledButton = styled(Button)`
 
 const AnchorContainer = styled.div`
   position: relative;
-  width: calc(100% - 46px);
+  width: 100%;
+  max-width: 500px;
   margin-block: auto;
-  left: 46px;
   overflow: hidden;
   overflow-x: auto;
   -ms-overflow-style: none;
@@ -79,7 +84,12 @@ const AnchorContainer = styled.div`
 `;
 
 const StyledAnchor = styled(Anchor)`
-  position: relative;
-  margin-right: 16px;
-  margin-block: auto;
+  position: fixed;
+  top: 64px;
+  margin: 0 auto;
+  width: calc(100% - 40px);
+  max-width: calc(500px - 40px);
+  .ant-anchor {
+    padding: 0 10px;
+  }
 `;

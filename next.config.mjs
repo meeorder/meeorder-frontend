@@ -22,7 +22,7 @@ const config = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "placekitten.com",
+        hostname: "source.unsplash.com",
       },
     ],
   },

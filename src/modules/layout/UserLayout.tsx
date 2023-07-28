@@ -36,11 +36,13 @@ const UserLayoutContainer = styled.div`
 `;
 
 const UserTopNavContainer = styled.nav`
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 1;
   width: 100%;
   height: 64px;
+  max-width: 500px;
+  margin: 0 auto;
   background-color: ${(props) => props.theme.antd.colorBgBase};
   display: flex;
   justify-content: center;
@@ -50,7 +52,7 @@ const UserTopNavContainer = styled.nav`
 
 const UserMainContainer = styled.main`
   background-color: ${(props) => props.theme.antd.colorBgBase};
-  padding-bottom: 64px;
+  padding-block: 64px;
 `;
 
 const UserBottomNavContainer = styled.nav`

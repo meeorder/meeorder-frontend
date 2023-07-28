@@ -1,6 +1,7 @@
+import { H4 } from "@/modules/common/components/Typography";
 import { type CategoryProps } from "@/modules/menu/components/Category";
 import RecommendedFoodCard from "@/modules/menu/components/RecommendedFoodCard";
-import { Row, Typography } from "antd";
+import { Row } from "antd";
 
 const RecommendedCategory: React.FC<CategoryProps> = ({ category, foods }) => {
   return (
@@ -10,16 +11,15 @@ const RecommendedCategory: React.FC<CategoryProps> = ({ category, foods }) => {
         scrollMarginTop: "112px", // very important for anchor to work
       }}
     >
-      <Typography.Title
-        level={4}
+      <H4
+        medium
         style={{
-          marginTop: "0px",
           marginBottom: "12px",
           marginLeft: "8px",
         }}
       >
         {category?.name}
-      </Typography.Title>
+      </H4>
 
       <Row gutter={[8, 8]}>
         {foods.map((food) => (

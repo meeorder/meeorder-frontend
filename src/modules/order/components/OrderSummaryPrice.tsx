@@ -1,6 +1,7 @@
+import { Text } from "@/modules/common/components/Typography";
 import { type PriceData } from "@/modules/mock/orders";
 import styled from "@emotion/styled";
-import { Divider, Space, Typography } from "antd";
+import { Divider, Space } from "antd";
 
 type OrderSummaryPriceProps = {
   priceData: PriceData;
@@ -36,6 +37,6 @@ const FlexBetween = styled.div`
   align-items: center;
 `;
 
-const StyledText = styled(Typography.Text)`
+const StyledText = styled(Text)`
   font-size: 16px;
 `;

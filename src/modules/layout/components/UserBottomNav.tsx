@@ -1,7 +1,8 @@
+import { Text } from "@/modules/common/components/Typography";
 import { pages, type PageId } from "@/modules/config/pageConfig";
 import styled from "@emotion/styled";
 import { type Icon } from "@phosphor-icons/react";
-import { ConfigProvider, Segmented, Typography, theme } from "antd";
+import { ConfigProvider, Segmented, theme } from "antd";
 import Link from "next/link";
 
 type UserBottomNavProps = {
@@ -74,13 +75,13 @@ const AutoIcon: React.FC<AutoIconProps> = ({
         fill={isMatch ? colorPrimary : undefined}
         weight={isMatch ? "fill" : undefined}
       />
-      <Typography.Text
+      <Text
         style={{
           color: isMatch ? colorPrimary : undefined,
         }}
       >
         {label}
-      </Typography.Text>
+      </Text>
     </IconContainer>
   );
 };
