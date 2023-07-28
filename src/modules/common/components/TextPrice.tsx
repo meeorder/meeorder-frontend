@@ -2,6 +2,7 @@ import {
   Text,
   type TypographyTextProps,
 } from "@/modules/common/components/Typography";
+import { transientOptions } from "@/modules/common/transientOptions";
 import styled from "@emotion/styled";
 import { type CSSProperties } from "react";
 
@@ -28,7 +29,7 @@ type StyledPriceProps = {
   $color?: CSSProperties["color"];
 };
 
-const StyledPrice = styled(Text)<StyledPriceProps>`
+const StyledPrice = styled(Text, transientOptions)<StyledPriceProps>`
   color: ${(props) =>
     props.$color ? props.$color : props.theme.antd.colorPrimaryText};
 `;
