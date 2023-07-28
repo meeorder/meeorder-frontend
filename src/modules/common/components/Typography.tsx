@@ -1,9 +1,9 @@
 import { Typography as AntTypography } from "antd";
-import { type TextProps } from "antd/es/typography/Text";
+import { type TextProps as AntTextProps } from "antd/es/typography/Text";
 import { type TitleProps } from "antd/es/typography/Title";
 import { type RefAttributes } from "react";
 
-export type TypographyTitleProps = TitleProps &
+export type HeaderProps = TitleProps &
   RefAttributes<HTMLElement> & {
     bold?: boolean;
     medium?: boolean;
@@ -36,7 +36,7 @@ const Header = ({
   regular = false,
   style,
   ...restProps
-}: TypographyTitleProps) => {
+}: HeaderProps) => {
   return (
     <AntTypography.Title
       level={level}
@@ -49,24 +49,14 @@ const Header = ({
   );
 };
 
-const headerLevels = [1, 2, 3, 4, 5] as const;
+export const H1 = (props: HeaderProps) => <Header level={1} {...props} />;
+export const H2 = (props: HeaderProps) => <Header level={2} {...props} />;
+export const H3 = (props: HeaderProps) => <Header level={3} {...props} />;
+export const H4 = (props: HeaderProps) => <Header level={4} {...props} />;
+export const H5 = (props: HeaderProps) => <Header level={5} {...props} />;
 
-function createHeader(levels: typeof headerLevels) {
-  return levels.reduce(
-    (acc, level) => {
-      acc[`H${level}`] = (props: TypographyTitleProps) => (
-        <Header level={level} {...props} />
-      );
-      return acc;
-    },
-    {} as Record<`H${(typeof headerLevels)[number]}`, typeof Header>,
-  );
-}
+export type TextProps = AntTextProps & RefAttributes<HTMLElement>;
 
-export const { H1, H2, H3, H4, H5 } = createHeader(headerLevels);
-
-export type TypographyTextProps = TextProps & RefAttributes<HTMLElement>;
-
-export const Text = ({ children, ...restProps }: TypographyTextProps) => {
+export const Text = ({ children, ...restProps }: TextProps) => {
   return <AntTypography.Text {...restProps}>{children}</AntTypography.Text>;
 };
