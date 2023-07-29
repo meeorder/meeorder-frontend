@@ -5,6 +5,7 @@ import {
   ClipboardText,
   Gauge,
   House,
+  ListBullets,
   PencilSimpleLine,
   User,
 } from "@phosphor-icons/react";
@@ -58,7 +59,7 @@ export const pages = {
     label: "จัดการโปรโมชั่น",
     path: "/admin/promotion",
     layout: "admin",
-    Icon: PencilSimpleLine,
+    Icon: ListBullets,
   },
   adminSalesReport: {
     id: "adminSalesReport",
