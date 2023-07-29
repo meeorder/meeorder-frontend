@@ -1,8 +1,8 @@
-import BasketFoodList from "@/modules/basket/components/BasketFoodList";
-import BasketSummaryNav from "@/modules/basket/components/BasketSummaryNav";
-import { pages } from "@/modules/config/pageConfig";
-import AppLayout from "@/modules/layout/AppLayout";
-import { inBasketOrders } from "@/modules/mock/orders";
+import AppLayout from "@/modules/AppLayout";
+import { pages } from "@/modules/pageConfig";
+import BasketFoodList from "@/modules/user/basket/components/BasketFoodList";
+import BasketSummaryNav from "@/modules/user/basket/components/BasketSummaryNav";
+import { inBasketOrders } from "@/modules/user/mock/orders";
 import styled from "@emotion/styled";
 import Head from "next/head";
 

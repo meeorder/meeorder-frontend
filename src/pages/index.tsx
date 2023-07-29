@@ -1,9 +1,9 @@
-import { pages } from "@/modules/config/pageConfig";
-import AppLayout from "@/modules/layout/AppLayout";
-import Category from "@/modules/menu/components/Category";
-import CategoryNav from "@/modules/menu/components/CategoryNav";
-import { categories } from "@/modules/mock/categories";
-import { foods } from "@/modules/mock/foods";
+import AppLayout from "@/modules/AppLayout";
+import { pages } from "@/modules/pageConfig";
+import Category from "@/modules/user/menu/components/Category";
+import CategoryNav from "@/modules/user/menu/components/CategoryNav";
+import { categories } from "@/modules/user/mock/categories";
+import { foods } from "@/modules/user/mock/foods";
 import styled from "@emotion/styled";
 import Head from "next/head";
 
