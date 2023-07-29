@@ -20,9 +20,9 @@ const WireFrame: React.FC<WireFrameProps> = ({
 }) => {
   return (
     <StyledCard
-      cardColor={cardColor}
-      height={height}
-      width={width}
+      $cardColor={cardColor}
+      $height={height}
+      $width={width}
       id={id}
       style={style}
     >
@@ -34,17 +34,17 @@ const WireFrame: React.FC<WireFrameProps> = ({
 export default WireFrame;
 
 type StyledCardProps = {
-  cardColor: string;
-  height?: React.CSSProperties["height"];
-  width?: React.CSSProperties["width"];
+  $cardColor: string;
+  $height?: React.CSSProperties["height"];
+  $width?: React.CSSProperties["width"];
 };
 
 const StyledCard = styled.div<StyledCardProps>`
-  border: 5px solid ${(props) => props.cardColor};
+  border: 5px solid ${(props) => props.$cardColor};
   border-radius: 10px;
-  height: ${(props) => props.height ?? "100%"};
-  width: ${(props) => props.width ?? "100%"};
-  color: ${(props) => props.cardColor};
+  height: ${(props) => props.$height ?? "100%"};
+  width: ${(props) => props.$width ?? "100%"};
+  color: ${(props) => props.$cardColor};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -56,7 +56,7 @@ const StyledCard = styled.div<StyledCardProps>`
     position: absolute;
     top: 0;
     left: 0;
-    background: ${(props) => props.cardColor};
+    background: ${(props) => props.$cardColor};
     opacity: 0.1;
     width: 100%;
     height: 100%;

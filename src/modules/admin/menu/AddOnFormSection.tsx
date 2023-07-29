@@ -1,0 +1,35 @@
+import { type MenuLayoutVariant } from "@/modules/admin/layout/AdminMenuLayout";
+import { H4 } from "@/modules/common/components/Typography";
+import WireFrame from "@/modules/mock/components/WireFrame";
+import styled from "@emotion/styled";
+import { Card } from "antd";
+
+type AddOnFormSectionProps = {
+  menuLayoutVariant: MenuLayoutVariant;
+};
+
+const AddOnFormSection: React.FC<AddOnFormSectionProps> = () => {
+  return (
+    <AddOnFormCard title={<H4>AddOnForm</H4>} bordered={false}>
+      <WireFrame contentNode="AddOnTable" cardColor="red" />
+    </AddOnFormCard>
+  );
+};
+
+export default AddOnFormSection;
+
+const AddOnFormCard = styled(Card)`
+  flex: 1;
+  padding: 0px 24px 24px 24px;
+  .ant-card-head {
+    padding: 0;
+    height: 64px;
+  }
+  .ant-card-body {
+    padding: 0;
+    margin: 0;
+    height: calc(100% - 64px);
+    display: flex;
+    flex-direction: column;
+  }
+`;
