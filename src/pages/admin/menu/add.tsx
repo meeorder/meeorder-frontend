@@ -1,9 +1,10 @@
 import AppLayout from "@/modules/AppLayout";
+import AdminMenuLayout from "@/modules/admin/layout/AdminMenuLayout";
 
 const AdminAddMenu = () => {
   return (
     <AppLayout layoutType="admin" currentPageId="adminAddEditMenu">
-      AdminAddMenu
+      <AdminMenuLayout menuLayoutVariant="add" />
     </AppLayout>
   );
 };
