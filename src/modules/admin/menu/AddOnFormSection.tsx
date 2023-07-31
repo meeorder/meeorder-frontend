@@ -8,7 +8,7 @@ import { type ColumnsType } from "antd/es/table";
 type AddOnFormSectionProps = {
   menuLayoutVariant: MenuLayoutVariant;
 };
-export const columns: ColumnsType<AddOnDataType> = [
+const columns: ColumnsType<AddOnDataType> = [
   {
     title: "Add-On Name",
     dataIndex: "title",
