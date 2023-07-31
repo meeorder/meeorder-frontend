@@ -1,16 +1,18 @@
-import AddonsCard from "@/modules/user/menu/components/AddonsCard";
-import { addOnData } from "@/modules/user/mock/addon";
+import AddMinusButton from "@/modules/user/food/components/AddMinusButton";
+import Content from "@/modules/user/food/components/Content";
+import SaveButton from "@/modules/user/food/components/SaveButton";
 import { foods } from "@/modules/user/mock/foods";
 import styled from "@emotion/styled";
-import { Input, Typography } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const FoodDetail = () => {
   const router = useRouter();
   const { foodId } = router.query;
-
   const food = foods.find((food) => food.id === foodId);
+
+  const [dishCount, setDishCount] = useState(0);
 
   return (
     <>
@@ -27,31 +29,11 @@ const FoodDetail = () => {
             height: "264px",
           }}
         />
-        <ContentContainer>
-          <Typography.Title level={4}>{food?.name}</Typography.Title>
-          <Typography.Text>
-            Homemade honey bread toast with butter on top with blueberry
-            homemade jam.
-          </Typography.Text>
-          <AddonContainer>
-            {addOnData.map((addon) => (
-              <AddonsCard key={addon.id} addons={addon} />
-            ))}
-          </AddonContainer>
-          <AdditionalRequest>
-            <Typography.Title style={{ marginLeft: "8px" }} level={5}>
-              Additional Request
-            </Typography.Title>
-            <Input.TextArea
-              style={{
-                borderRadius: "12px",
-                height: "55px",
-              }}
-              autoSize={{ minRows: 4, maxRows: 6 }}
-              placeholder="E.g No Carb"
-            />
-          </AdditionalRequest>
-        </ContentContainer>
+        <Content food={food} />
+        <AddToCardButtonNav>
+          <AddMinusButton count={dishCount} setCount={setDishCount} />
+          <SaveButton count={dishCount} />
+        </AddToCardButtonNav>
       </LayoutContainer>
     </>
   );
@@ -65,18 +47,18 @@ const LayoutContainer = styled.div`
   min-height: 100vh;
   max-width: 500px;
   margin: 0 auto;
+  background-color: ${(props) => props.theme.antd.colorBgLayout};
+`;
+
+const AddToCardButtonNav = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 88px;
+  max-width: 500px;
   background-color: ${(props) => props.theme.antd.colorBgBase};
-`;
-
-const ContentContainer = styled.div`
-  margin: 20px;
-`;
-
-const AddonContainer = styled.div`
-  margin-block: 28px;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  justify-content: space-between;
+  padding: 20px 32px;
+  align-items: center;
 `;
-
-const AdditionalRequest = styled.div``;
