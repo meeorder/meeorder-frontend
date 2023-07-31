@@ -1,6 +1,6 @@
-import AddonsCard from "@/modules/menu/components/AddonsCard";
-import { addons } from "@/modules/mock/addons";
-import { foods } from "@/modules/mock/foods";
+import AddonsCard from "@/modules/user/menu/components/AddonsCard";
+import { addOnData } from "@/modules/user/mock/addon";
+import { foods } from "@/modules/user/mock/foods";
 import styled from "@emotion/styled";
 import { Input, Typography } from "antd";
 import Image from "next/image";
@@ -34,7 +34,7 @@ const FoodDetail = () => {
             homemade jam.
           </Typography.Text>
           <AddonContainer>
-            {addons.map((addon) => (
+            {addOnData.map((addon) => (
               <AddonsCard key={addon.id} addons={addon} />
             ))}
           </AddonContainer>
