@@ -1,6 +1,7 @@
+import { Text } from "@/modules/common/components/Typography";
 import { type AddOnDataType } from "@/modules/user/mock/addon";
 import styled from "@emotion/styled";
-import { Checkbox, Typography } from "antd";
+import { Checkbox } from "antd";
 import { type CheckboxChangeEvent } from "antd/es/checkbox";
 
 export type AddonsCardProps = {
@@ -18,7 +19,7 @@ const AddonsCard: React.FC<AddonsCardProps> = ({ addons }) => {
         <Checkbox onChange={(e) => handleChange(e, addons.title)}>
           {addons.title}
         </Checkbox>
-        <Typography.Text>+{addons.price} Baht</Typography.Text>
+        <Text type="secondary">+{addons.price} Baht</Text>
       </FlexRow>
     </div>
   );
