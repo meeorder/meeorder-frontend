@@ -1,21 +1,8 @@
-import { type ColumnsType } from "antd/es/table";
-
 export type AddOnDataType = {
   id: string;
   title: string;
   price: string;
 };
-export const columns: ColumnsType<AddOnDataType> = [
-  {
-    title: "Add-On Name",
-    dataIndex: "title",
-  },
-  {
-    title: "Price",
-    dataIndex: "price",
-    width: "100px",
-  },
-];
 
 export const addOnData: AddOnDataType[] = [
   {

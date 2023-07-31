@@ -1,12 +1,24 @@
 import { type MenuLayoutVariant } from "@/modules/admin/layout/AdminMenuLayout";
-import { addOnData, columns } from "@/modules/admin/mock/addon";
+import { addOnData, type AddOnDataType } from "@/modules/admin/mock/addon";
 import { H4 } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Button, Card, Table } from "antd";
+import { type ColumnsType } from "antd/es/table";
 
 type AddOnFormSectionProps = {
   menuLayoutVariant: MenuLayoutVariant;
 };
+export const columns: ColumnsType<AddOnDataType> = [
+  {
+    title: "Add-On Name",
+    dataIndex: "title",
+  },
+  {
+    title: "Price",
+    dataIndex: "price",
+    width: "100px",
+  },
+];
 
 const AddOnFormSection: React.FC<AddOnFormSectionProps> = () => {
   return (
