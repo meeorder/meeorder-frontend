@@ -74,6 +74,8 @@ const AddOnFormSection: React.FC<AddOnFormSectionProps> = () => {
         dataSource={addOnData}
         scroll={{ y: "20vh", x: "max-content" }}
         pagination={false}
+        style={{ width: "99%" }}
+        rowKey={(record) => record.id}
       />
     </AddOnFormCard>
   );
