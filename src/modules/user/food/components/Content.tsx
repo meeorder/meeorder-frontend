@@ -41,6 +41,7 @@ export default Content;
 
 const ContentContainer = styled.div`
   margin: 20px;
+  margin-bottom: calc(20px + 88px);
 `;
 
 const AddonContainer = styled.div`
