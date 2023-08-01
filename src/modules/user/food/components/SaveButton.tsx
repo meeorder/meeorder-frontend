@@ -8,22 +8,20 @@ type SaveButtonProps = {
 
 const SaveButton: React.FC<SaveButtonProps> = ({ count }) => {
   return (
-    <>
-      <Button
-        type="primary"
-        size="large"
-        danger={count === 0}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <H5 style={{ color: "white" }}>
-          {count === 0 ? "Delete From My Cart" : "Save change $99.00"}
-        </H5>
-      </Button>
-    </>
+    <Button
+      type="primary"
+      size="large"
+      danger={count === 0}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <H5 style={{ color: "white" }}>
+        {count === 0 ? "Delete From My Cart" : "Save change $99.00"}
+      </H5>
+    </Button>
   );
 };
 
