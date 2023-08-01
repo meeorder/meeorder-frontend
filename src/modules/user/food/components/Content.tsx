@@ -13,13 +13,10 @@ const Content: React.FC<ContentProps> = ({ food }) => {
   return (
     <ContentContainer>
       <H4>{food?.name}</H4>
-      <Text type="secondary">
-        Homemade honey bread toast with butter on top with blueberry homemade
-        jam.
-      </Text>
+      <Text type="secondary">{food?.description}</Text>
       <AddonContainer>
         {addOnData.map((addon) => (
-          <AddonsCard key={addon.id} addons={addon} />
+          <AddonsCard key={addon.id} addon={addon} />
         ))}
       </AddonContainer>
       <AdditionalRequest>
