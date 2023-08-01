@@ -30,18 +30,12 @@ const FoodDetail = () => {
               objectPosition: "center",
               width: "100%",
               height: "264px",
-              position: "absolute",
             }}
           />
           <BackButton
             shape="circle"
             size="large"
             icon={<ArrowLeft size={16} />}
-            style={{
-              position: "absolute",
-              top: "24px",
-              left: "24px",
-            }}
           />
         </ImageContainer>
         <Content food={food} />
@@ -78,7 +72,14 @@ const AddToCardButtonNav = styled.div`
   align-items: center;
 `;
 
-const BackButton = styled(Button)``;
+const BackButton = styled(Button)`
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const ImageContainer = styled.div`
   position: relative;
