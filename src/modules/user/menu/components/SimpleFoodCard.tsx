@@ -50,4 +50,7 @@ const StyledButton = styled(Button)`
   position: absolute;
   right: 12px;
   bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
