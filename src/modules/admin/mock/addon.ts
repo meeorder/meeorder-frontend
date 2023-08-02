@@ -6,23 +6,23 @@ export type AddOnDataType = {
 
 export const addOnData: AddOnDataType[] = [
   {
-    title: "Add-On 1",
+    title: "เฉาก๊วย",
     price: 100,
     id: "1",
   },
   {
-    title: "Add-On 2",
+    title: "ไข่มุก",
     price: 200,
     id: "2",
   },
   {
     id: "3",
-    title: "Add-On 3",
+    title: "น้ำตาลมิตรผล",
     price: 300,
   },
   {
     id: "4",
-    title: "Add-On 4",
+    title: "กล้วยบวชชี",
     price: 400,
   },
   {
