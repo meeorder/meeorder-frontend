@@ -1,6 +1,5 @@
 import AddOnFormSection from "@/modules/admin/menu/AddOnFormSection";
 import MenuFormSection from "@/modules/admin/menu/MenuFormSection";
-import MenuPreviewSection from "@/modules/admin/menu/MenuPreviewSection";
 
 export type MenuLayoutVariant = "preview" | "add" | "edit";
 
@@ -19,7 +18,6 @@ const AdminMenuLayout: React.FC<AdminMenuLayoutProps> = ({
         gap: "24px",
       }}
     >
-      <MenuPreviewSection menuLayoutVariant={menuLayoutVariant} />
       <div
         style={{
           display: "flex",

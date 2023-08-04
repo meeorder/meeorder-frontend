@@ -1,9 +1,14 @@
+import { type MenuSectionMode } from "@/modules/admin/menu/hooks/useMenuSectionMode";
 import WireFrame from "@/modules/mock/components/WireFrame";
 
-const MenuList = () => {
+type MenuListProps = {
+  menuSectionMode: MenuSectionMode;
+};
+
+const MenuList: React.FC<MenuListProps> = ({ menuSectionMode }) => {
   return (
     <WireFrame
-      contentNode="MenuList"
+      contentNode={"MenuList " + menuSectionMode}
       cardColor="red"
       style={{
         flex: 1,
