@@ -1,4 +1,5 @@
 import MenuList from "@/modules/admin/menu/MenuList";
+import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
 import { type MenuSectionMode } from "@/modules/admin/menu/hooks/useMenuSectionMode";
 import { H3, H5 } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
@@ -14,6 +15,7 @@ const MenuSection: React.FC<MenuSectionProps> = ({
   menuSectionMode,
   setMenuSectionMode,
 }) => {
+  const { changeToAddMenuMode } = useConsoleSectionMode();
   return (
     <MenuSectionCard
       title={
@@ -37,6 +39,7 @@ const MenuSection: React.FC<MenuSectionProps> = ({
             type="text"
             title="เพิ่มเมนูใหม่"
             icon={<Plus size={32} />}
+            onClick={changeToAddMenuMode}
           />
         </CardTitleExtra>
       }

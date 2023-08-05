@@ -10,9 +10,9 @@ const useMenuSectionMode = () => {
 
   useEffect(() => {
     if (!router.isReady) return;
-    if (router.query?.mode === "preview") {
+    if (router.query?.["menu-mode"] === "preview") {
       setMenuSectionMode("preview");
-    } else if (router.query?.mode === "edit") {
+    } else if (router.query?.["menu-mode"] === "edit") {
       setMenuSectionMode("edit");
     }
   }, [router, router.isReady]);
@@ -20,7 +20,7 @@ const useMenuSectionMode = () => {
   const handleSetMenuSectionMode = (value: MenuSectionMode) => {
     setMenuSectionMode(value);
     const searchParams = new URLSearchParams(window.location.search);
-    searchParams.set("mode", value);
+    searchParams.set("menu-mode", value);
     window.history.pushState(
       {},
       "",

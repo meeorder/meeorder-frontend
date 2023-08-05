@@ -1,10 +1,25 @@
+import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
 import WireFrame from "@/modules/mock/components/WireFrame";
 import styled from "@emotion/styled";
+import { Button } from "antd";
 
 const ConsoleSection = () => {
+  const { consoleSectionMode, editMenuId, changeToCategoryMode } =
+    useConsoleSectionMode();
   return (
     <ConsoleSectionContainer>
-      <WireFrame contentNode="MenuForm" cardColor="red" />
+      <WireFrame
+        contentNode={
+          <div>
+            {"console Mode : " +
+              consoleSectionMode +
+              " menu id : " +
+              (editMenuId || "undefined")}
+            <Button onClick={changeToCategoryMode}>Change to category</Button>
+          </div>
+        }
+        cardColor="red"
+      />
     </ConsoleSectionContainer>
   );
 };
