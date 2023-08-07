@@ -21,8 +21,7 @@ const config = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "source.unsplash.com",
+        hostname: "**",
       },
     ],
   },
