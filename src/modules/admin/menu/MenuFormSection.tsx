@@ -2,9 +2,9 @@ import { type MenuLayoutVariant } from "@/modules/admin/layout/AdminMenuLayout";
 import { categories } from "@/modules/admin/mock/categories";
 import { ingredientData } from "@/modules/admin/mock/ingredient";
 import { H4 } from "@/modules/common/components/Typography";
-import { Category } from "@/modules/user/mock/categories";
+import { type Category } from "@/modules/user/mock/categories";
 import styled from "@emotion/styled";
-import { Button, Card, Form, Input, Select } from "antd";
+import { Button, Card, Form, Input, InputNumber, Select } from "antd";
 import Image from "next/image";
 import React, { useState } from "react";
 
@@ -96,7 +96,12 @@ const MenuFormSection: React.FC<MenuFormSectionProps> = ({
             rules={[{ required: true, message: "Please input price!" }]}
             style={{ width: "100%" }}
           >
-            <Input placeholder="50" />
+            <InputNumber
+              prefix="฿"
+              controls={false}
+              placeholder="50"
+              style={{ width: "100%" }}
+            />
           </Form.Item>
 
           <Form.Item<FieldType>
@@ -104,9 +109,9 @@ const MenuFormSection: React.FC<MenuFormSectionProps> = ({
             label="Category"
             style={{ width: "100%" }}
           >
-            <Select placeholder="Breakfast" allowClear>
+            <Select allowClear>
               {categories.map((category) => (
-                <Select.Option value={category.name}>
+                <Select.Option key={category.id} value={category.name}>
                   {category.name}
                 </Select.Option>
               ))}
@@ -118,9 +123,9 @@ const MenuFormSection: React.FC<MenuFormSectionProps> = ({
             label="Ingredients"
             style={{ width: "100%" }}
           >
-            <Select mode="multiple" placeholder="Pork" allowClear>
+            <Select mode="tags" placeholder="Pork" allowClear>
               {ingredientData.map((ingredient) => (
-                <Select.Option value={ingredient.name}>
+                <Select.Option key={ingredient.id} value={ingredient.name}>
                   {ingredient.name}
                 </Select.Option>
               ))}
@@ -211,7 +216,7 @@ const GeneralFormItemsContainer = styled.div`
 `;
 
 const ImageFormItemsContainer = styled.div`
-  display: "flex";
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;

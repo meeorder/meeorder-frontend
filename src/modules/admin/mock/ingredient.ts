@@ -18,7 +18,6 @@ export const ingredientData: IngredientDataType[] = [
   },
   {
     id: "4",
-
     name: "Fish",
   },
   {
