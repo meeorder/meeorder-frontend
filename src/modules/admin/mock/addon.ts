@@ -1,43 +1,33 @@
 export type AddOnDataType = {
   id: string;
+  key: React.Key;
   title: string;
   price: number;
 };
 
-export const addOnData: AddOnDataType[] = [
-  {
-    title: "Add-on 1",
+export type AddOnModalDataType = {
+  id: string;
+  key: React.Key;
+  title: string;
+  price: number;
+};
+
+export const addOnData: AddOnDataType[] = [];
+for (let i = 1; i <= 8; i++) {
+  addOnData.push({
+    title: `Add-on ${i}`,
+    id: i.toString(),
+    key: i.toString(),
     price: 100,
-    id: "1",
-  },
-  {
-    title: "Add-on 2",
-    price: 200,
-    id: "2",
-  },
-  {
-    id: "3",
-    title: "Add-on 3",
-    price: 300,
-  },
-  {
-    id: "4",
-    title: "Add-on 4",
-    price: 400,
-  },
-  {
-    id: "5",
-    title: "Add-on 5",
-    price: 500,
-  },
-  {
-    id: "6",
-    title: "Add-on 6",
-    price: 600,
-  },
-  {
-    id: "7",
-    title: "Add-on 7",
-    price: 700,
-  },
-];
+  });
+}
+
+export const addOnModalData: AddOnModalDataType[] = [];
+for (let i = 1; i <= 20; i++) {
+  addOnModalData.push({
+    title: `Add-On-Modal ${i}`,
+    id: i.toString(),
+    key: i.toString(),
+    price: 100,
+  });
+}
