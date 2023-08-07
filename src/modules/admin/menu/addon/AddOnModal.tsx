@@ -11,7 +11,7 @@ type AddOnModalProps = {
 };
 
 export type AddOnModalDataType = {
-  id: string;
+  id: React.Key;
   title: string;
   price: number;
 };
@@ -67,6 +67,27 @@ const addOnModalData: AddOnModalDataType[] = [
     price: 100,
   },
 ];
+const row_selection = {
+  onChange: (
+    selectedRowKeys: React.Key[],
+    selectedRows: AddOnModalDataType[],
+  ) => {
+    console.log(
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      `selectedRowKeys: ${selectedRowKeys}`,
+      "selectedRows: ",
+      selectedRows,
+    );
+  },
+  getCheckboxProps: (record: AddOnModalDataType) => {
+    console.log(record);
+    return {
+      id: record.id.toString(),
+      title: record.title,
+      price: record.price,
+    };
+  },
+};
 
 const AddOnModal: React.FC<AddOnModalProps> = ({
   isModalOpen,
@@ -102,7 +123,14 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
         placeholder="input search text"
         allowClear
       />
-      <Table columns={modal_columns} dataSource={addOnModalData} />
+      <Table
+        rowSelection={{
+          type: "checkbox",
+          ...row_selection,
+        }}
+        columns={modal_columns}
+        dataSource={addOnModalData}
+      />
     </Modal>
   );
 };
