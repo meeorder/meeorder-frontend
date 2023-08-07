@@ -1,3 +1,7 @@
+import {
+  addOnModalData,
+  type AddOnModalDataType,
+} from "@/modules/admin/mock/addon";
 import { H4 } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Plus } from "@phosphor-icons/react";
@@ -8,13 +12,6 @@ import { type Dispatch, type SetStateAction } from "react";
 type AddOnModalProps = {
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
-};
-
-export type AddOnModalDataType = {
-  id: string;
-  key: React.Key;
-  title: string;
-  price: number;
 };
 
 const modal_columns: ColumnsType<AddOnModalDataType> = [
@@ -41,68 +38,6 @@ const modal_columns: ColumnsType<AddOnModalDataType> = [
   },
 ];
 
-const addOnModalData: AddOnModalDataType[] = [
-  {
-    id: "1",
-    key: "1",
-    title: "Add-On-Modal 1",
-    price: 100,
-  },
-  {
-    id: "2",
-    key: "2",
-    title: "Add-On-Modal 2",
-    price: 100,
-  },
-  {
-    id: "3",
-    key: "3",
-    title: "Add-On-Modal 3",
-    price: 100,
-  },
-  {
-    id: "4",
-    key: "4",
-    title: "Add-On-Modal 4",
-    price: 100,
-  },
-  {
-    id: "5",
-    key: "5",
-    title: "Add-On-Modal 5",
-    price: 100,
-  },
-  {
-    id: "6",
-    key: "6",
-    title: "Add-On-Modal 6",
-    price: 100,
-  },
-  {
-    id: "7",
-    key: "7",
-    title: "Add-On-Modal 7",
-    price: 100,
-  },
-  {
-    id: "8",
-    key: "8",
-    title: "Add-On-Modal 8",
-    price: 100,
-  },
-  {
-    id: "9",
-    key: "9",
-    title: "Add-On-Modal 9",
-    price: 100,
-  },
-  {
-    id: "10",
-    key: "10",
-    title: "Add-On-Modal 10",
-    price: 100,
-  },
-];
 const row_selection = {
   onChange: (
     selectedRowKeys: React.Key[],
