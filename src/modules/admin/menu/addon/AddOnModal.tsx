@@ -11,7 +11,8 @@ type AddOnModalProps = {
 };
 
 export type AddOnModalDataType = {
-  id: React.Key;
+  id: string;
+  key: React.Key;
   title: string;
   price: number;
 };
@@ -24,7 +25,7 @@ const modal_columns: ColumnsType<AddOnModalDataType> = [
   {
     title: "Price",
     dataIndex: "price",
-    width: "50px",
+    width: "70px",
   },
   {
     title: "Action",
@@ -43,27 +44,62 @@ const modal_columns: ColumnsType<AddOnModalDataType> = [
 const addOnModalData: AddOnModalDataType[] = [
   {
     id: "1",
+    key: "1",
     title: "Add-On-Modal 1",
     price: 100,
   },
   {
     id: "2",
+    key: "2",
     title: "Add-On-Modal 2",
     price: 100,
   },
   {
     id: "3",
+    key: "3",
     title: "Add-On-Modal 3",
     price: 100,
   },
   {
     id: "4",
+    key: "4",
     title: "Add-On-Modal 4",
     price: 100,
   },
   {
     id: "5",
+    key: "5",
     title: "Add-On-Modal 5",
+    price: 100,
+  },
+  {
+    id: "6",
+    key: "6",
+    title: "Add-On-Modal 6",
+    price: 100,
+  },
+  {
+    id: "7",
+    key: "7",
+    title: "Add-On-Modal 7",
+    price: 100,
+  },
+  {
+    id: "8",
+    key: "8",
+    title: "Add-On-Modal 8",
+    price: 100,
+  },
+  {
+    id: "9",
+    key: "9",
+    title: "Add-On-Modal 9",
+    price: 100,
+  },
+  {
+    id: "10",
+    key: "10",
+    title: "Add-On-Modal 10",
     price: 100,
   },
 ];
@@ -82,7 +118,8 @@ const row_selection = {
   getCheckboxProps: (record: AddOnModalDataType) => {
     console.log(record);
     return {
-      id: record.id.toString(),
+      key: record.key.toString(),
+      id: record.id,
       title: record.title,
       price: record.price,
     };
@@ -124,12 +161,11 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
         allowClear
       />
       <Table
-        rowSelection={{
-          type: "checkbox",
-          ...row_selection,
-        }}
+        rowSelection={row_selection}
         columns={modal_columns}
         dataSource={addOnModalData}
+        pagination={false}
+        scroll={{ y: "60vh", x: "max-content" }}
       />
     </Modal>
   );
