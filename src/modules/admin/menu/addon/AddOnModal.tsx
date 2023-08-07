@@ -43,27 +43,27 @@ const modal_columns: ColumnsType<AddOnModalDataType> = [
 const addOnModalData: AddOnModalDataType[] = [
   {
     id: "1",
-    title: "ไข่ดาว",
+    title: "Add-On-Modal 1",
     price: 100,
   },
   {
     id: "2",
-    title: "ไข่เจียว",
+    title: "Add-On-Modal 2",
     price: 100,
   },
   {
     id: "3",
-    title: "ไข่ต้ม",
+    title: "Add-On-Modal 3",
     price: 100,
   },
   {
     id: "4",
-    title: "ไข่เยี่ยวม้า",
+    title: "Add-On-Modal 4",
     price: 100,
   },
   {
     id: "5",
-    title: "ผักเซอราลี",
+    title: "Add-On-Modal 5",
     price: 100,
   },
 ];
