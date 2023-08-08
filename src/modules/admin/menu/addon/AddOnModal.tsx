@@ -2,6 +2,7 @@ import {
   addOnModalData,
   type AddOnModalDataType,
 } from "@/modules/admin/mock/addon";
+import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import { H4 } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Plus } from "@phosphor-icons/react";
@@ -44,8 +45,8 @@ const row_selection = {
     selectedRows: AddOnModalDataType[],
   ) => {
     console.log(
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      `selectedRowKeys: ${selectedRowKeys}`,
+      "selectedRowKeys: ",
+      selectedRowKeys,
       "selectedRows: ",
       selectedRows,
     );
@@ -71,13 +72,13 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
         <ModalHeader>
           <H4>Add-on</H4>
           <ModalActionContainer>
-            <CenterContainButton icon={<Plus />}>Add New</CenterContainButton>
-            <CenterContainButton
+            <CenterContentButton icon={<Plus />}>Add New</CenterContentButton>
+            <CenterContentButton
               type="primary"
               onClick={() => setIsModalOpen(false)}
             >
               Apply to menu
-            </CenterContainButton>
+            </CenterContentButton>
           </ModalActionContainer>
         </ModalHeader>
       }
@@ -119,10 +120,4 @@ const ModalActionContainer = styled.div`
   justify-content: flex-end;
   align-items: center;
   gap: 8px;
-`;
-
-const CenterContainButton = styled(Button)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
