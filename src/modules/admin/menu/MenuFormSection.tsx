@@ -33,7 +33,7 @@ const MenuFormSection: React.FC<MenuFormSectionProps> = ({
     // TODO: get menu data from api then set value to form
   }
 
-  const onFormSubmit = (values: any) => {
+  const onFormSubmit = (values: FieldType) => {
     // TODO: send data to api
     console.log(values);
   };
@@ -97,7 +97,7 @@ const MenuFormSection: React.FC<MenuFormSectionProps> = ({
             style={{ width: "100%" }}
           >
             <InputNumber
-              prefix="฿"
+              addonAfter="฿"
               controls={false}
               placeholder="50"
               style={{ width: "100%" }}
@@ -198,7 +198,7 @@ const ButtonGroup = styled.div`
   gap: 8px;
 `;
 
-const MenuFormContainer = styled(Form)`
+const MenuFormContainer = styled(Form<FieldType>)`
   display: flex;
   padding: 12px 12px 0px 12px;
   justify-content: space-between;
