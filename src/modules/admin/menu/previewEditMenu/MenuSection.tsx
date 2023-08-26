@@ -1,6 +1,6 @@
-import MenuList from "@/modules/admin/menu/MenuList";
 import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
 import { type MenuSectionMode } from "@/modules/admin/menu/hooks/useMenuSectionMode";
+import MenuList from "@/modules/admin/menu/previewEditMenu/MenuList";
 import { H3, H5 } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Plus } from "@phosphor-icons/react";

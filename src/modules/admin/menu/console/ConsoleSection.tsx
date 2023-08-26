@@ -1,7 +1,7 @@
-import MenuFormSection from "@/modules/admin/menu/MenuFormSection";
-import AddOnFormSection from "@/modules/admin/menu/addon/AddOnFormSection";
+import AddOnFormSection from "@/modules/admin/menu/console/AddOnFormSection";
+import CategoryOverview from "@/modules/admin/menu/console/CategoryOverview";
+import MenuFormSection from "@/modules/admin/menu/console/MenuFormSection";
 import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
-import WireFrame from "@/modules/mock/components/WireFrame";
 import styled from "@emotion/styled";
 
 const ConsoleSection = () => {
@@ -15,7 +15,7 @@ const ConsoleSection = () => {
           <AddOnFormSection />
         </>
       ) : (
-        <WireFrame contentNode="category overview" />
+        <CategoryOverview />
       )}
     </ConsoleSectionContainer>
   );

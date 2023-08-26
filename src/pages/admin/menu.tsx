@@ -1,7 +1,7 @@
 import AppLayout from "@/modules/AppLayout";
-import ConsoleSection from "@/modules/admin/menu/ConsoleSection";
-import MenuSection from "@/modules/admin/menu/MenuSection";
+import ConsoleSection from "@/modules/admin/menu/console/ConsoleSection";
 import useMenuSectionMode from "@/modules/admin/menu/hooks/useMenuSectionMode";
+import MenuSection from "@/modules/admin/menu/previewEditMenu/MenuSection";
 import styled from "@emotion/styled";
 
 const AdminMenu = () => {

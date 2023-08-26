@@ -1,4 +1,4 @@
-import AddOnModal from "@/modules/admin/menu/addon/AddOnModal";
+import AddOnModal from "@/modules/admin/menu/console/AddOnModal";
 import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
 import { addOnData, type AddOnDataType } from "@/modules/admin/mock/addon";
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
