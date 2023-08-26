@@ -1,4 +1,4 @@
-import AddOnFormSection from "@/modules/admin/menu/AddOnFormSection";
+import AddOnFormSection from "@/modules/admin/menu/addon/AddOnFormSection";
 import MenuFormSection from "@/modules/admin/menu/MenuFormSection";
 
 export type MenuLayoutVariant = "preview" | "add" | "edit";
