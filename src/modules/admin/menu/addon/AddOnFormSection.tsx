@@ -1,8 +1,8 @@
-import { type MenuLayoutVariant } from "@/modules/admin/layout/AdminMenuLayout";
 import AddOnModal from "@/modules/admin/menu/addon/AddOnModal";
+import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
 import { addOnData, type AddOnDataType } from "@/modules/admin/mock/addon";
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
-import { H4 } from "@/modules/common/components/Typography";
+import { H4, Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Card, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
@@ -20,16 +20,26 @@ const columns: ColumnsType<AddOnDataType> = [
   },
 ];
 
-type AddOnFormSectionProps = {
-  menuLayoutVariant: MenuLayoutVariant;
-};
-
-const AddOnFormSection: React.FC<AddOnFormSectionProps> = () => {
+const AddOnFormSection: React.FC = () => {
+  const { consoleSectionMode, editMenuId } = useConsoleSectionMode();
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <>
       <AddOnFormCard
-        title={<H4>Add-on</H4>}
+        title={
+          <div
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              gap: "8px",
+            }}
+          >
+            <H4>Add-on</H4>
+            {consoleSectionMode === "edit-menu" && (
+              <Text type="secondary"> ({editMenuId}) </Text>
+            )}
+          </div>
+        }
         bordered={false}
         extra={
           <CenterContentButton

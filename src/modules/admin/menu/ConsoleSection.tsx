@@ -1,25 +1,22 @@
+import MenuFormSection from "@/modules/admin/menu/MenuFormSection";
+import AddOnFormSection from "@/modules/admin/menu/addon/AddOnFormSection";
 import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
 import WireFrame from "@/modules/mock/components/WireFrame";
 import styled from "@emotion/styled";
-import { Button } from "antd";
 
 const ConsoleSection = () => {
-  const { consoleSectionMode, editMenuId, changeToCategoryMode } =
-    useConsoleSectionMode();
+  const { consoleSectionMode } = useConsoleSectionMode();
   return (
     <ConsoleSectionContainer>
-      <WireFrame
-        contentNode={
-          <div>
-            {"console Mode : " +
-              consoleSectionMode +
-              " menu id : " +
-              (editMenuId || "undefined")}
-            <Button onClick={changeToCategoryMode}>Change to category</Button>
-          </div>
-        }
-        cardColor="red"
-      />
+      {consoleSectionMode === "edit-menu" ||
+      consoleSectionMode === "add-menu" ? (
+        <>
+          <MenuFormSection />
+          <AddOnFormSection />
+        </>
+      ) : (
+        <WireFrame contentNode="category overview" />
+      )}
     </ConsoleSectionContainer>
   );
 };

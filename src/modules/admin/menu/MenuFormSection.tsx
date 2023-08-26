@@ -1,7 +1,7 @@
-import { type MenuLayoutVariant } from "@/modules/admin/layout/AdminMenuLayout";
+import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
 import { categories } from "@/modules/admin/mock/categories";
 import { ingredientData } from "@/modules/admin/mock/ingredient";
-import { H4 } from "@/modules/common/components/Typography";
+import { H4, Text } from "@/modules/common/components/Typography";
 import { type Category } from "@/modules/user/mock/categories";
 import styled from "@emotion/styled";
 import { Button, Card, Form, Input, InputNumber, Select } from "antd";
@@ -17,57 +17,68 @@ type FieldType = {
   imageURL?: string;
 };
 
-type MenuFormSectionProps = {
-  menuLayoutVariant: MenuLayoutVariant;
-};
-
-const MenuFormSection: React.FC<MenuFormSectionProps> = ({
-  menuLayoutVariant,
-}) => {
+const MenuFormSection: React.FC = () => {
+  const { consoleSectionMode, editMenuId, changeToCategoryMode } =
+    useConsoleSectionMode();
   const [form] = Form.useForm();
   const [imageURL, setImageURL] = useState<string>(
     "https://source.unsplash.com/random/?food&plate&11",
   );
 
-  if (menuLayoutVariant === "edit") {
+  if (consoleSectionMode === "edit-menu") {
     // TODO: get menu data from api then set value to form
   }
 
-  const onFormSubmit = (values: FieldType) => {
+  const handleFormSubmit = (values: FieldType) => {
     // TODO: send data to api
     console.log(values);
   };
 
-  const onSave = () => {
+  const handleSave = () => {
     form.submit();
   };
 
-  const onCancel = () => {
+  const handleCancel = () => {
+    // mock
+    changeToCategoryMode();
     // TODO: popup confirm
     // TODO: if no close popup
     // TODO: if yes redirect to menu
   };
 
-  const onDelete = () => {
+  const handleDelete = () => {
     // TODO: popup confirm
     // TODO: if no close popup
     // TODO: if yes delete menu redirect to menu
   };
 
-  const title = menuLayoutVariant === "edit" ? "Edit" : "Add";
-
   return (
     <MenuFormCard
-      title={<H4 medium={true}>{title}</H4>}
+      title={
+        <div
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            gap: "8px",
+          }}
+        >
+          <H4>{consoleSectionMode === "edit-menu" ? "Edit" : "Add"}</H4>
+          {consoleSectionMode === "edit-menu" && (
+            <Text type="secondary"> ({editMenuId}) </Text>
+          )}
+        </div>
+      }
       bordered={false}
       extra={
         <ButtonGroup>
-          <Button type="primary" onClick={onSave}>
+          <Button type="primary" onClick={handleSave}>
             Save
           </Button>
-          <Button type="default">Cancel</Button>
-          {menuLayoutVariant === "edit" && (
-            <Button type="primary" danger>
+          <Button type="default" onClick={handleCancel}>
+            Cancel
+          </Button>
+          {consoleSectionMode === "edit-menu" && (
+            <Button type="primary" danger onClick={handleDelete}>
               Delete
             </Button>
           )}
@@ -77,7 +88,7 @@ const MenuFormSection: React.FC<MenuFormSectionProps> = ({
       <MenuFormContainer
         layout="vertical"
         form={form}
-        onFinish={onFormSubmit}
+        onFinish={handleFormSubmit}
         requiredMark="optional"
       >
         <GeneralFormItemsContainer>
