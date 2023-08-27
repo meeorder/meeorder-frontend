@@ -1,27 +1,27 @@
 import TextPrice from "@/modules/common/components/TextPrice";
 import { H5 } from "@/modules/common/components/Typography";
-import { type Food } from "@/modules/user/mock/foods";
+import { type Menu } from "@/modules/user/menu/types";
 import styled from "@emotion/styled";
 import { Col } from "antd";
 import Image from "next/image";
 
 type RecommendedFoodCardProps = {
-  food: Food;
+  menu: Menu;
 };
 
-const RecommendedFoodCard: React.FC<RecommendedFoodCardProps> = ({ food }) => {
+const RecommendedFoodCard: React.FC<RecommendedFoodCardProps> = ({ menu }) => {
   return (
     <Col span={12}>
       <AspectRatioSquare>
         <StyledImage
-          src={food.imagePath ?? ""}
-          alt={food.name}
+          src={menu.image ?? ""}
+          alt={menu.name}
           width={200}
           height={200}
         />
       </AspectRatioSquare>
-      <FoodNameText bold>{food.name}</FoodNameText>
-      <StyledTextPrice price={food.price} />
+      <FoodNameText bold>{menu.name}</FoodNameText>
+      <StyledTextPrice price={menu.price} />
     </Col>
   );
 };

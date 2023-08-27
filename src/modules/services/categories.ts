@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/modules/services/axios";
-import { paths } from "@/schemas/schema";
+import { type paths } from "@/schemas/schema";
 
 export type GetAllCategoriesResponse =
   paths["/categories"]["get"]["responses"]["200"]["content"]["application/json"];

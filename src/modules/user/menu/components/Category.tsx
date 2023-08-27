@@ -1,23 +1,20 @@
 import RecommendedCategory from "@/modules/user/menu/components/RecommendedCategory";
 import SimpleCategory from "@/modules/user/menu/components/SimpleCategory";
-import {
-  Category,
-  RECOMMEND_CATEGORY_ID,
-} from "@/modules/user/mock/categories";
-import { type Food } from "@/modules/user/mock/foods";
+import { Category, type Menu } from "@/modules/user/menu/types";
+import { RECOMMEND_CATEGORY_ID } from "@/modules/user/mock/categories";
 
 export type CategoryProps = {
   category: Category;
-  foods: Food[];
+  menus: Menu[];
 };
 
-const Category: React.FC<CategoryProps> = ({ category, foods }) => {
-  switch (category?.id) {
+const Category: React.FC<CategoryProps> = ({ category, menus }) => {
+  switch (category?._id) {
     case RECOMMEND_CATEGORY_ID:
-      return <RecommendedCategory category={category} foods={foods} />;
+      return <RecommendedCategory category={category} menus={menus} />;
     default:
       return (
-        <SimpleCategory category={category} foods={[...foods, ...foods]} /> // just to make the list longer
+        <SimpleCategory category={category} menus={menus} /> // just to make the list longer
       );
   }
 };
