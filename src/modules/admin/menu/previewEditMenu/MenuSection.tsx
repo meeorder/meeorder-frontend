@@ -29,7 +29,7 @@ const MenuSection: React.FC<MenuSectionProps> = ({
             <H5>แสดงตัวอย่าง</H5>
             <Switch
               title="ปรับเปลี่ยนโหมดแสดงตัวอย่าง"
-              checked={menuSectionMode === "preview" ? true : false}
+              checked={menuSectionMode === "preview"}
               onChange={(checked) => {
                 setMenuSectionMode(checked ? "preview" : "edit");
               }}
