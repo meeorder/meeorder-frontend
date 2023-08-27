@@ -5,9 +5,6 @@
 
 
 export interface paths {
-  "/health": {
-    get: operations["HealthController_getHealth"];
-  };
   "/health/ping": {
     get: operations["HealthController_getPing"];
   };
@@ -92,14 +89,7 @@ export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
     HealthResponseDto: {
-      id: string;
-      /** Format: date-time */
-      createdAt: string;
-      /**
-       * @description Health status
-       * @example OK
-       */
-      status: string;
+      msg: Record<string, never>;
     };
     CreateCategoryDto: {
       title: string;
@@ -131,7 +121,7 @@ export interface components {
     };
     GetMenuByIdResponseDto: {
       image: string;
-      name: string;
+      title: string;
       description: string;
       price: number;
       category: string;
@@ -147,7 +137,7 @@ export interface components {
     };
     CreateMenuDto: {
       image: string;
-      name: string;
+      title: string;
       description: string;
       price: number;
       category: string;
@@ -157,7 +147,7 @@ export interface components {
       /** @description Menu ID */
       _id: string;
       image: string;
-      name: string;
+      title: string;
       description: string;
       price: number;
       category: string;
@@ -240,22 +230,12 @@ export type external = Record<string, never>;
 
 export interface operations {
 
-  HealthController_getHealth: {
+  HealthController_getPing: {
     responses: {
       /** @description Health status */
       200: {
         content: {
           "application/json": components["schemas"]["HealthResponseDto"];
-        };
-      };
-    };
-  };
-  HealthController_getPing: {
-    responses: {
-      /** @description Health status (Not connected to DB) */
-      200: {
-        content: {
-          "application/json": string;
         };
       };
     };

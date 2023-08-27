@@ -15,12 +15,12 @@ const RecommendedFoodCard: React.FC<RecommendedFoodCardProps> = ({ menu }) => {
       <AspectRatioSquare>
         <StyledImage
           src={menu.image ?? ""}
-          alt={menu.name}
+          alt={menu.title}
           width={200}
           height={200}
         />
       </AspectRatioSquare>
-      <FoodNameText bold>{menu.name}</FoodNameText>
+      <FoodNameText bold>{menu.title}</FoodNameText>
       <StyledTextPrice price={menu.price} />
     </Col>
   );

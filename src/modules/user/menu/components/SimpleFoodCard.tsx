@@ -21,14 +21,14 @@ const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
             src={menu.image ?? ""}
             width={500}
             height={500}
-            alt={menu.name}
+            alt={menu.title}
           />
           <StyledButton type="primary" shape="circle" icon={<PlusOutlined />} />
         </>
       }
     >
       <List.Item.Meta
-        title={menu.name}
+        title={menu.title}
         description={<TextPrice price={menu.price} />}
       />
     </List.Item>

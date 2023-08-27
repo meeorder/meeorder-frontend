@@ -8,7 +8,7 @@
     "yarn": ">= 1.22.19"
   },
   "scripts": {
-    "dev": "npx openapi-typescript https://meeorder.github.io/meeorder-backend/swagger.json -o ./src/schemas/schema.d.ts &&  next dev",
+    "dev": "npx openapi-typescript ./swagger.json -o ./src/schemas/schema.d.ts &&  next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
