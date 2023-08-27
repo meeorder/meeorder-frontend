@@ -120,6 +120,8 @@ export interface components {
       price: number;
     };
     GetMenuByIdResponseDto: {
+      /** @description Menu ID */
+      _id: string;
       image: string;
       title: string;
       description: string;

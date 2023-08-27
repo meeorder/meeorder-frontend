@@ -25,7 +25,7 @@ const SimpleCategory: React.FC<CategoryProps> = ({ category, menus }) => {
       dataSource={menus}
       renderItem={(item) => {
         const menu = item as (typeof menus)[number];
-        return <SimpleFoodCard key={menu.title} menu={menu} />;
+        return <SimpleFoodCard key={menu?._id} menu={menu} />;
       }}
     />
   );

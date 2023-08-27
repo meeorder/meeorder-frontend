@@ -23,7 +23,7 @@ const RecommendedCategory: React.FC<CategoryProps> = ({ category, menus }) => {
 
       <Row gutter={[8, 8]}>
         {menus.map((menu) => (
-          <RecommendedFoodCard key={menu?.title} menu={menu} />
+          <RecommendedFoodCard key={menu?._id} menu={menu} />
         ))}
       </Row>
     </div>
