@@ -53,12 +53,11 @@ export type ReplaceMenuByIdAndDataResponse =
 
 export const replaceMenuByIdAndData = async (
   params: ReplaceMenuByIdAndDataPathParam & ReplaceMenuByIdAndDataBodyParam,
-): Promise<ReplaceMenuByIdAndDataResponse> => {
-  const { data } = await axiosInstance.put<ReplaceMenuByIdAndDataResponse>(
+): Promise<void> => {
+  await axiosInstance.put<ReplaceMenuByIdAndDataResponse>(
     `/menus/${params.id}`,
     params,
   );
-  return data;
 };
 
 export type PublishMenuByIdPathParam =
@@ -68,11 +67,10 @@ export type PublishMenuByIdResponse =
 
 export const publishMenuById = async (
   params: PublishMenuByIdPathParam,
-): Promise<PublishMenuByIdResponse> => {
-  const { data } = await axiosInstance.patch<PublishMenuByIdResponse>(
+): Promise<void> => {
+  await axiosInstance.patch<PublishMenuByIdResponse>(
     `/menus/${params.id}/publish`,
   );
-  return data;
 };
 
 export type UnpublishMenuByIdPathParam =
@@ -82,11 +80,10 @@ export type UnpublishMenuByIdResponse =
 
 export const unpublishMenuById = async (
   params: UnpublishMenuByIdPathParam,
-): Promise<UnpublishMenuByIdResponse> => {
-  const { data } = await axiosInstance.patch<UnpublishMenuByIdResponse>(
+): Promise<void> => {
+  await axiosInstance.patch<UnpublishMenuByIdResponse>(
     `/menus/${params.id}/unpublish`,
   );
-  return data;
 };
 
 export type DeleteMenuByIdPathParam =
@@ -96,9 +93,6 @@ export type DeleteMenuByIdResponse =
 
 export const deleteMenuById = async (
   params: DeleteMenuByIdPathParam,
-): Promise<DeleteMenuByIdResponse> => {
-  const { data } = await axiosInstance.delete<DeleteMenuByIdResponse>(
-    `/menus/${params.id}`,
-  );
-  return data;
+): Promise<void> => {
+  await axiosInstance.delete<DeleteMenuByIdResponse>(`/menus/${params.id}`);
 };
