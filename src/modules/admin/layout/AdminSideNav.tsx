@@ -31,7 +31,9 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
         defaultSelectedKeys={[currentPageId]}
         onClick={({ key }) => {
           const page = pages[key as PageId];
-          void router.push(page.path);
+          if (router.pathname !== page.path) {
+            void router.push(page.path);
+          }
         }}
         items={[
           adminDashboard,
