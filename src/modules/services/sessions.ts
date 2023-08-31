@@ -93,4 +93,17 @@ export const deleteSessionById = async (
   );
 };
 
-// TODO: Add another services
+export type GetSessionOrdersByIdPathParam =
+  paths["/sessions/{id}/orders"]["get"]["parameters"]["path"];
+
+export type GetSessionOrdersByIdResponse =
+  paths["/sessions/{id}/orders"]["get"]["responses"]["200"]["content"]["application/json"];
+
+export const getSessionOrdersById = async (
+  params: GetSessionOrdersByIdPathParam,
+): Promise<GetSessionOrdersByIdResponse> => {
+  const { data } = await axiosInstance.get<GetSessionOrdersByIdResponse>(
+    `/sessions/${params.id}/orders`,
+  );
+  return data;
+};

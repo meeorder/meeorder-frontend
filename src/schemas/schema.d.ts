@@ -103,7 +103,7 @@ export interface components {
     };
     UpdateCategoryDto: {
       title: string;
-      menu: string[];
+      menus: string[];
       rank: number;
     };
     RankDto: {
@@ -335,7 +335,7 @@ export interface operations {
       /** @description Get all addons */
       200: {
         content: {
-          "application/json": components["schemas"]["CreateAddonDto"][];
+          "application/json": components["schemas"]["AddonSchema"][];
         };
       };
     };
@@ -365,7 +365,7 @@ export interface operations {
       /** @description Get addon by Id */
       200: {
         content: {
-          "application/json": components["schemas"]["CreateAddonDto"];
+          "application/json": components["schemas"]["AddonSchema"];
         };
       };
       /** @description Addon not found */
