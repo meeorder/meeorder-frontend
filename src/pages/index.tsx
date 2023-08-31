@@ -4,6 +4,7 @@ import Category from "@/modules/user/menu/components/Category";
 import CategoryNav from "@/modules/user/menu/components/CategoryNav";
 import useAllMenu from "@/modules/user/menu/hooks/useAllMenu";
 import useCategories from "@/modules/user/menu/hooks/useCategory";
+import { type Menu } from "@/modules/user/menu/types";
 import styled from "@emotion/styled";
 import Head from "next/head";
 
@@ -30,7 +31,12 @@ const Home = () => {
                 <Category
                   key={item?.category?._id}
                   category={item?.category}
-                  menus={item?.menus}
+                  menus={
+                    item?.category?.menus.map(
+                      (menuId) =>
+                        item?.menus?.find((menu) => menu?._id === menuId),
+                    ) as Menu[]
+                  }
                 />
               );
             })}

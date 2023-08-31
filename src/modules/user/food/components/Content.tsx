@@ -1,23 +1,22 @@
 import { H4, H5, Text } from "@/modules/common/components/Typography";
 import AddonsCard from "@/modules/user/food/components/AddonsCard";
-import { addOnData } from "@/modules/user/mock/addon";
-import { type Food } from "@/modules/user/mock/foods";
+import { type Menu } from "@/modules/user/menu/types";
 import styled from "@emotion/styled";
 import { Input } from "antd";
 
 type ContentProps = {
-  food?: Food;
+  food: Menu;
 };
 
 const Content: React.FC<ContentProps> = ({ food }) => {
   return (
     <ContentContainer>
-      <H4>{food?.name}</H4>
+      <H4>{food?.title}</H4>
       <Text type="secondary">{food?.description}</Text>
       <AddonContainer>
-        {addOnData.map((addon) => (
-          <AddonsCard key={addon.id} addon={addon} />
-        ))}
+        {food?.addons
+          ?.sort((a, b) => (a?.price ?? 0) - (b?.price ?? 0))
+          ?.map((addon) => <AddonsCard key={addon._id} addon={addon} />)}
       </AddonContainer>
       <AdditionalRequest>
         <H5 style={{ marginLeft: "8px" }}>Additional Request</H5>

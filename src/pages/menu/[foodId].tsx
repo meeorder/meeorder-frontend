@@ -1,7 +1,7 @@
 import AddMinusButton from "@/modules/user/food/components/AddMinusButton";
 import Content from "@/modules/user/food/components/Content";
 import SaveButton from "@/modules/user/food/components/SaveButton";
-import { foods } from "@/modules/user/mock/foods";
+import useMenu from "@/modules/user/menu/hooks/useMenu";
 import styled from "@emotion/styled";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { Button } from "antd";
@@ -12,17 +12,23 @@ import { useState } from "react";
 const FoodDetail = () => {
   const router = useRouter();
   const { foodId } = router.query;
-  const food = foods.find((food) => food.id === foodId);
-
+  const { data: food } = useMenu({ id: foodId as string });
   const [dishCount, setDishCount] = useState(0);
 
+  const handleBack = () => {
+    void router.push("/");
+  };
+
+  if (!food) {
+    return null;
+  }
   return (
     <>
       <LayoutContainer>
         <ImageContainer>
           <Image
-            src={food?.imagePath ?? ""}
-            alt={food?.name ?? ""}
+            src={food?.image ?? ""}
+            alt={food?.title ?? ""}
             width={1000}
             height={1000}
             style={{
@@ -36,6 +42,7 @@ const FoodDetail = () => {
             shape="circle"
             size="large"
             icon={<ArrowLeft size={16} />}
+            onClick={handleBack}
           />
         </ImageContainer>
         <Content food={food} />

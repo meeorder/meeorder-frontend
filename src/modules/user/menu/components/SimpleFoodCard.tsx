@@ -4,12 +4,20 @@ import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import { Button, List } from "antd";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 type SimpleFoodCardProps = {
   menu: Menu;
 };
 
 const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
+  const router = useRouter();
+
+  const handleChooseMenu = () => {
+    void router.push({
+      pathname: `/menu/${menu._id}`,
+    });
+  };
   return (
     <List.Item
       style={{
@@ -23,7 +31,12 @@ const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
             height={500}
             alt={menu.title}
           />
-          <StyledButton type="primary" shape="circle" icon={<PlusOutlined />} />
+          <StyledButton
+            type="primary"
+            shape="circle"
+            icon={<PlusOutlined />}
+            onClick={handleChooseMenu}
+          />
         </>
       }
     >
