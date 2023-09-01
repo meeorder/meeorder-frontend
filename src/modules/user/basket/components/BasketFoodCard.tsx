@@ -29,7 +29,7 @@ const BasketFoodCard: React.FC<BasketFoodCardProps> = ({ order }) => {
         </ContentGroup>
         {/* TODO navigate to edit link */}
         <Link href={"#"} style={{ color: token.colorPrimary }}>
-          Edit
+          แก้ไข
         </Link>
       </FoodDetails>
       <ImageContainer>
