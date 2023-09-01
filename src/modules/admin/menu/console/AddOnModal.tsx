@@ -17,22 +17,21 @@ type AddOnModalProps = {
 
 const modal_columns: ColumnsType<AddOnModalDataType> = [
   {
-    title: "Add-On Name",
+    title: "ชื่อ",
     dataIndex: "title",
   },
   {
-    title: "Price",
+    title: "ราคา",
     dataIndex: "price",
     width: "70px",
   },
   {
-    title: "Action",
     width: "300px",
     render: () => {
       return (
         <>
-          <Button type="link">Edit</Button>
-          <Button type="link">Delete</Button>
+          <Button type="link">แก้ไข</Button>
+          <Button type="link">ลบ</Button>
         </>
       );
     },
@@ -72,12 +71,12 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
         <ModalHeader>
           <H4>Add-on</H4>
           <ModalActionContainer>
-            <CenterContentButton icon={<Plus />}>Add New</CenterContentButton>
+            <CenterContentButton icon={<Plus />}>เพิ่ม</CenterContentButton>
             <CenterContentButton
               type="primary"
               onClick={() => setIsModalOpen(false)}
             >
-              Apply to menu
+              ยืนยัน
             </CenterContentButton>
           </ModalActionContainer>
         </ModalHeader>
@@ -93,7 +92,7 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
           marginTop: "4px",
           marginBottom: "12px",
         }}
-        placeholder="input search text"
+        placeholder="ค้นหา"
         allowClear
       />
       <Table

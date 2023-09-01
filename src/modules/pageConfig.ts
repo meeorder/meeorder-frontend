@@ -42,7 +42,7 @@ export const pages = {
   },
   adminDashboard: {
     id: "adminDashboard",
-    label: "Dashboard",
+    label: "แดชบอร์ด",
     path: "/admin",
     layout: "admin",
     Icon: Gauge,

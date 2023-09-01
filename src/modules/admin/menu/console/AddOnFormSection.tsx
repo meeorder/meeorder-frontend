@@ -10,11 +10,11 @@ import { useState } from "react";
 
 const columns: ColumnsType<AddOnDataType> = [
   {
-    title: "Add-On Name",
+    title: "ชื่อ",
     dataIndex: "title",
   },
   {
-    title: "Price",
+    title: "ราคา",
     dataIndex: "price",
     width: "100px",
   },
@@ -46,7 +46,7 @@ const AddOnFormSection: React.FC = () => {
             type="primary"
             onClick={() => setIsModalOpen(true)}
           >
-            Edit
+            แก้ไข
           </CenterContentButton>
         }
       >

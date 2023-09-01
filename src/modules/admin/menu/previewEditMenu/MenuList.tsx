@@ -16,7 +16,7 @@ const MenuList: React.FC<MenuListProps> = ({ menuSectionMode }) => {
         <>
           <H2>{"MenuList " + menuSectionMode}</H2>
           <Button onClick={() => changeToEditMenuMode("mock-id/1234567abc")}>
-            Edit
+            แก้ไข
           </Button>
         </>
       }

@@ -62,7 +62,7 @@ const MenuFormSection: React.FC = () => {
             gap: "8px",
           }}
         >
-          <H4>{consoleSectionMode === "edit-menu" ? "Edit" : "Add"}</H4>
+          <H4>{consoleSectionMode === "edit-menu" ? "แก้ไข" : "เพิ่ม"}เมนู</H4>
           {consoleSectionMode === "edit-menu" && (
             <Text type="secondary"> ({editMenuId}) </Text>
           )}
@@ -72,14 +72,14 @@ const MenuFormSection: React.FC = () => {
       extra={
         <ButtonGroup>
           <Button type="primary" onClick={handleSave}>
-            Save
+            บันทึก
           </Button>
           <Button type="default" onClick={handleCancel}>
-            Cancel
+            ยกเลิก
           </Button>
           {consoleSectionMode === "edit-menu" && (
             <Button type="primary" danger onClick={handleDelete}>
-              Delete
+              ลบ
             </Button>
           )}
         </ButtonGroup>
@@ -94,17 +94,17 @@ const MenuFormSection: React.FC = () => {
         <GeneralFormItemsContainer>
           <Form.Item<FieldType>
             name="name"
-            label="Name"
-            rules={[{ required: true, message: "Please input name!" }]}
+            label="ชื่อ"
+            rules={[{ required: true, message: "กรุณาระบุชื่อของรายการนี้" }]}
             style={{ width: "100%" }}
           >
-            <Input placeholder="Name" />
+            <Input placeholder="ข้าวไข่เจียว" />
           </Form.Item>
 
           <Form.Item<FieldType>
             name="price"
-            label="Price"
-            rules={[{ required: true, message: "Please input price!" }]}
+            label="ราคา"
+            rules={[{ required: true, message: "กรุณาระบุราคาของรายการนี้" }]}
             style={{ width: "100%" }}
           >
             <InputNumber
@@ -117,7 +117,7 @@ const MenuFormSection: React.FC = () => {
 
           <Form.Item<FieldType>
             name="category"
-            label="Category"
+            label="หมวดหมู่"
             style={{ width: "100%" }}
           >
             <Select allowClear>
@@ -131,10 +131,10 @@ const MenuFormSection: React.FC = () => {
 
           <Form.Item<FieldType>
             name="ingredients"
-            label="Ingredients"
+            label="ส่วนประกอบ"
             style={{ width: "100%" }}
           >
-            <Select mode="tags" placeholder="Pork" allowClear>
+            <Select mode="tags" placeholder="เนื้อหมู" allowClear>
               {ingredientData.map((ingredient) => (
                 <Select.Option key={ingredient.id} value={ingredient.name}>
                   {ingredient.name}
@@ -145,11 +145,11 @@ const MenuFormSection: React.FC = () => {
 
           <Form.Item<FieldType>
             name="description"
-            label="Description"
+            label="คำอธิบาย"
             style={{ width: "100%", height: "100%" }}
           >
             <Input.TextArea
-              placeholder="This menu is very recommended"
+              placeholder="เมนูที่อร่อยที่สุดในโลก"
               showCount
               maxLength={100}
               size="large"
@@ -166,11 +166,11 @@ const MenuFormSection: React.FC = () => {
           />
           <Form.Item<FieldType>
             name="imageURL"
-            label="Image URL"
+            label="URL รูปภาพ"
             style={{ width: "100%" }}
           >
             <Input
-              placeholder="Image URL"
+              placeholder="https://..."
               onChange={(e) => {
                 if (e.target.value) {
                   setImageURL(e.target.value);
