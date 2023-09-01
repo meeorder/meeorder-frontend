@@ -11,6 +11,7 @@ const useMenu = ({ id }: GetMenuByIdPathParam) => {
       getMenuById({
         id,
       }),
+    enabled: !!id,
   });
 };
 

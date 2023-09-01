@@ -2,21 +2,26 @@ import { Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Minus, Plus } from "@phosphor-icons/react";
 import { Button } from "antd";
-import React, { type Dispatch, type SetStateAction } from "react";
+import React from "react";
 
 type AddMinusButtonProps = {
   count: number;
-  setCount: Dispatch<SetStateAction<number>>;
+  setCount: (value: number) => void;
+  isNewOrder: boolean;
 };
 
-const AddMinusButton: React.FC<AddMinusButtonProps> = ({ count, setCount }) => {
+const AddMinusButton: React.FC<AddMinusButtonProps> = ({
+  count,
+  setCount,
+  isNewOrder,
+}) => {
   return (
     <ButtonAddMinusContainer>
       <Button
         shape="circle"
         size="large"
         icon={<Minus size={16} />}
-        disabled={count === 0}
+        disabled={count === (isNewOrder ? 1 : 0)}
         style={{
           display: "flex",
           alignItems: "center",
@@ -24,7 +29,7 @@ const AddMinusButton: React.FC<AddMinusButtonProps> = ({ count, setCount }) => {
           boxShadow: "0px 2px 0px 0px rgba(0, 0, 0, 0.04)",
         }}
         onClick={() => {
-          if (count > 0) {
+          if (count > (isNewOrder ? 1 : 0)) {
             setCount(count - 1);
           }
         }}

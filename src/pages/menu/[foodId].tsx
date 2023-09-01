@@ -1,3 +1,8 @@
+import {
+  useBasketStore,
+  type BasketOrder,
+} from "@/modules/user/basket/hooks/useBasketStore";
+import { calculateBasketOrderPrice } from "@/modules/user/basket/utils";
 import AddMinusButton from "@/modules/user/food/components/AddMinusButton";
 import Content from "@/modules/user/food/components/Content";
 import SaveButton from "@/modules/user/food/components/SaveButton";
@@ -5,21 +10,65 @@ import useMenu from "@/modules/user/menu/hooks/useMenu";
 import styled from "@emotion/styled";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { Button } from "antd";
+import { randomBytes } from "crypto";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const FoodDetail = () => {
   const router = useRouter();
   const { foodId } = router.query;
-  const { data: food } = useMenu({ id: foodId as string });
-  const [dishCount, setDishCount] = useState(0);
+  const { data: menu } = useMenu({ id: foodId as string });
+  const [newBasketOrder, setNewBasketOrder] = useState<BasketOrder>();
+  const addOrUpdateToBasket = useBasketStore(
+    (state) => state.addOrUpdateToBasket,
+  );
+
+  useEffect(() => {
+    if (!menu) {
+      return;
+    }
+    const newMenu = {
+      ...structuredClone(menu),
+      additionalRequest: "",
+      addons: [],
+    };
+    setNewBasketOrder({
+      menu: newMenu,
+      quantity: 1,
+      basketOrderId: randomBytes(16).toString("hex"),
+    });
+  }, [menu]);
+
+  const setCount = (value: number) => {
+    setNewBasketOrder((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      return {
+        ...prev,
+        quantity: value,
+      };
+    });
+  };
 
   const handleBack = () => {
     void router.push("/");
   };
 
-  if (!food) {
+  const handleAddOrUpdateToBasket = () => {
+    if (!newBasketOrder) {
+      return;
+    }
+    addOrUpdateToBasket(
+      newBasketOrder.basketOrderId,
+      newBasketOrder.menu,
+      newBasketOrder.quantity,
+    );
+    void router.push("/basket");
+  };
+
+  if (!menu) {
     return null;
   }
   return (
@@ -27,8 +76,8 @@ const FoodDetail = () => {
       <LayoutContainer>
         <ImageContainer>
           <Image
-            src={food?.image ?? ""}
-            alt={food?.title ?? ""}
+            src={menu?.image ?? ""}
+            alt={menu?.title ?? ""}
             width={1000}
             height={1000}
             style={{
@@ -45,10 +94,32 @@ const FoodDetail = () => {
             onClick={handleBack}
           />
         </ImageContainer>
-        <Content food={food} />
+        <Content
+          menu={menu}
+          newBasketOrder={newBasketOrder}
+          setNewBasketOrder={setNewBasketOrder}
+        />
+        <pre>
+          {JSON.stringify(
+            {
+              ...newBasketOrder,
+            },
+            null,
+            2,
+          )}
+        </pre>
         <AddToCardButtonNav>
-          <AddMinusButton count={dishCount} setCount={setDishCount} />
-          <SaveButton count={dishCount} />
+          <AddMinusButton
+            count={newBasketOrder?.quantity || 0}
+            setCount={setCount}
+            isNewOrder={true}
+          />
+          <SaveButton
+            count={newBasketOrder?.quantity || 0}
+            isNewOrder={true}
+            price={calculateBasketOrderPrice(newBasketOrder)}
+            onClick={() => handleAddOrUpdateToBasket()}
+          />
         </AddToCardButtonNav>
       </LayoutContainer>
     </>
