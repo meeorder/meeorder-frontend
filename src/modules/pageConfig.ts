@@ -21,21 +21,21 @@ type PageMetaData = {
 export const pages = {
   home: {
     id: "home",
-    label: "Home",
+    label: "หน้าหลัก",
     path: "/",
     layout: "user",
     Icon: House,
   },
   basket: {
     id: "basket",
-    label: "Basket",
+    label: "ตะกร้า",
     path: "/basket",
     layout: "user",
     Icon: Basket,
   },
   orders: {
     id: "orders",
-    label: "My Orders",
+    label: "รายการที่สั่ง",
     path: "/orders",
     layout: "user",
     Icon: ClipboardText,
