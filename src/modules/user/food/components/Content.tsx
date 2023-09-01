@@ -93,6 +93,7 @@ const Content: React.FC<ContentProps> = ({
           }}
           autoSize={{ minRows: 4, maxRows: 6 }}
           placeholder="E.g No Carb"
+          value={newBasketOrder?.menu?.additionalRequest}
           onChange={handleAddAdditionRequest}
         />
       </AdditionalRequest>

@@ -214,6 +214,36 @@ export interface components {
       /** @description Table ID */
       table: number;
     };
+    OrdersSchema: {
+      /** Format: date-time */
+      created_at: string;
+      /** @enum {string} */
+      status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE";
+      /** @description Session ID */
+      session: string;
+      /** @description Menu ID */
+      menu: string;
+      /** @description Array of MenuID */
+      addons: string[];
+      /** @description Additional info */
+      additional_info: string;
+      /**
+       * Format: date-time
+       * @description for cancel status
+       */
+      cancelled_at: string;
+    };
+    OrdersListDto: {
+      /** @description table number */
+      table: number;
+      /** @description total price */
+      total_price: number;
+      /** @description discount price */
+      discount_price: number;
+      /** @description net price */
+      net_price: number;
+      orders: components["schemas"]["OrdersSchema"][];
+    };
     TablesDto: {
       _id: number;
     };
@@ -693,7 +723,11 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: {
+          "application/json": components["schemas"]["OrdersListDto"];
+        };
+      };
     };
   };
   TablesController_getTables: {

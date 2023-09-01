@@ -60,7 +60,7 @@ function mergeMenu(
   quantity: number,
   basketOrders: BasketOrder[],
 ) {
-  const newBasket = structuredClone(basketOrders);
+  let newBasket = structuredClone(basketOrders);
   const newMenu = sortMenuAddons(menu);
   let isExist = false;
   newBasket.forEach((order) => {
@@ -77,6 +77,9 @@ function mergeMenu(
     });
   }
 
-  newBasket.filter((order) => order.quantity > 0);
+  newBasket = newBasket.filter((order) => order.quantity > 0);
+  newBasket = newBasket.sort((a, b) =>
+    a.menu.title.localeCompare(b.menu.title),
+  );
   return newBasket;
 }

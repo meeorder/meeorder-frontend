@@ -19,12 +19,31 @@ const FoodDetail = () => {
   const router = useRouter();
   const { foodId } = router.query;
   const { data: menu } = useMenu({ id: foodId as string });
+  const [isNewOrder, setIsNewOrder] = useState(false);
   const [newBasketOrder, setNewBasketOrder] = useState<BasketOrder>();
-  const addOrUpdateToBasket = useBasketStore(
-    (state) => state.addOrUpdateToBasket,
-  );
+  const [addOrUpdateToBasket, basketOrders] = useBasketStore((state) => [
+    state.addOrUpdateToBasket,
+    state.basketOrders,
+  ]);
 
   useEffect(() => {
+    if (!router.isReady) {
+      return;
+    }
+
+    const basketOrderId = router.query["basket-order-id"];
+    let basketOrder: BasketOrder | undefined;
+
+    if (basketOrderId) {
+      basketOrder = basketOrders.find(
+        (order) => order.basketOrderId === basketOrderId.toString(),
+      );
+      console.log("basketOrderId", basketOrderId);
+      console.log("basketOrder", basketOrder);
+      console.log("basketOrders", basketOrders);
+    } else {
+      setIsNewOrder(true);
+    }
     if (!menu) {
       return;
     }
@@ -34,11 +53,12 @@ const FoodDetail = () => {
       addons: [],
     };
     setNewBasketOrder({
-      menu: newMenu,
-      quantity: 1,
-      basketOrderId: randomBytes(16).toString("hex"),
+      menu: basketOrder?.menu ?? newMenu,
+      quantity: basketOrder?.quantity ?? 1,
+      basketOrderId:
+        basketOrder?.basketOrderId ?? randomBytes(16).toString("hex"),
     });
-  }, [menu]);
+  }, [menu, router, basketOrders]);
 
   const setCount = (value: number) => {
     setNewBasketOrder((prev) => {
@@ -60,6 +80,7 @@ const FoodDetail = () => {
     if (!newBasketOrder) {
       return;
     }
+
     addOrUpdateToBasket(
       newBasketOrder.basketOrderId,
       newBasketOrder.menu,
@@ -99,24 +120,15 @@ const FoodDetail = () => {
           newBasketOrder={newBasketOrder}
           setNewBasketOrder={setNewBasketOrder}
         />
-        <pre>
-          {JSON.stringify(
-            {
-              ...newBasketOrder,
-            },
-            null,
-            2,
-          )}
-        </pre>
         <AddToCardButtonNav>
           <AddMinusButton
-            count={newBasketOrder?.quantity || 0}
+            count={newBasketOrder?.quantity ?? 1}
             setCount={setCount}
-            isNewOrder={true}
+            isNewOrder={isNewOrder}
           />
           <SaveButton
-            count={newBasketOrder?.quantity || 0}
-            isNewOrder={true}
+            count={newBasketOrder?.quantity ?? 1}
+            isNewOrder={isNewOrder}
             price={calculateBasketOrderPrice(newBasketOrder)}
             onClick={() => handleAddOrUpdateToBasket()}
           />
