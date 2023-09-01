@@ -1,15 +1,15 @@
 import TextPrice from "@/modules/common/components/TextPrice";
-import { type Food } from "@/modules/user/mock/foods";
+import { type Menu } from "@/modules/user/menu/types";
 import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import { Button, List } from "antd";
 import Image from "next/image";
 
 type SimpleFoodCardProps = {
-  food: Food;
+  menu: Menu;
 };
 
-const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ food }) => {
+const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
   return (
     <List.Item
       style={{
@@ -18,18 +18,18 @@ const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ food }) => {
       extra={
         <>
           <StyledImage
-            src={food.imagePath ?? ""}
+            src={menu.image ?? ""}
             width={500}
             height={500}
-            alt={food.name}
+            alt={menu.title}
           />
           <StyledButton type="primary" shape="circle" icon={<PlusOutlined />} />
         </>
       }
     >
       <List.Item.Meta
-        title={food.name}
-        description={<TextPrice price={food.price} />}
+        title={menu.title}
+        description={<TextPrice price={menu.price} />}
       />
     </List.Item>
   );

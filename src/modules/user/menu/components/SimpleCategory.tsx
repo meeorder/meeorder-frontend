@@ -5,13 +5,13 @@ import styled from "@emotion/styled";
 import { List } from "antd";
 import React from "react";
 
-const SimpleCategory: React.FC<CategoryProps> = ({ category, foods }) => {
+const SimpleCategory: React.FC<CategoryProps> = ({ category, menus }) => {
   return (
     <StyledList
       style={{
         scrollMarginTop: "112px", // very important for anchor to work
       }}
-      id={category?.id}
+      id={category?._id}
       header={
         <H4
           style={{
@@ -19,13 +19,13 @@ const SimpleCategory: React.FC<CategoryProps> = ({ category, foods }) => {
             marginLeft: "8px",
           }}
         >
-          {category?.name}
+          {category?.title}
         </H4>
       }
-      dataSource={foods}
+      dataSource={menus}
       renderItem={(item) => {
-        const food = item as (typeof foods)[number];
-        return <SimpleFoodCard key={food.id} food={food} />;
+        const menu = item as (typeof menus)[number];
+        return <SimpleFoodCard key={menu?._id} menu={menu} />;
       }}
     />
   );
