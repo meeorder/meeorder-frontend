@@ -16,7 +16,7 @@ const OrderSummaryPrice: React.FC<OrderSummaryPriceProps> = ({ priceData }) => {
         <StyledText>{priceData.orderPrice.toFixed(2)} บาท</StyledText>
       </FlexBetween>
       <FlexBetween>
-        <StyledText>ลด</StyledText>
+        <StyledText>ส่วนลด</StyledText>
         <StyledText>-{priceData.discountPrice.toFixed(2)} บาท</StyledText>
       </FlexBetween>
       <Divider style={{ margin: "0px" }} />
