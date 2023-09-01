@@ -1,30 +1,25 @@
-import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
 import { type MenuSectionMode } from "@/modules/admin/menu/hooks/useMenuSectionMode";
-import { H2 } from "@/modules/common/components/Typography";
-import WireFrame from "@/modules/mock/components/WireFrame";
-import { Button } from "antd";
+import MenuListCategory from "@/modules/admin/menu/previewEditMenu/MenuListCategory";
+import { categories } from "@/modules/user/mock/categories";
+import { foods } from "@/modules/user/mock/foods";
 
 type MenuListProps = {
   menuSectionMode: MenuSectionMode;
 };
 
 const MenuList: React.FC<MenuListProps> = ({ menuSectionMode }) => {
-  const { changeToEditMenuMode } = useConsoleSectionMode();
+  // const { changeToEditMenuMode } = useConsoleSectionMode();
+  console.log(menuSectionMode);
   return (
-    <WireFrame
-      contentNode={
-        <>
-          <H2>{"MenuList " + menuSectionMode}</H2>
-          <Button onClick={() => changeToEditMenuMode("mock-id/1234567abc")}>
-            Edit
-          </Button>
-        </>
-      }
-      cardColor="red"
-      style={{
-        flex: 1,
-      }}
-    />
+    <>
+      {categories?.map((category) => (
+        <MenuListCategory
+          key={category?.id}
+          category={category}
+          foods={foods}
+        />
+      ))}
+    </>
   );
 };
 
