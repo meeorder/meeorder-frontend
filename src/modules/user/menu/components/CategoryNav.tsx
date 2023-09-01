@@ -1,4 +1,4 @@
-import { type Category } from "@/modules/user/mock/categories";
+import { type Category } from "@/modules/user/menu/types";
 import styled from "@emotion/styled";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { Anchor, Button, ConfigProvider } from "antd";
@@ -30,11 +30,11 @@ const CategoryNav: React.FC<CategoryNavProps> = ({ categories }) => {
             replace
             offsetTop={64}
             targetOffset={64 + 48}
-            items={categories.map((category) => {
+            items={categories?.map((category) => {
               return {
-                title: category.name,
-                key: category.id,
-                href: `#${category.id}`,
+                title: category.title,
+                key: category._id,
+                href: `#${category._id}`,
               };
             })}
           />

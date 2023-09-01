@@ -3,10 +3,10 @@ import { type CategoryProps } from "@/modules/user/menu/components/Category";
 import RecommendedFoodCard from "@/modules/user/menu/components/RecommendedFoodCard";
 import { Row } from "antd";
 
-const RecommendedCategory: React.FC<CategoryProps> = ({ category, foods }) => {
+const RecommendedCategory: React.FC<CategoryProps> = ({ category, menus }) => {
   return (
     <div
-      id={category?.id}
+      id={category?._id}
       style={{
         scrollMarginTop: "112px", // very important for anchor to work
       }}
@@ -18,12 +18,12 @@ const RecommendedCategory: React.FC<CategoryProps> = ({ category, foods }) => {
           marginLeft: "8px",
         }}
       >
-        {category?.name}
+        {category?.title}
       </H4>
 
       <Row gutter={[8, 8]}>
-        {foods.map((food) => (
-          <RecommendedFoodCard key={food.id} food={food} />
+        {menus.map((menu) => (
+          <RecommendedFoodCard key={menu?._id} menu={menu} />
         ))}
       </Row>
     </div>

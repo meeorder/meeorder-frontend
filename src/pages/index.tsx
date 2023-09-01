@@ -2,12 +2,15 @@ import AppLayout from "@/modules/AppLayout";
 import { pages } from "@/modules/pageConfig";
 import Category from "@/modules/user/menu/components/Category";
 import CategoryNav from "@/modules/user/menu/components/CategoryNav";
-import { categories } from "@/modules/user/mock/categories";
-import { foods } from "@/modules/user/mock/foods";
+import useAllMenu from "@/modules/user/menu/hooks/useAllMenu";
+import useCategories from "@/modules/user/menu/hooks/useCategory";
 import styled from "@emotion/styled";
 import Head from "next/head";
 
 const Home = () => {
+  const allMenu = useAllMenu();
+  const categories = useCategories();
+
   return (
     <>
       <Head>
@@ -16,13 +19,21 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppLayout layoutType="user" currentPageId={pages.home.id}>
-        <CategoryNav categories={categories} />
+        <CategoryNav
+          categories={categories?.data?.sort((a, b) => a.rank - b.rank) ?? []}
+        />
         <MenuContainer>
-          {categories.map((category) => {
-            return (
-              <Category key={category?.id} category={category} foods={foods} />
-            );
-          })}
+          {allMenu?.data
+            ?.sort((a, b) => a?.category?.rank - b?.category?.rank)
+            ?.map((item) => {
+              return (
+                <Category
+                  key={item?.category?._id}
+                  category={item?.category}
+                  menus={item?.menus}
+                />
+              );
+            })}
         </MenuContainer>
       </AppLayout>
     </>
