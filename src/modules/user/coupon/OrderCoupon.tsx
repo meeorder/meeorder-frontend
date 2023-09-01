@@ -1,7 +1,7 @@
 import { Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { CaretRight, User } from "@phosphor-icons/react";
-import { Card, theme } from "antd";
+import { Button, Card, theme } from "antd";
 
 const OrderCoupon = () => {
   const {
@@ -10,23 +10,31 @@ const OrderCoupon = () => {
 
   return (
     <OrderCouponContainer onClick={() => alert("go to coupon page")}>
-      <OrderCouponContent>
-        <StyledIcon>
-          <User size={22} color={colorPrimary} weight="duotone" />
-        </StyledIcon>
-        <StyledText>Use a coupon</StyledText>
-        <StyledCaretRight size={32} />
-      </OrderCouponContent>
+      <StyledCard>
+        <OrderCouponContent>
+          <StyledIcon>
+            <User size={22} color={colorPrimary} weight="duotone" />
+          </StyledIcon>
+          <StyledText>Use a coupon</StyledText>
+          <StyledCaretRight size={32} />
+        </OrderCouponContent>
+      </StyledCard>
     </OrderCouponContainer>
   );
 };
 
 export default OrderCoupon;
 
-const OrderCouponContainer = styled(Card)`
-  display: flex;
-  margin-top: 20px;
+const OrderCouponContainer = styled(Button)`
   width: 100%;
+  height: 100%;
+  margin-top: 20px;
+  padding: 0;
+  border-radius: 12px;
+`;
+
+const StyledCard = styled(Card)`
+  display: flex;
   border-radius: 12px;
   .ant-card-body {
     width: 100%;
