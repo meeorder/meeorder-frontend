@@ -31,6 +31,7 @@ const OrderCouponContainer = styled(Button)`
   margin-top: 20px;
   padding: 0;
   border-radius: 12px;
+  border: none;
 `;
 
 const StyledCard = styled(Card)`
