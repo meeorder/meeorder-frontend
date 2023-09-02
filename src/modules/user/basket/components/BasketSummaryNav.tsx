@@ -44,6 +44,7 @@ const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
   const mapStatusToModalProps: MapStatusToModalProps = {
     idle: {
       title: `ยืนยันการสั่งอาหาร`,
+      subtitle: `ราคารวม ${totalPrice} บาท`,
       modalStatus: "info",
       onOk: handleSubmitOrder,
       onCancel: handleCancelSendOrder,
@@ -110,6 +111,11 @@ const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
           status={mapStatusToModalProps?.[basketAPIStatus]?.modalStatus}
           title={
             <H4>{mapStatusToModalProps?.[basketAPIStatus]?.title ?? ""}</H4>
+          }
+          subTitle={
+            <Text>
+              {mapStatusToModalProps?.[basketAPIStatus]?.subtitle ?? ""}
+            </Text>
           }
         />
       </Modal>
