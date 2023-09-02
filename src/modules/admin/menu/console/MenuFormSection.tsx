@@ -33,14 +33,14 @@ const MenuFormSection: React.FC = () => {
     useConsoleSectionMode();
   const { token } = theme.useToken();
   const [form] = Form.useForm();
-  const [imageURL, setImageURL] = useState<string>(
+  const [imageURL, setImageURL] = useState(
     "https://source.unsplash.com/random/?food&plate&11",
   );
-  const [published, setPublished] = useState<boolean>(true);
+  const [published, setPublished] = useState(true);
 
-  const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
+  const [openCancelModal, setOpenCancelModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
   if (consoleSectionMode === "edit-menu") {
     // TODO: get menu data from api then set value to form
@@ -266,7 +266,7 @@ const MenuFormSection: React.FC = () => {
               title="ปรับเปลี่ยนระหว่างสถานะ แบบร่าง/วางขาย"
               checked={published}
               onChange={(checked) => {
-                setPublished(checked ? true : false);
+                setPublished(checked);
               }}
             />
             <H5
@@ -335,6 +335,8 @@ const StyledImage = styled(Image)`
   flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
+  object-fit: cover;
+  object-position: center;
 `;
 
 const StyledModal = styled(Modal)`
