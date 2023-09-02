@@ -12,17 +12,17 @@ const OrderSummaryPrice: React.FC<OrderSummaryPriceProps> = ({ priceData }) => {
     <Space direction="vertical" size={8} style={{ display: "flex" }}>
       <Divider style={{ marginTop: "16px", marginBottom: "0px" }} />
       <FlexBetween>
-        <StyledText>Order Price</StyledText>
-        <StyledText>{priceData.orderPrice.toFixed(2)} THB</StyledText>
+        <StyledText>ราคารวม</StyledText>
+        <StyledText>{priceData.orderPrice.toFixed(2)} บาท</StyledText>
       </FlexBetween>
       <FlexBetween>
-        <StyledText>Discount</StyledText>
-        <StyledText>-{priceData.discountPrice.toFixed(2)} THB</StyledText>
+        <StyledText>ส่วนลด</StyledText>
+        <StyledText>-{priceData.discountPrice.toFixed(2)} บาท</StyledText>
       </FlexBetween>
       <Divider style={{ margin: "0px" }} />
       <FlexBetween>
-        <StyledText strong>Bill Total</StyledText>
-        <StyledText strong>{priceData.totalPrice.toFixed(2)} THB</StyledText>
+        <StyledText strong>ราคาสุทธิ</StyledText>
+        <StyledText strong>{priceData.totalPrice.toFixed(2)} บาท</StyledText>
       </FlexBetween>
     </Space>
   );
