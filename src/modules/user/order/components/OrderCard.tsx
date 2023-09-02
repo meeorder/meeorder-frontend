@@ -83,7 +83,7 @@ const mapStatusToColor: Record<OrderStatus, TagProps["color"]> = {
 const mapOrderStatusTranslation: Record<OrderStatus, string> = {
   "In queue": "อยู่ในคิว",
   Preparing: "กำลังเตรียมการ",
-  Ready: "รอรับออเดอร์",
+  Ready: "พร้อมเสิร์ฟ",
   Success: "สำเร็จ",
   Cancel: "ยกเลิก",
 }
