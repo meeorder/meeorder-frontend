@@ -20,14 +20,14 @@ const Content: React.FC<ContentProps> = ({ food }) => {
         ))}
       </AddonContainer>
       <AdditionalRequest>
-        <H5 style={{ marginLeft: "8px" }}>Additional Request</H5>
+        <H5 style={{ marginLeft: "8px" }}>คำขอเพิ่มเติม</H5>
         <Input.TextArea
           style={{
             borderRadius: "12px",
             height: "55px",
           }}
           autoSize={{ minRows: 4, maxRows: 6 }}
-          placeholder="E.g No Carb"
+          placeholder="เช่น ไม่ใส่พริก"
         />
       </AdditionalRequest>
     </ContentContainer>
