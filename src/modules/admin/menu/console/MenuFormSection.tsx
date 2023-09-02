@@ -122,8 +122,8 @@ const MenuFormSection: React.FC = () => {
           >
             <Select allowClear>
               {categories.map((category) => (
-                <Select.Option key={category.id} value={category.name}>
-                  {category.name}
+                <Select.Option key={category._id} value={category.title}>
+                  {category.title}
                 </Select.Option>
               ))}
             </Select>
