@@ -1,10 +1,21 @@
 import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
 import { categories } from "@/modules/admin/mock/categories";
 import { ingredientData } from "@/modules/admin/mock/ingredient";
-import { H4, Text } from "@/modules/common/components/Typography";
+import { H4, H5, Text } from "@/modules/common/components/Typography";
 import { type Category } from "@/modules/user/mock/categories";
 import styled from "@emotion/styled";
-import { Button, Card, Form, Input, InputNumber, Select } from "antd";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Result,
+  Select,
+  Switch,
+  theme,
+} from "antd";
 import Image from "next/image";
 import React, { useState } from "react";
 
@@ -20,10 +31,16 @@ type FieldType = {
 const MenuFormSection: React.FC = () => {
   const { consoleSectionMode, editMenuId, changeToCategoryMode } =
     useConsoleSectionMode();
+  const { token } = theme.useToken();
   const [form] = Form.useForm();
   const [imageURL, setImageURL] = useState<string>(
     "https://source.unsplash.com/random/?food&plate&11",
   );
+  const [published, setPublished] = useState<boolean>(true);
+
+  const [openCancelModal, setOpenCancelModal] = useState<boolean>(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
 
   if (consoleSectionMode === "edit-menu") {
     // TODO: get menu data from api then set value to form
@@ -39,17 +56,18 @@ const MenuFormSection: React.FC = () => {
   };
 
   const handleCancel = () => {
-    // mock
     changeToCategoryMode();
-    // TODO: popup confirm
-    // TODO: if no close popup
-    // TODO: if yes redirect to menu
   };
 
   const handleDelete = () => {
-    // TODO: popup confirm
-    // TODO: if no close popup
-    // TODO: if yes delete menu redirect to menu
+    setLoadingDelete(true);
+    setTimeout(() => {
+      setLoadingDelete(false);
+      setOpenDeleteModal(false);
+      // delete menu
+
+      changeToCategoryMode();
+    }, 1500);
   };
 
   return (
@@ -71,17 +89,69 @@ const MenuFormSection: React.FC = () => {
       bordered={false}
       extra={
         <ButtonGroup>
-          <Button type="primary" onClick={handleSave}>
-            บันทึก
-          </Button>
-          <Button type="default" onClick={handleCancel}>
+          {consoleSectionMode === "edit-menu" && (
+            <>
+              <Button
+                type="primary"
+                danger
+                onClick={() => setOpenDeleteModal(true)}
+              >
+                ลบ
+              </Button>
+              <StyledModal
+                centered
+                closable={false}
+                maskClosable={false}
+                open={openDeleteModal}
+                confirmLoading={loadingDelete}
+                onOk={handleDelete}
+                onCancel={() => setOpenDeleteModal(false)}
+                cancelText="ยกเลิก"
+                okText="ลบ"
+                okButtonProps={{ danger: true }}
+              >
+                <Result
+                  status="warning"
+                  title={
+                    <H4 style={{ paddingBottom: "12px" }}>
+                      คุณต้องการจะลบเมนูหรือไม่?
+                    </H4>
+                  }
+                  style={{ paddingBottom: "0px", paddingTop: "0px" }}
+                />
+              </StyledModal>
+            </>
+          )}
+          <Button type="default" onClick={() => setOpenCancelModal(true)}>
             ยกเลิก
           </Button>
-          {consoleSectionMode === "edit-menu" && (
-            <Button type="primary" danger onClick={handleDelete}>
-              ลบ
-            </Button>
-          )}
+          <StyledModal
+            centered
+            closable={false}
+            maskClosable={false}
+            open={openCancelModal}
+            onOk={handleCancel}
+            onCancel={() => setOpenCancelModal(false)}
+            cancelText="ไม่"
+            okText="ใช่"
+          >
+            <Result
+              status="warning"
+              title={
+                <H4 style={{ paddingBottom: "12px" }}>
+                  คุณต้องการจะยกเลิกการ
+                  {consoleSectionMode === "edit-menu" ? "แก้ไข" : "เพิ่ม"}
+                  เมนูหรือไม่?
+                </H4>
+              }
+              style={{ paddingBottom: "0px", paddingTop: "0px" }}
+            />
+          </StyledModal>
+          <Button type="primary" onClick={handleSave}>
+            {consoleSectionMode === "edit-menu"
+              ? "ยืนยันการแก้ไข"
+              : "เพิ่มเมนูใหม่"}
+          </Button>
         </ButtonGroup>
       }
     >
@@ -182,6 +252,33 @@ const MenuFormSection: React.FC = () => {
               }}
             />
           </Form.Item>
+          <div>
+            <H5
+              style={{
+                marginRight: 8,
+                display: "inline-block",
+                color: published ? token.colorTextQuaternary : token.colorText,
+              }}
+            >
+              แบบร่าง
+            </H5>
+            <Switch
+              title="ปรับเปลี่ยนระหว่างสถานะ แบบร่าง/วางขาย"
+              checked={published}
+              onChange={(checked) => {
+                setPublished(checked ? true : false);
+              }}
+            />
+            <H5
+              style={{
+                marginLeft: 8,
+                display: "inline-block",
+                color: published ? token.colorText : token.colorTextQuaternary,
+              }}
+            >
+              วางขาย
+            </H5>
+          </div>
         </ImageFormItemsContainer>
       </MenuFormContainer>
     </MenuFormCard>
@@ -238,4 +335,12 @@ const StyledImage = styled(Image)`
   flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
+`;
+
+const StyledModal = styled(Modal)`
+  padding-top: 20px !important;
+  .ant-modal-footer {
+    display: flex;
+    justify-content: center;
+  }
 `;
