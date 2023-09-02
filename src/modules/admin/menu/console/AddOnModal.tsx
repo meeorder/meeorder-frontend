@@ -69,7 +69,7 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
     <Modal
       title={
         <ModalHeader>
-          <H4>Add-on</H4>
+          <H4>ท๊อปปิ้ง</H4>
           <ModalActionContainer>
             <CenterContentButton icon={<Plus />}>เพิ่ม</CenterContentButton>
             <CenterContentButton

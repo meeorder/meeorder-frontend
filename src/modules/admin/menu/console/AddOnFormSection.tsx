@@ -34,7 +34,7 @@ const AddOnFormSection: React.FC = () => {
               gap: "8px",
             }}
           >
-            <H4>Add-on</H4>
+            <H4>ท๊อปปิ้ง</H4>
             {consoleSectionMode === "edit-menu" && (
               <Text type="secondary"> ({editMenuId}) </Text>
             )}
