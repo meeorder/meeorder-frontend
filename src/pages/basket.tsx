@@ -26,8 +26,9 @@ const Basket = () => {
       <AppLayout layoutType="user" currentPageId={pages.basket.id}>
         <BasketMainContentWrapper>
           <BasketFoodList basketOrders={isLoaded ? basketOrders : []} />
+
           <BasketSummaryNav
-            totalPrice={isLoaded ? calculateBasketOrdersPrice(basketOrders) : 0}
+            totalPrice={calculateBasketOrdersPrice(basketOrders)}
           />
         </BasketMainContentWrapper>
       </AppLayout>

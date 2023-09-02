@@ -78,6 +78,10 @@ const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
     },
   };
 
+  if (totalPrice === 0) {
+    return null;
+  }
+
   return (
     <>
       <BasketSummaryNavWrapper style={{ backgroundColor: colorPrimary }}>

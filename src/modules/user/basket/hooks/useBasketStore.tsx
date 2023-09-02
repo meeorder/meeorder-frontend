@@ -54,7 +54,7 @@ export const useBasketStore = create<BasketStore>()(
         set({ basketOrders: [] });
       },
     }),
-    { name: "bearStore" },
+    { name: "basket" },
   ),
 );
 

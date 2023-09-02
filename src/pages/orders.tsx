@@ -1,15 +1,17 @@
 import AppLayout from "@/modules/AppLayout";
 import { H4, H5 } from "@/modules/common/components/Typography";
 import { pages } from "@/modules/pageConfig";
-import { ordersData } from "@/modules/user/mock/orders";
 import OrderList from "@/modules/user/order/components/OrderList";
 import OrderSummaryPrice from "@/modules/user/order/components/OrderSummaryPrice";
+import useOrder from "@/modules/user/order/hooks/useOrder";
+import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import Head from "next/head";
 
-const tableNumber = 10; // from session
-
 const Orders = () => {
+  const session = useSessionStore((state) => state.session);
+  const { data: ordersData } = useOrder(session?._id ?? "");
+
   return (
     <>
       <Head>
@@ -21,10 +23,22 @@ const Orders = () => {
         <OrderContainer>
           <OrderHeader>
             <H4>My Order</H4>
-            <H5 type="secondary">Table {tableNumber}</H5>
+            <H5 type="secondary">Table {session?.table}</H5>
           </OrderHeader>
-          <OrderList orders={ordersData.orders} />
-          <OrderSummaryPrice priceData={ordersData.priceData} />
+          <OrderList
+            orders={
+              ordersData?.orders?.sort((a, b) =>
+                (b?.created_at + b?._id).localeCompare(a?.created_at + a?._id),
+              ) ?? []
+            }
+          />
+          <OrderSummaryPrice
+            priceData={{
+              total_price: ordersData?.total_price ?? 0,
+              discount_price: ordersData?.discount_price ?? 0,
+              net_price: ordersData?.net_price ?? 0,
+            }}
+          />
         </OrderContainer>
       </AppLayout>
     </>

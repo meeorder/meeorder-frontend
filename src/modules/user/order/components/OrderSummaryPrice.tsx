@@ -1,10 +1,13 @@
 import { Text } from "@/modules/common/components/Typography";
-import { type PriceData } from "@/modules/user/mock/orders";
 import styled from "@emotion/styled";
 import { Divider, Space } from "antd";
 
 type OrderSummaryPriceProps = {
-  priceData: PriceData;
+  priceData: {
+    total_price: number;
+    discount_price: number;
+    net_price: number;
+  };
 };
 
 const OrderSummaryPrice: React.FC<OrderSummaryPriceProps> = ({ priceData }) => {
@@ -13,16 +16,19 @@ const OrderSummaryPrice: React.FC<OrderSummaryPriceProps> = ({ priceData }) => {
       <Divider style={{ marginTop: "16px", marginBottom: "0px" }} />
       <FlexBetween>
         <StyledText>Order Price</StyledText>
-        <StyledText>{priceData.orderPrice.toFixed(2)} THB</StyledText>
+        <StyledText>{priceData.total_price.toFixed(2)} THB</StyledText>
       </FlexBetween>
       <FlexBetween>
         <StyledText>Discount</StyledText>
-        <StyledText>-{priceData.discountPrice.toFixed(2)} THB</StyledText>
+        <StyledText>
+          {priceData.discount_price > 0 && "-"}
+          {priceData.discount_price.toFixed(2)} THB
+        </StyledText>
       </FlexBetween>
       <Divider style={{ margin: "0px" }} />
       <FlexBetween>
         <StyledText strong>Bill Total</StyledText>
-        <StyledText strong>{priceData.totalPrice.toFixed(2)} THB</StyledText>
+        <StyledText strong>{priceData.net_price.toFixed(2)} THB</StyledText>
       </FlexBetween>
     </Space>
   );

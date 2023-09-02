@@ -4,7 +4,6 @@ import Category from "@/modules/user/menu/components/Category";
 import CategoryNav from "@/modules/user/menu/components/CategoryNav";
 import useAllMenu from "@/modules/user/menu/hooks/useAllMenu";
 import useCategories from "@/modules/user/menu/hooks/useCategory";
-import { type Menu } from "@/modules/user/menu/types";
 import {
   useRevalidateSession,
   useSetNewSessionBySessionId,
@@ -41,9 +40,7 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppLayout layoutType="user" currentPageId={pages.home.id}>
-        <CategoryNav
-          categories={categories?.data?.sort((a, b) => a.rank - b.rank) ?? []}
-        />
+        <CategoryNav categories={categories?.data ?? []} />
         <MenuContainer>
           {allMenu?.data
             ?.sort((a, b) => a?.category?.rank - b?.category?.rank)
@@ -52,12 +49,7 @@ const Home = () => {
                 <Category
                   key={item?.category?._id}
                   category={item?.category}
-                  menus={
-                    item?.category?.menus.map(
-                      (menuId) =>
-                        item?.menus?.find((menu) => menu?._id === menuId),
-                    ) as Menu[]
-                  }
+                  menus={item?.menus}
                 />
               );
             })}

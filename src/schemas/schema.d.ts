@@ -82,6 +82,29 @@ export interface paths {
     get: operations["TablesController_getTables"];
     post: operations["TablesController_createTable"];
   };
+  "/auth/login": {
+    post: operations["AuthController_signIn"];
+  };
+  "/auth/logout": {
+    post: operations["AuthController_signOut"];
+  };
+  "/users": {
+    get: operations["UsersController_getUsers"];
+    post: operations["UsersController_createUser"];
+    delete: operations["UsersController_deleteUser"];
+  };
+  "/users/reset_password": {
+    post: operations["UsersController_updateUser"];
+  };
+  "/coupons": {
+    get: operations["CouponsController_findAll"];
+    post: operations["CouponsController_create"];
+  };
+  "/coupons/{id}": {
+    get: operations["CouponsController_findOne"];
+    delete: operations["CouponsController_remove"];
+    patch: operations["CouponsController_update"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -214,17 +237,19 @@ export interface components {
       /** @description Table ID */
       table: number;
     };
-    OrdersSchema: {
+    OrdersResponseDto: {
+      /** @description Order ID (ObjectID) */
+      _id: string;
       /** Format: date-time */
       created_at: string;
       /** @enum {string} */
       status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE";
-      /** @description Session ID */
-      session: string;
-      /** @description Menu ID */
-      menu: string;
-      /** @description Array of MenuID */
-      addons: string[];
+      /** @description Session Schema */
+      session: components["schemas"]["SessionSchema"];
+      /** @description Menu Schema */
+      menu: components["schemas"]["MenuSchema"];
+      /** @description Array of Addons Schema */
+      addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
       additional_info: string;
       /**
@@ -242,13 +267,77 @@ export interface components {
       discount_price: number;
       /** @description net price */
       net_price: number;
-      orders: components["schemas"]["OrdersSchema"][];
+      orders: components["schemas"]["OrdersResponseDto"][];
     };
     TablesDto: {
       _id: number;
     };
     TablesSchema: {
       _id: number;
+    };
+    LoginDto: {
+      username: string;
+      password: string;
+    };
+    CreateUserDto: {
+      /** @description username is string */
+      username: string;
+      /** @description password is string */
+      password: string;
+      /**
+       * @description select role from enum UserRole example: Owner, Chef, Cashier, Employee, Customer
+       * @example [
+       *   "Owner",
+       *   "Chef",
+       *   "Cashier",
+       *   "Employee",
+       *   "Customer"
+       * ]
+       * @enum {number}
+       */
+      role: 100 | 75 | 50 | 25 | 1;
+    };
+    UserSchema: {
+      _id: string;
+      username: string;
+      point: number;
+      /** @enum {number} */
+      role: 100 | 75 | 50 | 25 | 1;
+      /**
+       * Format: date-time
+       * @default 2023-09-02T19:05:16.224Z
+       */
+      created_at: string;
+    };
+    CreateCouponDto: {
+      /** @description Coupon Code */
+      title: string;
+      /** @description Coupon Description */
+      description?: string;
+      required_menus?: string[];
+      /** @description Discount Price of Coupon */
+      price: number;
+      /** @description Amount of Coupon */
+      amount?: number;
+      /** @description Coupon status */
+      activated: number;
+      /** @description Coupon Required Point */
+      required_point?: number;
+    };
+    UpdateCouponDto: {
+      /** @description Coupon Code */
+      title?: string;
+      /** @description Coupon Description */
+      description?: string;
+      required_menus?: string[];
+      /** @description Discount Price of Coupon */
+      price?: number;
+      /** @description Amount of Coupon */
+      amount?: number;
+      /** @description Coupon status */
+      activated?: number;
+      /** @description Coupon Required Point */
+      required_point?: number;
     };
   };
   responses: never;
@@ -749,6 +838,141 @@ export interface operations {
     responses: {
       /** @description Create table */
       201: never;
+    };
+  };
+  AuthController_signIn: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LoginDto"];
+      };
+    };
+    responses: {
+      204: never;
+    };
+  };
+  AuthController_signOut: {
+    responses: {
+      204: never;
+    };
+  };
+  UsersController_getUsers: {
+    parameters: {
+      query?: {
+        /** @description User role */
+        role?: string;
+      };
+    };
+    responses: {
+      /** @description Get users by roles */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserSchema"][];
+        };
+      };
+    };
+  };
+  UsersController_createUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateUserDto"];
+      };
+    };
+    responses: {
+      /** @description Create user */
+      201: never;
+    };
+  };
+  UsersController_deleteUser: {
+    parameters: {
+      query: {
+        /** @description User id (ObjectId) */
+        id: string;
+      };
+    };
+    responses: {
+      204: never;
+    };
+  };
+  UsersController_updateUser: {
+    parameters: {
+      query: {
+        /** @description User id (ObjectId) */
+        id: string;
+      };
+    };
+    responses: {
+      204: never;
+    };
+  };
+  CouponsController_findAll: {
+    responses: {
+      /** @description Get all coupons */
+      200: {
+        content: {
+          "application/json": components["schemas"];
+        };
+      };
+    };
+  };
+  CouponsController_create: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateCouponDto"];
+      };
+    };
+    responses: {
+      /** @description Coupon created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["CreateCouponDto"];
+        };
+      };
+    };
+  };
+  CouponsController_findOne: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Get all coupons */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateCouponDto"];
+        };
+      };
+    };
+  };
+  CouponsController_remove: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Coupon deleted */
+      200: never;
+    };
+  };
+  CouponsController_update: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateCouponDto"];
+      };
+    };
+    responses: {
+      /** @description Coupon updated */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateCouponDto"];
+        };
+      };
     };
   };
 }
