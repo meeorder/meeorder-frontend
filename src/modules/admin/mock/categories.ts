@@ -26,4 +26,52 @@ export const categories: Category[] = [
     menus: [],
     rank: 4,
   },
+  {
+    _id: "id5",
+    title: "test5",
+    menus: [],
+    rank: 5,
+  },
+  {
+    _id: "id6",
+    title: "test6",
+    menus: [],
+    rank: 6,
+  },
+  {
+    _id: "id7",
+    title: "test7",
+    menus: [],
+    rank: 7,
+  },
+  {
+    _id: "id8",
+    title: "test8",
+    menus: [],
+    rank: 8,
+  },
+  {
+    _id: "id9",
+    title: "test9",
+    menus: [],
+    rank: 9,
+  },
+  {
+    _id: "id10",
+    title: "test10",
+    menus: [],
+    rank: 10,
+  },
+  {
+    _id: "id11",
+    title: "test11",
+    menus: [],
+    rank: 11,
+  },
+  {
+    _id: "id12",
+    title: "test12",
+    menus: [],
+    rank: 12,
+  },
 ];

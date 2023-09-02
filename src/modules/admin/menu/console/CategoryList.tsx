@@ -57,10 +57,12 @@ const CategoryList = () => {
   const columns: ColumnsType<CategoryColumns> = [
     {
       key: "sort",
+      width: "40px",
     },
     {
       title: "Category Name",
       dataIndex: "title",
+      width: "346px",
       render: (title: string, record) => {
         return (
           <Text editable={{ onChange: (value) => onChange(value, record._id) }}>
@@ -72,10 +74,12 @@ const CategoryList = () => {
     {
       title: "Number of Menus",
       dataIndex: "numberOfMenus",
+      width: "232px",
     },
     {
       title: "Action",
       dataIndex: "action",
+      width: "112px",
       render: (action: string, record) => {
         return (
           <StyledDiv>
@@ -134,6 +138,9 @@ const CategoryList = () => {
         strategy={verticalListSortingStrategy}
       >
         <Table
+          pagination={false}
+          scroll={{ y: "70vh"}}
+          style={{width: "99%"}}
           components={{
             body: {
               row: CategoryRow,

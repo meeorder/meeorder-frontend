@@ -1,7 +1,7 @@
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { MenuOutlined } from '@ant-design/icons';
+import { HolderOutlined } from '@ant-design/icons';
 
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   "data-row-key": string;
@@ -33,7 +33,7 @@ const CategoryRow = ({ children, ...props }: RowProps) => {
         if ((child as React.ReactElement).key === "sort") {
           return React.cloneElement(child as React.ReactElement, {
             children: (
-              <MenuOutlined
+              <HolderOutlined
                 ref={setActivatorNodeRef}
                 style={{ touchAction: "none", cursor: "move" }}
                 {...listeners}
