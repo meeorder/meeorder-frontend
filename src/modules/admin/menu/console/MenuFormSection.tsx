@@ -134,7 +134,7 @@ const MenuFormSection: React.FC = () => {
             label="ส่วนประกอบ"
             style={{ width: "100%" }}
           >
-            <Select mode="tags" placeholder="เนื้อหมู" allowClear>
+            <Select mode="tags" placeholder="ไข่" allowClear>
               {ingredientData.map((ingredient) => (
                 <Select.Option key={ingredient.id} value={ingredient.name}>
                   {ingredient.name}
