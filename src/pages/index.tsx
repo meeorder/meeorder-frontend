@@ -5,12 +5,33 @@ import CategoryNav from "@/modules/user/menu/components/CategoryNav";
 import useAllMenu from "@/modules/user/menu/hooks/useAllMenu";
 import useCategories from "@/modules/user/menu/hooks/useCategory";
 import { type Menu } from "@/modules/user/menu/types";
+import {
+  useRevalidateSession,
+  useSetNewSessionBySessionId,
+} from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const Home = () => {
   const allMenu = useAllMenu();
   const categories = useCategories();
+  const [sessionId, setSessionId] = useState<string>("");
+  useSetNewSessionBySessionId(sessionId);
+  useRevalidateSession();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!router.isReady) {
+      return;
+    }
+    const sessionId = router.query["session-id"];
+    if (typeof sessionId === "string") {
+      setSessionId(sessionId);
+    }
+  }, [router]);
 
   return (
     <>

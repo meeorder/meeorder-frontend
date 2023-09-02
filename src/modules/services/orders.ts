@@ -61,3 +61,18 @@ export const setOrderStatusToDoneById = async (
     `/orders/${params.id}/done`,
   );
 };
+
+export type GetOrdersBySessionIdPathParam =
+  paths["/sessions/{id}/orders"]["get"]["parameters"]["path"];
+
+export type GetOrdersBySessionIdResponse =
+  paths["/sessions/{id}/orders"]["get"]["responses"]["200"]["content"]["application/json"];
+
+export const getOrdersBySessionId = async (
+  params: GetOrdersBySessionIdPathParam,
+): Promise<GetOrdersBySessionIdResponse> => {
+  const { data } = await axiosInstance.get<GetOrdersBySessionIdResponse>(
+    `/sessions/${params.id}/orders`,
+  );
+  return data;
+};

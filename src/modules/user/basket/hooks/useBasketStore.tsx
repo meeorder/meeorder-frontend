@@ -1,4 +1,10 @@
+import {
+  createOrder,
+  type CreateOrderBodyParam,
+} from "@/modules/services/orders";
 import { type Menu } from "@/modules/user/menu/types";
+import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useMutation } from "@tanstack/react-query";
 import { randomBytes } from "crypto";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -20,7 +26,8 @@ type BasketStore = {
     newMenu: MenuWithAdditionalRequest,
     newQuantity: number,
   ) => void;
-  deleteBasket: (basketOrderId: string) => void;
+  deleteBasketOrder: (basketOrderId: string) => void;
+  deleteAllBasketOrder: () => void;
 };
 
 export const useBasketStore = create<BasketStore>()(
@@ -36,12 +43,15 @@ export const useBasketStore = create<BasketStore>()(
 
         set({ basketOrders: newBasket });
       },
-      deleteBasket: (basketOrderId) => {
+      deleteBasketOrder: (basketOrderId) => {
         const { basketOrders } = get();
         const newBasket = basketOrders.filter(
           (order) => order.basketOrderId !== basketOrderId,
         );
         set({ basketOrders: newBasket });
+      },
+      deleteAllBasketOrder: () => {
+        set({ basketOrders: [] });
       },
     }),
     { name: "bearStore" },
@@ -83,3 +93,34 @@ function mergeMenu(
   );
   return newBasket;
 }
+
+export const useConfirmOrder = () => {
+  const { basketOrders, deleteAllBasketOrder } = useBasketStore((state) => ({
+    basketOrders: state.basketOrders,
+    deleteAllBasketOrder: state.deleteAllBasketOrder,
+  }));
+  const session = useSessionStore((state) => state.session);
+
+  const allBasketOrders: CreateOrderBodyParam = {
+    session: session?._id ?? "",
+    orders: [],
+  };
+
+  basketOrders.forEach((order) => {
+    const { menu, quantity } = order;
+    for (let i = 0; i < quantity; i++) {
+      allBasketOrders.orders.push({
+        menu: menu._id,
+        addons: menu?.addons?.map((addon) => addon._id) ?? [],
+        additional_info: menu?.additionalRequest ?? "",
+      });
+    }
+  });
+
+  return useMutation({
+    mutationFn: () => createOrder(allBasketOrders),
+    onSuccess: () => {
+      deleteAllBasketOrder();
+    },
+  });
+};

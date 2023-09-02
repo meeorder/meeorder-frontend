@@ -1,5 +1,6 @@
 import TextPrice from "@/modules/common/components/TextPrice";
 import { type Menu } from "@/modules/user/menu/types";
+import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import { Button, List } from "antd";
@@ -18,6 +19,9 @@ const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
       pathname: `/menu/${menu._id}`,
     });
   };
+
+  const session = useSessionStore((state) => state.session);
+
   return (
     <List.Item
       style={{
@@ -31,12 +35,14 @@ const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
             height={500}
             alt={menu.title}
           />
-          <StyledButton
-            type="primary"
-            shape="circle"
-            icon={<PlusOutlined />}
-            onClick={handleChooseMenu}
-          />
+          {!!session && (
+            <StyledButton
+              type="primary"
+              shape="circle"
+              icon={<PlusOutlined />}
+              onClick={handleChooseMenu}
+            />
+          )}
         </>
       }
     >
