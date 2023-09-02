@@ -4,7 +4,7 @@ import { H5 } from "@/modules/common/components/Typography";
 import { type Food } from "@/modules/user/mock/foods";
 import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
-import { Button } from "antd";
+import { Button, Tag } from "antd";
 import Image from "next/image";
 
 type MenuListFoodCardProps = {
@@ -22,14 +22,20 @@ const MenuListFoodCard: React.FC<MenuListFoodCardProps> = ({ food }) => {
   };
 
   return (
-    <CardContainer
-      onClick={() => changeToEditMenuMode(food.id)}
-      style={{
-        opacity: getIsFoodPublished(food) ? "1" : "0.1",
-      }}
-    >
+    <CardContainer onClick={() => changeToEditMenuMode(food.id)}>
       <TextContainer>
-        <H5>{food.name}</H5>
+        <div>
+          <H5
+            style={{
+              display: "inline-block",
+            }}
+          >
+            {food.name}
+          </H5>
+          {!getIsFoodPublished(food) && (
+            <StyledStatusTag color="orange">ร่าง</StyledStatusTag>
+          )}
+        </div>
         <TextPrice price={food.price} />
       </TextContainer>
       <PhotoContainer>
@@ -87,4 +93,9 @@ const TextContainer = styled.div`
 
 const PhotoContainer = styled.div`
   position: relative;
+`;
+
+const StyledStatusTag = styled(Tag)`
+  border-radius: 12px;
+  margin-left: 8px;
 `;
