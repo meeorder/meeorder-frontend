@@ -3,7 +3,6 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
   "/health/ping": {
     get: operations["HealthController_getPing"];
@@ -214,6 +213,36 @@ export interface components {
       /** @description Table ID */
       table: number;
     };
+    OrdersSchema: {
+      /** Format: date-time */
+      created_at: string;
+      /** @enum {string} */
+      status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE";
+      /** @description Session ID */
+      session: string;
+      /** @description Menu ID */
+      menu: string;
+      /** @description Array of MenuID */
+      addons: string[];
+      /** @description Additional info */
+      additional_info: string;
+      /**
+       * Format: date-time
+       * @description for cancel status
+       */
+      cancelled_at: string;
+    };
+    OrdersListDto: {
+      /** @description table number */
+      table: number;
+      /** @description total price */
+      total_price: number;
+      /** @description discount price */
+      discount_price: number;
+      /** @description net price */
+      net_price: number;
+      orders: components["schemas"]["OrdersSchema"][];
+    };
     TablesDto: {
       _id: number;
     };
@@ -228,10 +257,11 @@ export interface components {
   pathItems: never;
 }
 
+export type $defs = Record<string, never>;
+
 export type external = Record<string, never>;
 
 export interface operations {
-
   HealthController_getPing: {
     responses: {
       /** @description Health status */
@@ -281,7 +311,9 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   CategoriesController_updateCategory: {
@@ -303,7 +335,9 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   CategoriesController_deleteCategory: {
@@ -314,9 +348,13 @@ export interface operations {
     };
     responses: {
       /** @description Deleted category */
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Category not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   CategoriesController_updateRank: {
@@ -327,7 +365,9 @@ export interface operations {
     };
     responses: {
       /** @description Change category rank */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   AddonsController_getAllAddons: {
@@ -369,7 +409,9 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   AddonsController_updateAddon: {
@@ -391,7 +433,9 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   AddonsController_deleteAddon: {
@@ -402,9 +446,13 @@ export interface operations {
     };
     responses: {
       /** @description Deleted addon */
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Addon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   MenusController_getMenus: {
@@ -445,9 +493,13 @@ export interface operations {
     };
     responses: {
       /** @description The menus have been successfully deleted. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   MenusController_getMenuById: {
@@ -464,7 +516,9 @@ export interface operations {
         };
       };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   MenusController_updateMenuById: {
@@ -480,9 +534,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully updated. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   MenusController_removeMenuById: {
@@ -493,9 +551,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully deleted. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   MenusController_publishMenuById: {
@@ -506,9 +568,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully published. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   MenusController_unpublishMenuById: {
@@ -519,9 +585,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully unpublished. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   OrdersController_getOrders: {
@@ -542,7 +612,9 @@ export interface operations {
     };
     responses: {
       /** @description Create order */
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   OrdersController_preparing: {
@@ -554,7 +626,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to preparing */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   OrdersController_readyToServe: {
@@ -566,7 +640,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to ready to serve */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   OrdersController_done: {
@@ -578,7 +654,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to done */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   OrdersController_cancel: {
@@ -590,7 +668,9 @@ export interface operations {
     };
     responses: {
       /** @description Cancel order */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   SessionController_getSessions: {
@@ -648,9 +728,13 @@ export interface operations {
     };
     responses: {
       /** @description Session deleted */
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Session not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   SessionController_getSessionByTable: {
@@ -668,7 +752,9 @@ export interface operations {
         };
       };
       /** @description No session found in the table */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   SessionController_finishSession: {
@@ -680,9 +766,13 @@ export interface operations {
     };
     responses: {
       /** @description Session finished */
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Session not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   SessionController_getOrdersBySession: {
@@ -693,7 +783,11 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: {
+          "application/json": components["schemas"]["OrdersListDto"];
+        };
+      };
     };
   };
   TablesController_getTables: {
@@ -714,7 +808,9 @@ export interface operations {
     };
     responses: {
       /** @description Create table */
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
 }
