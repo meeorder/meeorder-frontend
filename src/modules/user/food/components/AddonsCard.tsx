@@ -20,7 +20,7 @@ const AddonsCard: React.FC<AddonsCardProps> = ({
         <Checkbox checked={isChecked} onChange={() => handleToggleAddon(addon)}>
           {addon?.title}
         </Checkbox>
-        <Text type="secondary">+{addon?.price} Baht</Text>
+        <Text type="secondary">+฿{addon?.price}</Text>
       </FlexRow>
     </div>
   );

@@ -22,7 +22,9 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
           <H5>{order?.menu?.title}</H5>
           <Text type="secondary">
             <TextPrice price={calculateOrderPrice(order)} />
-            <StyledStatusTag color={colorTag}>{order.status}</StyledStatusTag>
+            <StyledStatusTag color={colorTag}>
+              {mapOrderStatusTranslation[order.status]}
+            </StyledStatusTag>
           </Text>
           {order?.addons?.map((addon) => {
             return (
@@ -93,5 +95,13 @@ const mapStatusToColor: Record<Order["status"] | "CANCEL", TagProps["color"]> =
     DONE: "green",
     CANCEL: "red",
   };
+
+const mapOrderStatusTranslation: Record<Order["status"] | "CANCEL", string> = {
+  IN_QUEUE: "อยู่ในคิว",
+  PREPARING: "กำลังเตรียมการ",
+  READY_TO_SERVE: "พร้อมเสิร์ฟ",
+  DONE: "สำเร็จ",
+  CANCEL: "ยกเลิก",
+};
 
 export default OrderCard;

@@ -43,7 +43,7 @@ const BasketFoodCard: React.FC<BasketFoodCardProps> = ({ basketOrder }) => {
             <Text>โน๊ต : {basketOrder?.menu?.additionalRequest}</Text>
           )}
         </ContentGroup>
-        <Typography.Link onClick={handleEditOrder}>Edit</Typography.Link>
+        <Typography.Link onClick={handleEditOrder}>แก้ไข</Typography.Link>
       </FoodDetails>
       <ImageContainer>
         <Image

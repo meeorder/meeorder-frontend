@@ -11,7 +11,7 @@ const BasketFoodList: React.FC<BasketFoodListProp> = ({ basketOrders }) => {
   return (
     <List
       size="large"
-      header={<H4>My Basket</H4>}
+      header={<H4>ตะกร้าของฉัน</H4>}
       dataSource={basketOrders}
       renderItem={(order) => (
         <List.Item>

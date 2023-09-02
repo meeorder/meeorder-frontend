@@ -29,10 +29,10 @@ const SaveButton: React.FC<SaveButtonProps> = ({
     >
       <H5 style={{ color: "white" }}>
         {count === 0
-          ? "Delete From My Cart"
+          ? "นำออกจากตะกร้า"
           : isNewOrder
-          ? `Add to Cart ( ${price} THB )`
-          : `Save Change ( ${price} THB )`}
+          ? `เพิ่มลงตะกร้า ( ฿${price} )`
+          : `อัปเดตตะกร้า ( ฿${price} )`}
       </H5>
     </Button>
   );
