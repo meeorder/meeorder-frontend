@@ -10,7 +10,7 @@ import {
   User,
 } from "@phosphor-icons/react";
 
-type PageMetaData = {
+export type PageMetaData = {
   id: string;
   label: string;
   path: string;

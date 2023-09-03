@@ -1,5 +1,5 @@
 import WireFrame from "@/modules/mock/components/WireFrame";
-import { pages, type PageId } from "@/modules/pageConfig";
+import { pages, type PageId, type PageMetaData } from "@/modules/pageConfig";
 import { Layout, Menu, type MenuProps } from "antd";
 import { useRouter } from "next/router";
 type AdminSideNavProps = {
@@ -8,19 +8,14 @@ type AdminSideNavProps = {
 
 type MenuItem = Required<MenuProps>["items"][number];
 
-function getItem(
-  label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-): MenuItem {
+const getItem = (page: PageMetaData, children?: PageMetaData[]): MenuItem => {
   return {
-    key,
-    icon,
-    children,
-    label,
-  } as MenuItem;
-}
+    key: page.id,
+    icon: <page.Icon />,
+    label: page.label,
+    children: children?.map((page) => getItem(page)),
+  };
+};
 
 const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
   const {
@@ -42,14 +37,9 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     adminSetting,
   ].map((page) => {
     if (page.id == adminAddEditPromotion.id) {
-      return getItem(page.label, page.id, <page.Icon />, [
-        ...[adminEditPoint, adminEditCoupon].map((page) =>
-          getItem(page.label, page.id),
-        ),
-      ]);
-    } else {
-      return getItem(page.label, page.id, <page.Icon />);
+      return getItem(page, [adminEditCoupon, adminEditPoint]);
     }
+    return getItem(page);
   });
 
   return (
