@@ -48,31 +48,34 @@ const CouponList = () => {
       key: "title",
       title: "ชื่อคูปอง",
       dataIndex: "title",
-      width: "25%",
     },
     {
       key: "discount",
       title: "ส่วนลด",
       dataIndex: "discount",
       width: "7%",
+      align: "right",
     },
     {
       key: "point",
       title: "แต้มที่ต้องใช้",
       dataIndex: "point",
       width: "8%",
+      align: "right",
     },
     {
       key: "numberOfMenusCanUse",
       title: "เมนูที่ใช้คูปองได้",
       dataIndex: "numberOfMenusCanUse",
       width: "10%",
+      align: "right",
     },
     {
       key: "numberOfCoupons",
       title: "จำนวนคูปอง",
       dataIndex: "numberOfCoupons",
       width: "10%",
+      align: "right",
     },
     {
       key: "percentOfUsedCoupons",
@@ -80,7 +83,14 @@ const CouponList = () => {
       dataIndex: "percentOfUsedCoupons",
       width: "17%",
       render: (percentOfUsedCoupons: number) => {
-        return <Progress percent={percentOfUsedCoupons} />;
+        return (
+          <ProgressTextContainer>
+            <ProgressContainer>
+              <Progress percent={percentOfUsedCoupons} showInfo={false} />
+            </ProgressContainer>
+            <Text>{percentOfUsedCoupons.toFixed(0)}%</Text>
+          </ProgressTextContainer>
+        );
       },
     },
     {
@@ -101,7 +111,7 @@ const CouponList = () => {
       key: "action",
       title: "ดำเนินการ",
       dataIndex: "action",
-      width: "15%",
+      width: "10%",
       render: (_, record) => {
         return (
           <StyledDiv>
@@ -114,14 +124,16 @@ const CouponList = () => {
   ];
 
   return (
-    <Table
-      pagination={false}
-      scroll={{ y: "76vh" }}
-      style={{ width: "99%" }}
-      rowKey={"_id"}
-      dataSource={dataSource}
-      columns={columns}
-    />
+    <ScrollAuto>
+      <Table
+        pagination={false}
+        scroll={{ y: "76vh" }}
+        style={{ width: "99%" }}
+        rowKey={"_id"}
+        dataSource={dataSource}
+        columns={columns}
+      />
+    </ScrollAuto>
   );
 };
 export default CouponList;
@@ -139,4 +151,20 @@ const DotStatus = styled.span<{ status: "published" | "draft" }>`
   background-color: ${(props) =>
     props.status === "published" ? "#52c41a" : "#d9d9d9"};
   margin-right: 8px;
+`;
+
+const ScrollAuto = styled.div`
+  .ant-table-body {
+    overflow-y: auto !important;
+  }
+`;
+
+const ProgressTextContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const ProgressContainer = styled.div`
+  width: 80%;
 `;

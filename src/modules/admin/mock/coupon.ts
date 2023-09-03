@@ -27,7 +27,7 @@ export const couponData: CouponDataType[] = [
     point: 10,
     useableMenu: ["1", "2", "3", "5"],
     numberOfUsedCoupons: 25,
-    numberOfCoupons: 100,
+    numberOfCoupons: 200,
     status: "published",
   },
   {
@@ -36,8 +36,8 @@ export const couponData: CouponDataType[] = [
     discount: 100,
     point: 100,
     useableMenu: ["1"],
-    numberOfUsedCoupons: 90,
-    numberOfCoupons: 100,
+    numberOfUsedCoupons: 9,
+    numberOfCoupons: 10,
     status: "published",
   },
   {
@@ -47,7 +47,7 @@ export const couponData: CouponDataType[] = [
     point: 10,
     useableMenu: ["3"],
     numberOfUsedCoupons: 0,
-    numberOfCoupons: 100,
+    numberOfCoupons: 1,
     status: "draft",
   },
   {
