@@ -10,7 +10,7 @@ import {
   User,
 } from "@phosphor-icons/react";
 
-type PageMetaData = {
+export type PageMetaData = {
   id: string;
   label: string;
   path: string;
@@ -60,6 +60,20 @@ export const pages = {
     path: "/admin/promotion",
     layout: "admin",
     Icon: ListBullets,
+  },
+  adminEditPoint: {
+    id: "adminEditPoint",
+    label: "จัดการสัดส่วนแต้ม",
+    path: "/admin/promotion/edit-point",
+    layout: "admin",
+    Icon: User,
+  },
+  adminEditCoupon: {
+    id: "adminEditCoupon",
+    label: "จัดการคูปอง",
+    path: "/admin/promotion/edit-coupon",
+    layout: "admin",
+    Icon: User,
   },
   adminSalesReport: {
     id: "adminSalesReport",
