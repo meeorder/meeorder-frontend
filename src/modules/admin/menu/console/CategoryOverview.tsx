@@ -6,9 +6,9 @@ import { Button, Card } from "antd";
 const CategoryOverview = () => {
   return (
     <CategoryOverviewCard
-      title={ <H4>Category</H4> }
+      title={ <H4>หมวดหมู่</H4> }
       extra={
-        <Button type = "primary">Create Category</Button>
+        <Button type = "primary">เพิ่มหมวดหมู่</Button>
       }
     >  
       <CatergoryList />

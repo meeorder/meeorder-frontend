@@ -178,7 +178,7 @@ const MenuFormSection: React.FC = () => {
             style={{ width: "100%" }}
           >
             <InputNumber
-              addonAfter="฿"
+              addonAfter="บาท"
               controls={false}
               placeholder="50"
               style={{ width: "100%" }}
