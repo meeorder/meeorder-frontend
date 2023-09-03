@@ -15,7 +15,7 @@ export type PageMetaData = {
   label: string;
   path: string;
   layout: LayoutType;
-  Icon: React.FC;
+  Icon?: React.FC;
 };
 
 export const pages = {
@@ -66,14 +66,12 @@ export const pages = {
     label: "จัดการสัดส่วนแต้ม",
     path: "/admin/promotion/edit-point",
     layout: "admin",
-    Icon: User,
   },
   adminEditCoupon: {
     id: "adminEditCoupon",
     label: "จัดการคูปอง",
     path: "/admin/promotion/edit-coupon",
     layout: "admin",
-    Icon: User,
   },
   adminSalesReport: {
     id: "adminSalesReport",
