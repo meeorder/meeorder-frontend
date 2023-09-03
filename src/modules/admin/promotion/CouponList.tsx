@@ -31,17 +31,14 @@ const CouponList = () => {
     })),
   );
 
-  // const onChange = (value: string, _id: string) => {
-  //   setDataSource((prev) => [
-  //     ...prev.map((coupon) =>
-  //       coupon._id === _id ? { ...coupon, title: value } : coupon,
-  //     ),
-  //   ]);
-  // };
+  const handleEdit = (_id: string) => {
+    const coupon = couponData.find((coupon) => coupon._id === _id);
+    console.log("Edit", coupon);
+  };
 
-  // const onConfirm = (_id: string) => {
-  //   setDataSource((prev) => [...prev.filter((coupon) => coupon._id !== _id)]); // TODO: update to api
-  // };
+  const handleDelete = (_id: string) => {
+    setDataSource((prev) => [...prev.filter((coupon) => coupon._id !== _id)]);
+  };
 
   const columns: ColumnsType<TableRowProps> = [
     {
@@ -115,8 +112,15 @@ const CouponList = () => {
       render: (_, record) => {
         return (
           <StyledDiv>
-            <Typography.Link key="edit">แก้ไข</Typography.Link>
-            <Typography.Link key="delete">ลบ</Typography.Link>
+            <Typography.Link key="edit" onClick={() => handleEdit(record._id)}>
+              แก้ไข
+            </Typography.Link>
+            <Typography.Link
+              key="delete"
+              onClick={() => handleDelete(record._id)}
+            >
+              ลบ
+            </Typography.Link>
           </StyledDiv>
         );
       },

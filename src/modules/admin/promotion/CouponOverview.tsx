@@ -3,6 +3,10 @@ import { H4 } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Button, Card } from "antd";
 
+const handleAddCoupon = () => {
+  console.log("Add Coupon");
+};
+
 const CouponOverview = () => {
   return (
     <CouponOverviewConatiner
@@ -25,6 +29,7 @@ const CouponOverview = () => {
             marginBottom: "16px",
           }}
           type="primary"
+          onClick={() => handleAddCoupon()}
         >
           + เพิ่มคูปอง
         </Button>
