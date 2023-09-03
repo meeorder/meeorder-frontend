@@ -4,17 +4,13 @@ import BasketFoodList from "@/modules/user/basket/components/BasketFoodList";
 import BasketSummaryNav from "@/modules/user/basket/components/BasketSummaryNav";
 import { useBasketStore } from "@/modules/user/basket/hooks/useBasketStore";
 import { calculateBasketOrdersPrice } from "@/modules/user/basket/utils";
+import { useRevalidateSession } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import Head from "next/head";
-import { useEffect, useState } from "react";
 
 const Basket = () => {
   const basketOrders = useBasketStore((state) => state.basketOrders);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
+  useRevalidateSession();
 
   return (
     <>
@@ -25,7 +21,7 @@ const Basket = () => {
       </Head>
       <AppLayout layoutType="user" currentPageId={pages.basket.id}>
         <BasketMainContentWrapper>
-          <BasketFoodList basketOrders={isLoaded ? basketOrders : []} />
+          <BasketFoodList basketOrders={basketOrders} />
 
           <BasketSummaryNav
             totalPrice={calculateBasketOrdersPrice(basketOrders)}

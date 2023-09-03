@@ -1,12 +1,16 @@
+import { H3 } from "@/modules/common/components/Typography";
 import {
   getSessionById,
   type GetSessionByIdResponse,
 } from "@/modules/services/sessions";
 import { useBasketStore } from "@/modules/user/basket/hooks/useBasketStore";
+import { HandsPraying } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
+import { Modal } from "antd";
+import { useRouter } from "next/router";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
+const { confirm } = Modal;
 export type Session = GetSessionByIdResponse;
 
 type SessionStore = {
@@ -24,6 +28,7 @@ export const useSessionStore = create<SessionStore>()(
     }),
     {
       name: "session",
+      skipHydration: true,
     },
   ),
 );
@@ -42,8 +47,9 @@ export const useSetNewSessionBySessionId = (
     (state) => state.deleteAllBasketOrder,
   );
 
-  useQuery({
+  const { data: sessionData, refetch } = useQuery({
     queryKey: ["getSessionById", sessionId],
+    retry: false,
     queryFn: () =>
       getSessionById({
         id: sessionId,
@@ -63,6 +69,7 @@ export const useSetNewSessionBySessionId = (
     onError: () => {
       console.error("Session not found");
       clearSession();
+      deleteAllBasketOrder();
     },
     enabled: !!sessionId && session?._id !== sessionId,
   });
@@ -74,6 +81,12 @@ export const useRevalidateSession = () => {
     setSession: state.setSession,
     clearSession: state.clearSession,
   }));
+
+  const deleteAllBasketOrder = useBasketStore(
+    (state) => state.deleteAllBasketOrder,
+  );
+
+  const router = useRouter();
   useQuery({
     queryKey: ["getSessionById", session?._id],
     queryFn: () =>
@@ -82,15 +95,38 @@ export const useRevalidateSession = () => {
       }),
     onSuccess: (newSession) => {
       if (newSession?.finished_at !== null) {
+        confirm({
+          title: (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <H3>โต๊ะนี้ถูกปิดแล้ว ขอบคุณที่ใช้บริการ ค่ะ</H3>
+              <HandsPraying size={96} />
+            </div>
+          ),
+          icon: null,
+          centered: true,
+          onOk() {
+            clearSession();
+            deleteAllBasketOrder();
+            void router.push({
+              pathname: "/",
+            });
+          },
+          okButtonProps: {
+            style: { alignSelf: "center", marginInline: "auto" },
+          },
+          cancelButtonProps: { style: { display: "none" } },
+        });
         clearSession();
+        deleteAllBasketOrder();
         return;
       }
-      setSession(newSession);
     },
-    onError: () => {
-      console.error("Session not found");
-      clearSession();
-    },
-    enabled: !!session?._id,
   });
 };

@@ -305,7 +305,7 @@ export interface components {
       role: 100 | 75 | 50 | 25 | 1;
       /**
        * Format: date-time
-       * @default 2023-09-02T19:05:16.224Z
+       * @default 2023-09-03T10:05:35.534Z
        */
       created_at: string;
     };

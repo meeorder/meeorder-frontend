@@ -4,13 +4,17 @@ import { pages } from "@/modules/pageConfig";
 import OrderList from "@/modules/user/order/components/OrderList";
 import OrderSummaryPrice from "@/modules/user/order/components/OrderSummaryPrice";
 import useOrder from "@/modules/user/order/hooks/useOrder";
-import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import {
+  useRevalidateSession,
+  useSessionStore,
+} from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import Head from "next/head";
 
 const Orders = () => {
   const session = useSessionStore((state) => state.session);
   const { data: ordersData } = useOrder(session?._id ?? "");
+  useRevalidateSession();
 
   return (
     <>

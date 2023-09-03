@@ -4,10 +4,7 @@ import Category from "@/modules/user/menu/components/Category";
 import CategoryNav from "@/modules/user/menu/components/CategoryNav";
 import useAllMenu from "@/modules/user/menu/hooks/useAllMenu";
 import useCategories from "@/modules/user/menu/hooks/useCategory";
-import {
-  useRevalidateSession,
-  useSetNewSessionBySessionId,
-} from "@/modules/user/order/hooks/useSessionStore";
+import { useSetNewSessionBySessionId } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -18,7 +15,6 @@ const Home = () => {
   const categories = useCategories();
   const [sessionId, setSessionId] = useState<string>("");
   useSetNewSessionBySessionId(sessionId);
-  useRevalidateSession();
 
   const router = useRouter();
 

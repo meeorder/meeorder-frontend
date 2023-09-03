@@ -6,6 +6,7 @@ import { type Menu } from "@/modules/user/menu/types";
 import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import { useMutation } from "@tanstack/react-query";
 import { randomBytes } from "crypto";
+import { useRouter } from "next/router";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -54,7 +55,7 @@ export const useBasketStore = create<BasketStore>()(
         set({ basketOrders: [] });
       },
     }),
-    { name: "basket" },
+    { name: "basket", skipHydration: true },
   ),
 );
 
@@ -106,6 +107,15 @@ export const useConfirmOrder = () => {
     orders: [],
   };
 
+  const router = useRouter();
+
+  const handleSuccess = () => {
+    deleteAllBasketOrder();
+    void router.push({
+      pathname: "/orders",
+    });
+  };
+
   basketOrders.forEach((order) => {
     const { menu, quantity } = order;
     for (let i = 0; i < quantity; i++) {
@@ -119,8 +129,6 @@ export const useConfirmOrder = () => {
 
   return useMutation({
     mutationFn: () => createOrder(allBasketOrders),
-    onSuccess: () => {
-      deleteAllBasketOrder();
-    },
+    onSuccess: handleSuccess,
   });
 };
