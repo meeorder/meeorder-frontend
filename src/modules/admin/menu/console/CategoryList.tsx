@@ -139,8 +139,8 @@ const CategoryList = () => {
       >
         <Table
           pagination={false}
-          scroll={{ y: "76vh"}}
-          style={{width: "99%"}}
+          scroll={{ y: "76vh" }}
+          style={{ width: "99%" }}
           components={{
             body: {
               row: CategoryRow,
