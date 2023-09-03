@@ -36,7 +36,7 @@ const CategoryList = () => {
       _id: category._id,
       title: category.title,
       numberOfMenus: category.menus.length,
-      action: "delete",
+      action: "ลบ",
     })),
   );
 
@@ -60,7 +60,7 @@ const CategoryList = () => {
       width: "40px",
     },
     {
-      title: "Category Name",
+      title: "ชื่อหมวดหมู่",
       dataIndex: "title",
       width: "346px",
       render: (title: string, record) => {
@@ -72,25 +72,25 @@ const CategoryList = () => {
       },
     },
     {
-      title: "Number of Menus",
+      title: "จำนวนเมนู",
       dataIndex: "numberOfMenus",
       width: "232px",
     },
     {
-      title: "Action",
+      title: "ดำเนินการ",
       dataIndex: "action",
       width: "112px",
       render: (action: string, record) => {
         return (
           <StyledDiv>
             <Popconfirm
-              title="Delete the category"
-              description="Are you sure to delete this category?"
-              okText="Yes"
+              title="ลบหมวดหมู่"
+              description="คุณยืนยันที่จะลบหมวดหมู่นี้หรือไม่?"
+              okText="ยืนยัน"
               onConfirm={() => {
                 onConfirm(record._id);
               }}
-              cancelText="No"
+              cancelText="ยกเลิก"
             >
               <Typography.Link key={action}>{action}</Typography.Link>
             </Popconfirm>
