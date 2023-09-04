@@ -13,7 +13,7 @@ interface TableRowProps {
   numberOfMenusCanUse: number;
   numberOfCoupons: number;
   percentOfUsedCoupons: number;
-  status: "published" | "draft";
+  status: boolean;
 }
 
 const CouponList = () => {
@@ -23,10 +23,10 @@ const CouponList = () => {
       title: coupon.title,
       discount: coupon.discount,
       point: coupon.point,
-      numberOfMenusCanUse: coupon.useableMenu.length,
+      numberOfMenusCanUse: coupon.redeamableMenu.length,
       numberOfCoupons: coupon.numberOfCoupons,
       percentOfUsedCoupons:
-        (coupon.numberOfUsedCoupons / coupon.numberOfCoupons) * 100,
+        (coupon.numberOfReadeamedCoupons / coupon.numberOfCoupons) * 100,
       status: coupon.status,
     })),
   );
@@ -95,11 +95,11 @@ const CouponList = () => {
       title: "สถานะ",
       dataIndex: "status",
       width: "8%",
-      render: (status: "published" | "draft") => {
+      render: (status: boolean) => {
         return (
           <>
             <DotStatus status={status} />
-            <Text>{status === "published" ? "เผยแพร่" : "ฉบับร่าง"}</Text>
+            <Text>{status ? "เผยแพร่" : "ฉบับร่าง"}</Text>
           </>
         );
       },
@@ -147,13 +147,12 @@ const StyledDiv = styled.div`
   gap: 16px;
 `;
 
-const DotStatus = styled.span<{ status: "published" | "draft" }>`
+const DotStatus = styled.span<{ status: boolean }>`
   display: inline-block;
   width: 6px;
   height: 6px;
   border-radius: 100px;
-  background-color: ${(props) =>
-    props.status === "published" ? "#52c41a" : "#d9d9d9"};
+  background-color: ${(props) => (props.status ? "#52c41a" : "#d9d9d9")};
   margin-right: 8px;
 `;
 

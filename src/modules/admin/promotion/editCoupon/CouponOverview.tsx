@@ -1,13 +1,18 @@
-import CouponList from "@/modules/admin/promotion/CouponList";
+import CouponList from "@/modules/admin/promotion/editCoupon/CouponList";
 import { H4 } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Button, Card } from "antd";
 
-const handleAddCoupon = () => {
-  console.log("Add Coupon");
+type CouponOverviewProps = {
+  openModal: boolean;
+  setOpenModal: (open: boolean) => void;
 };
 
-const CouponOverview = () => {
+const CouponOverview: React.FC<CouponOverviewProps> = ({ setOpenModal }) => {
+  const handleAddCoupon = () => {
+    setOpenModal(true);
+  };
+
   return (
     <CouponOverviewConatiner
       title={
