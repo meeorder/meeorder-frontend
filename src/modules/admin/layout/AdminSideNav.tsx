@@ -11,7 +11,7 @@ type MenuItem = Required<MenuProps>["items"][number];
 const getItem = (page: PageMetaData, children?: PageMetaData[]): MenuItem => {
   return {
     key: page.id,
-    icon: <page.Icon />,
+    icon: page.Icon && <page.Icon />,
     label: page.label,
     children: children?.map((page) => getItem(page)),
   };
@@ -37,7 +37,7 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     adminSetting,
   ].map((page) => {
     if (page.id == adminAddEditPromotion.id) {
-      return getItem(page, [adminEditCoupon, adminEditPoint]);
+      return getItem(page, [adminEditPoint, adminEditCoupon]);
     }
     return getItem(page);
   });
@@ -56,7 +56,7 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
         mode="inline"
         defaultSelectedKeys={[currentPageId]}
         defaultOpenKeys={
-          [adminEditCoupon.id, adminEditPoint.id].some(
+          [adminEditPoint.id, adminEditCoupon.id].some(
             (id) => id == currentPageId,
           )
             ? [adminAddEditPromotion.id]
