@@ -1,6 +1,7 @@
 import { type GetCategoryByIdResponse } from "@/modules/services/categories";
 
 export type Category = GetCategoryByIdResponse;
+
 export const categories: Category[] = [
   {
     _id: "id1",
