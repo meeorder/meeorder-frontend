@@ -6,25 +6,23 @@ import { Button, Card } from "antd";
 const CategoryOverview = () => {
   return (
     <CategoryOverviewCard
-      title={ <H4>หมวดหมู่</H4> }
-      extra={
-        <Button type = "primary">เพิ่มหมวดหมู่</Button>
-      }
-    >  
+      title={<H4>หมวดหมู่</H4>}
+      extra={<Button type="primary">เพิ่มหมวดหมู่</Button>}
+    >
       <CatergoryList />
     </CategoryOverviewCard>
-  )
+  );
 };
 
 export default CategoryOverview;
 const CategoryOverviewCard = styled(Card)`
   width: 100%;
   height: 100%;
-  .ant-card-head{
+  .ant-card-head {
     min-height: 52px;
     border-bottom: 0;
   }
-  .ant-card-body{
+  .ant-card-body {
     padding-top: 0;
   }
-`
+`;
