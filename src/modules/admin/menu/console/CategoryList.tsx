@@ -137,19 +137,21 @@ const CategoryList = () => {
         items={dataSource.map((i) => i._id)}
         strategy={verticalListSortingStrategy}
       >
-        <Table
-          pagination={false}
-          scroll={{ y: "76vh"}}
-          style={{width: "99%"}}
-          components={{
-            body: {
-              row: CategoryRow,
-            },
-          }}
-          rowKey={"_id"}
-          dataSource={dataSource}
-          columns={columns}
-        />
+        <ScrollAuto>
+          <Table
+            pagination={false}
+            scroll={{ y: "76vh" }}
+            style={{ width: "99%" }}
+            components={{
+              body: {
+                row: CategoryRow,
+              },
+            }}
+            rowKey={"_id"}
+            dataSource={dataSource}
+            columns={columns}
+          />
+        </ScrollAuto>
       </SortableContext>
     </DndContext>
   );
@@ -159,4 +161,10 @@ export default CategoryList;
 const StyledDiv = styled.div`
   display: flex;
   gap: 16px;
+`;
+
+const ScrollAuto = styled.div`
+  .ant-table-body {
+    overflow-y: auto !important;
+  }
 `;
