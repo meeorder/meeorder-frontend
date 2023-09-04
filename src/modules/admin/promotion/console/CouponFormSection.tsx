@@ -1,5 +1,5 @@
-import { categories } from "@/modules/admin/mock/categories";
 import { type CouponDataType } from "@/modules/admin/mock/coupon";
+import { getAllMenus } from "@/modules/admin/mock/menu";
 import { H4, H5, Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 
@@ -22,14 +22,14 @@ type CouponFormSectionModalProps = {
   setOpenModal: (open: boolean) => void;
 };
 
-const menuByCategoryData = categories.map((category) => ({
-  key: category._id,
-  value: category.title,
-  title: category.title,
-  children: category.menus.map((menu) => ({
-    value: menu,
-    title: menu,
-    key: menu,
+const menuByCategoryData = getAllMenus.map((items) => ({
+  key: items.category._id,
+  value: items.category._id,
+  title: items.category.title,
+  children: items.menu.map((menu) => ({
+    key: menu._id,
+    value: menu._id,
+    title: menu.title,
   })),
 }));
 
@@ -47,6 +47,26 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
 
   const handleFormSubmit = (values: CouponDataType) => {
     // TODO: send data to api
+    const allReadeamableMenuId = [];
+    for (let i = 0; i < values.redeamableMenu.length; i++) {
+      const item_id = values.redeamableMenu[i];
+      const itemCategory = getAllMenus.find(
+        (item) => item.category._id === item_id,
+      );
+      if (itemCategory) {
+        const menuList = itemCategory.menu;
+        for (let j = 0; j < menuList.length; j++) {
+          const menuId = menuList[j]?._id;
+          allReadeamableMenuId.push(menuId);
+        }
+      } else {
+        allReadeamableMenuId.push(item_id);
+      }
+    }
+    values.redeamableMenu = allReadeamableMenuId.map((item) =>
+      item ? item?.toString() : "",
+    );
+
     console.log(values);
     setOpenModal(false);
   };
