@@ -6,7 +6,7 @@ export type Coupon = {
   required_menus: number[];
   price: number;
   required_point: number;
-  status: "inused" | "redeemable" | "disabled";
+  status: "inUsed" | "redeemable" | "disabled";
 };
 
 export const coupons: Coupon[] = [
@@ -18,7 +18,7 @@ export const coupons: Coupon[] = [
     required_menus: [1, 2],
     price: 50,
     required_point: 100,
-    status: "inused",
+    status: "inUsed",
   },
   {
     id: "2",
@@ -28,7 +28,7 @@ export const coupons: Coupon[] = [
     required_menus: [3, 4],
     price: 50,
     required_point: 200,
-    status: "inused",
+    status: "redeemable",
   },
   {
     id: "3",

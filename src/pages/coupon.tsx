@@ -43,20 +43,21 @@ const Orders = () => {
       return;
     }
 
-    const isInUsed = session.coupon === coupon.id;
-    const isRedeemable =
-      session.user && session.user?.point >= coupon.required_point;
+    const isInUsed = coupon.status === "inUsed";
+    const isRedeemable = coupon.status === "redeemable";
     const hasCouponInUse = !!session.coupon;
 
     if (isInUsed) {
-      // remove coupon
+      // TODO: remove coupon BE
     } else if (isRedeemable && hasCouponInUse) {
       setDrawerOpen(false);
       setModalType("changeCoupon");
       setModalOpen(true);
     } else if (isRedeemable && !hasCouponInUse) {
-      // add coupon
-      // redirect to orders pages
+      // TODO: add coupon BE
+      void router.push({
+        pathname: "/orders",
+      });
     }
   };
 

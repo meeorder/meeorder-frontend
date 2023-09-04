@@ -1,7 +1,6 @@
 import { H5, Text } from "@/modules/common/components/Typography";
 import { commaFormat } from "@/modules/common/utils";
 import { type Coupon } from "@/modules/user/mock/coupons";
-import { session } from "@/modules/user/mock/session";
 import styled from "@emotion/styled";
 import { Button, Card, Divider, theme } from "antd";
 import Image from "next/image";
@@ -22,9 +21,8 @@ const CouponCard: React.FC<CouponCardProps> = ({
   } = theme.useToken();
 
   // TODO: Change this to relate with BE
-  const isDisabled =
-    !!session.user && session.user.point < coupon.required_point;
-  const isInUsed = session.coupon === coupon.id;
+  const isDisabled = coupon.status === "disabled";
+  const isInUsed = coupon.status === "inUsed";
   const statusText = isInUsed
     ? "นำคูปองออก"
     : `แลก ${commaFormat(coupon.required_point)} แต้ม`;
