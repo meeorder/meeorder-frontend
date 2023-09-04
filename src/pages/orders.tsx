@@ -21,8 +21,8 @@ const Orders = () => {
       <AppLayout layoutType="user" currentPageId={pages.orders.id}>
         <OrderContainer>
           <OrderHeader>
-            <H4>My Order</H4>
-            <H5 type="secondary">Table {tableNumber}</H5>
+            <H4>รายการอาหารที่สั่ง</H4>
+            <H5 type="secondary">โต๊ะ {tableNumber}</H5>
           </OrderHeader>
           <OrderList orders={ordersData.orders} />
           <OrderCoupon />

@@ -1,10 +1,21 @@
 import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
 import { categories } from "@/modules/admin/mock/categories";
 import { ingredientData } from "@/modules/admin/mock/ingredient";
-import { H4, Text } from "@/modules/common/components/Typography";
+import { H4, H5, Text } from "@/modules/common/components/Typography";
 import { type Category } from "@/modules/user/mock/categories";
 import styled from "@emotion/styled";
-import { Button, Card, Form, Input, InputNumber, Select } from "antd";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Result,
+  Select,
+  Switch,
+  theme,
+} from "antd";
 import Image from "next/image";
 import React, { useState } from "react";
 
@@ -20,10 +31,16 @@ type FieldType = {
 const MenuFormSection: React.FC = () => {
   const { consoleSectionMode, editMenuId, changeToCategoryMode } =
     useConsoleSectionMode();
+  const { token } = theme.useToken();
   const [form] = Form.useForm();
-  const [imageURL, setImageURL] = useState<string>(
+  const [imageURL, setImageURL] = useState(
     "https://source.unsplash.com/random/?food&plate&11",
   );
+  const [published, setPublished] = useState(true);
+
+  const [openCancelModal, setOpenCancelModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
   if (consoleSectionMode === "edit-menu") {
     // TODO: get menu data from api then set value to form
@@ -39,17 +56,18 @@ const MenuFormSection: React.FC = () => {
   };
 
   const handleCancel = () => {
-    // mock
     changeToCategoryMode();
-    // TODO: popup confirm
-    // TODO: if no close popup
-    // TODO: if yes redirect to menu
   };
 
   const handleDelete = () => {
-    // TODO: popup confirm
-    // TODO: if no close popup
-    // TODO: if yes delete menu redirect to menu
+    setLoadingDelete(true);
+    setTimeout(() => {
+      setLoadingDelete(false);
+      setOpenDeleteModal(false);
+      // delete menu
+
+      changeToCategoryMode();
+    }, 1500);
   };
 
   return (
@@ -62,7 +80,7 @@ const MenuFormSection: React.FC = () => {
             gap: "8px",
           }}
         >
-          <H4>{consoleSectionMode === "edit-menu" ? "Edit" : "Add"}</H4>
+          <H4>{consoleSectionMode === "edit-menu" ? "แก้ไข" : "เพิ่ม"}เมนู</H4>
           {consoleSectionMode === "edit-menu" && (
             <Text type="secondary"> ({editMenuId}) </Text>
           )}
@@ -71,17 +89,69 @@ const MenuFormSection: React.FC = () => {
       bordered={false}
       extra={
         <ButtonGroup>
-          <Button type="primary" onClick={handleSave}>
-            Save
-          </Button>
-          <Button type="default" onClick={handleCancel}>
-            Cancel
-          </Button>
           {consoleSectionMode === "edit-menu" && (
-            <Button type="primary" danger onClick={handleDelete}>
-              Delete
-            </Button>
+            <>
+              <Button
+                type="primary"
+                danger
+                onClick={() => setOpenDeleteModal(true)}
+              >
+                ลบ
+              </Button>
+              <StyledModal
+                centered
+                closable={false}
+                maskClosable={false}
+                open={openDeleteModal}
+                confirmLoading={loadingDelete}
+                onOk={handleDelete}
+                onCancel={() => setOpenDeleteModal(false)}
+                cancelText="ยกเลิก"
+                okText="ลบ"
+                okButtonProps={{ danger: true }}
+              >
+                <Result
+                  status="warning"
+                  title={
+                    <H4 style={{ paddingBottom: "12px" }}>
+                      คุณต้องการจะลบเมนูหรือไม่?
+                    </H4>
+                  }
+                  style={{ paddingBottom: "0px", paddingTop: "0px" }}
+                />
+              </StyledModal>
+            </>
           )}
+          <Button type="default" onClick={() => setOpenCancelModal(true)}>
+            ยกเลิก
+          </Button>
+          <StyledModal
+            centered
+            closable={false}
+            maskClosable={false}
+            open={openCancelModal}
+            onOk={handleCancel}
+            onCancel={() => setOpenCancelModal(false)}
+            cancelText="ไม่"
+            okText="ใช่"
+          >
+            <Result
+              status="warning"
+              title={
+                <H4 style={{ paddingBottom: "12px" }}>
+                  คุณต้องการจะยกเลิกการ
+                  {consoleSectionMode === "edit-menu" ? "แก้ไข" : "เพิ่ม"}
+                  เมนูหรือไม่?
+                </H4>
+              }
+              style={{ paddingBottom: "0px", paddingTop: "0px" }}
+            />
+          </StyledModal>
+          <Button type="primary" onClick={handleSave}>
+            {consoleSectionMode === "edit-menu"
+              ? "ยืนยันการแก้ไข"
+              : "เพิ่มเมนูใหม่"}
+          </Button>
         </ButtonGroup>
       }
     >
@@ -94,21 +164,21 @@ const MenuFormSection: React.FC = () => {
         <GeneralFormItemsContainer>
           <Form.Item<FieldType>
             name="name"
-            label="Name"
-            rules={[{ required: true, message: "Please input name!" }]}
+            label="ชื่อ"
+            rules={[{ required: true, message: "กรุณาระบุชื่อของรายการนี้" }]}
             style={{ width: "100%" }}
           >
-            <Input placeholder="Name" />
+            <Input placeholder="ข้าวไข่เจียว" />
           </Form.Item>
 
           <Form.Item<FieldType>
             name="price"
-            label="Price"
-            rules={[{ required: true, message: "Please input price!" }]}
+            label="ราคา"
+            rules={[{ required: true, message: "กรุณาระบุราคาของรายการนี้" }]}
             style={{ width: "100%" }}
           >
             <InputNumber
-              addonAfter="฿"
+              addonAfter="บาท"
               controls={false}
               placeholder="50"
               style={{ width: "100%" }}
@@ -117,13 +187,13 @@ const MenuFormSection: React.FC = () => {
 
           <Form.Item<FieldType>
             name="category"
-            label="Category"
+            label="หมวดหมู่"
             style={{ width: "100%" }}
           >
             <Select allowClear>
               {categories.map((category) => (
-                <Select.Option key={category.id} value={category.name}>
-                  {category.name}
+                <Select.Option key={category._id} value={category.title}>
+                  {category.title}
                 </Select.Option>
               ))}
             </Select>
@@ -131,10 +201,10 @@ const MenuFormSection: React.FC = () => {
 
           <Form.Item<FieldType>
             name="ingredients"
-            label="Ingredients"
+            label="ส่วนประกอบ"
             style={{ width: "100%" }}
           >
-            <Select mode="tags" placeholder="Pork" allowClear>
+            <Select mode="tags" placeholder="ไข่" allowClear>
               {ingredientData.map((ingredient) => (
                 <Select.Option key={ingredient.id} value={ingredient.name}>
                   {ingredient.name}
@@ -145,11 +215,11 @@ const MenuFormSection: React.FC = () => {
 
           <Form.Item<FieldType>
             name="description"
-            label="Description"
+            label="คำอธิบาย"
             style={{ width: "100%", height: "100%" }}
           >
             <Input.TextArea
-              placeholder="This menu is very recommended"
+              placeholder="เมนูที่อร่อยที่สุดในโลก"
               showCount
               maxLength={100}
               size="large"
@@ -166,11 +236,11 @@ const MenuFormSection: React.FC = () => {
           />
           <Form.Item<FieldType>
             name="imageURL"
-            label="Image URL"
+            label="URL รูปภาพ"
             style={{ width: "100%" }}
           >
             <Input
-              placeholder="Image URL"
+              placeholder="https://..."
               onChange={(e) => {
                 if (e.target.value) {
                   setImageURL(e.target.value);
@@ -182,6 +252,33 @@ const MenuFormSection: React.FC = () => {
               }}
             />
           </Form.Item>
+          <div>
+            <H5
+              style={{
+                marginRight: 8,
+                display: "inline-block",
+                color: published ? token.colorTextQuaternary : token.colorText,
+              }}
+            >
+              แบบร่าง
+            </H5>
+            <Switch
+              title="ปรับเปลี่ยนระหว่างสถานะ แบบร่าง/วางขาย"
+              checked={published}
+              onChange={(checked) => {
+                setPublished(checked);
+              }}
+            />
+            <H5
+              style={{
+                marginLeft: 8,
+                display: "inline-block",
+                color: published ? token.colorText : token.colorTextQuaternary,
+              }}
+            >
+              วางขาย
+            </H5>
+          </div>
         </ImageFormItemsContainer>
       </MenuFormContainer>
     </MenuFormCard>
@@ -238,4 +335,14 @@ const StyledImage = styled(Image)`
   flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
+  object-fit: cover;
+  object-position: center;
+`;
+
+const StyledModal = styled(Modal)`
+  padding-top: 20px !important;
+  .ant-modal-footer {
+    display: flex;
+    justify-content: center;
+  }
 `;

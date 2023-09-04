@@ -11,6 +11,7 @@ type OrderCardProps = {
 
 const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
   const colorTag = mapStatusToColor[order.status];
+  const orderStatus = mapOrderStatusTranslation[order.status];
   return (
     <StyledCard>
       <FlexBetweenRow>
@@ -18,7 +19,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
           <H5>{order.food.name}</H5>
           <Text type="secondary">
             <TextPrice price={order.food.price} />
-            <StyledStatusTag color={colorTag}>{order.status}</StyledStatusTag>
+            <StyledStatusTag color={colorTag}>{orderStatus}</StyledStatusTag>
           </Text>
         </FlexBetweenCol>
         <StyledImage
@@ -78,5 +79,13 @@ const mapStatusToColor: Record<OrderStatus, TagProps["color"]> = {
   Success: "green",
   Cancel: "red",
 };
+
+const mapOrderStatusTranslation: Record<OrderStatus, string> = {
+  "In queue": "อยู่ในคิว",
+  Preparing: "กำลังเตรียมการ",
+  Ready: "พร้อมเสิร์ฟ",
+  Success: "สำเร็จ",
+  Cancel: "ยกเลิก",
+}
 
 export default OrderCard;
