@@ -1,13 +1,9 @@
+import UserAvatar from "@/modules/user/user/UserAvatar";
 import styled from "@emotion/styled";
-import { User } from "@phosphor-icons/react";
-import { Button, theme } from "antd";
+import { Button } from "antd";
 import Image from "next/image";
 
 const UserTopNav = () => {
-  const {
-    token: { colorPrimary },
-  } = theme.useToken();
-
   return (
     <>
       <Image
@@ -23,8 +19,8 @@ const UserTopNav = () => {
       <StyledButton
         type="default"
         shape="circle"
-        icon={<User size={22} color={colorPrimary} weight="duotone" />}
-      />
+        icon={<UserAvatar />}
+      ></StyledButton>
     </>
   );
 };
@@ -41,5 +37,4 @@ const StyledButton = styled(Button)`
   width: 44px !important;
   height: 44px;
   border: none;
-  background-color: ${(props) => props.theme.antd.colorPrimaryBg};
 `;
