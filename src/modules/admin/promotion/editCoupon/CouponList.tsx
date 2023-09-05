@@ -16,14 +16,22 @@ interface TableRowProps {
   status: boolean;
 }
 
-const CouponList = () => {
+type CouponListProps = {
+  setCouponId: (data: string) => void;
+  setOpenModal: (open: boolean) => void;
+};
+
+const CouponList: React.FC<CouponListProps> = ({
+  setCouponId,
+  setOpenModal,
+}) => {
   const [dataSource, setDataSource] = useState(
     couponData.map((coupon) => ({
       _id: coupon._id,
       title: coupon.title,
       discount: coupon.discount,
       point: coupon.point,
-      numberOfMenusCanUse: coupon.redeamableMenu.length,
+      numberOfMenusCanUse: coupon.redeemableMenu.length,
       numberOfCoupons: coupon.numberOfCoupons,
       percentOfUsedCoupons:
         (coupon.numberOfReadeamedCoupons / coupon.numberOfCoupons) * 100,
@@ -33,6 +41,8 @@ const CouponList = () => {
 
   const handleEdit = (_id: string) => {
     const coupon = couponData.find((coupon) => coupon._id === _id);
+    setCouponId(_id);
+    setOpenModal(true);
     console.log("Edit", coupon);
   };
 
