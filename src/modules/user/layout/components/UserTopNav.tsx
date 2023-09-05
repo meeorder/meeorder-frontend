@@ -16,11 +16,7 @@ const UserTopNav = () => {
         height={100}
         alt="logo"
       />
-      <StyledButton
-        type="default"
-        shape="circle"
-        icon={<UserAvatar />}
-      ></StyledButton>
+      <StyledButton type="default" shape="circle" icon={<UserAvatar />} />
     </>
   );
 };

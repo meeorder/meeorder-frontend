@@ -29,11 +29,11 @@ const OrderCoupon = () => {
     <OrderCouponContainer onClick={onClickOrderCoupon}>
       <StyledCard>
         <OrderCouponContent>
-          {!isHeadTable ? (
-            <UserAvatar image={session.headTableUser?.image} />
-          ) : (
-            <UserAvatar image={session.user?.image} />
-          )}
+          <UserAvatar
+            image={
+              !isHeadTable ? session.headTableUser?.image : session.user?.image
+            }
+          />
           <FlexBetweenCol>
             {couponInUsed ? (
               <CouponTitle>

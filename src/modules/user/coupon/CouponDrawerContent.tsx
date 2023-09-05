@@ -6,7 +6,7 @@ import { Button } from "antd";
 import Image from "next/image";
 
 type CouponDrawerContentProps = {
-  coupon: Coupon | undefined | null;
+  coupon: Coupon | undefined;
   onClickCouponButton: (coupon: Coupon) => void;
 };
 

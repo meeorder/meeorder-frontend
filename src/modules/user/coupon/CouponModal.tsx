@@ -35,6 +35,8 @@ const CouponModal: React.FC<CouponModalProps> = ({
         }
       }}
       onCancel={() => setModalOpen(false)}
+      okText="ยืนยัน"
+      cancelText="ยกเลิก"
     >
       <Text>
         {modalType === "headTable"

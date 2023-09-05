@@ -44,6 +44,7 @@ const CouponHeaderContainer = styled.div`
   z-index: 1;
   background-color: ${(props) => props.theme.antd.colorBgBase};
   width: 100%;
+  max-width: 500px;
   height: 120px;
   box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.15);
 

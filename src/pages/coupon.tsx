@@ -62,7 +62,7 @@ const Orders = () => {
   };
 
   return (
-    <>
+    <CouponLayoutContainer>
       <Head>
         <title>MeeOrder | Coupon</title>
         <meta name="description" content="MeeOrder Application" />
@@ -86,17 +86,25 @@ const Orders = () => {
         closable={false}
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
+        contentWrapperStyle={{ maxWidth: "500px", margin: "0 auto" }}
       >
         <CouponDrawerContent
           coupon={coupon}
           onClickCouponButton={onClickCouponButton}
         />
       </Drawer>
-    </>
+    </CouponLayoutContainer>
   );
 };
 
 export default Orders;
+
+const CouponLayoutContainer = styled.div`
+  min-height: 100vh;
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: ${(props) => props.theme.antd.colorBgBase};
+`;
 
 const CouponContainer = styled.div`
   background-color: ${(props) => props.theme.antd.colorBgBase};
