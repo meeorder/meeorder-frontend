@@ -1,4 +1,4 @@
-import { type CouponDataType } from "@/modules/admin/mock/coupon";
+import { couponData, type CouponDataType } from "@/modules/admin/mock/coupon";
 import { getAllMenus } from "@/modules/admin/mock/menu";
 import { H4, H5, Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
@@ -11,8 +11,8 @@ import {
   InputNumber,
   Modal,
   Switch,
-  TreeSelect,
   theme,
+  TreeSelect,
 } from "antd";
 import Image from "next/image";
 import { useState } from "react";
@@ -20,6 +20,8 @@ import { useState } from "react";
 type CouponFormSectionModalProps = {
   openModal: boolean;
   setOpenModal: (open: boolean) => void;
+  couponId: string;
+  setCouponId: (data: string) => void;
 };
 
 const menuByCategoryData = getAllMenus.map((items) => ({
@@ -36,6 +38,8 @@ const menuByCategoryData = getAllMenus.map((items) => ({
 const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
   openModal,
   setOpenModal,
+  couponId,
+  setCouponId,
 }) => {
   const { token } = theme.useToken();
   const [form] = Form.useForm();
@@ -48,8 +52,8 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
   const handleFormSubmit = (values: CouponDataType) => {
     // TODO: send data to api
     const allReadeamableMenuId = [];
-    for (let i = 0; i < values.redeamableMenu.length; i++) {
-      const item_id = values.redeamableMenu[i];
+    for (let i = 0; i < values.redeemableMenu.length; i++) {
+      const item_id = values.redeemableMenu[i];
       const itemCategory = getAllMenus.find(
         (item) => item.category._id === item_id,
       );
@@ -63,24 +67,34 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
         allReadeamableMenuId.push(item_id);
       }
     }
-    values.redeamableMenu = allReadeamableMenuId.map((item) =>
+    values.redeemableMenu = allReadeamableMenuId.map((item) =>
       item ? item?.toString() : "",
     );
 
-    console.log(values);
     setOpenModal(false);
   };
 
   const handleSave = () => {
     form.submit();
+    form.resetFields();
   };
 
-  const onChange = (value: string) => {
+  const handleCancel = () => {
+    form.resetFields();
+    setCouponId("");
+    setOpenModal(false);
+  };
+
+  const onChangeRedeemableMenu = (value: string) => {
     setValue(value);
   };
 
+  const coupon = couponData.find((coupon) => coupon._id === couponId);
+  console.log("State", coupon);
+
   return (
     <StyledModal
+      key={couponId}
       centered
       closable={false}
       maskClosable={false}
@@ -101,14 +115,14 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
                 paddingLeft: "12px",
               }}
             >
-              เพิ่มคูปอง
+              {coupon ? "แก้ไขคูปอง" : "เพิ่มคูปอง"}
             </H4>
           </div>
         }
         bordered={false}
         extra={
           <ButtonGroup>
-            <Button type="default" onClick={() => setOpenModal(false)}>
+            <Button type="default" onClick={() => handleCancel()}>
               ยกเลิก
             </Button>
             <Button
@@ -127,6 +141,20 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
           form={form}
           onFinish={handleFormSubmit}
           requiredMark="optional"
+          initialValues={
+            coupon
+              ? {
+                  title: coupon.title,
+                  discount: coupon.discount,
+                  point: coupon.point,
+                  redeemableMenu: coupon.redeemableMenu,
+                  numberOfCoupons: coupon.numberOfCoupons,
+                  description: coupon?.description,
+                  imageURL: coupon?.imageURL,
+                  status: coupon.status,
+                }
+              : {}
+          }
         >
           <GeneralFormItemsContainer>
             <Form.Item<CouponDataType>
@@ -181,14 +209,14 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
             </Form.Item>
 
             <Form.Item<CouponDataType>
-              name="redeamableMenu"
+              name="redeemableMenu"
               label={<Text>เมนูที่ใช้คูปองได้</Text>}
               style={{ width: "100%" }}
             >
               <TreeSelect
                 treeData={menuByCategoryData}
                 value={value}
-                onChange={onChange}
+                onChange={onChangeRedeemableMenu}
                 treeCheckable={true}
                 showCheckedStrategy="SHOW_PARENT"
                 placeholder="เมนูทั้งหมด"
