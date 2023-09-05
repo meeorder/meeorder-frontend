@@ -14,6 +14,7 @@ const AdminEditCoupon = () => {
         setCouponId={setCouponId}
       />
       <CouponFormSectionModal
+        key={couponId}
         openModal={modalFormOpen}
         setOpenModal={setModalFormOpen}
         couponId={couponId}
