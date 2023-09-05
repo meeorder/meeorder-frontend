@@ -71,6 +71,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
       item ? item?.toString() : "",
     );
 
+    console.log("Form", values);
     setOpenModal(false);
   };
 
@@ -90,7 +91,6 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
   };
 
   const coupon = couponData.find((coupon) => coupon._id === couponId);
-  console.log("State", coupon);
 
   return (
     <StyledModal
