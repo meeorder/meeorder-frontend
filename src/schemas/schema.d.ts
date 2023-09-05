@@ -3,83 +3,158 @@
  * Do not make direct changes to the file.
  */
 
+
 export interface paths {
   "/health/ping": {
     get: operations["HealthController_getPing"];
   };
   "/categories": {
+    /** Get all categories */
     get: operations["CategoriesController_getAllCategories"];
+    /** Create a category */
     post: operations["CategoriesController_createCategory"];
   };
   "/categories/{id}": {
+    /** Get a category by id */
     get: operations["CategoriesController_getCategory"];
+    /** Replace a category by id */
     put: operations["CategoriesController_updateCategory"];
+    /** Delete a category by id */
     delete: operations["CategoriesController_deleteCategory"];
   };
   "/categories/rank": {
+    /** order the categories' rank */
     patch: operations["CategoriesController_updateRank"];
   };
   "/addons": {
+    /** Get all addons */
     get: operations["AddonsController_getAllAddons"];
+    /** Create a addon */
     post: operations["AddonsController_createAddon"];
   };
   "/addons/{id}": {
+    /** Get a addon by id */
     get: operations["AddonsController_getAddon"];
+    /** Replace a addon by id */
     put: operations["AddonsController_updateAddon"];
+    /** Delete a addon by id */
     delete: operations["AddonsController_deleteAddon"];
   };
   "/menus": {
     get: operations["MenusController_getMenus"];
+    /** Create a menu */
     post: operations["MenusController_createMenu"];
+    /**
+     * Delete menus by ids
+     * @description Delete many menus
+     */
     delete: operations["MenusController_removeMenus"];
   };
   "/menus/{id}": {
+    /** Get a menu by id */
     get: operations["MenusController_getMenuById"];
+    /** Replace a menu by id */
     put: operations["MenusController_updateMenuById"];
+    /** Delete a menu by id */
     delete: operations["MenusController_removeMenuById"];
   };
   "/menus/{id}/publish": {
+    /** Publish a menu by id */
     patch: operations["MenusController_publishMenuById"];
   };
   "/menus/{id}/unpublish": {
+    /** Unpublish a menu by id */
     patch: operations["MenusController_unpublishMenuById"];
   };
   "/orders": {
+    /** Get all orders */
     get: operations["OrdersController_getOrders"];
+    /** Create order */
     post: operations["OrdersController_createOrder"];
   };
   "/orders/{id}/preparing": {
+    /** Change order status to preparing */
     patch: operations["OrdersController_preparing"];
   };
   "/orders/{id}/ready_to_serve": {
+    /** Change order status to ready to serve */
     patch: operations["OrdersController_readyToServe"];
   };
   "/orders/{id}/done": {
+    /** Change order status to done */
     patch: operations["OrdersController_done"];
   };
   "/orders/{id}/cancel": {
+    /** Cancel order */
     patch: operations["OrdersController_cancel"];
   };
   "/sessions": {
+    /** Get all sessions */
     get: operations["SessionController_getSessions"];
+    /** Create a session */
     post: operations["SessionController_createSession"];
   };
   "/sessions/{id}": {
+    /** Get a session by id */
     get: operations["SessionController_getSession"];
+    /** Delete a session by id */
     delete: operations["SessionController_deleteSession"];
   };
   "/sessions/table/{id}": {
+    /** Get a session by table id */
     get: operations["SessionController_getSessionByTable"];
   };
   "/sessions/{id}/finish": {
+    /** Finish a session */
     patch: operations["SessionController_finishSession"];
   };
   "/sessions/{id}/orders": {
+    /** Get orders by session */
     get: operations["SessionController_getOrdersBySession"];
   };
   "/tables": {
+    /** Get all tables */
     get: operations["TablesController_getTables"];
+    /** Create a table */
     post: operations["TablesController_createTable"];
+  };
+  "/auth/login": {
+    /** Login */
+    post: operations["AuthController_signIn"];
+  };
+  "/auth/logout": {
+    /** Logout */
+    post: operations["AuthController_signOut"];
+  };
+  "/auth/register": {
+    /** Customer's registraion */
+    post: operations["AuthController_register"];
+  };
+  "/users": {
+    /** Get users */
+    get: operations["UsersController_getUsers"];
+    /** Create user (for Owner) */
+    post: operations["UsersController_createUser"];
+    /** Delete user */
+    delete: operations["UsersController_deleteUser"];
+  };
+  "/users/reset/password": {
+    /** Reset user password */
+    post: operations["UsersController_updateUser"];
+  };
+  "/coupons": {
+    /** Get all coupons (Owner) */
+    get: operations["CouponsController_findAll"];
+    /** Create a coupon */
+    post: operations["CouponsController_create"];
+  };
+  "/coupons/{id}": {
+    /** Get a coupon by id */
+    get: operations["CouponsController_findOne"];
+    /** Delete a coupon by id */
+    delete: operations["CouponsController_remove"];
+    /** Update a coupon by id */
+    patch: operations["CouponsController_update"];
   };
 }
 
@@ -106,6 +181,7 @@ export interface components {
       rank: number;
     };
     RankDto: {
+      /** @description Ordered Rank ID */
       rank: string[];
     };
     CreateAddonDto: {
@@ -213,17 +289,19 @@ export interface components {
       /** @description Table ID */
       table: number;
     };
-    OrdersSchema: {
+    OrdersResponseDto: {
+      /** @description Order ID (ObjectID) */
+      _id: string;
       /** Format: date-time */
       created_at: string;
       /** @enum {string} */
       status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE";
-      /** @description Session ID */
-      session: string;
-      /** @description Menu ID */
-      menu: string;
-      /** @description Array of MenuID */
-      addons: string[];
+      /** @description Session Schema */
+      session: components["schemas"]["SessionSchema"];
+      /** @description Menu Schema */
+      menu: components["schemas"]["MenuSchema"];
+      /** @description Array of Addons Schema */
+      addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
       additional_info: string;
       /**
@@ -241,13 +319,81 @@ export interface components {
       discount_price: number;
       /** @description net price */
       net_price: number;
-      orders: components["schemas"]["OrdersSchema"][];
+      orders: components["schemas"]["OrdersResponseDto"][];
     };
     TablesDto: {
       _id: number;
     };
     TablesSchema: {
       _id: number;
+    };
+    LoginDto: {
+      username: string;
+      password: string;
+    };
+    RegisterDto: {
+      username: string;
+      password: string;
+    };
+    CreateUserDto: {
+      /** @description username is string */
+      username: string;
+      /** @description password is string */
+      password: string;
+      /**
+       * @description select role from enum UserRole example: Owner, Chef, Cashier, Employee, Customer
+       * @example [
+       *   "Owner",
+       *   "Chef",
+       *   "Cashier",
+       *   "Employee",
+       *   "Customer"
+       * ]
+       * @enum {number}
+       */
+      role: 100 | 75 | 50 | 25 | 1;
+    };
+    UserSchema: {
+      _id: string;
+      username: string;
+      point: number;
+      /** @enum {number} */
+      role: 100 | 75 | 50 | 25 | 1;
+      /**
+       * Format: date-time
+       * @default 2023-09-04T12:24:12.610Z
+       */
+      created_at: string;
+    };
+    CreateCouponDto: {
+      /** @description Coupon Code */
+      title: string;
+      /** @description Coupon Description */
+      description?: string;
+      required_menus?: string[];
+      /** @description Discount Price of Coupon */
+      price: number;
+      /** @description Amount of Coupon */
+      amount?: number;
+      /** @description Coupon status */
+      activated: number;
+      /** @description Coupon Required Point */
+      required_point?: number;
+    };
+    UpdateCouponDto: {
+      /** @description Coupon Code */
+      title?: string;
+      /** @description Coupon Description */
+      description?: string;
+      required_menus?: string[];
+      /** @description Discount Price of Coupon */
+      price?: number;
+      /** @description Amount of Coupon */
+      amount?: number;
+      /** @description Coupon status */
+      activated?: number;
+      /** @description Coupon Required Point */
+      required_point?: number;
     };
   };
   responses: never;
@@ -257,11 +403,10 @@ export interface components {
   pathItems: never;
 }
 
-export type $defs = Record<string, never>;
-
 export type external = Record<string, never>;
 
 export interface operations {
+
   HealthController_getPing: {
     responses: {
       /** @description Health status */
@@ -272,9 +417,9 @@ export interface operations {
       };
     };
   };
+  /** Get all categories */
   CategoriesController_getAllCategories: {
     responses: {
-      /** @description Get all categories */
       200: {
         content: {
           "application/json": components["schemas"]["CategorySchema"][];
@@ -282,6 +427,7 @@ export interface operations {
       };
     };
   };
+  /** Create a category */
   CategoriesController_createCategory: {
     requestBody: {
       content: {
@@ -297,6 +443,7 @@ export interface operations {
       };
     };
   };
+  /** Get a category by id */
   CategoriesController_getCategory: {
     parameters: {
       path: {
@@ -304,18 +451,16 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Get category by ID */
       200: {
         content: {
           "application/json": components["schemas"]["CategorySchema"];
         };
       };
       /** @description Category not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
+  /** Replace a category by id */
   CategoriesController_updateCategory: {
     parameters: {
       path: {
@@ -335,11 +480,10 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
+  /** Delete a category by id */
   CategoriesController_deleteCategory: {
     parameters: {
       path: {
@@ -347,16 +491,12 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Deleted category */
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Category not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
+  /** order the categories' rank */
   CategoriesController_updateRank: {
     requestBody: {
       content: {
@@ -365,14 +505,12 @@ export interface operations {
     };
     responses: {
       /** @description Change category rank */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
+  /** Get all addons */
   AddonsController_getAllAddons: {
     responses: {
-      /** @description Get all addons */
       200: {
         content: {
           "application/json": components["schemas"]["AddonSchema"][];
@@ -380,6 +518,7 @@ export interface operations {
       };
     };
   };
+  /** Create a addon */
   AddonsController_createAddon: {
     requestBody: {
       content: {
@@ -395,6 +534,7 @@ export interface operations {
       };
     };
   };
+  /** Get a addon by id */
   AddonsController_getAddon: {
     parameters: {
       path: {
@@ -402,18 +542,16 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Get addon by Id */
       200: {
         content: {
           "application/json": components["schemas"]["AddonSchema"];
         };
       };
       /** @description Addon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
+  /** Replace a addon by id */
   AddonsController_updateAddon: {
     parameters: {
       path: {
@@ -433,11 +571,10 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
+  /** Delete a addon by id */
   AddonsController_deleteAddon: {
     parameters: {
       path: {
@@ -445,14 +582,9 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Deleted addon */
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Addon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   MenusController_getMenus: {
@@ -470,6 +602,7 @@ export interface operations {
       };
     };
   };
+  /** Create a menu */
   MenusController_createMenu: {
     requestBody: {
       content: {
@@ -485,6 +618,10 @@ export interface operations {
       };
     };
   };
+  /**
+   * Delete menus by ids
+   * @description Delete many menus
+   */
   MenusController_removeMenus: {
     parameters: {
       query: {
@@ -493,15 +630,12 @@ export interface operations {
     };
     responses: {
       /** @description The menus have been successfully deleted. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
+  /** Get a menu by id */
   MenusController_getMenuById: {
     parameters: {
       path: {
@@ -509,18 +643,16 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Get menu by id */
       200: {
         content: {
           "application/json": components["schemas"]["GetMenuByIdResponseDto"];
         };
       };
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
+  /** Replace a menu by id */
   MenusController_updateMenuById: {
     parameters: {
       path: {
@@ -534,15 +666,12 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully updated. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
+  /** Delete a menu by id */
   MenusController_removeMenuById: {
     parameters: {
       path: {
@@ -551,15 +680,12 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully deleted. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
+  /** Publish a menu by id */
   MenusController_publishMenuById: {
     parameters: {
       path: {
@@ -568,15 +694,12 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully published. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
+  /** Unpublish a menu by id */
   MenusController_unpublishMenuById: {
     parameters: {
       path: {
@@ -585,18 +708,14 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully unpublished. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
+  /** Get all orders */
   OrdersController_getOrders: {
     responses: {
-      /** @description Get all orders */
       200: {
         content: {
           "application/json": components["schemas"]["OrderGetDto"][];
@@ -604,6 +723,7 @@ export interface operations {
       };
     };
   };
+  /** Create order */
   OrdersController_createOrder: {
     requestBody: {
       content: {
@@ -612,11 +732,10 @@ export interface operations {
     };
     responses: {
       /** @description Create order */
-      201: {
-        content: never;
-      };
+      201: never;
     };
   };
+  /** Change order status to preparing */
   OrdersController_preparing: {
     parameters: {
       path: {
@@ -626,11 +745,10 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to preparing */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
+  /** Change order status to ready to serve */
   OrdersController_readyToServe: {
     parameters: {
       path: {
@@ -640,11 +758,10 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to ready to serve */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
+  /** Change order status to done */
   OrdersController_done: {
     parameters: {
       path: {
@@ -654,11 +771,10 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to done */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
+  /** Cancel order */
   OrdersController_cancel: {
     parameters: {
       path: {
@@ -668,11 +784,10 @@ export interface operations {
     };
     responses: {
       /** @description Cancel order */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
+  /** Get all sessions */
   SessionController_getSessions: {
     parameters: {
       query?: {
@@ -680,7 +795,6 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Sessions list */
       200: {
         content: {
           "application/json": components["schemas"]["SessionSchema"][];
@@ -688,6 +802,7 @@ export interface operations {
       };
     };
   };
+  /** Create a session */
   SessionController_createSession: {
     requestBody: {
       content: {
@@ -701,8 +816,11 @@ export interface operations {
           "application/json": components["schemas"]["SessionSchema"];
         };
       };
+      /** @description Session already exists */
+      409: never;
     };
   };
+  /** Get a session by id */
   SessionController_getSession: {
     parameters: {
       path: {
@@ -717,8 +835,11 @@ export interface operations {
           "application/json": components["schemas"]["SessionSchema"];
         };
       };
+      /** @description Session not found */
+      404: never;
     };
   };
+  /** Delete a session by id */
   SessionController_deleteSession: {
     parameters: {
       path: {
@@ -728,15 +849,12 @@ export interface operations {
     };
     responses: {
       /** @description Session deleted */
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Session not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
+  /** Get a session by table id */
   SessionController_getSessionByTable: {
     parameters: {
       path: {
@@ -752,11 +870,10 @@ export interface operations {
         };
       };
       /** @description No session found in the table */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
+  /** Finish a session */
   SessionController_finishSession: {
     parameters: {
       path: {
@@ -766,15 +883,12 @@ export interface operations {
     };
     responses: {
       /** @description Session finished */
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Session not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
+  /** Get orders by session */
   SessionController_getOrdersBySession: {
     parameters: {
       path: {
@@ -790,6 +904,7 @@ export interface operations {
       };
     };
   };
+  /** Get all tables */
   TablesController_getTables: {
     responses: {
       /** @description Get tables */
@@ -800,6 +915,7 @@ export interface operations {
       };
     };
   };
+  /** Create a table */
   TablesController_createTable: {
     requestBody: {
       content: {
@@ -808,8 +924,161 @@ export interface operations {
     };
     responses: {
       /** @description Create table */
+      201: never;
+    };
+  };
+  /** Login */
+  AuthController_signIn: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LoginDto"];
+      };
+    };
+    responses: {
+      204: never;
+    };
+  };
+  /** Logout */
+  AuthController_signOut: {
+    responses: {
+      204: never;
+    };
+  };
+  /** Customer's registraion */
+  AuthController_register: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RegisterDto"];
+      };
+    };
+    responses: {
+      201: never;
+    };
+  };
+  /** Get users */
+  UsersController_getUsers: {
+    parameters: {
+      query?: {
+        /** @description User role */
+        role?: string;
+      };
+    };
+    responses: {
+      /** @description Get users by roles */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserSchema"][];
+        };
+      };
+    };
+  };
+  /** Create user (for Owner) */
+  UsersController_createUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateUserDto"];
+      };
+    };
+    responses: {
+      /** @description Create user */
+      201: never;
+    };
+  };
+  /** Delete user */
+  UsersController_deleteUser: {
+    parameters: {
+      query: {
+        /** @description User id (ObjectId) */
+        id: string;
+      };
+    };
+    responses: {
+      204: never;
+    };
+  };
+  /** Reset user password */
+  UsersController_updateUser: {
+    parameters: {
+      query: {
+        /** @description User id (ObjectId) */
+        id: string;
+      };
+    };
+    responses: {
+      204: never;
+    };
+  };
+  /** Get all coupons (Owner) */
+  CouponsController_findAll: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"];
+        };
+      };
+    };
+  };
+  /** Create a coupon */
+  CouponsController_create: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateCouponDto"];
+      };
+    };
+    responses: {
+      /** @description Coupon created */
       201: {
-        content: never;
+        content: {
+          "application/json": components["schemas"]["CreateCouponDto"];
+        };
+      };
+    };
+  };
+  /** Get a coupon by id */
+  CouponsController_findOne: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateCouponDto"];
+        };
+      };
+    };
+  };
+  /** Delete a coupon by id */
+  CouponsController_remove: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Coupon deleted */
+      200: never;
+    };
+  };
+  /** Update a coupon by id */
+  CouponsController_update: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateCouponDto"];
+      };
+    };
+    responses: {
+      /** @description Coupon updated */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateCouponDto"];
+        };
       };
     };
   };
