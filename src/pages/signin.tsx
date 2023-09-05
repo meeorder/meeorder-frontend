@@ -1,4 +1,5 @@
 import { H2, H5 } from "@/modules/common/components/Typography";
+import { useLogin } from "@/modules/common/hooks/useLogin";
 import styled from "@emotion/styled";
 import { LockSimple, User } from "@phosphor-icons/react";
 import { Button, Form, Input, theme } from "antd";
@@ -12,8 +13,9 @@ type FieldType = {
 };
 
 const SignIn = () => {
-  const handleRegister = (values: FieldType) => {
-    console.log("Received values of form: ", values);
+  const { mutate: login } = useLogin();
+  const handleSignIn = (values: FieldType) => {
+    login(values);
   };
   const {
     token: { colorPrimary, colorBorder },
@@ -42,7 +44,7 @@ const SignIn = () => {
             เข้าสู่ระบบเพื่อสะสมแต้มและรับสิทธิพิเศษเฉพาะคุณ!
           </H5>
         </div>
-        <Form onFinish={handleRegister} style={{ width: "100%" }}>
+        <Form onFinish={handleSignIn} style={{ width: "100%" }}>
           <Form.Item<FieldType>
             name="username"
             rules={[{ required: true, message: "กรุณากรอกชื่อผู้ใช้" }]}

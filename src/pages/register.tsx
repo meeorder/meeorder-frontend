@@ -1,4 +1,5 @@
 import { H2, H5 } from "@/modules/common/components/Typography";
+import { useRegister } from "@/modules/common/hooks/useRegister";
 import styled from "@emotion/styled";
 import { LockSimple, User } from "@phosphor-icons/react";
 import { Button, Form, Input, theme } from "antd";
@@ -12,8 +13,10 @@ type FieldType = {
 };
 
 const Register = () => {
+  const { mutate: register } = useRegister();
   const handleRegister = (values: FieldType) => {
-    console.log("Received values of form: ", values);
+    console.log(values);
+    register(values);
   };
   const {
     token: { colorPrimary, colorBorder },
