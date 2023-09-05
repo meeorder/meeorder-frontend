@@ -11,6 +11,7 @@ type BasketSummaryNavProps = {
 
 type ModalProps = {
   title: string;
+  subtitle?: string;
   modalStatus: ResultStatusType | undefined;
   onOk?: () => void;
   onCancel?: () => void;
@@ -72,7 +73,7 @@ const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
     <>
       <BasketSummaryNavWrapper style={{ backgroundColor: colorPrimary }}>
         <H4 style={{ color: colorBgBase, marginLeft: "8px" }}>
-          ราคารวม {totalPrice} บาท 
+          ราคารวม {totalPrice} บาท
         </H4>
         <OrderButton
           size="large"
