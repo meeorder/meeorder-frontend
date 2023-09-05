@@ -1,5 +1,6 @@
 import { H4, Text } from "@/modules/common/components/Typography";
 import { type APIStatus } from "@/modules/common/types";
+import { useConfirmOrder } from "@/modules/user/basket/hooks/useBasketStore";
 import styled from "@emotion/styled";
 import { PaperPlaneRight } from "@phosphor-icons/react";
 import { Button, Modal, Result, theme } from "antd";
@@ -21,25 +22,35 @@ type MapStatusToModalProps = Record<APIStatus, ModalProps>;
 
 const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [basketAPIStatus, setBasketAPIStatus] = useState<APIStatus>("idle");
   const {
     token: { colorPrimary, colorBgBase },
   } = theme.useToken();
+
+  const {
+    isIdle,
+    isLoading,
+    isError,
+    isSuccess,
+    mutate: confirmOrder,
+  } = useConfirmOrder();
+
+  const basketAPIStatus = isIdle
+    ? "idle"
+    : isLoading
+    ? "pending"
+    : isError
+    ? "error"
+    : isSuccess
+    ? "success"
+    : "idle";
+
   const openModal = () => {
-    setBasketAPIStatus("idle");
     setIsModalOpen(true);
   };
   const handleSubmitOrder = () => {
-    setBasketAPIStatus("pending");
-    // TODO send order to server
-    setTimeout(() => {
-      // TODO show response message before close modal
-      setBasketAPIStatus("success");
-      // setBasketAPIStatus("error");
-    }, 2000);
+    confirmOrder();
   };
   const handleCancelSendOrder = () => {
-    setBasketAPIStatus("idle");
     setIsModalOpen(false);
   };
   const mapStatusToModalProps: MapStatusToModalProps = {
@@ -68,6 +79,10 @@ const BasketSummaryNav: React.FC<BasketSummaryNavProps> = ({ totalPrice }) => {
       onOk: handleCancelSendOrder,
     },
   };
+
+  if (totalPrice === 0) {
+    return null;
+  }
 
   return (
     <>

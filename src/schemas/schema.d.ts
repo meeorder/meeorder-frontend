@@ -194,45 +194,101 @@ export interface components {
       title: string;
       price: number;
     };
+    MenuDtoForAllMenu: {
+      /** @description Menu ID */
+      _id: string;
+      /** @description Menu Image */
+      image: string | null;
+      /** @description Menu Title */
+      title: string;
+      /** @description Menu Description */
+      description: string | null;
+      /** @description Menu Price */
+      price: number;
+      /** @description Menu Addons */
+      addons: components["schemas"]["AddonSchema"][];
+      /**
+       * Format: date-time
+       * @description Menu Published Date
+       */
+      published_at: string;
+      /**
+       * Format: date-time
+       * @description Menu Deleted Date
+       */
+      deleted_at: string | null;
+    };
+    GetAllMenuResponseDto: {
+      /** @description Menu's Category */
+      category: components["schemas"]["CategorySchema"];
+      /** @description Array of all menu in category */
+      menus: components["schemas"]["MenuDtoForAllMenu"][];
+    };
     GetMenuByIdResponseDto: {
       /** @description Menu ID */
       _id: string;
-      image: string;
+      /** @description Menu Image */
+      image: string | null;
+      /** @description Menu Title */
       title: string;
-      description: string;
+      /** @description Menu Description */
+      description: string | null;
+      /** @description Menu Price */
       price: number;
-      category: string;
-      addons: components["schemas"]["AddonSchema"][];
-      /** Format: date-time */
-      published_at: string;
-      /** Format: date-time */
-      deleted_at: string;
-    };
-    GetAllMenuResponseDto: {
+      /** @description Menu Category */
       category: components["schemas"]["CategorySchema"];
-      menus: components["schemas"]["GetMenuByIdResponseDto"][];
+      /** @description Menu Addons */
+      addons: components["schemas"]["AddonSchema"][];
+      /**
+       * Format: date-time
+       * @description Menu Published Date
+       */
+      published_at: string;
+      /**
+       * Format: date-time
+       * @description Menu Deleted Date
+       */
+      deleted_at: string | null;
     };
     CreateMenuDto: {
-      image: string;
+      /** @description Menu Image */
+      image: string | null;
+      /** @description Menu Title */
       title: string;
-      description: string;
+      /** @description Menu Description */
+      description: string | null;
+      /** @description Menu Price */
       price: number;
+      /** @description Menu Category */
       category: string;
+      /** @description Menu Addons */
       addons: string[];
     };
     MenuSchema: {
       /** @description Menu ID */
       _id: string;
-      image: string;
+      /** @description Menu Image */
+      image: string | null;
+      /** @description Menu Title */
       title: string;
-      description: string;
+      /** @description Menu Description */
+      description: string | null;
+      /** @description Menu Price */
       price: number;
-      category: string;
+      /** @description Menu Category */
+      category: Record<string, never>;
+      /** @description Menu Addons */
       addons: string[];
-      /** Format: date-time */
+      /**
+       * Format: date-time
+       * @description Menu Published Date
+       */
       published_at: string;
-      /** Format: date-time */
-      deleted_at: string;
+      /**
+       * Format: date-time
+       * @description Menu Deleted Date
+       */
+      deleted_at: string | null;
     };
     Orders: {
       /** @description menu is ObjectID */
@@ -331,6 +387,13 @@ export interface components {
       username: string;
       password: string;
     };
+    LoginResponseDto: {
+      /**
+       * @description JWT access token
+       * @example eyJ ...
+       */
+      access_token: string;
+    };
     RegisterDto: {
       username: string;
       password: string;
@@ -361,7 +424,7 @@ export interface components {
       role: 100 | 75 | 50 | 25 | 1;
       /**
        * Format: date-time
-       * @default 2023-09-04T12:24:12.610Z
+       * @default 2023-09-05T13:52:34.432Z
        */
       created_at: string;
     };
@@ -935,7 +998,11 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      default: {
+        content: {
+          "application/json": components["schemas"]["LoginResponseDto"];
+        };
+      };
     };
   };
   /** Logout */
@@ -1013,7 +1080,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"];
+          "application/json": components["schemas"]["CreateCouponDto"][];
         };
       };
     };
