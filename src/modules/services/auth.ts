@@ -1,6 +1,14 @@
 import { axiosInstance } from "@/modules/services/axios";
 import { type paths } from "@/schemas/schema";
 
+export type User =
+  paths["/auth/me"]["get"]["responses"]["200"]["content"]["application/json"];
+export type GetUserResponse = User;
+export const getUser = async (): Promise<GetUserResponse> => {
+  const { data } = await axiosInstance.get<GetUserResponse>("/auth/me");
+  return data;
+};
+
 export type RegisterBodyParam =
   paths["/auth/register"]["post"]["requestBody"]["content"]["application/json"];
 export type RegisterResponse =
@@ -11,8 +19,15 @@ export const register = async (params: RegisterBodyParam): Promise<void> => {
 
 export type LoginBodyParam =
   paths["/auth/login"]["post"]["requestBody"]["content"]["application/json"];
-export const login = async (params: LoginBodyParam): Promise<void> => {
-  await axiosInstance.post<void>("/auth/login", params);
+export type LoginResponse =
+  paths["/auth/login"]["post"]["responses"]["200"]["content"]["application/json"];
+
+export const login = async (params: LoginBodyParam): Promise<LoginResponse> => {
+  const { data } = await axiosInstance.post<LoginResponse>(
+    "/auth/login",
+    params,
+  );
+  return data;
 };
 
 export type LogoutResponse =
