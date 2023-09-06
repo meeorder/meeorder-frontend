@@ -21,7 +21,7 @@ const CouponDrawerContent: React.FC<CouponDrawerContentProps> = ({
   const isInUsed = coupon.status === "inUsed";
   const statusText = isInUsed
     ? "นำคูปองออก"
-    : `แลก ${commaFormat(coupon.required_point)} แต้ม`;
+    : `แลกใช้ ${commaFormat(coupon.required_point)} แต้ม`;
 
   return (
     <CouponDrawerContentContainer>
@@ -59,6 +59,7 @@ const CouponDrawerContentContainer = styled.div`
   flex-direction: column;
   position: relative;
   height: 100%;
+  border-radius: 12px 12px 0px 0px;
 `;
 
 const CouponHeader = styled.div`

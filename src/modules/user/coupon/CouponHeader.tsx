@@ -42,7 +42,7 @@ export default CouponHeader;
 const CouponHeaderContainer = styled.div`
   position: fixed;
   z-index: 1;
-  background-color: ${(props) => props.theme.antd.colorBgBase};
+  background-color: #d5eafb;
   width: 100%;
   max-width: 500px;
   height: 120px;

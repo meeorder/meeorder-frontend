@@ -54,7 +54,7 @@ const Orders = () => {
 export default Orders;
 
 const OrderContainer = styled.div`
-  background-color: ${(props) => props.theme.antd.colorBgLayout};
+  background-color: #fafafa;
   min-height: calc(100vh - 128px);
   height: 100%;
   padding: 20px;

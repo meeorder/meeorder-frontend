@@ -86,7 +86,12 @@ const Orders = () => {
         closable={false}
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        contentWrapperStyle={{ maxWidth: "500px", margin: "0 auto" }}
+        contentWrapperStyle={{
+          maxWidth: "500px",
+          margin: "0 auto",
+          borderRadius: "20px",
+        }}
+        style={{ borderRadius: "20px" }}
       >
         <CouponDrawerContent
           coupon={coupon}
@@ -103,11 +108,10 @@ const CouponLayoutContainer = styled.div`
   min-height: 100vh;
   max-width: 500px;
   margin: 0 auto;
-  background-color: ${(props) => props.theme.antd.colorBgBase};
+  background-color: #fafafa;
 `;
 
 const CouponContainer = styled.div`
-  background-color: ${(props) => props.theme.antd.colorBgBase};
   min-height: calc(100vh - 128px);
   height: 100%;
   padding: 20px;
