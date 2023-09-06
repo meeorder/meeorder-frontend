@@ -17,10 +17,10 @@ export interface paths {
   "/categories/{id}": {
     /** Get a category by id */
     get: operations["CategoriesController_getCategory"];
-    /** Replace a category by id */
-    put: operations["CategoriesController_updateCategory"];
     /** Delete a category by id */
     delete: operations["CategoriesController_deleteCategory"];
+    /** Replace a category by id */
+    patch: operations["CategoriesController_updateCategory"];
   };
   "/categories/rank": {
     /** order the categories' rank */
@@ -112,6 +112,18 @@ export interface paths {
     /** Get orders by session */
     get: operations["SessionController_getOrdersBySession"];
   };
+  "/sessions/{id}/user": {
+    /** Updated session user */
+    patch: operations["SessionController_updateSessionUser"];
+  };
+  "/sessions/{id}/coupon/all": {
+    /** Get all useable coupon */
+    get: operations["SessionController_getCoupons"];
+  };
+  "/sessions/{id}/coupon": {
+    /** Update coupon in session */
+    patch: operations["SessionController_updateSessionCoupon"];
+  };
   "/tables": {
     /** Get all tables */
     get: operations["TablesController_getTables"];
@@ -129,6 +141,10 @@ export interface paths {
   "/auth/register": {
     /** Customer's registraion */
     post: operations["AuthController_register"];
+  };
+  "/auth/me": {
+    /** Get current user */
+    get: operations["AuthController_getMe"];
   };
   "/users": {
     /** Get users */
@@ -166,19 +182,23 @@ export interface components {
       msg: Record<string, never>;
     };
     CreateCategoryDto: {
+      /** @description Category title */
       title: string;
     };
     CategorySchema: {
       /** @description Category ID */
       _id: string;
+      /** @description Category title */
       title: string;
+      /** @description List of Menu */
       menus: string[];
-      rank: number;
+      /** @description Category rank */
+      rank: number | null;
     };
     UpdateCategoryDto: {
-      title: string;
-      menus: string[];
-      rank: number;
+      /** @description Category title */
+      title?: string;
+      menus?: string[];
     };
     RankDto: {
       /** @description Ordered Rank ID */
@@ -191,8 +211,15 @@ export interface components {
     AddonSchema: {
       /** @description Addon ID */
       _id: string;
+      /** @description Addon Title */
       title: string;
+      /** @description Addon Price */
       price: number;
+      /**
+       * Format: date-time
+       * @description Addon deletion date
+       */
+      deleted_at: string | null;
     };
     MenuDtoForAllMenu: {
       /** @description Menu ID */
@@ -267,26 +294,26 @@ export interface components {
     MenuSchema: {
       /** @description Menu ID */
       _id: string;
-      /** @description Menu Image */
+      /** @description Menu image */
       image: string | null;
-      /** @description Menu Title */
+      /** @description Menu title */
       title: string;
-      /** @description Menu Description */
+      /** @description Menu description */
       description: string | null;
-      /** @description Menu Price */
+      /** @description Menu price */
       price: number;
-      /** @description Menu Category */
-      category: Record<string, never>;
-      /** @description Menu Addons */
+      /** @description Menu category */
+      category: components["schemas"]["CategorySchema"] | null;
+      /** @description Menu addons */
       addons: string[];
       /**
        * Format: date-time
-       * @description Menu Published Date
+       * @description Menu publication date
        */
       published_at: string;
       /**
        * Format: date-time
-       * @description Menu Deleted Date
+       * @description Menu deletion date
        */
       deleted_at: string | null;
     };
@@ -316,9 +343,18 @@ export interface components {
        */
       finished_at: string | null;
       /** @description User ID */
-      uid: string | null;
+      user: string | null;
+      /** @description User point */
+      point: number;
+      /** @description Coupon ID */
+      coupon: string | null;
       /** @description Table ID */
-      table: number;
+      table: string;
+      /**
+       * Format: date-time
+       * @description Session deletion date
+       */
+      deleted_at: string | null;
     };
     OrderGetDto: {
       /** @description Orders ID */
@@ -341,9 +377,35 @@ export interface components {
     };
     CreateSessionDto: {
       /** @description User ID */
-      uid?: string;
+      user?: string;
       /** @description Table ID */
-      table: number;
+      table: string;
+    };
+    MenusResponseDto: {
+      /** @description Menu ID */
+      _id: string;
+      /** @description Menu image */
+      image: string | null;
+      /** @description Menu title */
+      title: string;
+      /** @description Menu description */
+      description: string | null;
+      /** @description Menu price */
+      price: number;
+      /** @description Menu category */
+      category: string;
+      /** @description Menu addons */
+      addons: string[];
+      /**
+       * Format: date-time
+       * @description Menu publication date
+       */
+      published_at: string;
+      /**
+       * Format: date-time
+       * @description Menu deletion date
+       */
+      deleted_at: string | null;
     };
     OrdersResponseDto: {
       /** @description Order ID (ObjectID) */
@@ -352,14 +414,14 @@ export interface components {
       created_at: string;
       /** @enum {string} */
       status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE";
-      /** @description Session Schema */
-      session: components["schemas"]["SessionSchema"];
+      /** @description Session ID */
+      session: string;
       /** @description Menu Schema */
-      menu: components["schemas"]["MenuSchema"];
+      menu: components["schemas"]["MenusResponseDto"];
       /** @description Array of Addons Schema */
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
-      additional_info: string;
+      additional_info: string | null;
       /**
        * Format: date-time
        * @description for cancel status
@@ -367,8 +429,8 @@ export interface components {
       cancelled_at: string;
     };
     OrdersListDto: {
-      /** @description table number */
-      table: number;
+      /** @description table id */
+      table: string;
       /** @description total price */
       total_price: number;
       /** @description discount price */
@@ -377,11 +439,43 @@ export interface components {
       net_price: number;
       orders: components["schemas"]["OrdersResponseDto"][];
     };
+    SessionUserUpdateDto: {
+      /** @description User ID */
+      user: string;
+    };
+    ExampleCouponDto: {
+      /** @description Coupon ID */
+      _id: string;
+      /** @description Coupon title */
+      title: string;
+      /** @description Coupon description */
+      description: string;
+      /** @description Coupon required menus */
+      required_menus: string[];
+      /** @description Discount price of the coupon */
+      price: number;
+      /** @description Amount of coupon */
+      amount: number;
+      /** @description Coupon status */
+      activated: boolean;
+      /** @description Coupon required point */
+      required_point: number;
+      /** @description isUseable */
+      isuseable: boolean;
+    };
+    UpdateSessionCouponDto: {
+      /** @description Coupon ID */
+      coupon_id: string | null;
+    };
     TablesDto: {
-      _id: number;
+      /** @description Table number */
+      table_number: number;
     };
     TablesSchema: {
-      _id: number;
+      /** @description Table ID */
+      _id: string;
+      /** @description Table number */
+      table_number: number;
     };
     LoginDto: {
       username: string;
@@ -398,10 +492,19 @@ export interface components {
       username: string;
       password: string;
     };
-    CreateUserDto: {
-      /** @description username is string */
+    UserResponseDto: {
+      /** @description User ID */
+      _id: string;
+      /** @description Username */
       username: string;
-      /** @description password is string */
+      /** @description Role of user */
+      role: string;
+      point: number;
+    };
+    CreateUserDto: {
+      /** @description Username */
+      username: string;
+      /** @description Password */
       password: string;
       /**
        * @description select role from enum UserRole example: Owner, Chef, Cashier, Employee, Customer
@@ -414,19 +517,31 @@ export interface components {
        * ]
        * @enum {number}
        */
-      role: 100 | 75 | 50 | 25 | 1;
+      role: 100 | 50 | 25 | 1;
     };
     UserSchema: {
+      /** @description User ID */
       _id: string;
+      /** @description User name */
       username: string;
+      /** @description User point */
       point: number;
-      /** @enum {number} */
-      role: 100 | 75 | 50 | 25 | 1;
+      /**
+       * @description User role
+       * @enum {number}
+       */
+      role: 100 | 50 | 25 | 1;
       /**
        * Format: date-time
-       * @default 2023-09-05T13:52:34.432Z
+       * @description User creation date
+       * @default 2023-09-06T17:38:02.223Z
        */
       created_at: string;
+      /**
+       * Format: date-time
+       * @description User deletion date
+       */
+      deleted_at: string | null;
     };
     CreateCouponDto: {
       /** @description Coupon Code */
@@ -523,6 +638,19 @@ export interface operations {
       404: never;
     };
   };
+  /** Delete a category by id */
+  CategoriesController_deleteCategory: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      204: never;
+      /** @description Category not found */
+      404: never;
+    };
+  };
   /** Replace a category by id */
   CategoriesController_updateCategory: {
     parameters: {
@@ -546,19 +674,6 @@ export interface operations {
       404: never;
     };
   };
-  /** Delete a category by id */
-  CategoriesController_deleteCategory: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      204: never;
-      /** @description Category not found */
-      404: never;
-    };
-  };
   /** order the categories' rank */
   CategoriesController_updateRank: {
     requestBody: {
@@ -573,6 +688,11 @@ export interface operations {
   };
   /** Get all addons */
   AddonsController_getAllAddons: {
+    parameters: {
+      query: {
+        status: "active" | "all";
+      };
+    };
     responses: {
       200: {
         content: {
@@ -967,6 +1087,49 @@ export interface operations {
       };
     };
   };
+  /** Updated session user */
+  SessionController_updateSessionUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SessionUserUpdateDto"];
+      };
+    };
+    responses: {
+      /** @description Updated session user */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SessionUserUpdateDto"];
+        };
+      };
+    };
+  };
+  /** Get all useable coupon */
+  SessionController_getCoupons: {
+    responses: {
+      /** @description Get all useable coupon */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ExampleCouponDto"];
+        };
+      };
+    };
+  };
+  /** Update coupon in session */
+  SessionController_updateSessionCoupon: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateSessionCouponDto"];
+      };
+    };
+    responses: {
+      /** @description Update coupon in session */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateSessionCouponDto"];
+        };
+      };
+    };
+  };
   /** Get all tables */
   TablesController_getTables: {
     responses: {
@@ -998,7 +1161,7 @@ export interface operations {
       };
     };
     responses: {
-      default: {
+      200: {
         content: {
           "application/json": components["schemas"]["LoginResponseDto"];
         };
@@ -1019,7 +1182,21 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: {
+          "application/json": components["schemas"]["RegisterDto"];
+        };
+      };
+    };
+  };
+  /** Get current user */
+  AuthController_getMe: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserResponseDto"];
+        };
+      };
     };
   };
   /** Get users */
