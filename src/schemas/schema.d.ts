@@ -17,10 +17,10 @@ export interface paths {
   "/categories/{id}": {
     /** Get a category by id */
     get: operations["CategoriesController_getCategory"];
-    /** Replace a category by id */
-    put: operations["CategoriesController_updateCategory"];
     /** Delete a category by id */
     delete: operations["CategoriesController_deleteCategory"];
+    /** Replace a category by id */
+    patch: operations["CategoriesController_updateCategory"];
   };
   "/categories/rank": {
     /** order the categories' rank */
@@ -142,6 +142,10 @@ export interface paths {
     /** Customer's registraion */
     post: operations["AuthController_register"];
   };
+  "/auth/me": {
+    /** Get current user */
+    get: operations["AuthController_getMe"];
+  };
   "/users": {
     /** Get users */
     get: operations["UsersController_getUsers"];
@@ -178,19 +182,23 @@ export interface components {
       msg: Record<string, never>;
     };
     CreateCategoryDto: {
+      /** @description Category title */
       title: string;
     };
     CategorySchema: {
       /** @description Category ID */
       _id: string;
+      /** @description Category title */
       title: string;
+      /** @description List of Menu */
       menus: string[];
-      rank: number;
+      /** @description Category rank */
+      rank: number | null;
     };
     UpdateCategoryDto: {
-      title: string;
-      menus: string[];
-      rank: number;
+      /** @description Category title */
+      title?: string;
+      menus?: string[];
     };
     RankDto: {
       /** @description Ordered Rank ID */
@@ -393,9 +401,9 @@ export interface components {
       net_price: number;
       orders: components["schemas"]["OrdersResponseDto"][];
     };
-    ObjectId: Record<string, never>;
     SessionUserUpdateDto: {
-      user: components["schemas"]["ObjectId"];
+      /** @description User ID */
+      user: string;
     };
     ExampleCouponDto: {
       /** @description Coupon ID */
@@ -424,6 +432,7 @@ export interface components {
     TablesDto: {
       table_number: number;
     };
+    ObjectId: Record<string, never>;
     TablesSchema: {
       _id: components["schemas"]["ObjectId"];
       table_number: number;
@@ -442,6 +451,12 @@ export interface components {
     RegisterDto: {
       username: string;
       password: string;
+    };
+    UserResponseDto: {
+      _id: string;
+      username: string;
+      role: number;
+      point: number;
     };
     CreateUserDto: {
       /** @description username is string */
@@ -469,7 +484,7 @@ export interface components {
       role: 100 | 75 | 50 | 25 | 1;
       /**
        * Format: date-time
-       * @default 2023-09-05T15:31:02.846Z
+       * @default 2023-09-06T04:22:57.557Z
        */
       created_at: string;
     };
@@ -572,6 +587,23 @@ export interface operations {
       };
     };
   };
+  /** Delete a category by id */
+  CategoriesController_deleteCategory: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
+      /** @description Category not found */
+      404: {
+        content: never;
+      };
+    };
+  };
   /** Replace a category by id */
   CategoriesController_updateCategory: {
     parameters: {
@@ -590,23 +622,6 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["UpdateCategoryDto"];
         };
-      };
-      /** @description Category not found */
-      404: {
-        content: never;
-      };
-    };
-  };
-  /** Delete a category by id */
-  CategoriesController_deleteCategory: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      204: {
-        content: never;
       };
       /** @description Category not found */
       404: {
@@ -1154,7 +1169,7 @@ export interface operations {
       };
     };
     responses: {
-      default: {
+      200: {
         content: {
           "application/json": components["schemas"]["LoginResponseDto"];
         };
@@ -1178,7 +1193,19 @@ export interface operations {
     };
     responses: {
       201: {
-        content: never;
+        content: {
+          "application/json": components["schemas"]["RegisterDto"];
+        };
+      };
+    };
+  };
+  /** Get current user */
+  AuthController_getMe: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserResponseDto"];
+        };
       };
     };
   };
