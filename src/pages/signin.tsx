@@ -1,25 +1,47 @@
 import { H2, H5 } from "@/modules/common/components/Typography";
-import { useLogin } from "@/modules/common/hooks/useLogin";
+import { useLogin } from "@/modules/common/hooks/useAuth";
 import styled from "@emotion/styled";
 import { LockSimple, User } from "@phosphor-icons/react";
 import { Button, Form, Input, theme } from "antd";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 type FieldType = {
   username: string;
   password: string;
-  confirmPassword: string;
 };
 
 const SignIn = () => {
-  const { mutate: login } = useLogin();
+  const [form] = Form.useForm<FieldType>();
+  const router = useRouter();
+  const { mutate: login, isLoading, isSuccess, isError } = useLogin();
   const handleSignIn = (values: FieldType) => {
     login(values);
   };
   const {
     token: { colorPrimary, colorBorder },
   } = theme.useToken();
+  useEffect(() => {
+    if (isError) {
+      form.setFields([
+        {
+          name: "username",
+          errors: [""],
+        },
+        {
+          name: "password",
+          errors: ["ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"],
+        },
+      ]);
+    }
+  }, [isError]);
+  useEffect(() => {
+    if (isSuccess) {
+      void router.push("/");
+    }
+  }, [isSuccess, router]);
   return (
     <Container>
       <FormContainer>
@@ -44,7 +66,11 @@ const SignIn = () => {
             เข้าสู่ระบบเพื่อสะสมแต้มและรับสิทธิพิเศษเฉพาะคุณ!
           </H5>
         </div>
-        <Form onFinish={handleSignIn} style={{ width: "100%" }}>
+        <Form<FieldType>
+          form={form}
+          onFinish={handleSignIn}
+          style={{ width: "100%" }}
+        >
           <Form.Item<FieldType>
             name="username"
             rules={[{ required: true, message: "กรุณากรอกชื่อผู้ใช้" }]}
@@ -64,7 +90,12 @@ const SignIn = () => {
             />
           </Form.Item>
           <Form.Item<FieldType> style={{ textAlign: "end" }}>
-            <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+            <Button
+              loading={isLoading}
+              type="primary"
+              htmlType="submit"
+              style={{ width: "100%" }}
+            >
               ลงชื่อเข้าใช้
             </Button>
             หรือ{" "}

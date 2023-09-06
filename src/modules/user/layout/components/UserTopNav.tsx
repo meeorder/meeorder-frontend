@@ -43,6 +43,7 @@ const UserTopNav = () => {
         type="default"
         shape="circle"
         icon={<User size={22} color={colorPrimary} weight="duotone" />}
+        href="/signin"
       />
     </>
   );

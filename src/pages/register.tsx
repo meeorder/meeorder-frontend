@@ -1,10 +1,11 @@
 import { H2, H5 } from "@/modules/common/components/Typography";
-import { useRegister } from "@/modules/common/hooks/useRegister";
+import { useRegister } from "@/modules/common/hooks/useAuth";
 import styled from "@emotion/styled";
 import { LockSimple, User } from "@phosphor-icons/react";
 import { Button, Form, Input, theme } from "antd";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 
 type FieldType = {
   username: string;
@@ -13,7 +14,8 @@ type FieldType = {
 };
 
 const Register = () => {
-  const { mutate: register } = useRegister();
+  const [form] = Form.useForm<FieldType>();
+  const { mutate: register, isLoading, isSuccess, isError } = useRegister();
   const handleRegister = (values: FieldType) => {
     console.log(values);
     register(values);
@@ -21,6 +23,21 @@ const Register = () => {
   const {
     token: { colorPrimary, colorBorder },
   } = theme.useToken();
+  useEffect(() => {
+    if (isSuccess) {
+      window.location.href = "/signin";
+    }
+  }, [isSuccess]);
+  useEffect(() => {
+    if (isError) {
+      form.setFields([
+        {
+          name: "username",
+          errors: ["ไม่สามารถใช้ชื่อผู้ใช้นี้ได้"],
+        },
+      ]);
+    }
+  }, [isError]);
   return (
     <Container>
       <FormContainer>
@@ -55,11 +72,11 @@ const Register = () => {
           </Form.Item>
           <Form.Item<FieldType>
             name="password"
-            rules={[{ required: true, message: "Please input your Password!" }]}
+            rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
           >
             <Input.Password
               prefix={<LockSimple size={14} color={colorBorder} />}
-              placeholder="Password"
+              placeholder="รหัสผ่าน"
             />
           </Form.Item>
           <Form.Item<FieldType>
@@ -67,28 +84,29 @@ const Register = () => {
             name="confirmPassword"
             dependencies={["password"]}
             rules={[
-              { required: true, message: "Please input your Password!" },
+              { required: true, message: "กรุณายืนยันรหัสผ่าน" },
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (!value || getFieldValue("password") === value) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(
-                    new Error(
-                      "The two passwords that you entered do not match!",
-                    ),
-                  );
+                  return Promise.reject(new Error("รหัสผ่านไม่ตรงกัน"));
                 },
               }),
             ]}
           >
             <Input.Password
               prefix={<LockSimple size={14} color={colorBorder} />}
-              placeholder="confirm password"
+              placeholder="ยืนยันรหัสผ่าน"
             />
           </Form.Item>
           <Form.Item<FieldType> style={{ textAlign: "end" }}>
-            <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+            <Button
+              loading={isLoading}
+              type="primary"
+              htmlType="submit"
+              style={{ width: "100%" }}
+            >
               ลงทะเบียน
             </Button>
             หรือ{" "}
