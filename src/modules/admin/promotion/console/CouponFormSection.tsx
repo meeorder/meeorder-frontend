@@ -10,6 +10,7 @@ import {
   Input,
   InputNumber,
   Modal,
+  Popconfirm,
   Switch,
   theme,
   TreeSelect,
@@ -73,11 +74,13 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
 
     console.log("Form", values);
     setOpenModal(false);
+    setCouponId("");
   };
 
   const handleSave = () => {
     form.submit();
     form.resetFields();
+    setCouponId("");
   };
 
   const handleCancel = () => {
@@ -122,9 +125,16 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
         bordered={false}
         extra={
           <ButtonGroup>
-            <Button type="default" onClick={() => handleCancel()}>
+            <Popconfirm
+              title={coupon ? "คุณต้องการจะยกเลิกการแก้ไขคูปองหรือไม่?":"คุณต้องการจะยกเลิกการเพิ่มคูปองหรือไม่?"}
+              okText="ใช่"
+              cancelText="ไม่"
+              onConfirm={() => handleCancel()}>
+            <Button type="default">
               ยกเลิก
             </Button>
+
+            </Popconfirm>
             <Button
               type="primary"
               onClick={() => {
