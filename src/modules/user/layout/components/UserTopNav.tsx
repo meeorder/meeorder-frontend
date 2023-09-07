@@ -4,13 +4,14 @@ import styled from "@emotion/styled";
 import { User } from "@phosphor-icons/react";
 import { Button, theme } from "antd";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const UserTopNav = () => {
   const {
     token: { colorPrimary },
   } = theme.useToken();
-
+  const router = useRouter();
   // temporary
   const [isLoaded, setIsLoaded] = useState(false);
   const session = useSessionStore((state) => state.session);
@@ -43,6 +44,7 @@ const UserTopNav = () => {
         type="default"
         shape="circle"
         icon={<User size={22} color={colorPrimary} weight="duotone" />}
+        onClick={() => void router.push("/signin")}
       />
     </>
   );
