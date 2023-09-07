@@ -1,20 +1,12 @@
-import { couponData } from "@/modules/admin/mock/coupon";
+import useAllCoupon from "@/modules/admin/promotion/hook/useCoupon";
 import { Text } from "@/modules/common/components/Typography";
+import { type GetAllCouponsResponse } from "@/modules/services/coupon";
 import styled from "@emotion/styled";
 import { Progress, Table, Typography } from "antd";
 import { type ColumnsType } from "antd/es/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-interface TableRowProps {
-  _id: string;
-  title: string;
-  discount: number;
-  point: number;
-  numberOfMenusCanUse: number;
-  numberOfCoupons: number;
-  percentOfUsedCoupons: number;
-  status: boolean;
-}
+type TableRowProps = GetAllCouponsResponse[number];
 
 type CouponListProps = {
   setCouponId: (data: string) => void;
@@ -27,28 +19,19 @@ const CouponList: React.FC<CouponListProps> = ({
   setOpenModalForm,
   setOpenModalDelete,
 }) => {
-  const [dataSource, setDataSource] = useState(
-    couponData.map((coupon) => ({
-      _id: coupon._id,
-      title: coupon.title,
-      discount: coupon.discount,
-      point: coupon.point,
-      numberOfMenusCanUse: coupon.redeemableMenu.length,
-      numberOfCoupons: coupon.numberOfCoupons,
-      percentOfUsedCoupons:
-        (coupon.numberOfReadeamedCoupons / coupon.numberOfCoupons) * 100,
-      status: coupon.status,
-    })),
-  );
+  const { data: allCoupons } = useAllCoupon();
+  const [dataSource, setDataSource] = useState<TableRowProps[]>([]);
+
+  useEffect(() => {
+    setDataSource(allCoupons ?? []);
+  }, [allCoupons]);
 
   const handleEdit = (_id: string) => {
-    const coupon = couponData.find((coupon) => coupon._id === _id);
     setCouponId(_id);
     setOpenModalForm(true);
   };
 
   const handleDelete = (_id: string) => {
-    const coupon = couponData.find((coupon) => coupon._id === _id);
     setCouponId(_id);
     setOpenModalDelete(true);
   };
@@ -67,32 +50,36 @@ const CouponList: React.FC<CouponListProps> = ({
       align: "right",
     },
     {
-      key: "point",
+      key: "required_point",
       title: "แต้มที่ต้องใช้",
-      dataIndex: "point",
+      dataIndex: "required_point",
       width: "8%",
       align: "right",
     },
     {
-      key: "numberOfMenusCanUse",
+      key: "required_menus",
       title: "เมนูที่ใช้คูปองได้",
-      dataIndex: "numberOfMenusCanUse",
+      dataIndex: "required_menus",
       width: "10%",
       align: "right",
+      render: (required_menus: string[]) => {
+        return <Text>{required_menus.length ?? 0}</Text>;
+      },
     },
     {
-      key: "numberOfCoupons",
+      key: "quota",
       title: "จำนวนคูปอง",
-      dataIndex: "numberOfCoupons",
+      dataIndex: "quota",
       width: "10%",
       align: "right",
     },
     {
       key: "percentOfUsedCoupons",
       title: "เปอร์เซ็นต์การใช้คูปอง",
-      dataIndex: "percentOfUsedCoupons",
       width: "17%",
-      render: (percentOfUsedCoupons: number) => {
+      render: (_, record) => {
+        const { quota, redeemed } = record;
+        const percentOfUsedCoupons = (redeemed / quota) * 100;
         return (
           <ProgressTextContainer>
             <ProgressContainer>
@@ -104,15 +91,15 @@ const CouponList: React.FC<CouponListProps> = ({
       },
     },
     {
-      key: "status",
+      key: "activated",
       title: "สถานะ",
-      dataIndex: "status",
+      dataIndex: "activated",
       width: "8%",
-      render: (status: boolean) => {
+      render: (activated: boolean) => {
         return (
           <>
-            <DotStatus status={status} />
-            <Text>{status ? "เผยแพร่" : "ฉบับร่าง"}</Text>
+            <DotStatus activated={activated} />
+            <Text>{activated ? "เผยแพร่" : "ฉบับร่าง"}</Text>
           </>
         );
       },
@@ -120,7 +107,6 @@ const CouponList: React.FC<CouponListProps> = ({
     {
       key: "action",
       title: "ดำเนินการ",
-      dataIndex: "action",
       width: "10%",
       render: (_, record) => {
         return (
@@ -160,12 +146,12 @@ const StyledDiv = styled.div`
   gap: 16px;
 `;
 
-const DotStatus = styled.span<{ status: boolean }>`
+const DotStatus = styled.span<{ activated: boolean }>`
   display: inline-block;
   width: 6px;
   height: 6px;
   border-radius: 100px;
-  background-color: ${(props) => (props.status ? "#52c41a" : "#d9d9d9")};
+  background-color: ${(props) => (props.activated ? "#52c41a" : "#d9d9d9")};
   margin-right: 8px;
 `;
 

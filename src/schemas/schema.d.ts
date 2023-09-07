@@ -117,7 +117,7 @@ export interface paths {
     patch: operations["SessionController_updateSessionUser"];
   };
   "/sessions/{id}/coupon/all": {
-    /** Get all useable coupon */
+    /** Get all redeemable coupon */
     get: operations["SessionController_getCoupons"];
   };
   "/sessions/{id}/coupon": {
@@ -211,8 +211,15 @@ export interface components {
     AddonSchema: {
       /** @description Addon ID */
       _id: string;
+      /** @description Addon Title */
       title: string;
+      /** @description Addon Price */
       price: number;
+      /**
+       * Format: date-time
+       * @description Addon deletion date
+       */
+      deleted_at: string | null;
     };
     MenuDtoForAllMenu: {
       /** @description Menu ID */
@@ -287,26 +294,26 @@ export interface components {
     MenuSchema: {
       /** @description Menu ID */
       _id: string;
-      /** @description Menu Image */
+      /** @description Menu image */
       image: string | null;
-      /** @description Menu Title */
+      /** @description Menu title */
       title: string;
-      /** @description Menu Description */
+      /** @description Menu description */
       description: string | null;
-      /** @description Menu Price */
+      /** @description Menu price */
       price: number;
-      /** @description Menu Category */
-      category: Record<string, never>;
-      /** @description Menu Addons */
+      /** @description Menu category */
+      category: components["schemas"]["CategorySchema"] | null;
+      /** @description Menu addons */
       addons: string[];
       /**
        * Format: date-time
-       * @description Menu Published Date
+       * @description Menu publication date
        */
       published_at: string;
       /**
        * Format: date-time
-       * @description Menu Deleted Date
+       * @description Menu deletion date
        */
       deleted_at: string | null;
     };
@@ -336,13 +343,18 @@ export interface components {
        */
       finished_at: string | null;
       /** @description User ID */
-      user: Record<string, unknown> | null;
+      user: string | null;
       /** @description User point */
       point: number;
       /** @description Coupon ID */
-      coupon: Record<string, never>[];
+      coupon: string | null;
       /** @description Table ID */
       table: string;
+      /**
+       * Format: date-time
+       * @description Session deletion date
+       */
+      deleted_at: string | null;
     };
     OrderGetDto: {
       /** @description Orders ID */
@@ -365,9 +377,35 @@ export interface components {
     };
     CreateSessionDto: {
       /** @description User ID */
-      uid?: string;
+      user?: string;
       /** @description Table ID */
       table: string;
+    };
+    MenusResponseDto: {
+      /** @description Menu ID */
+      _id: string;
+      /** @description Menu image */
+      image: string | null;
+      /** @description Menu title */
+      title: string;
+      /** @description Menu description */
+      description: string | null;
+      /** @description Menu price */
+      price: number;
+      /** @description Menu category */
+      category: string;
+      /** @description Menu addons */
+      addons: string[];
+      /**
+       * Format: date-time
+       * @description Menu publication date
+       */
+      published_at: string;
+      /**
+       * Format: date-time
+       * @description Menu deletion date
+       */
+      deleted_at: string | null;
     };
     OrdersResponseDto: {
       /** @description Order ID (ObjectID) */
@@ -376,14 +414,14 @@ export interface components {
       created_at: string;
       /** @enum {string} */
       status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE";
-      /** @description Session Schema */
-      session: components["schemas"]["SessionSchema"];
+      /** @description Session ID */
+      session: string;
       /** @description Menu Schema */
-      menu: components["schemas"]["MenuSchema"];
+      menu: components["schemas"]["MenusResponseDto"];
       /** @description Array of Addons Schema */
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
-      additional_info: string;
+      additional_info: string | null;
       /**
        * Format: date-time
        * @description for cancel status
@@ -408,33 +446,39 @@ export interface components {
     ExampleCouponDto: {
       /** @description Coupon ID */
       _id: string;
-      /** @description Coupon Code */
+      /** @description Coupon title */
       title: string;
-      /** @description Coupon Description */
+      /** @description Coupon description */
       description: string;
-      /** @description Coupon Required Menus */
+      /** @description Coupon image */
+      image: string;
+      /** @description Coupon required menus */
       required_menus: string[];
-      /** @description Discount Price of Coupon */
-      price: number;
-      /** @description Amount of Coupon */
-      amount: number;
+      /** @description Discount price of the Coupon */
+      discount: number;
+      /** @description Quota of the coupon */
+      quota: number;
+      /** @description Number of coupons that have been redeemed */
+      redeemed: number;
       /** @description Coupon status */
       activated: boolean;
-      /** @description Coupon Required Point */
+      /** @description Coupon required point */
       required_point: number;
-      /** @description isUseable */
-      isuseable: boolean;
+      /** @description The coupon is redeemable or not */
+      redeemable: boolean;
     };
     UpdateSessionCouponDto: {
       /** @description Coupon ID */
       coupon_id: string | null;
     };
     TablesDto: {
+      /** @description Table number */
       table_number: number;
     };
-    ObjectId: Record<string, never>;
     TablesSchema: {
-      _id: components["schemas"]["ObjectId"];
+      /** @description Table ID */
+      _id: string;
+      /** @description Table number */
       table_number: number;
     };
     LoginDto: {
@@ -453,15 +497,18 @@ export interface components {
       password: string;
     };
     UserResponseDto: {
+      /** @description User ID */
       _id: string;
+      /** @description Username */
       username: string;
-      role: number;
+      /** @description Role of user */
+      role: string;
       point: number;
     };
     CreateUserDto: {
-      /** @description username is string */
+      /** @description Username */
       username: string;
-      /** @description password is string */
+      /** @description Password */
       password: string;
       /**
        * @description select role from enum UserRole example: Owner, Chef, Cashier, Employee, Customer
@@ -474,47 +521,89 @@ export interface components {
        * ]
        * @enum {number}
        */
-      role: 100 | 75 | 50 | 25 | 1;
+      role: 100 | 50 | 25 | 1;
     };
     UserSchema: {
+      /** @description User ID */
       _id: string;
+      /** @description User name */
       username: string;
+      /** @description User point */
       point: number;
-      /** @enum {number} */
-      role: 100 | 75 | 50 | 25 | 1;
+      /**
+       * @description User role
+       * @enum {number}
+       */
+      role: 100 | 50 | 25 | 1;
       /**
        * Format: date-time
-       * @default 2023-09-06T04:22:57.557Z
+       * @description User creation date
+       * @default 2023-09-07T14:21:24.424Z
        */
       created_at: string;
+      /**
+       * Format: date-time
+       * @description User deletion date
+       */
+      deleted_at: string | null;
     };
     CreateCouponDto: {
       /** @description Coupon Code */
       title: string;
       /** @description Coupon Description */
       description?: string;
+      /** @description Coupon image */
+      image?: string;
       required_menus?: string[];
-      /** @description Discount Price of Coupon */
-      price: number;
-      /** @description Amount of Coupon */
-      amount?: number;
+      /** @description Discount price of Coupon */
+      discount: number;
+      /** @description Quota of the coupon */
+      quota: number;
+      /** @description Number of coupons that have been redeemed */
+      redeemed?: number;
       /** @description Coupon status */
-      activated: number;
+      activated: boolean;
       /** @description Coupon Required Point */
       required_point?: number;
+    };
+    CouponSchema: {
+      /** @description Coupon ID */
+      _id: string;
+      /** @description Coupon title */
+      title: string;
+      /** @description Coupon description */
+      description: string;
+      /** @description Coupon image */
+      image: string;
+      /** @description Coupon required menus */
+      required_menus: string[];
+      /** @description Discount price of the Coupon */
+      discount: number;
+      /** @description Quota of the coupon */
+      quota: number;
+      /** @description Number of coupons that have been redeemed */
+      redeemed: number;
+      /** @description Coupon status */
+      activated: boolean;
+      /** @description Coupon required point */
+      required_point: number;
     };
     UpdateCouponDto: {
       /** @description Coupon Code */
       title?: string;
       /** @description Coupon Description */
       description?: string;
+      /** @description Coupon image */
+      image?: string;
       required_menus?: string[];
-      /** @description Discount Price of Coupon */
-      price?: number;
-      /** @description Amount of Coupon */
-      amount?: number;
+      /** @description Discount price of Coupon */
+      discount?: number;
+      /** @description Quota of the coupon */
+      quota?: number;
+      /** @description Number of coupons that have been redeemed */
+      redeemed?: number;
       /** @description Coupon status */
-      activated?: number;
+      activated?: boolean;
       /** @description Coupon Required Point */
       required_point?: number;
     };
@@ -563,7 +652,7 @@ export interface operations {
       /** @description Created new category */
       201: {
         content: {
-          "application/json": components["schemas"]["CreateCategoryDto"];
+          "application/json": components["schemas"]["CategorySchema"];
         };
       };
     };
@@ -572,6 +661,7 @@ export interface operations {
   CategoriesController_getCategory: {
     parameters: {
       path: {
+        /** @description Category ID (ObjectID) */
         id: string;
       };
     };
@@ -591,6 +681,7 @@ export interface operations {
   CategoriesController_deleteCategory: {
     parameters: {
       path: {
+        /** @description Category ID (ObjectID) */
         id: string;
       };
     };
@@ -608,6 +699,7 @@ export interface operations {
   CategoriesController_updateCategory: {
     parameters: {
       path: {
+        /** @description Category ID (ObjectID) */
         id: string;
       };
     };
@@ -620,7 +712,7 @@ export interface operations {
       /** @description Update category */
       200: {
         content: {
-          "application/json": components["schemas"]["UpdateCategoryDto"];
+          "application/json": components["schemas"]["CategorySchema"];
         };
       };
       /** @description Category not found */
@@ -645,6 +737,11 @@ export interface operations {
   };
   /** Get all addons */
   AddonsController_getAllAddons: {
+    parameters: {
+      query: {
+        status: "active" | "all";
+      };
+    };
     responses: {
       200: {
         content: {
@@ -664,7 +761,7 @@ export interface operations {
       /** @description Created addon */
       201: {
         content: {
-          "application/json": components["schemas"]["CreateAddonDto"];
+          "application/json": components["schemas"]["AddonSchema"];
         };
       };
     };
@@ -673,6 +770,7 @@ export interface operations {
   AddonsController_getAddon: {
     parameters: {
       path: {
+        /** @description Addon ID (ObjectID) */
         id: string;
       };
     };
@@ -692,6 +790,7 @@ export interface operations {
   AddonsController_updateAddon: {
     parameters: {
       path: {
+        /** @description Addon ID (ObjectID) */
         id: string;
       };
     };
@@ -704,7 +803,7 @@ export interface operations {
       /** @description Updated addon */
       200: {
         content: {
-          "application/json": components["schemas"]["CreateAddonDto"];
+          "application/json": components["schemas"]["AddonSchema"];
         };
       };
       /** @description Addon not found */
@@ -717,6 +816,7 @@ export interface operations {
   AddonsController_deleteAddon: {
     parameters: {
       path: {
+        /** @description Addon ID (ObjectID) */
         id: string;
       };
     };
@@ -1095,6 +1195,12 @@ export interface operations {
   };
   /** Updated session user */
   SessionController_updateSessionUser: {
+    parameters: {
+      path: {
+        /** @description Session ID (ObjectId) */
+        id: string;
+      };
+    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["SessionUserUpdateDto"];
@@ -1109,10 +1215,16 @@ export interface operations {
       };
     };
   };
-  /** Get all useable coupon */
+  /** Get all redeemable coupon */
   SessionController_getCoupons: {
+    parameters: {
+      path: {
+        /** @description Session ID (ObjectId) */
+        id: string;
+      };
+    };
     responses: {
-      /** @description Get all useable coupon */
+      /** @description Get all redeemable coupon */
       200: {
         content: {
           "application/json": components["schemas"]["ExampleCouponDto"];
@@ -1122,17 +1234,25 @@ export interface operations {
   };
   /** Update coupon in session */
   SessionController_updateSessionCoupon: {
+    parameters: {
+      path: {
+        /** @description Session ID (ObjectId) */
+        id: string;
+      };
+    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateSessionCouponDto"];
       };
     };
     responses: {
-      /** @description Update coupon in session */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateSessionCouponDto"];
-        };
+      /** @description Coupon is attached to session */
+      204: {
+        content: never;
+      };
+      /** @description Resource conflict (coupon quota has been reached) */
+      409: {
+        content: never;
       };
     };
   };
@@ -1273,7 +1393,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["CreateCouponDto"][];
+          "application/json": components["schemas"]["CouponSchema"][];
         };
       };
     };
@@ -1304,7 +1424,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["CreateCouponDto"];
+          "application/json": components["schemas"]["CouponSchema"];
         };
       };
     };
@@ -1339,7 +1459,7 @@ export interface operations {
       /** @description Coupon updated */
       200: {
         content: {
-          "application/json": components["schemas"]["CreateCouponDto"];
+          "application/json": components["schemas"]["CouponSchema"];
         };
       };
     };
