@@ -4,16 +4,18 @@ import styled from "@emotion/styled";
 import { Button, Card } from "antd";
 
 type CouponOverviewProps = {
-  setOpenModal: (open: boolean) => void;
+  setOpenModalForm: (open: boolean) => void;
   setCouponId: (data: string) => void;
+  setOpenModalDelete: (open: boolean) => void;
 };
 
 const CouponOverview: React.FC<CouponOverviewProps> = ({
-  setOpenModal,
+  setOpenModalForm,
   setCouponId,
+  setOpenModalDelete,
 }) => {
   const handleAddCoupon = () => {
-    setOpenModal(true);
+    setOpenModalForm(true);
   };
 
   return (
@@ -43,7 +45,11 @@ const CouponOverview: React.FC<CouponOverviewProps> = ({
         </Button>
       }
     >
-      <CouponList setCouponId={setCouponId} setOpenModal={setOpenModal} />
+      <CouponList
+        setCouponId={setCouponId}
+        setOpenModalForm={setOpenModalForm}
+        setOpenModalDelete={setOpenModalDelete}
+      />
     </CouponOverviewConatiner>
   );
 };

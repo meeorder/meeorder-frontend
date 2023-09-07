@@ -18,12 +18,14 @@ interface TableRowProps {
 
 type CouponListProps = {
   setCouponId: (data: string) => void;
-  setOpenModal: (open: boolean) => void;
+  setOpenModalForm: (open: boolean) => void;
+  setOpenModalDelete: (open: boolean) => void;
 };
 
 const CouponList: React.FC<CouponListProps> = ({
   setCouponId,
-  setOpenModal,
+  setOpenModalForm,
+  setOpenModalDelete,
 }) => {
   const [dataSource, setDataSource] = useState(
     couponData.map((coupon) => ({
@@ -42,12 +44,13 @@ const CouponList: React.FC<CouponListProps> = ({
   const handleEdit = (_id: string) => {
     const coupon = couponData.find((coupon) => coupon._id === _id);
     setCouponId(_id);
-    setOpenModal(true);
-    console.log("Edit", coupon);
+    setOpenModalForm(true);
   };
 
   const handleDelete = (_id: string) => {
-    setDataSource((prev) => [...prev.filter((coupon) => coupon._id !== _id)]);
+    const coupon = couponData.find((coupon) => coupon._id === _id);
+    setCouponId(_id);
+    setOpenModalDelete(true);
   };
 
   const columns: ColumnsType<TableRowProps> = [

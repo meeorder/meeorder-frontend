@@ -19,8 +19,8 @@ import Image from "next/image";
 import { useState } from "react";
 
 type CouponFormSectionModalProps = {
-  openModal: boolean;
-  setOpenModal: (open: boolean) => void;
+  openModalForm: boolean;
+  setOpenModalForm: (open: boolean) => void;
   couponId: string;
   setCouponId: (data: string) => void;
 };
@@ -37,8 +37,8 @@ const menuByCategoryData = getAllMenus.map((items) => ({
 }));
 
 const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
-  openModal,
-  setOpenModal,
+  openModalForm,
+  setOpenModalForm,
   couponId,
   setCouponId,
 }) => {
@@ -73,7 +73,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
     );
 
     console.log("Form", values);
-    setOpenModal(false);
+    setOpenModalForm(false);
     setCouponId("");
   };
 
@@ -86,7 +86,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
   const handleCancel = () => {
     form.resetFields();
     setCouponId("");
-    setOpenModal(false);
+    setOpenModalForm(false);
   };
 
   const onChangeRedeemableMenu = (value: string) => {
@@ -101,7 +101,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
       centered
       closable={false}
       maskClosable={false}
-      open={openModal}
+      open={openModalForm}
       cancelText="ไม่"
       okText="ใช่"
     >
@@ -126,14 +126,16 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
         extra={
           <ButtonGroup>
             <Popconfirm
-              title={coupon ? "คุณต้องการจะยกเลิกการแก้ไขคูปองหรือไม่?":"คุณต้องการจะยกเลิกการเพิ่มคูปองหรือไม่?"}
+              title={
+                coupon
+                  ? "คุณต้องการจะยกเลิกการแก้ไขคูปองหรือไม่?"
+                  : "คุณต้องการจะยกเลิกการเพิ่มคูปองหรือไม่?"
+              }
               okText="ใช่"
               cancelText="ไม่"
-              onConfirm={() => handleCancel()}>
-            <Button type="default">
-              ยกเลิก
-            </Button>
-
+              onConfirm={() => handleCancel()}
+            >
+              <Button type="default">ยกเลิก</Button>
             </Popconfirm>
             <Button
               type="primary"
