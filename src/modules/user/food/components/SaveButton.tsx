@@ -4,11 +4,20 @@ import React from "react";
 
 type SaveButtonProps = {
   count: number;
+  price: number;
+  isNewOrder: boolean;
+  onClick: () => void;
 };
 
-const SaveButton: React.FC<SaveButtonProps> = ({ count }) => {
+const SaveButton: React.FC<SaveButtonProps> = ({
+  count,
+  price,
+  isNewOrder,
+  onClick,
+}) => {
   return (
     <Button
+      onClick={onClick}
       type="primary"
       size="large"
       danger={count === 0}
@@ -19,7 +28,11 @@ const SaveButton: React.FC<SaveButtonProps> = ({ count }) => {
       }}
     >
       <H5 style={{ color: "white" }}>
-        {count === 0 ? "นำออกจากตะกร้า" : "อัปเดตตะกร้า ฿99.00"}
+        {count === 0
+          ? "นำออกจากตะกร้า"
+          : isNewOrder
+          ? `เพิ่มลงตะกร้า ( ฿${price} )`
+          : `อัปเดตตะกร้า ( ฿${price} )`}
       </H5>
     </Button>
   );

@@ -1,25 +1,26 @@
 import { Text } from "@/modules/common/components/Typography";
-import { type AddOnDataType } from "@/modules/user/mock/addon";
+import { type Menu } from "@/modules/user/menu/types";
 import styled from "@emotion/styled";
 import { Checkbox } from "antd";
-import { type CheckboxChangeEvent } from "antd/es/checkbox";
 
 export type AddonsCardProps = {
-  addon: AddOnDataType;
+  addon: Menu["addons"][number];
+  handleToggleAddon: (addon: Menu["addons"][number]) => void;
+  isChecked: boolean;
 };
 
-const handleChange = (e: CheckboxChangeEvent, addonTitle: string) => {
-  console.log("Addon:", addonTitle, "checked", e.target.checked);
-};
-
-const AddonsCard: React.FC<AddonsCardProps> = ({ addon }) => {
+const AddonsCard: React.FC<AddonsCardProps> = ({
+  addon,
+  handleToggleAddon,
+  isChecked,
+}) => {
   return (
     <div style={{ marginInline: "12px" }}>
       <FlexRow>
-        <Checkbox onChange={(e) => handleChange(e, addon.title)}>
-          {addon.title}
+        <Checkbox checked={isChecked} onChange={() => handleToggleAddon(addon)}>
+          {addon?.title}
         </Checkbox>
-        <Text type="secondary">+฿{addon.price}</Text>
+        <Text type="secondary">+฿{addon?.price}</Text>
       </FlexRow>
     </div>
   );
