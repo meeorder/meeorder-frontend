@@ -1,23 +1,21 @@
 import { Text } from "@/modules/common/components/Typography";
+import { useClient } from "@/modules/common/hooks/useClient";
 import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import { User } from "@phosphor-icons/react";
 import { Button, theme } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 
 const UserTopNav = () => {
   const {
     token: { colorPrimary },
   } = theme.useToken();
   const router = useRouter();
-  // temporary
-  const [isLoaded, setIsLoaded] = useState(false);
+  const { isClientLoaded } = useClient();
+
   const session = useSessionStore((state) => state.session);
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
+
   return (
     <>
       <Image
@@ -38,7 +36,7 @@ const UserTopNav = () => {
           width: "3rem",
         }}
       >
-        {isLoaded && session?._id}
+        {isClientLoaded && session?._id}
       </Text>
       <StyledButton
         type="default"
