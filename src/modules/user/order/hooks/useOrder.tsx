@@ -1,7 +1,7 @@
 import {
   getOrdersBySessionId,
   type GetOrdersBySessionIdResponse,
-} from "@/modules/services/orders";
+} from "@/modules/services/sessions";
 import { useQuery } from "@tanstack/react-query";
 
 export type OrdersWithPriceData = GetOrdersBySessionIdResponse;

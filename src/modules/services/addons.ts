@@ -1,29 +1,7 @@
 import { axiosInstance } from "@/modules/services/axios";
 import { type paths } from "@/schemas/schema";
 
-export type GetAllAddonsResponse =
-  paths["/addons"]["get"]["responses"]["200"]["content"]["application/json"];
-
-export const getAllAddons = async (): Promise<GetAllAddonsResponse> => {
-  const { data } = await axiosInstance.get<GetAllAddonsResponse>("/addons");
-  return data;
-};
-
-export type GetAddonByIdPathParam =
-  paths["/addons/{id}"]["get"]["parameters"]["path"];
-
-export type GetAddonByIdResponse =
-  paths["/addons/{id}"]["get"]["responses"]["200"]["content"]["application/json"];
-
-export const getAddonById = async (
-  params: GetAddonByIdPathParam,
-): Promise<GetAddonByIdResponse> => {
-  const { data } = await axiosInstance.get<GetAddonByIdResponse>(
-    `/addons/${params.id}`,
-  );
-  return data;
-};
-
+//================>>>> Create an addon <<<<========================================//
 export type CreateAddonBodyParam =
   paths["/addons"]["post"]["requestBody"]["content"]["application/json"];
 
@@ -40,30 +18,66 @@ export const createAddon = async (
   return data;
 };
 
-export type ReplaceAddonByIdAndDataPathParam =
+//================>>>> Get all addons <<<<=========================================//
+
+export type GetAllAddonsQueryParams =
+  paths["/addons"]["get"]["parameters"]["query"];
+
+export type GetAllAddonsResponse =
+  paths["/addons"]["get"]["responses"]["200"]["content"]["application/json"];
+
+export const getAllAddons = async (
+  params: GetAllAddonsQueryParams,
+): Promise<GetAllAddonsResponse> => {
+  const { data } = await axiosInstance.get<GetAllAddonsResponse>("/addons", {
+    params,
+  });
+  return data;
+};
+
+//================>>>> Get an addon by id <<<<=====================================//
+
+export type GetAddonByIdPathParam =
+  paths["/addons/{id}"]["get"]["parameters"]["path"];
+
+export type GetAddonByIdResponse =
+  paths["/addons/{id}"]["get"]["responses"]["200"]["content"]["application/json"];
+
+export const getAddonById = async (
+  params: GetAddonByIdPathParam,
+): Promise<GetAddonByIdResponse> => {
+  const { data } = await axiosInstance.get<GetAddonByIdResponse>(
+    `/addons/${params.id}`,
+  );
+  return data;
+};
+
+//================>>>> Update an addon by id <<<<==================================//
+export type UpdateAddonByIdPathParam =
   paths["/addons/{id}"]["put"]["parameters"]["path"];
 
-export type ReplaceAddonByIdAndDataBodyParam =
+export type UpdateAddonByIdBodyParam =
   paths["/addons/{id}"]["put"]["requestBody"]["content"]["application/json"];
 
-export type ReplaceAddonByIdAndDataResponse =
+export type UpdateAddonByIdResponse =
   paths["/addons/{id}"]["put"]["responses"]["200"]["content"]["application/json"];
 
-export const replaceAddonByIdAndData = async (
-  params: ReplaceAddonByIdAndDataPathParam & ReplaceAddonByIdAndDataBodyParam,
-): Promise<ReplaceAddonByIdAndDataResponse> => {
-  const { data } = await axiosInstance.put<ReplaceAddonByIdAndDataResponse>(
+export const updateAddonById = async (
+  params: UpdateAddonByIdPathParam & UpdateAddonByIdBodyParam,
+): Promise<UpdateAddonByIdResponse> => {
+  const { data } = await axiosInstance.put<UpdateAddonByIdResponse>(
     `/addons/${params.id}`,
     params,
   );
   return data;
 };
 
+//================>>>> Delete an addon by id <<<<==================================//
 export type DeleteAddonByIdPathParam =
   paths["/addons/{id}"]["delete"]["parameters"]["path"];
 
 export type DeleteAddonByIdResponse =
-  paths["/addons/{id}"]["delete"]["responses"]["204"]["content"]["application/json"];
+  paths["/addons/{id}"]["delete"]["responses"]["204"];
 
 export const deleteAddonById = async (
   params: DeleteAddonByIdPathParam,

@@ -1,3 +1,4 @@
+import { useClient } from "@/modules/common/hooks/useClient";
 import WireFrame from "@/modules/mock/components/WireFrame";
 import { type PageId } from "@/modules/pageConfig";
 import UserBottomNav from "@/modules/user/layout/components/UserBottomNav";
@@ -15,13 +16,15 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   currentPageId,
 }) => {
   const session = useSessionStore((state) => state.session);
+  const { isClientLoaded } = useClient();
+
   return (
     <UserLayoutContainer>
       <UserTopNavContainer>
         <UserTopNav />
       </UserTopNavContainer>
       <UserMainContainer>{mainNode}</UserMainContainer>
-      {session && (
+      {isClientLoaded && session && (
         <UserBottomNavContainer>
           <UserBottomNav currentPageId={currentPageId} />
         </UserBottomNavContainer>
