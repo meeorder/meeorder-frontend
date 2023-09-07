@@ -1,6 +1,6 @@
 import { useUserStore } from "@/modules/common/hooks/useUserStore";
 import {
-  getUser,
+  getCurrentUser,
   login,
   register,
   type LoginBodyParam,
@@ -31,7 +31,7 @@ export const useUser = () => {
   return useQuery({
     queryKey: ["user"],
     retry: 1,
-    queryFn: () => getUser(),
+    queryFn: () => getCurrentUser(),
     onSuccess: (data) => {
       setUser(data);
     },

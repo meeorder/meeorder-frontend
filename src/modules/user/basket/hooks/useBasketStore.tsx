@@ -1,5 +1,5 @@
 import {
-  createOrder,
+  createMultipleOrders,
   type CreateOrderBodyParam,
 } from "@/modules/services/orders";
 import { type Menu } from "@/modules/user/menu/types";
@@ -128,7 +128,7 @@ export const useConfirmOrder = () => {
   });
 
   return useMutation({
-    mutationFn: () => createOrder(allBasketOrders),
+    mutationFn: () => createMultipleOrders(allBasketOrders),
     onSuccess: handleSuccess,
   });
 };

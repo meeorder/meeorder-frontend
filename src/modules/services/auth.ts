@@ -1,22 +1,12 @@
 import { axiosInstance } from "@/modules/services/axios";
 import { type paths } from "@/schemas/schema";
 
+//================>>>> Types <<<<==================================================//
+
 export type User =
   paths["/auth/me"]["get"]["responses"]["200"]["content"]["application/json"];
-export type GetUserResponse = User;
-export const getUser = async (): Promise<GetUserResponse> => {
-  const { data } = await axiosInstance.get<GetUserResponse>("/auth/me");
-  return data;
-};
 
-export type RegisterBodyParam =
-  paths["/auth/register"]["post"]["requestBody"]["content"]["application/json"];
-export type RegisterResponse =
-  paths["/auth/register"]["post"]["responses"]["201"]["content"];
-export const register = async (params: RegisterBodyParam): Promise<void> => {
-  await axiosInstance.post<RegisterResponse>("/auth/register", params);
-};
-
+//================>>>> Login <<<<==================================================//
 export type LoginBodyParam =
   paths["/auth/login"]["post"]["requestBody"]["content"]["application/json"];
 export type LoginResponse =
@@ -30,8 +20,26 @@ export const login = async (params: LoginBodyParam): Promise<LoginResponse> => {
   return data;
 };
 
+//================>>>> Register <<<<===============================================//
+export type RegisterBodyParam =
+  paths["/auth/register"]["post"]["requestBody"]["content"]["application/json"];
+export type RegisterResponse =
+  paths["/auth/register"]["post"]["responses"]["201"]["content"];
+
+export const register = async (params: RegisterBodyParam): Promise<void> => {
+  await axiosInstance.post<RegisterResponse>("/auth/register", params);
+};
+
+//================>>>> Logout <<<<=================================================//
 export type LogoutResponse =
   paths["/auth/logout"]["post"]["responses"]["204"]["content"];
 export const logout = async (): Promise<void> => {
   await axiosInstance.post<LogoutResponse>("/auth/logout");
+};
+
+//================>>>> Get current user <<<<=======================================//
+export type GetUserResponse = User;
+export const getCurrentUser = async (): Promise<GetUserResponse> => {
+  const { data } = await axiosInstance.get<GetUserResponse>("/auth/me");
+  return data;
 };
