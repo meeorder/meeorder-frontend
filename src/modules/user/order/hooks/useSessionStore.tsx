@@ -28,7 +28,6 @@ export const useSessionStore = create<SessionStore>()(
     }),
     {
       name: "session",
-      skipHydration: true,
     },
   ),
 );

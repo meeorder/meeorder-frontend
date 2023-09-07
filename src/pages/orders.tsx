@@ -1,5 +1,6 @@
 import AppLayout from "@/modules/AppLayout";
 import { H4, H5 } from "@/modules/common/components/Typography";
+import { useClient } from "@/modules/common/hooks/useClient";
 import { pages } from "@/modules/pageConfig";
 import OrderCoupon from "@/modules/user/coupon/OrderCoupon";
 import OrderList from "@/modules/user/order/components/OrderList";
@@ -15,6 +16,7 @@ import Head from "next/head";
 const Orders = () => {
   const session = useSessionStore((state) => state.session);
   const { data: ordersData } = useOrder(session?._id ?? "");
+  const { isClientLoaded } = useClient();
   useRevalidateSession();
 
   return (
@@ -28,7 +30,7 @@ const Orders = () => {
         <OrderContainer>
           <OrderHeader>
             <H4>รายการอาหารที่สั่ง</H4>
-            <H5 type="secondary">โต๊ะ {session?.table}</H5>
+            <H5 type="secondary">โต๊ะ {isClientLoaded && session?.table}</H5>
           </OrderHeader>
           <OrderList
             orders={

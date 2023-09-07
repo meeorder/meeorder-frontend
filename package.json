@@ -25,6 +25,7 @@
     "@tanstack/react-query": "^4.32.0",
     "antd": "^5.8.0",
     "axios": "^1.4.0",
+    "js-cookie": "^3.0.5",
     "next": "^13.4.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^4.29.25",
     "@types/eslint": "^8.37.0",
+    "@types/js-cookie": "^3.0.3",
     "@types/node": "^18.16.0",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",

@@ -1,22 +1,18 @@
-import UserAvatar from "@/modules/user/user/UserAvatar";
 import { Text } from "@/modules/common/components/Typography";
+import { useClient } from "@/modules/common/hooks/useClient";
 import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import UserAvatar from "@/modules/user/user/UserAvatar";
 import styled from "@emotion/styled";
-import { Button, theme } from "antd";
+import { Button } from "antd";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const UserTopNav = () => {
-  const {
-    token: { colorPrimary },
-  } = theme.useToken();
+  const router = useRouter();
+  const { isClientLoaded } = useClient();
 
-  // temporary
-  const [isLoaded, setIsLoaded] = useState(false);
   const session = useSessionStore((state) => state.session);
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
+
   return (
     <>
       <Image
@@ -37,9 +33,14 @@ const UserTopNav = () => {
           width: "3rem",
         }}
       >
-        {isLoaded && session?._id}
+        {isClientLoaded && session?._id}
       </Text>
-      <StyledButton type="default" shape="circle" icon={<UserAvatar />} />
+      <StyledButton
+        type="default"
+        shape="circle"
+        icon={<UserAvatar />}
+        onClick={() => void router.push("/signin")}
+      />
     </>
   );
 };

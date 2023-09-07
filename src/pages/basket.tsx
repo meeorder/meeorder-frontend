@@ -1,4 +1,5 @@
 import AppLayout from "@/modules/AppLayout";
+import { useClient } from "@/modules/common/hooks/useClient";
 import { pages } from "@/modules/pageConfig";
 import BasketFoodList from "@/modules/user/basket/components/BasketFoodList";
 import BasketSummaryNav from "@/modules/user/basket/components/BasketSummaryNav";
@@ -11,6 +12,7 @@ import Head from "next/head";
 const Basket = () => {
   const basketOrders = useBasketStore((state) => state.basketOrders);
   useRevalidateSession();
+  const { isClientLoaded } = useClient();
 
   return (
     <>
@@ -20,13 +22,15 @@ const Basket = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppLayout layoutType="user" currentPageId={pages.basket.id}>
-        <BasketMainContentWrapper>
-          <BasketFoodList basketOrders={basketOrders} />
+        {isClientLoaded && (
+          <BasketMainContentWrapper>
+            <BasketFoodList basketOrders={basketOrders} />
 
-          <BasketSummaryNav
-            totalPrice={calculateBasketOrdersPrice(basketOrders)}
-          />
-        </BasketMainContentWrapper>
+            <BasketSummaryNav
+              totalPrice={calculateBasketOrdersPrice(basketOrders)}
+            />
+          </BasketMainContentWrapper>
+        )}
       </AppLayout>
     </>
   );

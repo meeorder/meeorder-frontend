@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/modules/services/axios";
 import { type paths } from "@/schemas/schema";
 
+//================>>>> Get all menus <<<<==========================================//
 export type GetAllMenusQueryParam =
   paths["/menus"]["get"]["parameters"]["query"];
 export type GetAllMenusResponse =
@@ -15,20 +16,7 @@ export const getAllMenus = async (
   return data;
 };
 
-export type GetMenuByIdPathParam =
-  paths["/menus/{id}"]["get"]["parameters"]["path"];
-export type GetMenuByIdResponse =
-  paths["/menus/{id}"]["get"]["responses"]["200"]["content"]["application/json"];
-
-export const getMenuById = async (
-  params: GetMenuByIdPathParam,
-): Promise<GetMenuByIdResponse> => {
-  const { data } = await axiosInstance.get<GetMenuByIdResponse>(
-    `/menus/${params.id}`,
-  );
-  return data;
-};
-
+//================>>>> Create a menu <<<<==========================================//
 export type CreateMenuBodyParam =
   paths["/menus"]["post"]["requestBody"]["content"]["application/json"];
 export type CreateMenuResponse =
@@ -44,22 +32,55 @@ export const createMenu = async (
   return data;
 };
 
-export type ReplaceMenuByIdAndDataPathParam =
+//================>>>> Delete menus by ids <<<<====================================//
+
+// todo
+
+//================>>>> Get a menu by id <<<<=======================================//
+export type GetMenuByIdPathParam =
+  paths["/menus/{id}"]["get"]["parameters"]["path"];
+export type GetMenuByIdResponse =
+  paths["/menus/{id}"]["get"]["responses"]["200"]["content"]["application/json"];
+
+export const getMenuById = async (
+  params: GetMenuByIdPathParam,
+): Promise<GetMenuByIdResponse> => {
+  const { data } = await axiosInstance.get<GetMenuByIdResponse>(
+    `/menus/${params.id}`,
+  );
+  return data;
+};
+
+//================>>>> Replace a menu by id <<<<===================================//
+export type ReplaceMenuByIdPathParam =
   paths["/menus/{id}"]["put"]["parameters"]["path"];
-export type ReplaceMenuByIdAndDataBodyParam =
+export type ReplaceMenuByIdBodyParam =
   paths["/menus/{id}"]["put"]["requestBody"]["content"]["application/json"];
-export type ReplaceMenuByIdAndDataResponse =
+export type ReplaceMenuByIdResponse =
   paths["/menus/{id}"]["put"]["responses"]["200"];
 
-export const replaceMenuByIdAndData = async (
-  params: ReplaceMenuByIdAndDataPathParam & ReplaceMenuByIdAndDataBodyParam,
+export const replaceMenuById = async (
+  params: ReplaceMenuByIdPathParam & ReplaceMenuByIdBodyParam,
 ): Promise<void> => {
-  await axiosInstance.put<ReplaceMenuByIdAndDataResponse>(
+  await axiosInstance.put<ReplaceMenuByIdResponse>(
     `/menus/${params.id}`,
     params,
   );
 };
 
+//================>>>> Delete a menu by id <<<<====================================//
+export type DeleteMenuByIdPathParam =
+  paths["/menus/{id}"]["delete"]["parameters"]["path"];
+export type DeleteMenuByIdResponse =
+  paths["/menus/{id}"]["delete"]["responses"]["200"];
+
+export const deleteMenuById = async (
+  params: DeleteMenuByIdPathParam,
+): Promise<void> => {
+  await axiosInstance.delete<DeleteMenuByIdResponse>(`/menus/${params.id}`);
+};
+
+//================>>>> Publish a menu by id <<<<===================================//
 export type PublishMenuByIdPathParam =
   paths["/menus/{id}/publish"]["patch"]["parameters"]["path"];
 export type PublishMenuByIdResponse =
@@ -73,6 +94,7 @@ export const publishMenuById = async (
   );
 };
 
+//================>>>> Unpublish a menu by id <<<<=================================//
 export type UnpublishMenuByIdPathParam =
   paths["/menus/{id}/unpublish"]["patch"]["parameters"]["path"];
 export type UnpublishMenuByIdResponse =
@@ -84,15 +106,4 @@ export const unpublishMenuById = async (
   await axiosInstance.patch<UnpublishMenuByIdResponse>(
     `/menus/${params.id}/unpublish`,
   );
-};
-
-export type DeleteMenuByIdPathParam =
-  paths["/menus/{id}"]["delete"]["parameters"]["path"];
-export type DeleteMenuByIdResponse =
-  paths["/menus/{id}"]["delete"]["responses"]["200"];
-
-export const deleteMenuById = async (
-  params: DeleteMenuByIdPathParam,
-): Promise<void> => {
-  await axiosInstance.delete<DeleteMenuByIdResponse>(`/menus/${params.id}`);
 };
