@@ -1,23 +1,52 @@
-import { User } from "@phosphor-icons/react";
+import { type User } from "@/modules/user/mock/user";
+import { User as ReactUser } from "@phosphor-icons/react";
 import { Avatar, theme } from "antd";
 
 type UserAvatarProps = {
-  image?: string;
+  user?: User | null;
 };
 
-const UserAvatar: React.FC<UserAvatarProps> = ({ image }) => {
+const UserAvatar: React.FC<UserAvatarProps> = ({ user }) => {
   const {
     token: { colorPrimary, colorPrimaryBg },
   } = theme.useToken();
 
-  if (image) {
-    return <Avatar size={44} src={image} alt="User avatar" />;
+  if (user) {
+    const colors = [
+      "#737373",
+      "#78716c",
+      "#ef4444",
+      "#f97316",
+      "#f59e0b",
+      "#eab308",
+      "#84cc16",
+      "#22c55e",
+      "#10b981",
+      "#14b8a6",
+      "#06b6d4",
+      "#0ea5e9",
+      "#3b82f6",
+      "#6366f1",
+      "#8b5cf6",
+      "#a855f7",
+      "#d946ef",
+      "#ec4899",
+      "#f43f5e",
+    ];
+
+    const userColor = colors[parseInt(user.id) % colors.length];
+
+    return (
+      <Avatar size={44} style={{ backgroundColor: userColor }}>
+        {user.name[0]}
+      </Avatar>
+    );
   } else {
     return (
       <Avatar
         size={44}
         style={{ backgroundColor: colorPrimaryBg }}
-        icon={<User color={colorPrimary} weight="duotone" />}
+        icon={<ReactUser color={colorPrimary} weight="duotone" />}
       />
     );
   }

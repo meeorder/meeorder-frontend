@@ -23,7 +23,7 @@ const CouponPoint = () => {
 
   return (
     <CouponPointContainer color={colorPrimary} onClick={onClickCouponPoint}>
-      <UserAvatar image={session.user?.image} />
+      <UserAvatar user={session.user} />
 
       {session.user ? (
         <Space direction="vertical" size={4}>

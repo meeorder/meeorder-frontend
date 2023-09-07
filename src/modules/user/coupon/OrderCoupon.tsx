@@ -30,9 +30,7 @@ const OrderCoupon = () => {
       <StyledCard>
         <OrderCouponContent>
           <UserAvatar
-            image={
-              !isHeadTable ? session.headTableUser?.image : session.user?.image
-            }
+            user={!isHeadTable ? session.headTableUser : session.user}
           />
           <FlexBetweenCol>
             {couponInUsed ? (
