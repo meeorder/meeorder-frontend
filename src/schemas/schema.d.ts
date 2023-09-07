@@ -534,7 +534,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-07T07:11:47.624Z
+       * @default 2023-09-07T09:36:27.457Z
        */
       created_at: string;
       /**
