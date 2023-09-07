@@ -4,6 +4,7 @@ import {
   login,
   register,
   type LoginBodyParam,
+  type RegisterBodyParam,
 } from "@/modules/services/auth";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -20,7 +21,7 @@ export const useLogin = () => {
 
 export const useRegister = () => {
   return useMutation({
-    mutationFn: ({ username, password }: LoginBodyParam) =>
+    mutationFn: ({ username, password }: RegisterBodyParam) =>
       register({ username, password }),
   });
 };
