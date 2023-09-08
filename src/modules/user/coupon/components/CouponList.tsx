@@ -1,4 +1,4 @@
-import CouponCard from "@/modules/user/coupon/CouponCard";
+import CouponCard from "@/modules/user/coupon/components/CouponCard";
 import { type Coupon } from "@/modules/user/mock/coupons";
 import styled from "@emotion/styled";
 import { Space } from "antd";

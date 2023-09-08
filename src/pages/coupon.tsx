@@ -1,7 +1,7 @@
-import CouponDrawerContent from "@/modules/user/coupon/CouponDrawerContent";
-import CouponHeader from "@/modules/user/coupon/CouponHeader";
-import CouponList from "@/modules/user/coupon/CouponList";
-import CouponModal from "@/modules/user/coupon/CouponModal";
+import CouponDrawerContent from "@/modules/user/coupon/components/CouponDrawerContent";
+import CouponHeader from "@/modules/user/coupon/components/CouponHeader";
+import CouponList from "@/modules/user/coupon/components/CouponList";
+import CouponModal from "@/modules/user/coupon/components/CouponModal";
 import { coupons, type Coupon } from "@/modules/user/mock/coupons";
 import { session } from "@/modules/user/mock/session";
 import styled from "@emotion/styled";

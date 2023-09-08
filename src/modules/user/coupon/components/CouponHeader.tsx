@@ -1,5 +1,5 @@
 import { H3, H5 } from "@/modules/common/components/Typography";
-import CouponPoint from "@/modules/user/coupon/CouponPoint";
+import CouponPoint from "@/modules/user/coupon/components/CouponPoint";
 import { session } from "@/modules/user/mock/session";
 import styled from "@emotion/styled";
 import { ArrowLeft } from "@phosphor-icons/react";
