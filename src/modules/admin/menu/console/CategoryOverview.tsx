@@ -1,4 +1,4 @@
-import CatergoryList from "@/modules/admin/menu/console/CategoryList";
+import CategoryList from "@/modules/admin/menu/console/CategoryList";
 import { H4 } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Button, Card } from "antd";
@@ -9,7 +9,7 @@ const CategoryOverview = () => {
       title={<H4>หมวดหมู่</H4>}
       extra={<Button type="primary">เพิ่มหมวดหมู่</Button>}
     >
-      <CatergoryList />
+      <CategoryList />
     </CategoryOverviewCard>
   );
 };

@@ -62,7 +62,7 @@ const CategoryList = () => {
     {
       title: "ชื่อหมวดหมู่",
       dataIndex: "title",
-      width: "346px",
+      width: "200px",
       render: (title: string, record) => {
         return (
           <Text editable={{ onChange: (value) => onChange(value, record._id) }}>
@@ -74,7 +74,7 @@ const CategoryList = () => {
     {
       title: "จำนวนเมนู",
       dataIndex: "numberOfMenus",
-      width: "232px",
+      width: "100px",
     },
     {
       title: "ดำเนินการ",
