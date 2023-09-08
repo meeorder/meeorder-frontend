@@ -1,13 +1,23 @@
-import CouponList from "@/modules/admin/promotion/CouponList";
+import CouponList from "@/modules/admin/promotion/editCoupon/CouponList";
 import { H4 } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Button, Card } from "antd";
 
-const handleAddCoupon = () => {
-  console.log("Add Coupon");
+type CouponOverviewProps = {
+  setOpenModalForm: (open: boolean) => void;
+  setCouponId: (data: string) => void;
+  setOpenModalDelete: (open: boolean) => void;
 };
 
-const CouponOverview = () => {
+const CouponOverview: React.FC<CouponOverviewProps> = ({
+  setOpenModalForm,
+  setCouponId,
+  setOpenModalDelete,
+}) => {
+  const handleAddCoupon = () => {
+    setOpenModalForm(true);
+  };
+
   return (
     <CouponOverviewConatiner
       title={
@@ -35,7 +45,11 @@ const CouponOverview = () => {
         </Button>
       }
     >
-      <CouponList />
+      <CouponList
+        setCouponId={setCouponId}
+        setOpenModalForm={setOpenModalForm}
+        setOpenModalDelete={setOpenModalDelete}
+      />
     </CouponOverviewConatiner>
   );
 };

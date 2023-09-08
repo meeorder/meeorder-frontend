@@ -117,7 +117,7 @@ export interface paths {
     patch: operations["SessionController_updateSessionUser"];
   };
   "/sessions/{id}/coupon/all": {
-    /** Get all useable coupon */
+    /** Get all redeemable coupon */
     get: operations["SessionController_getCoupons"];
   };
   "/sessions/{id}/coupon": {
@@ -450,18 +450,22 @@ export interface components {
       title: string;
       /** @description Coupon description */
       description: string;
+      /** @description Coupon image */
+      image: string;
       /** @description Coupon required menus */
       required_menus: string[];
-      /** @description Discount price of the coupon */
-      price: number;
-      /** @description Amount of coupon */
-      amount: number;
+      /** @description Discount price of the Coupon */
+      discount: number;
+      /** @description Quota of the coupon */
+      quota: number;
+      /** @description Number of coupons that have been redeemed */
+      redeemed: number;
       /** @description Coupon status */
       activated: boolean;
       /** @description Coupon required point */
       required_point: number;
-      /** @description isUseable */
-      isuseable: boolean;
+      /** @description The coupon is redeemable or not */
+      redeemable: boolean;
     };
     UpdateSessionCouponDto: {
       /** @description Coupon ID */
@@ -534,7 +538,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-07T09:36:27.457Z
+       * @default 2023-09-07T14:21:24.424Z
        */
       created_at: string;
       /**
@@ -548,28 +552,58 @@ export interface components {
       title: string;
       /** @description Coupon Description */
       description?: string;
+      /** @description Coupon image */
+      image?: string;
       required_menus?: string[];
-      /** @description Discount Price of Coupon */
-      price: number;
-      /** @description Amount of Coupon */
-      amount?: number;
+      /** @description Discount price of Coupon */
+      discount: number;
+      /** @description Quota of the coupon */
+      quota: number;
+      /** @description Number of coupons that have been redeemed */
+      redeemed?: number;
       /** @description Coupon status */
-      activated: number;
+      activated: boolean;
       /** @description Coupon Required Point */
       required_point?: number;
+    };
+    CouponSchema: {
+      /** @description Coupon ID */
+      _id: string;
+      /** @description Coupon title */
+      title: string;
+      /** @description Coupon description */
+      description: string;
+      /** @description Coupon image */
+      image: string;
+      /** @description Coupon required menus */
+      required_menus: string[];
+      /** @description Discount price of the Coupon */
+      discount: number;
+      /** @description Quota of the coupon */
+      quota: number;
+      /** @description Number of coupons that have been redeemed */
+      redeemed: number;
+      /** @description Coupon status */
+      activated: boolean;
+      /** @description Coupon required point */
+      required_point: number;
     };
     UpdateCouponDto: {
       /** @description Coupon Code */
       title?: string;
       /** @description Coupon Description */
       description?: string;
+      /** @description Coupon image */
+      image?: string;
       required_menus?: string[];
-      /** @description Discount Price of Coupon */
-      price?: number;
-      /** @description Amount of Coupon */
-      amount?: number;
+      /** @description Discount price of Coupon */
+      discount?: number;
+      /** @description Quota of the coupon */
+      quota?: number;
+      /** @description Number of coupons that have been redeemed */
+      redeemed?: number;
       /** @description Coupon status */
-      activated?: number;
+      activated?: boolean;
       /** @description Coupon Required Point */
       required_point?: number;
     };
@@ -580,6 +614,8 @@ export interface components {
   headers: never;
   pathItems: never;
 }
+
+export type $defs = Record<string, never>;
 
 export type external = Record<string, never>;
 
@@ -616,7 +652,7 @@ export interface operations {
       /** @description Created new category */
       201: {
         content: {
-          "application/json": components["schemas"]["CreateCategoryDto"];
+          "application/json": components["schemas"]["CategorySchema"];
         };
       };
     };
@@ -625,6 +661,7 @@ export interface operations {
   CategoriesController_getCategory: {
     parameters: {
       path: {
+        /** @description Category ID (ObjectID) */
         id: string;
       };
     };
@@ -635,26 +672,34 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a category by id */
   CategoriesController_deleteCategory: {
     parameters: {
       path: {
+        /** @description Category ID (ObjectID) */
         id: string;
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Category not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Replace a category by id */
   CategoriesController_updateCategory: {
     parameters: {
       path: {
+        /** @description Category ID (ObjectID) */
         id: string;
       };
     };
@@ -667,11 +712,13 @@ export interface operations {
       /** @description Update category */
       200: {
         content: {
-          "application/json": components["schemas"]["UpdateCategoryDto"];
+          "application/json": components["schemas"]["CategorySchema"];
         };
       };
       /** @description Category not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** order the categories' rank */
@@ -683,7 +730,9 @@ export interface operations {
     };
     responses: {
       /** @description Change category rank */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all addons */
@@ -712,7 +761,7 @@ export interface operations {
       /** @description Created addon */
       201: {
         content: {
-          "application/json": components["schemas"]["CreateAddonDto"];
+          "application/json": components["schemas"]["AddonSchema"];
         };
       };
     };
@@ -721,6 +770,7 @@ export interface operations {
   AddonsController_getAddon: {
     parameters: {
       path: {
+        /** @description Addon ID (ObjectID) */
         id: string;
       };
     };
@@ -731,13 +781,16 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Replace a addon by id */
   AddonsController_updateAddon: {
     parameters: {
       path: {
+        /** @description Addon ID (ObjectID) */
         id: string;
       };
     };
@@ -750,24 +803,31 @@ export interface operations {
       /** @description Updated addon */
       200: {
         content: {
-          "application/json": components["schemas"]["CreateAddonDto"];
+          "application/json": components["schemas"]["AddonSchema"];
         };
       };
       /** @description Addon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a addon by id */
   AddonsController_deleteAddon: {
     parameters: {
       path: {
+        /** @description Addon ID (ObjectID) */
         id: string;
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Addon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   MenusController_getMenus: {
@@ -813,9 +873,13 @@ export interface operations {
     };
     responses: {
       /** @description The menus have been successfully deleted. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get a menu by id */
@@ -832,7 +896,9 @@ export interface operations {
         };
       };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Replace a menu by id */
@@ -849,9 +915,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully updated. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a menu by id */
@@ -863,9 +933,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully deleted. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Publish a menu by id */
@@ -877,9 +951,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully published. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Unpublish a menu by id */
@@ -891,9 +969,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully unpublished. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Get all orders */
@@ -915,7 +997,9 @@ export interface operations {
     };
     responses: {
       /** @description Create order */
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   /** Change order status to preparing */
@@ -928,7 +1012,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to preparing */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Change order status to ready to serve */
@@ -941,7 +1027,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to ready to serve */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Change order status to done */
@@ -954,7 +1042,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to done */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Cancel order */
@@ -967,7 +1057,9 @@ export interface operations {
     };
     responses: {
       /** @description Cancel order */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all sessions */
@@ -1000,7 +1092,9 @@ export interface operations {
         };
       };
       /** @description Session already exists */
-      409: never;
+      409: {
+        content: never;
+      };
     };
   };
   /** Get a session by id */
@@ -1019,7 +1113,9 @@ export interface operations {
         };
       };
       /** @description Session not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a session by id */
@@ -1032,9 +1128,13 @@ export interface operations {
     };
     responses: {
       /** @description Session deleted */
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Session not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Get a session by table id */
@@ -1053,7 +1153,9 @@ export interface operations {
         };
       };
       /** @description No session found in the table */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Finish a session */
@@ -1066,9 +1168,13 @@ export interface operations {
     };
     responses: {
       /** @description Session finished */
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Session not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Get orders by session */
@@ -1089,6 +1195,12 @@ export interface operations {
   };
   /** Updated session user */
   SessionController_updateSessionUser: {
+    parameters: {
+      path: {
+        /** @description Session ID (ObjectId) */
+        id: string;
+      };
+    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["SessionUserUpdateDto"];
@@ -1103,10 +1215,16 @@ export interface operations {
       };
     };
   };
-  /** Get all useable coupon */
+  /** Get all redeemable coupon */
   SessionController_getCoupons: {
+    parameters: {
+      path: {
+        /** @description Session ID (ObjectId) */
+        id: string;
+      };
+    };
     responses: {
-      /** @description Get all useable coupon */
+      /** @description Get all redeemable coupon */
       200: {
         content: {
           "application/json": components["schemas"]["ExampleCouponDto"];
@@ -1116,17 +1234,25 @@ export interface operations {
   };
   /** Update coupon in session */
   SessionController_updateSessionCoupon: {
+    parameters: {
+      path: {
+        /** @description Session ID (ObjectId) */
+        id: string;
+      };
+    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateSessionCouponDto"];
       };
     };
     responses: {
-      /** @description Update coupon in session */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateSessionCouponDto"];
-        };
+      /** @description Coupon is attached to session */
+      204: {
+        content: never;
+      };
+      /** @description Resource conflict (coupon quota has been reached) */
+      409: {
+        content: never;
       };
     };
   };
@@ -1150,7 +1276,9 @@ export interface operations {
     };
     responses: {
       /** @description Create table */
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   /** Login */
@@ -1171,7 +1299,9 @@ export interface operations {
   /** Logout */
   AuthController_signOut: {
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Customer's registraion */
@@ -1225,7 +1355,9 @@ export interface operations {
     };
     responses: {
       /** @description Create user */
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   /** Delete user */
@@ -1237,7 +1369,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Reset user password */
@@ -1249,7 +1383,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all coupons (Owner) */
@@ -1257,7 +1393,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["CreateCouponDto"][];
+          "application/json": components["schemas"]["CouponSchema"][];
         };
       };
     };
@@ -1288,7 +1424,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["CreateCouponDto"];
+          "application/json": components["schemas"]["CouponSchema"];
         };
       };
     };
@@ -1302,7 +1438,9 @@ export interface operations {
     };
     responses: {
       /** @description Coupon deleted */
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   /** Update a coupon by id */
@@ -1321,7 +1459,7 @@ export interface operations {
       /** @description Coupon updated */
       200: {
         content: {
-          "application/json": components["schemas"]["CreateCouponDto"];
+          "application/json": components["schemas"]["CouponSchema"];
         };
       };
     };
