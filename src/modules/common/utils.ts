@@ -8,3 +8,9 @@ export const commaFormat = (num: number | undefined) => {
 
   return formated.slice(1, -3);
 };
+
+export const checkImageSrc = (src: string) => {
+  return src?.startsWith("http") || src?.startsWith("https")
+    ? src
+    : `https://source.unsplash.com/random/?food&plate&abc`;
+};

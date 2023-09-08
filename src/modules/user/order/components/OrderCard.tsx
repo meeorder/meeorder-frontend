@@ -1,5 +1,6 @@
 import TextPrice from "@/modules/common/components/TextPrice";
 import { H5, Text } from "@/modules/common/components/Typography";
+import { checkImageSrc } from "@/modules/common/utils";
 import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
 import { calculateOrderPrice } from "@/modules/user/order/utils";
 import styled from "@emotion/styled";
@@ -40,7 +41,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
         <StyledImage
           width={900}
           height={900}
-          src={order?.menu?.image}
+          src={checkImageSrc(order?.menu?.image ?? "")}
           alt={order?.menu?.title}
         />
       </FlexBetweenRow>
