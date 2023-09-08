@@ -1,8 +1,11 @@
 import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
-import { categories } from "@/modules/admin/mock/categories";
+import useCreateMenu from "@/modules/admin/menu/hooks/useCreateMenu";
+import useEditMenu from "@/modules/admin/menu/hooks/useEditMenu";
+import useMenu from "@/modules/admin/menu/hooks/useMenu";
 import { ingredientData } from "@/modules/admin/mock/ingredient";
 import { H4, H5, Text } from "@/modules/common/components/Typography";
-import { type Category } from "@/modules/user/mock/categories";
+import useCategories from "@/modules/common/hooks/useCategory";
+import { type CreateMenuBodyParam } from "@/modules/services/menus";
 import styled from "@emotion/styled";
 import {
   Button,
@@ -17,22 +20,16 @@ import {
   theme,
 } from "antd";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-type FieldType = {
-  name: string;
-  price: number;
-  category?: Category;
-  ingredients?: string;
-  description?: string;
-  imageURL?: string;
-};
+type FieldType = CreateMenuBodyParam;
 
 const MenuFormSection: React.FC = () => {
   const { consoleSectionMode, editMenuId, changeToCategoryMode } =
     useConsoleSectionMode();
+  const { data: allCategories } = useCategories();
   const { token } = theme.useToken();
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<FieldType>();
   const [imageURL, setImageURL] = useState(
     "https://source.unsplash.com/random/?food&plate&11",
   );
@@ -42,13 +39,49 @@ const MenuFormSection: React.FC = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
 
-  if (consoleSectionMode === "edit-menu") {
-    // TODO: get menu data from api then set value to form
-  }
+  const { mutate: createMenu } = useCreateMenu();
+  const { mutate: editMenu } = useEditMenu();
+  const { data: initialData } = useMenu(editMenuId ?? "");
 
+  useEffect(() => {
+    form.resetFields();
+    if (consoleSectionMode === "edit-menu") {
+      if (initialData) {
+        form.setFieldsValue({
+          title: initialData.title,
+          price: initialData.price,
+          // category: initialData.category?._id,
+          // ingredient: [], todo add ingredient field
+          description: initialData.description,
+          image: initialData.image,
+        });
+      } else {
+        form.setFieldsValue({
+          title: "loading...",
+          price: 0,
+          category: "loading...",
+          // ingredient: [], todo add ingredient field
+          description: "loading...",
+          image: "loading...",
+        });
+      }
+
+      if (initialData && allCategories) {
+        console.log("initialData.category?._id", initialData.category?._id);
+        form.setFieldValue("category", initialData.category?._id);
+      }
+    }
+  }, [consoleSectionMode, initialData, form]);
   const handleFormSubmit = (values: FieldType) => {
-    // TODO: send data to api
-    console.log(values);
+    if (consoleSectionMode === "add-menu") {
+      createMenu(values);
+    } else if (consoleSectionMode === "edit-menu") {
+      if (editMenuId) {
+        console.log("editMenu", { id: editMenuId, ...values });
+        console.log("initialData", initialData);
+        editMenu({ id: editMenuId, ...values });
+      }
+    }
   };
 
   const handleSave = () => {
@@ -163,7 +196,7 @@ const MenuFormSection: React.FC = () => {
       >
         <GeneralFormItemsContainer>
           <Form.Item<FieldType>
-            name="name"
+            name="title"
             label="ชื่อ"
             rules={[{ required: true, message: "กรุณาระบุชื่อของรายการนี้" }]}
             style={{ width: "100%" }}
@@ -190,17 +223,25 @@ const MenuFormSection: React.FC = () => {
             label="หมวดหมู่"
             style={{ width: "100%" }}
           >
-            <Select allowClear>
-              {categories.map((category) => (
-                <Select.Option key={category._id} value={category.title}>
+            <Select
+              allowClear
+              options={allCategories?.map((category) => ({
+                label: category.title,
+                value: category._id,
+              }))}
+              defaultValue={initialData?.category?._id}
+              key={initialData?.category?._id}
+            />
+            {/* {allCategories?.map((category) => (
+                <Select.Option key={category._id} value={category._id}>
                   {category.title}
                 </Select.Option>
               ))}
-            </Select>
+            </Select> */}
           </Form.Item>
 
           <Form.Item<FieldType>
-            name="ingredients"
+            // name="ingredient" todo add ingredient field
             label="ส่วนประกอบ"
             style={{ width: "100%" }}
           >
@@ -235,7 +276,7 @@ const MenuFormSection: React.FC = () => {
             unoptimized
           />
           <Form.Item<FieldType>
-            name="imageURL"
+            name="image"
             label="URL รูปภาพ"
             style={{ width: "100%" }}
           >
@@ -262,6 +303,7 @@ const MenuFormSection: React.FC = () => {
             >
               แบบร่าง
             </H5>
+
             <Switch
               title="ปรับเปลี่ยนระหว่างสถานะ แบบร่าง/วางขาย"
               checked={published}

@@ -29,7 +29,9 @@ const MenuListFoodCard: React.FC<MenuListFoodCardProps> = ({ food }) => {
   return (
     <CardContainer
       style={{
-        border: editMenuId === food.id ? `2px solid ${colorPrimaryBorder}` : "",
+        ...(editMenuId === food.id
+          ? { border: `2px solid ${colorPrimaryBorder}` }
+          : null),
         borderRadius: "8px",
       }}
       onClick={() => {
