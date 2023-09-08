@@ -1,12 +1,10 @@
 import { deleteMenuById } from "@/modules/services/menus";
 import { useMutation } from "@tanstack/react-query";
 
-const useDeleteMenu = (id: string) => {
+const useDeleteMenu = (onSuccess: () => void) => {
   return useMutation({
-    mutationFn: () => deleteMenuById({ id }),
-    onSuccess: () => {
-      // todo invalidate query
-    },
+    mutationFn: deleteMenuById,
+    onSuccess: onSuccess,
   });
 };
 

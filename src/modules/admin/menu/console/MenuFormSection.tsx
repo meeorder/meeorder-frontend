@@ -1,5 +1,7 @@
+import useChangePublishMenu from "@/modules/admin/menu/hooks/useChangePublishMenu";
 import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
 import useCreateMenu from "@/modules/admin/menu/hooks/useCreateMenu";
+import useDeleteMenu from "@/modules/admin/menu/hooks/useDeleteMenu";
 import useEditMenu from "@/modules/admin/menu/hooks/useEditMenu";
 import useMenu from "@/modules/admin/menu/hooks/useMenu";
 import { ingredientData } from "@/modules/admin/mock/ingredient";
@@ -30,30 +32,34 @@ const MenuFormSection: React.FC = () => {
   const { data: allCategories } = useCategories();
   const { token } = theme.useToken();
   const [form] = Form.useForm<FieldType>();
-  const [imageURL, setImageURL] = useState(
-    "https://source.unsplash.com/random/?food&plate&11",
-  );
   const [published, setPublished] = useState(true);
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [loadingDelete, setLoadingDelete] = useState(false);
+  // const [loadingDelete, setLoadingDelete] = useState(false);
 
-  const { mutate: createMenu } = useCreateMenu();
-  const { mutate: editMenu } = useEditMenu();
+  const { mutate: createMenu } = useCreateMenu(changeToCategoryMode);
+  const { mutate: editMenu } = useEditMenu(changeToCategoryMode);
+  const { mutate: deleteMenu, isLoading: loadingDelete } =
+    useDeleteMenu(changeToCategoryMode);
   const { data: initialData } = useMenu(editMenuId ?? "");
-
+  const { publishMenu, unPublishMenu } = useChangePublishMenu();
   useEffect(() => {
     form.resetFields();
+  }, [form]);
+
+  useEffect(() => {
     if (consoleSectionMode === "edit-menu") {
       if (initialData) {
         form.setFieldsValue({
           title: initialData.title,
           price: initialData.price,
-          // category: initialData.category?._id,
+          category: JSON.stringify(initialData.category).slice(1, -1),
           // ingredient: [], todo add ingredient field
           description: initialData.description,
           image: initialData.image,
         });
+
+        setPublished(initialData.published_at ? true : false);
       } else {
         form.setFieldsValue({
           title: "loading...",
@@ -64,13 +70,8 @@ const MenuFormSection: React.FC = () => {
           image: "loading...",
         });
       }
-
-      if (initialData && allCategories) {
-        console.log("initialData.category?._id", initialData.category?._id);
-        form.setFieldValue("category", initialData.category?._id);
-      }
     }
-  }, [consoleSectionMode, initialData, form]);
+  }, [consoleSectionMode, editMenuId, form, initialData]);
   const handleFormSubmit = (values: FieldType) => {
     if (consoleSectionMode === "add-menu") {
       createMenu(values);
@@ -79,6 +80,11 @@ const MenuFormSection: React.FC = () => {
         console.log("editMenu", { id: editMenuId, ...values });
         console.log("initialData", initialData);
         editMenu({ id: editMenuId, ...values });
+        if (published && !initialData?.published_at) {
+          publishMenu({ id: editMenuId });
+        } else if (!published && initialData?.published_at) {
+          unPublishMenu({ id: editMenuId });
+        }
       }
     }
   };
@@ -92,14 +98,11 @@ const MenuFormSection: React.FC = () => {
   };
 
   const handleDelete = () => {
-    setLoadingDelete(true);
-    setTimeout(() => {
-      setLoadingDelete(false);
-      setOpenDeleteModal(false);
-      // delete menu
-
-      changeToCategoryMode();
-    }, 1500);
+    if (editMenuId) {
+      deleteMenu({
+        id: editMenuId,
+      });
+    }
   };
 
   return (
@@ -199,22 +202,15 @@ const MenuFormSection: React.FC = () => {
             name="category"
             label="หมวดหมู่"
             style={{ width: "100%" }}
+            valuePropName="value"
           >
-            <Select
-              allowClear
-              options={allCategories?.map((category) => ({
-                label: category.title,
-                value: category._id,
-              }))}
-              defaultValue={initialData?.category?._id}
-              key={initialData?.category?._id}
-            />
-            {/* {allCategories?.map((category) => (
+            <Select allowClear>
+              {allCategories?.map((category) => (
                 <Select.Option key={category._id} value={category._id}>
                   {category.title}
                 </Select.Option>
               ))}
-            </Select> */}
+            </Select>
           </Form.Item>
 
           <Form.Item<FieldType>
@@ -246,7 +242,7 @@ const MenuFormSection: React.FC = () => {
         </GeneralFormItemsContainer>
         <ImageFormItemsContainer>
           <StyledImage
-            src={imageURL}
+            src={form.getFieldsValue().image ?? ""}
             alt="Food image"
             width={296}
             height={296}
@@ -257,47 +253,42 @@ const MenuFormSection: React.FC = () => {
             label="URL รูปภาพ"
             style={{ width: "100%" }}
           >
-            <Input
-              placeholder="https://..."
-              onChange={(e) => {
-                if (e.target.value) {
-                  setImageURL(e.target.value);
-                } else {
-                  setImageURL(
-                    "https://source.unsplash.com/random/?food&plate&11",
-                  );
-                }
-              }}
-            />
+            <Input placeholder="https://..." />
           </Form.Item>
-          <div>
-            <H5
-              style={{
-                marginRight: 8,
-                display: "inline-block",
-                color: published ? token.colorTextQuaternary : token.colorText,
-              }}
-            >
-              แบบร่าง
-            </H5>
+          {consoleSectionMode === "edit-menu" && (
+            <div>
+              <H5
+                style={{
+                  marginRight: 8,
+                  display: "inline-block",
+                  color: published
+                    ? token.colorTextQuaternary
+                    : token.colorText,
+                }}
+              >
+                แบบร่าง
+              </H5>
 
-            <Switch
-              title="ปรับเปลี่ยนระหว่างสถานะ แบบร่าง/วางขาย"
-              checked={published}
-              onChange={(checked) => {
-                setPublished(checked);
-              }}
-            />
-            <H5
-              style={{
-                marginLeft: 8,
-                display: "inline-block",
-                color: published ? token.colorText : token.colorTextQuaternary,
-              }}
-            >
-              วางขาย
-            </H5>
-          </div>
+              <Switch
+                title="ปรับเปลี่ยนระหว่างสถานะ แบบร่าง/วางขาย"
+                checked={published}
+                onChange={(checked) => {
+                  setPublished(checked);
+                }}
+              />
+              <H5
+                style={{
+                  marginLeft: 8,
+                  display: "inline-block",
+                  color: published
+                    ? token.colorText
+                    : token.colorTextQuaternary,
+                }}
+              >
+                วางขาย
+              </H5>
+            </div>
+          )}
         </ImageFormItemsContainer>
       </MenuFormContainer>
     </MenuFormCard>

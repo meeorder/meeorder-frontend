@@ -1,12 +1,10 @@
 import { createMenu } from "@/modules/services/menus";
 import { useMutation } from "@tanstack/react-query";
 
-const useCreateMenu = () => {
+const useCreateMenu = (onSuccess: () => void) => {
   return useMutation({
     mutationFn: createMenu,
-    onSuccess: () => {
-      // todo invalidate query
-    },
+    onSuccess: onSuccess,
   });
 };
 
