@@ -1,5 +1,6 @@
 import TextPrice from "@/modules/common/components/TextPrice";
 import { H5, Text } from "@/modules/common/components/Typography";
+import { checkImageSrc } from "@/modules/common/utils";
 import { type BasketOrder } from "@/modules/user/basket/hooks/useBasketStore";
 import { calculateBasketOrderPrice } from "@/modules/user/basket/utils";
 import styled from "@emotion/styled";
@@ -47,7 +48,7 @@ const BasketFoodCard: React.FC<BasketFoodCardProps> = ({ basketOrder }) => {
       </FoodDetails>
       <ImageContainer>
         <Image
-          src={basketOrder?.menu?.image}
+          src={checkImageSrc(basketOrder?.menu?.image ?? "")}
           alt={basketOrder?.menu?.title}
           width={900}
           height={900}

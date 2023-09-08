@@ -1,4 +1,5 @@
 import TextPrice from "@/modules/common/components/TextPrice";
+import { checkImageSrc } from "@/modules/common/utils";
 import { type Menu } from "@/modules/user/menu/types";
 import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import { PlusOutlined } from "@ant-design/icons";
@@ -30,7 +31,7 @@ const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
       extra={
         <>
           <StyledImage
-            src={menu.image ?? ""}
+            src={checkImageSrc(menu.image ?? "")}
             width={500}
             height={500}
             alt={menu.title}

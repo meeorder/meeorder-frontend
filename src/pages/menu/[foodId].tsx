@@ -1,3 +1,4 @@
+import { checkImageSrc } from "@/modules/common/utils";
 import {
   useBasketStore,
   type BasketOrder,
@@ -97,7 +98,7 @@ const FoodDetail = () => {
       <LayoutContainer>
         <ImageContainer>
           <Image
-            src={menu?.image ?? ""}
+            src={checkImageSrc(menu?.image ?? "")}
             alt={menu?.title ?? ""}
             width={1000}
             height={1000}
