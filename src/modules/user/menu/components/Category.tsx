@@ -13,9 +13,7 @@ const Category: React.FC<CategoryProps> = ({ category, menus }) => {
     case RECOMMEND_CATEGORY_ID:
       return <RecommendedCategory category={category} menus={menus} />;
     default:
-      return (
-        <SimpleCategory category={category} menus={menus} /> // just to make the list longer
-      );
+      return <SimpleCategory category={category} menus={menus} />;
   }
 };
 

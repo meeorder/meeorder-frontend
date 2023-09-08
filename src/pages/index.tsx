@@ -1,9 +1,9 @@
 import AppLayout from "@/modules/AppLayout";
+import useCategories from "@/modules/common/hooks/useCategory";
 import { pages } from "@/modules/pageConfig";
 import Category from "@/modules/user/menu/components/Category";
 import CategoryNav from "@/modules/user/menu/components/CategoryNav";
 import useAllMenu from "@/modules/user/menu/hooks/useAllMenu";
-import useCategories from "@/modules/user/menu/hooks/useCategory";
 import { useSetNewSessionBySessionId } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import Head from "next/head";
@@ -39,7 +39,9 @@ const Home = () => {
         <CategoryNav categories={categories?.data ?? []} />
         <MenuContainer>
           {allMenu?.data
-            ?.sort((a, b) => a?.category?.rank - b?.category?.rank)
+            ?.sort(
+              (a, b) => (a?.category?.rank ?? 0) - (b?.category?.rank ?? 0),
+            )
             ?.map((item) => {
               return (
                 <Category
