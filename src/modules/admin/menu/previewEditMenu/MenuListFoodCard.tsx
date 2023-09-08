@@ -1,6 +1,7 @@
 import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
 import TextPrice from "@/modules/common/components/TextPrice";
 import { H5 } from "@/modules/common/components/Typography";
+import { checkImageSrc } from "@/modules/common/utils";
 import { type Food } from "@/modules/user/mock/foods";
 import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
@@ -56,7 +57,7 @@ const MenuListFoodCard: React.FC<MenuListFoodCardProps> = ({ food }) => {
       </TextContainer>
       <PhotoContainer>
         <StyledImage
-          src={food.imagePath ?? ""}
+          src={checkImageSrc(food.imagePath ?? "")}
           width={500}
           height={500}
           alt={food.name}

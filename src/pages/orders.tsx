@@ -2,6 +2,7 @@ import AppLayout from "@/modules/AppLayout";
 import { H4, H5 } from "@/modules/common/components/Typography";
 import { useClient } from "@/modules/common/hooks/useClient";
 import { pages } from "@/modules/pageConfig";
+import OrderCoupon from "@/modules/user/coupon/components/OrderCoupon";
 import OrderList from "@/modules/user/order/components/OrderList";
 import OrderSummaryPrice from "@/modules/user/order/components/OrderSummaryPrice";
 import useOrder from "@/modules/user/order/hooks/useOrder";
@@ -38,6 +39,7 @@ const Orders = () => {
               ) ?? []
             }
           />
+          <OrderCoupon />
           <OrderSummaryPrice
             priceData={{
               total_price: ordersData?.total_price ?? 0,
@@ -54,7 +56,7 @@ const Orders = () => {
 export default Orders;
 
 const OrderContainer = styled.div`
-  background-color: ${(props) => props.theme.antd.colorBgLayout};
+  background-color: #fafafa;
   min-height: calc(100vh - 128px);
   height: 100%;
   padding: 20px;

@@ -7,6 +7,7 @@ import useMenu from "@/modules/admin/menu/hooks/useMenu";
 import { ingredientData } from "@/modules/admin/mock/ingredient";
 import { H4, H5, Text } from "@/modules/common/components/Typography";
 import useCategories from "@/modules/common/hooks/useCategory";
+import { checkImageSrc } from "@/modules/common/utils";
 import { type CreateMenuBodyParam } from "@/modules/services/menus";
 import styled from "@emotion/styled";
 import {
@@ -242,7 +243,7 @@ const MenuFormSection: React.FC = () => {
         </GeneralFormItemsContainer>
         <ImageFormItemsContainer>
           <StyledImage
-            src={form.getFieldsValue().image ?? ""}
+            src={checkImageSrc(form.getFieldsValue().image ?? "")}
             alt="Food image"
             width={296}
             height={296}
