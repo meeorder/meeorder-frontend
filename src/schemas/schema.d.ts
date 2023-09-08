@@ -473,13 +473,13 @@ export interface components {
     };
     TablesDto: {
       /** @description Table number */
-      table_number: number;
+      title: string;
     };
     TablesSchema: {
       /** @description Table ID */
       _id: string;
       /** @description Table number */
-      table_number: number;
+      title: string;
     };
     LoginDto: {
       username: string;
@@ -538,7 +538,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-07T14:21:24.424Z
+       * @default 2023-09-07T15:09:03.270Z
        */
       created_at: string;
       /**
@@ -1142,7 +1142,7 @@ export interface operations {
     parameters: {
       path: {
         /** @description Table ID */
-        id: number;
+        id: string;
       };
     };
     responses: {
@@ -1277,7 +1277,9 @@ export interface operations {
     responses: {
       /** @description Create table */
       201: {
-        content: never;
+        content: {
+          "application/json": components["schemas"]["TablesSchema"];
+        };
       };
     };
   };
@@ -1409,7 +1411,7 @@ export interface operations {
       /** @description Coupon created */
       201: {
         content: {
-          "application/json": components["schemas"]["CreateCouponDto"];
+          "application/json": components["schemas"]["CouponSchema"];
         };
       };
     };

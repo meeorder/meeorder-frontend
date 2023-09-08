@@ -1,6 +1,6 @@
-import useAllCoupon from "@/modules/admin/promotion/hook/useCoupon";
+import useAllCoupon from "@/modules/admin/promotion/hook/useAllCoupon";
 import { Text } from "@/modules/common/components/Typography";
-import { type GetAllCouponsResponse } from "@/modules/services/coupon";
+import { type GetAllCouponsResponse } from "@/modules/services/coupons";
 import styled from "@emotion/styled";
 import { Progress, Table, Typography } from "antd";
 import { type ColumnsType } from "antd/es/table";
@@ -48,13 +48,15 @@ const CouponList: React.FC<CouponListProps> = ({
       dataIndex: "discount",
       width: "7%",
       align: "right",
+      sorter: (a, b) => b.discount - a.discount,
     },
     {
       key: "required_point",
       title: "แต้มที่ต้องใช้",
       dataIndex: "required_point",
-      width: "8%",
+      width: "12%",
       align: "right",
+      sorter: (a, b) => b.required_point - a.required_point,
     },
     {
       key: "required_menus",
@@ -62,6 +64,7 @@ const CouponList: React.FC<CouponListProps> = ({
       dataIndex: "required_menus",
       width: "10%",
       align: "right",
+      sorter: (a, b) => b.required_menus.length - a.required_menus.length,
       render: (required_menus: string[]) => {
         return <Text>{required_menus.length ?? 0}</Text>;
       },
@@ -72,11 +75,17 @@ const CouponList: React.FC<CouponListProps> = ({
       dataIndex: "quota",
       width: "10%",
       align: "right",
+      sorter: (a, b) => b.quota - a.quota,
     },
     {
       key: "percentOfUsedCoupons",
       title: "เปอร์เซ็นต์การใช้คูปอง",
       width: "17%",
+      sorter: (a, b) => {
+        const percentOfUsedCouponsA = (a.redeemed / a.quota) * 100;
+        const percentOfUsedCouponsB = (b.redeemed / b.quota) * 100;
+        return percentOfUsedCouponsB - percentOfUsedCouponsA;
+      },
       render: (_, record) => {
         const { quota, redeemed } = record;
         const percentOfUsedCoupons = (redeemed / quota) * 100;
@@ -85,7 +94,11 @@ const CouponList: React.FC<CouponListProps> = ({
             <ProgressContainer>
               <Progress percent={percentOfUsedCoupons} showInfo={false} />
             </ProgressContainer>
-            <Text>{percentOfUsedCoupons.toFixed(0)}%</Text>
+            {Number.isNaN(percentOfUsedCoupons) ? (
+              <Text>0%</Text>
+            ) : (
+              <Text>{percentOfUsedCoupons.toFixed(0)}%</Text>
+            )}
           </ProgressTextContainer>
         );
       },
@@ -95,6 +108,7 @@ const CouponList: React.FC<CouponListProps> = ({
       title: "สถานะ",
       dataIndex: "activated",
       width: "8%",
+      sorter: (a, b) => +b.activated - +a.activated,
       render: (activated: boolean) => {
         return (
           <>
