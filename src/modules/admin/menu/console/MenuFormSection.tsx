@@ -35,7 +35,6 @@ const MenuFormSection: React.FC = () => {
   );
   const [published, setPublished] = useState(true);
 
-  const [openCancelModal, setOpenCancelModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
 
@@ -155,31 +154,9 @@ const MenuFormSection: React.FC = () => {
               </StyledModal>
             </>
           )}
-          <Button type="default" onClick={() => setOpenCancelModal(true)}>
+          <Button type="default" onClick={handleCancel}>
             ยกเลิก
           </Button>
-          <StyledModal
-            centered
-            closable={false}
-            maskClosable={false}
-            open={openCancelModal}
-            onOk={handleCancel}
-            onCancel={() => setOpenCancelModal(false)}
-            cancelText="ไม่"
-            okText="ใช่"
-          >
-            <Result
-              status="warning"
-              title={
-                <H4 style={{ paddingBottom: "12px" }}>
-                  คุณต้องการจะยกเลิกการ
-                  {consoleSectionMode === "edit-menu" ? "แก้ไข" : "เพิ่ม"}
-                  เมนูหรือไม่?
-                </H4>
-              }
-              style={{ paddingBottom: "0px", paddingTop: "0px" }}
-            />
-          </StyledModal>
           <Button type="primary" onClick={handleSave}>
             {consoleSectionMode === "edit-menu"
               ? "ยืนยันการแก้ไข"
