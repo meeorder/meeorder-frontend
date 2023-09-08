@@ -1,35 +1,36 @@
 import { type GetCategoryByIdResponse } from "@/modules/services/categories";
 
 export type Category = GetCategoryByIdResponse;
+
 export const categories: Category[] = [
   {
     _id: "id1",
     title: "test1",
-    menus: [],
+    menus: ["menu2"],
     rank: 1,
   },
   {
     _id: "id2",
     title: "test2",
-    menus: ["test1", "test2"],
+    menus: ["menu1", "menu22"],
     rank: 2,
   },
   {
     _id: "id3",
     title: "test3",
-    menus: [],
+    menus: ["menu10", "menu32"],
     rank: 3,
   },
   {
     _id: "id4",
     title: "test4",
-    menus: [],
+    menus: ["menu6", "menu55"],
     rank: 4,
   },
   {
     _id: "id5",
     title: "test5",
-    menus: [],
+    menus: ["menu7", "menu8", "menu9", "menu12"],
     rank: 5,
   },
   {
