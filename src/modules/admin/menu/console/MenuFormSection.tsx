@@ -61,6 +61,7 @@ const MenuFormSection: React.FC = () => {
         });
 
         setPublished(initialData.published_at ? true : false);
+        setImageURL(initialData.image || "");
       } else {
         form.setFieldsValue({
           title: "loading...",
@@ -70,6 +71,7 @@ const MenuFormSection: React.FC = () => {
           description: "loading...",
           image: "loading...",
         });
+        setImageURL("");
       }
     } else if (consoleSectionMode === "add-menu") {
       form.resetFields();
