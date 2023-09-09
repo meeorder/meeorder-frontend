@@ -3,6 +3,7 @@ import {
   Basket,
   CheckCircle,
   ClipboardText,
+  Fish,
   Gauge,
   House,
   ListBullets,
@@ -86,6 +87,20 @@ export const pages = {
     path: "/admin/setting",
     layout: "admin",
     Icon: User,
+  },
+  employeeStock: {
+    id: "employeeStock",
+    label: "จัดการวัตถุดิบ",
+    path: "/admin/stock",
+    layout: "admin",
+    Icon: Fish,
+  },
+  employeeOrderManagement: {
+    id: "employeeOrderManagement",
+    label: "จัดการออเดอร์",
+    path: "/admin/order-management",
+    layout: "admin",
+    Icon: ClipboardText,
   },
 } as const satisfies Record<string, PageMetaData>;
 

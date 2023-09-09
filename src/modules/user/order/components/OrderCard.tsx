@@ -99,7 +99,7 @@ const mapStatusToColor: Record<Order["status"] | "CANCEL", TagProps["color"]> =
 
 const mapOrderStatusTranslation: Record<Order["status"] | "CANCEL", string> = {
   IN_QUEUE: "อยู่ในคิว",
-  PREPARING: "กำลังเตรียมการ",
+  PREPARING: "กำลังเตรียมอาหาร",
   READY_TO_SERVE: "พร้อมเสิร์ฟ",
   DONE: "สำเร็จ",
   CANCEL: "ยกเลิก",
