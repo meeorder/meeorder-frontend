@@ -1,14 +1,18 @@
+import { type MenuSectionMode } from "@/modules/admin/menu/hooks/useMenuSectionMode";
 import Item from "@/modules/admin/menu/previewEditMenu/Item";
-import { type Food } from "@/modules/user/mock/foods";
+import { type GetAllMenusResponse } from "@/modules/services/menus";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { type HTMLAttributes } from "react";
 
+type Menu = GetAllMenusResponse[number]["menus"][number];
+
 type Props = {
-  food: Food;
+  menu: Menu;
+  menuSectionMode: MenuSectionMode;
 } & HTMLAttributes<HTMLDivElement>;
 
-const SortableItem = ({ food, ...props }: Props) => {
+const SortableItem = ({ menu, menuSectionMode, ...props }: Props) => {
   const {
     attributes,
     isDragging,
@@ -17,7 +21,8 @@ const SortableItem = ({ food, ...props }: Props) => {
     transform,
     transition,
   } = useSortable({
-    id: food.id,
+    id: menu?._id,
+    disabled: menuSectionMode === "preview",
   });
 
   const styles = {
@@ -27,10 +32,12 @@ const SortableItem = ({ food, ...props }: Props) => {
 
   return (
     <Item
-      food={food}
+      menu={menu}
       ref={setNodeRef}
       style={styles}
       isOpacityEnabled={isDragging}
+      menuSectionMode={menuSectionMode}
+      isDisable={menuSectionMode === "preview"}
       {...props}
       {...attributes}
       {...listeners}
