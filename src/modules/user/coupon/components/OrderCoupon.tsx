@@ -1,6 +1,11 @@
 import { H5, Text } from "@/modules/common/components/Typography";
-import { coupons } from "@/modules/user/mock/coupons";
-import { session } from "@/modules/user/mock/session";
+import { useUserStore } from "@/modules/common/hooks/useUserStore";
+import { tuncateString } from "@/modules/common/utils";
+import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
+import {
+  useSessionStore,
+  type Session,
+} from "@/modules/user/order/hooks/useSessionStore";
 import UserAvatar from "@/modules/user/user/UserAvatar";
 import styled from "@emotion/styled";
 import { CaretRight } from "@phosphor-icons/react";
@@ -18,22 +23,33 @@ const OrderCoupon = () => {
       pathname: "/coupon",
     });
   };
-
   // TODO: get from session
-  const couponInUsed = !!session.coupon;
-  const isHeadTable = session.user?.id === session.headTableUser?.id;
+  const session = useSessionStore((state) => state.session as Session);
+  const user = useUserStore((state) => state.user);
+  const { data: coupons } = useAllUsableCouponsInSession();
 
-  const coupon = coupons.find((coupon) => coupon.id === session.coupon);
+  const isHeadTable = session.user === user?._id;
+
+  const coupon = coupons?.find((coupon) => coupon._id === session.coupon);
 
   return (
     <OrderCouponContainer onClick={onClickOrderCoupon}>
       <StyledCard>
         <OrderCouponContent>
           <UserAvatar
-            user={!isHeadTable ? session.headTableUser : session.user}
+            user={
+              isHeadTable
+                ? user
+                : {
+                    _id: session.user || "",
+                    username: session.user || "",
+                    point: 0,
+                    role: "user",
+                  }
+            }
           />
           <FlexBetweenCol>
-            {couponInUsed ? (
+            {coupon ? (
               <CouponTitle>
                 {'"'}
                 {coupon?.title}
@@ -44,14 +60,11 @@ const OrderCoupon = () => {
             )}
             {!isHeadTable && (
               <Text type="secondary">
-                {session.headTableUser?.name} เป็นเจ้าของบิล
+                {tuncateString(session.user || "", 15)} เป็นเจ้าของบิล
               </Text>
             )}
           </FlexBetweenCol>
-          <StyledCaretRight
-            size={32}
-            color={couponInUsed ? colorPrimary : ""}
-          />
+          <StyledCaretRight size={32} color={coupon ? colorPrimary : ""} />
         </OrderCouponContent>
       </StyledCard>
     </OrderCouponContainer>
