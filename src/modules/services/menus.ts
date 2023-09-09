@@ -13,7 +13,10 @@ export const getAllMenus = async (
   const { data } = await axiosInstance.get<GetAllMenusResponse>("/menus", {
     params,
   });
-  return data;
+  return data.map((item) => ({
+    category: item.category,
+    menus: item.menus.filter((menu) => menu),
+  }));
 };
 
 //================>>>> Create a menu <<<<==========================================//

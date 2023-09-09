@@ -1,16 +1,13 @@
-import {
-  getCouponById,
-  type GetCouponByIdResponse,
-} from "@/modules/services/coupon";
+import { getCoupon, type GetCouponResponse } from "@/modules/services/coupons";
 import { useQuery } from "@tanstack/react-query";
 
-export type Coupon = GetCouponByIdResponse;
+export type Coupon = GetCouponResponse;
 
 const useCouponById = (couponId: string) => {
   return useQuery({
     queryKey: ["useCouponById", couponId],
     queryFn: () =>
-      getCouponById({
+      getCoupon({
         id: couponId,
       }),
     enabled: !!couponId,
