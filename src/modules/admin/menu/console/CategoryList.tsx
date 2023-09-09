@@ -3,7 +3,9 @@ import { Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Popconfirm, Table, Typography } from "antd";
 import { type ColumnsType } from "antd/es/table";
-import { useEffect, useState } from "react";
+import { useId, useState } from "react";
+
+import { useEffect } from "react";
 
 import useAllCategory from "@/modules/admin/menu/hooks/useCategory";
 import useDeleteCategory from "@/modules/admin/menu/hooks/useDeleteCategory";
@@ -104,6 +106,7 @@ const CategoryList = () => {
   ];
 
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
+  const dndId = useId();
 
   const { mutate: updateCategoryOrder } = useUpdateCategoryOrder();
   const handleDragEnd = (event: DragEndEvent) => {
@@ -134,6 +137,8 @@ const CategoryList = () => {
 
   return (
     <DndContext
+      key={dndId}
+      id={dndId}
       modifiers={[restrictToVerticalAxis]}
       sensors={sensors}
       collisionDetection={closestCenter}

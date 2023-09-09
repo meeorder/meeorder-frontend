@@ -2,15 +2,15 @@ import { updateCategoryById } from "@/modules/services/categories";
 import { queryClient } from "@/pages/_app";
 import { useMutation } from "@tanstack/react-query";
 
-const useUpdateCategory = () => {
+const useUpdateCategoryById = () => {
   return useMutation({
     mutationFn: updateCategoryById,
-    mutationKey: ["updateCategory"],
+    mutationKey: ["updateCategoryById"],
     onSuccess: () => {
-      void queryClient.invalidateQueries(["useAllCategory"]);
+      void queryClient.invalidateQueries(["getMenuById", "all"]);
       void queryClient.invalidateQueries(["getAllMenus"]);
     },
   });
 };
 
-export default useUpdateCategory;
+export default useUpdateCategoryById;

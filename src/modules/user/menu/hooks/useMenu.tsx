@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const useMenu = ({ id }: GetMenuByIdPathParam) => {
   return useQuery({
-    queryKey: ["getAllMenus", id],
+    queryKey: ["getMenuById", id],
     queryFn: () =>
       getMenuById({
         id,
