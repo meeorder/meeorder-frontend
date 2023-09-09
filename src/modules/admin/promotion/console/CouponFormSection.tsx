@@ -4,6 +4,7 @@ import useCouponById, {
 import useCreateCoupon from "@/modules/admin/promotion/hook/useCreateCoupon";
 import useUpdateCoupon from "@/modules/admin/promotion/hook/useUpdateCoupon";
 import { H4, H5, Text } from "@/modules/common/components/Typography";
+import { checkImageSrc } from "@/modules/common/utils";
 import { type GetAllMenusResponse } from "@/modules/services/menus";
 import useAllMenu from "@/modules/user/menu/hooks/useAllMenu";
 import styled from "@emotion/styled";
@@ -237,7 +238,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
           </GeneralFormItemsContainer>
           <ImageFormItemsContainer>
             <StyledImage
-              src={imageURL}
+              src={checkImageSrc(imageURL)}
               alt="Food image"
               width={296}
               height={296}

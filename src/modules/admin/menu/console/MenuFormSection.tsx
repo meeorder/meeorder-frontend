@@ -2,6 +2,7 @@ import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionM
 import { categories } from "@/modules/admin/mock/categories";
 import { ingredientData } from "@/modules/admin/mock/ingredient";
 import { H4, H5, Text } from "@/modules/common/components/Typography";
+import { checkImageSrc } from "@/modules/common/utils";
 import { type Category } from "@/modules/user/mock/categories";
 import styled from "@emotion/styled";
 import {
@@ -228,7 +229,7 @@ const MenuFormSection: React.FC = () => {
         </GeneralFormItemsContainer>
         <ImageFormItemsContainer>
           <StyledImage
-            src={imageURL}
+            src={checkImageSrc(imageURL)}
             alt="Food image"
             width={296}
             height={296}
