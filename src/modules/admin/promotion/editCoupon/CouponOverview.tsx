@@ -19,7 +19,7 @@ const CouponOverview: React.FC<CouponOverviewProps> = ({
   };
 
   return (
-    <CouponOverviewConatiner
+    <CouponOverviewContainer
       title={
         <H4
           style={{
@@ -50,13 +50,13 @@ const CouponOverview: React.FC<CouponOverviewProps> = ({
         setOpenModalForm={setOpenModalForm}
         setOpenModalDelete={setOpenModalDelete}
       />
-    </CouponOverviewConatiner>
+    </CouponOverviewContainer>
   );
 };
 
 export default CouponOverview;
 
-const CouponOverviewConatiner = styled(Card)`
+const CouponOverviewContainer = styled(Card)`
   width: 100%;
   height: 100%;
   .ant-card-head {
