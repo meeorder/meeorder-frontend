@@ -1,4 +1,4 @@
-import { type User } from "@/modules/user/mock/user";
+import { type User } from "@/modules/services/auth";
 import { User as ReactUser } from "@phosphor-icons/react";
 import { Avatar, theme } from "antd";
 
@@ -34,11 +34,11 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ user }) => {
       "#f43f5e",
     ];
 
-    const userColor = colors[parseInt(user.id) % colors.length];
+    const userColor = colors[parseInt(user._id) % colors.length];
 
     return (
       <Avatar size={44} style={{ backgroundColor: userColor }}>
-        {user.name[0]}
+        {user?.username?.[0]}
       </Avatar>
     );
   } else {
