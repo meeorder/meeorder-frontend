@@ -72,6 +72,8 @@ export const useSetNewSessionBySessionId = (
     },
     enabled: !!sessionId && session?._id !== sessionId,
   });
+
+  return { refetch };
 };
 
 export const useRevalidateSession = () => {
