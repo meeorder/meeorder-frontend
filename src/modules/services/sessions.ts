@@ -148,4 +148,19 @@ export const getAllUsableCouponsInSession = async (
 
 //================>>>> Update coupon in session <<<<===============================//
 
-// todo
+export type UpdateCouponInSessionPathParam =
+  paths["/sessions/{id}/coupon"]["patch"]["parameters"]["path"];
+export type UpdateCouponInSessionBodyParam =
+  paths["/sessions/{id}/coupon"]["patch"]["requestBody"]["content"]["application/json"];
+
+export type UpdateCouponInSessionResponse =
+  paths["/sessions/{id}/coupon"]["patch"]["responses"]["204"];
+
+export const updateCouponInSession = async (
+  params: UpdateCouponInSessionPathParam & UpdateCouponInSessionBodyParam,
+): Promise<void> => {
+  await axiosInstance.patch<UpdateCouponInSessionResponse>(
+    `/sessions/${params.id}/coupon`,
+    params,
+  );
+};
