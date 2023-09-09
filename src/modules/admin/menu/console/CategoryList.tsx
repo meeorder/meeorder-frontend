@@ -5,8 +5,12 @@ import { Popconfirm, Table, Typography } from "antd";
 import { type ColumnsType } from "antd/es/table";
 import { useId, useState } from "react";
 
-import { categories } from "@/modules/admin/mock/categories";
+import { useEffect } from "react";
 
+import useAllCategory from "@/modules/admin/menu/hooks/useCategory";
+import useDeleteCategory from "@/modules/admin/menu/hooks/useDeleteCategory";
+import useUpdateCategory from "@/modules/admin/menu/hooks/useUpdateCategory";
+import useUpdateCategoryOrder from "@/modules/admin/menu/hooks/useUpdateCategoryOrder";
 import {
   DndContext,
   PointerSensor,
@@ -31,27 +35,28 @@ type CategoryColumns = {
 };
 
 const CategoryList = () => {
-  const [dataSource, setDataSource] = useState(
-    categories.map((category) => ({
-      _id: category._id,
-      title: category.title,
-      numberOfMenus: category.menus.length,
-      action: "ลบ",
-    })),
-  );
+  const { data: allCategory } = useAllCategory();
+  const [dataSource, setDataSource] = useState<CategoryColumns[]>([]);
 
+  useEffect(() => {
+    setDataSource(
+      allCategory?.map((category) => ({
+        _id: category._id,
+        title: category.title,
+        numberOfMenus: category.menus.length,
+        action: "ลบ",
+      })) ?? [],
+    );
+  }, [allCategory]);
+
+  const { mutate: updateCategory } = useUpdateCategory();
   const onChange = (value: string, _id: string) => {
-    setDataSource((prev) => [
-      ...prev.map((category) =>
-        category._id === _id ? { ...category, title: value } : category,
-      ),
-    ]);
+    console.log(value, _id);
+    updateCategory({ id: _id, title: value });
   };
-
-  const onConfirm = (_id: string) => {
-    setDataSource((prev) => [
-      ...prev.filter((category) => category._id !== _id),
-    ]); // TODO: update to api
+  const { mutate: deleteCategory } = useDeleteCategory();
+  const onDeleteConfirm = (_id: string) => {
+    deleteCategory({ id: _id });
   };
 
   const columns: ColumnsType<CategoryColumns> = [
@@ -88,7 +93,7 @@ const CategoryList = () => {
               description="คุณยืนยันที่จะลบหมวดหมู่นี้หรือไม่?"
               okText="ยืนยัน"
               onConfirm={() => {
-                onConfirm(record._id);
+                onDeleteConfirm(record._id);
               }}
               cancelText="ยกเลิก"
             >
@@ -103,6 +108,7 @@ const CategoryList = () => {
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
   const dndId = useId();
 
+  const { mutate: updateCategoryOrder } = useUpdateCategoryOrder();
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over) return;
@@ -122,6 +128,9 @@ const CategoryList = () => {
     const overIndex = dataSource.indexOf(overCategoryList);
 
     if (activeIndex !== overIndex) {
+      updateCategoryOrder({
+        rank: arrayMove(dataSource, activeIndex, overIndex).map((i) => i._id),
+      });
       setDataSource((prev) => arrayMove(prev, activeIndex, overIndex));
     }
   };

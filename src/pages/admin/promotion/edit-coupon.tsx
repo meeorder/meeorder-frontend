@@ -27,6 +27,8 @@ const AdminEditCoupon = () => {
         key={"CouponDeleteModal" + couponId}
         openDeleteModal={modalDeleteOpen}
         setOpenDeleteModal={setModalDeleteOpen}
+        couponId={couponId}
+        setCouponId={setCouponId}
       />
     </AppLayout>
   );

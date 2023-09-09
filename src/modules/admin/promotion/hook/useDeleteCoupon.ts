@@ -1,14 +1,15 @@
-import { createCoupon } from "@/modules/services/coupons";
+import { deleteCoupon } from "@/modules/services/coupons";
 import { queryClient } from "@/pages/_app";
 import { useMutation } from "@tanstack/react-query";
-const useCreateCoupon = () => {
+
+const useDeleteCoupon = () => {
   return useMutation({
-    mutationFn: createCoupon,
-    mutationKey: ["useCreateCoupon"],
+    mutationFn: deleteCoupon,
+    mutationKey: ["useDeleteCoupon"],
     onSuccess: () => {
       void queryClient.invalidateQueries(["useAllCoupon"]);
     },
   });
 };
 
-export default useCreateCoupon;
+export default useDeleteCoupon;
