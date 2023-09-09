@@ -1,4 +1,5 @@
 import AppLayout from "@/modules/AppLayout";
+import { useSetSessionUser } from "@/modules/common/hooks/useSetSessionUser";
 import { pages } from "@/modules/pageConfig";
 import Category from "@/modules/user/menu/components/Category";
 import CategoryNav from "@/modules/user/menu/components/CategoryNav";
@@ -15,6 +16,7 @@ const Home = () => {
   const categories = useCategories();
   const [sessionId, setSessionId] = useState<string>("");
   useSetNewSessionBySessionId(sessionId);
+  const { mutate: setSessionUser } = useSetSessionUser({ isForce: true });
 
   const router = useRouter();
 
@@ -28,6 +30,10 @@ const Home = () => {
     }
   }, [router]);
 
+  useEffect(() => {
+    setSessionUser();
+  }, [setSessionUser]);
+
   return (
     <>
       <Head>
@@ -39,7 +45,9 @@ const Home = () => {
         <CategoryNav categories={categories?.data ?? []} />
         <MenuContainer>
           {allMenu?.data
-            ?.sort((a, b) => a?.category?.rank - b?.category?.rank)
+            ?.sort(
+              (a, b) => (a?.category?.rank || 0) - (b?.category?.rank || 0),
+            )
             ?.map((item) => {
               return (
                 <Category
