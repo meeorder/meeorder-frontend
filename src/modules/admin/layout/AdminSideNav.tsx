@@ -1,7 +1,9 @@
 import WireFrame from "@/modules/mock/components/WireFrame";
 import { pages, type PageId, type PageMetaData } from "@/modules/pageConfig";
-import { Layout, Menu, type MenuProps } from "antd";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { Button, Layout, Menu, type MenuProps } from "antd";
 import { useRouter } from "next/router";
+import { useState } from "react";
 type AdminSideNavProps = {
   currentPageId: PageId;
 };
@@ -42,8 +44,12 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     return getItem(page);
   });
 
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
     <Layout.Sider
+      collapsed={collapsed}
+      collapsedWidth={64}
       theme="light"
       style={{
         marginBlock: 24,
@@ -71,6 +77,21 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
           }
         }}
         items={items}
+      />
+      <Button
+        type="text"
+        icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+        onClick={() => setCollapsed(!collapsed)}
+        style={{
+          fontSize: "16px",
+          width: "100%",
+          height: 64,
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+          borderRadius: "0 0 12px 0",
+          borderTop: "1px solid #d9d9d9",
+        }}
       />
     </Layout.Sider>
   );
