@@ -1,10 +1,11 @@
+import WireFrame from "@/modules/mock/components/WireFrame";
 import styled from "@emotion/styled";
 import { Card } from "antd";
 
 const AddonStock = () => {
   return (
-    <StyledCard>
-      <div>AddonStock</div>
+    <StyledCard title={<div>addonStock</div>}>
+      <WireFrame height={"500px"} />
     </StyledCard>
   );
 };

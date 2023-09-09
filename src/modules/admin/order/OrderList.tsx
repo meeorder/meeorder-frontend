@@ -1,3 +1,4 @@
+import WireFrame from "@/modules/mock/components/WireFrame";
 import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import { type OrderStatus } from "@/pages/admin/order-management";
 import styled from "@emotion/styled";
@@ -14,63 +15,46 @@ const OrderList: React.FC<OrderListCardProps> = ({ status, orders }) => {
       {orders.map((order) => {
         return <div key={order._id}>{status}</div>;
       })}
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
-      <div>asdasd</div>
+      <WireFrame
+        height={"200px"}
+        contentNode={status + " order"}
+        cardColor="lightcoral"
+      />
+      <WireFrame
+        height={"200px"}
+        contentNode={status + " order"}
+        cardColor="lightseagreen"
+      />
+      <WireFrame
+        height={"200px"}
+        contentNode={status + " order"}
+        cardColor="lightsteelblue"
+      />
+      <WireFrame
+        height={"200px"}
+        contentNode={status + " order"}
+        cardColor="lightpink"
+      />
+      <WireFrame
+        height={"200px"}
+        contentNode={status + " order"}
+        cardColor="lightcoral"
+      />
+      <WireFrame
+        height={"200px"}
+        contentNode={status + " order"}
+        cardColor="lightseagreen"
+      />
+      <WireFrame
+        height={"200px"}
+        contentNode={status + " order"}
+        cardColor="lightsteelblue"
+      />
+      <WireFrame
+        height={"200px"}
+        contentNode={status + " order"}
+        cardColor="lightpink"
+      />
     </StyledCard>
   );
 };
