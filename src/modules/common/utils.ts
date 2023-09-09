@@ -14,3 +14,10 @@ export const checkImageSrc = (src: string) => {
     ? src
     : `https://source.unsplash.com/random/?food&plate&abc`;
 };
+
+export const tuncateString = (str: string, num: number) => {
+  if (str.length <= num) {
+    return str;
+  }
+  return str.slice(0, num) + "...";
+};
