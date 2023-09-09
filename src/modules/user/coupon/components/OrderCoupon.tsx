@@ -2,10 +2,7 @@ import { H5, Text } from "@/modules/common/components/Typography";
 import { useUserStore } from "@/modules/common/hooks/useUserStore";
 import { tuncateString } from "@/modules/common/utils";
 import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
-import {
-  useSessionStore,
-  type Session,
-} from "@/modules/user/order/hooks/useSessionStore";
+import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import UserAvatar from "@/modules/user/user/UserAvatar";
 import styled from "@emotion/styled";
 import { CaretRight } from "@phosphor-icons/react";
@@ -23,14 +20,14 @@ const OrderCoupon = () => {
       pathname: "/coupon",
     });
   };
-  // TODO: get from session
-  const session = useSessionStore((state) => state.session as Session);
+
+  const session = useSessionStore((state) => state.session);
   const user = useUserStore((state) => state.user);
   const { data: coupons } = useAllUsableCouponsInSession();
 
-  const isHeadTable = session.user === user?._id;
+  const isHeadTable = session?.user === user?._id;
 
-  const coupon = coupons?.find((coupon) => coupon._id === session.coupon);
+  const coupon = coupons?.find((coupon) => coupon._id === session?.coupon);
 
   return (
     <OrderCouponContainer onClick={onClickOrderCoupon}>
@@ -41,8 +38,8 @@ const OrderCoupon = () => {
               isHeadTable
                 ? user
                 : {
-                    _id: session.user || "",
-                    username: session.user || "",
+                    _id: session?.user || "",
+                    username: session?.user || "",
                     point: 0,
                     role: "user",
                   }
@@ -60,7 +57,7 @@ const OrderCoupon = () => {
             )}
             {!isHeadTable && (
               <Text type="secondary">
-                {tuncateString(session.user || "", 15)} เป็นเจ้าของบิล
+                {tuncateString(session?.user || "", 15)} เป็นเจ้าของบิล
               </Text>
             )}
           </FlexBetweenCol>
