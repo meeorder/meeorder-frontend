@@ -1,5 +1,6 @@
 import AppLayout from "@/modules/AppLayout";
 import OrderList from "@/modules/admin/order/OrderList";
+import useAllOrders from "@/modules/admin/order/hook/useAllOrders";
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import { H1 } from "@/modules/common/components/Typography";
 import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
@@ -8,6 +9,8 @@ import { Funnel } from "@phosphor-icons/react";
 import { Popover } from "antd";
 
 const OrderManagement = () => {
+  const { data: allOrder } = useAllOrders();
+  // console.log("allOrder:", allOrder);
   return (
     <AppLayout layoutType="admin" currentPageId="employeeOrderManagement">
       <Container>
@@ -43,7 +46,7 @@ const OrderManagement = () => {
               // allOrder.filter((order) => order.status === status)
               return {
                 status,
-                orders: [],
+                orders: allOrder?.filter((order) => order.status === status)??[],
               };
             })
             .map(({ status, orders }) => (

@@ -2,18 +2,31 @@ import WireFrame from "@/modules/mock/components/WireFrame";
 import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import { type OrderStatus } from "@/pages/admin/order-management";
 import styled from "@emotion/styled";
-import { Card } from "antd";
+import { Badge, Card } from "antd";
 
 type OrderListCardProps = {
   status: OrderStatus;
   orders: GetAllOrdersResponse;
 };
 
+const badgecolor = {
+  IN_QUEUE: "#FFA940",
+  PREPARING: "#597EF7",
+  READY_TO_SERVE: "#40A9FF",
+  DONE: "#73D13D",
+  CANCEL: "#FF4D4F",
+};
+
 const OrderList: React.FC<OrderListCardProps> = ({ status, orders }) => {
   return (
-    <StyledCard title={<div>{status}</div>} extra={<div>extra</div>}>
+    <StyledCard
+      title={<div>{status}</div>}
+      extra={
+        <Badge count={orders?.length} color={badgecolor[status]} showZero />
+      }
+    >
       {orders.map((order) => {
-        return <div key={order._id}>{status}</div>;
+        return <div key={order._id}>{order._id}</div>;
       })}
       <WireFrame
         height={"200px"}
@@ -66,7 +79,6 @@ const StyledCard = styled(Card)`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 144px);
-
   .ant-card-body {
     flex: 1;
     overflow-y: auto;
