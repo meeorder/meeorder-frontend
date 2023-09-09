@@ -46,11 +46,7 @@ const Home = () => {
         <MenuContainer>
           {allMenu?.data
             ?.sort(
-<<<<<<< HEAD
-              (a, b) => (a?.category?.rank || 0) - (b?.category?.rank || 0),
-=======
               (a, b) => (a?.category?.rank ?? 0) - (b?.category?.rank ?? 0),
->>>>>>> develop
             )
             ?.map((item) => {
               return (

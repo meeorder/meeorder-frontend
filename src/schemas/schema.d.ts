@@ -3,7 +3,6 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
   "/health/ping": {
     get: operations["HealthController_getPing"];
@@ -548,11 +547,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-<<<<<<< HEAD
-       * @default 2023-09-09T07:47:12.832Z
-=======
        * @default 2023-09-09T09:29:11.275Z
->>>>>>> develop
        */
       created_at: string;
       /**
@@ -632,7 +627,6 @@ export interface components {
 export type external = Record<string, never>;
 
 export interface operations {
-
   HealthController_getPing: {
     responses: {
       /** @description Health status */
