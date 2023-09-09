@@ -12,7 +12,7 @@ const MenuList: React.FC<MenuListProps> = ({ menuSectionMode }) => {
 
   return (
     <>
-      <MenuListContaner>
+      <MenuListContainer>
         {menuByCategory?.map((items) => (
           <MenuListCategory
             key={items.category._id + items.category.menus.join("")}
@@ -21,13 +21,13 @@ const MenuList: React.FC<MenuListProps> = ({ menuSectionMode }) => {
             menuSectionMode={menuSectionMode}
           />
         ))}
-      </MenuListContaner>
+      </MenuListContainer>
     </>
   );
 };
 
 export default MenuList;
 
-const MenuListContaner = styled.div`
+const MenuListContainer = styled.div`
   overflow-y: auto;
 `;

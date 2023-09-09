@@ -8,6 +8,7 @@ const useUpdateCategoryOrder = () => {
     mutationFn: updateCategoryOrderByIds,
     onSuccess: () => {
       void queryClient.invalidateQueries(["useAllCategory"]);
+      void queryClient.invalidateQueries(["getAllMenus"]);
     },
   });
 };

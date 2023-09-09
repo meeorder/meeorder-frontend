@@ -8,6 +8,7 @@ const useDeleteCategory = () => {
     mutationFn: deleteCategoryById,
     onSuccess: () => {
       void queryClient.invalidateQueries(["useAllCategory"]);
+      void queryClient.invalidateQueries(["getAllMenus"]);
     },
   });
 };

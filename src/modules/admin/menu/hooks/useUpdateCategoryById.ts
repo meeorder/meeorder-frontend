@@ -8,6 +8,7 @@ const useUpdateCategoryById = () => {
     mutationKey: ["updateCategoryById"],
     onSuccess: () => {
       void queryClient.invalidateQueries(["getMenuById", "all"]);
+      void queryClient.invalidateQueries(["getAllMenus"]);
     },
   });
 };

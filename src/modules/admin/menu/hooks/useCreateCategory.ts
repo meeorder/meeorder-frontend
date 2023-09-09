@@ -8,6 +8,7 @@ const useCreateCategory = () => {
     mutationFn: createCategory,
     onSuccess: () => {
       void queryClient.invalidateQueries(["useAllCategory"]);
+      void queryClient.invalidateQueries(["getAllMenus"]);
     },
   });
 };
