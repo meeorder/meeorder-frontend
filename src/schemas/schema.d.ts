@@ -88,6 +88,10 @@ export interface paths {
     /** Cancel order */
     patch: operations["OrdersController_cancel"];
   };
+  "/orders/{id}/cancel/addons": {
+    /** Cancel order and disable addons */
+    patch: operations["OrdersController_cancelByAddons"];
+  };
   "/sessions": {
     /** Get all sessions */
     get: operations["SessionController_getSessions"];
@@ -220,6 +224,8 @@ export interface components {
        * @description Addon deletion date
        */
       deleted_at: string | null;
+      /** @description Addon status */
+      available: boolean;
     };
     MenuDtoForAllMenu: {
       /** @description Menu ID */
@@ -375,6 +381,10 @@ export interface components {
       session: components["schemas"]["SessionSchema"];
       menu: components["schemas"]["MenuSchema"];
     };
+    DisableAddonsDto: {
+      /** @description addons is ObjectID */
+      addonsList: string[];
+    };
     CreateSessionDto: {
       /** @description User ID */
       user?: string;
@@ -443,7 +453,7 @@ export interface components {
       /** @description User ID */
       user: string;
     };
-    ExampleCouponDto: {
+    CouponDto: {
       /** @description Coupon ID */
       _id: string;
       /** @description Coupon title */
@@ -473,13 +483,13 @@ export interface components {
     };
     TablesDto: {
       /** @description Table number */
-      table_number: number;
+      title: string;
     };
     TablesSchema: {
       /** @description Table ID */
       _id: string;
       /** @description Table number */
-      table_number: number;
+      title: string;
     };
     LoginDto: {
       username: string;
@@ -538,7 +548,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-07T14:21:24.424Z
+       * @default 2023-09-08T18:08:15.153Z
        */
       created_at: string;
       /**
@@ -1062,6 +1072,27 @@ export interface operations {
       };
     };
   };
+  /** Cancel order and disable addons */
+  OrdersController_cancelByAddons: {
+    parameters: {
+      path: {
+        /** @description Session ID (ObjectId) */
+        id: string;
+      };
+    };
+    /** @description List of addons to disable */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DisableAddonsDto"];
+      };
+    };
+    responses: {
+      /** @description Cancel order with trigger disable addons */
+      204: {
+        content: never;
+      };
+    };
+  };
   /** Get all sessions */
   SessionController_getSessions: {
     parameters: {
@@ -1142,7 +1173,7 @@ export interface operations {
     parameters: {
       path: {
         /** @description Table ID */
-        id: number;
+        id: string;
       };
     };
     responses: {
@@ -1227,7 +1258,7 @@ export interface operations {
       /** @description Get all redeemable coupon */
       200: {
         content: {
-          "application/json": components["schemas"]["ExampleCouponDto"];
+          "application/json": components["schemas"]["CouponDto"][];
         };
       };
     };
@@ -1277,7 +1308,9 @@ export interface operations {
     responses: {
       /** @description Create table */
       201: {
-        content: never;
+        content: {
+          "application/json": components["schemas"]["TablesSchema"];
+        };
       };
     };
   };
@@ -1409,7 +1442,7 @@ export interface operations {
       /** @description Coupon created */
       201: {
         content: {
-          "application/json": components["schemas"]["CreateCouponDto"];
+          "application/json": components["schemas"]["CouponSchema"];
         };
       };
     };
