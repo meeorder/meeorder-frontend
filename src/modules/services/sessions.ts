@@ -111,11 +111,40 @@ export const getOrdersBySessionId = async (
 
 //================>>>> Update session user <<<<====================================//
 
-// todo
+export type UpdateSessionUserByIdPathParam =
+  paths["/sessions/{id}/user"]["patch"]["parameters"]["path"];
+export type UpdateSessionUserByIdBodyParam =
+  paths["/sessions/{id}/user"]["patch"]["requestBody"]["content"]["application/json"];
+
+export type UpdateSessionUserByIdResponse =
+  paths["/sessions/{id}/user"]["patch"]["responses"]["200"]["content"]["application/json"];
+
+export const updateSessionUserById = async (
+  params: UpdateSessionUserByIdPathParam & UpdateSessionUserByIdBodyParam,
+): Promise<UpdateSessionUserByIdResponse> => {
+  const { data } = await axiosInstance.patch<UpdateSessionUserByIdResponse>(
+    `/sessions/${params.id}/user`,
+    params,
+  );
+  return data;
+};
 
 //================>>>> Get all usable coupons in session <<<<======================//
 
-// todo
+export type GetAllUsableCouponsInSessionPathParam =
+  paths["/sessions/{id}/coupon/all"]["get"]["parameters"]["path"];
+export type GetAllUsableCouponsInSessionResponse =
+  paths["/sessions/{id}/coupon/all"]["get"]["responses"]["200"]["content"]["application/json"];
+
+export const getAllUsableCouponsInSession = async (
+  params: GetAllUsableCouponsInSessionPathParam,
+): Promise<GetAllUsableCouponsInSessionResponse> => {
+  const { data } =
+    await axiosInstance.get<GetAllUsableCouponsInSessionResponse>(
+      `/sessions/${params.id}/coupon/all`,
+    );
+  return data;
+};
 
 //================>>>> Update coupon in session <<<<===============================//
 
