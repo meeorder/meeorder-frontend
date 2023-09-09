@@ -1,6 +1,7 @@
 import { type User } from "@/modules/services/auth";
+import styled from "@emotion/styled";
 import { User as ReactUser } from "@phosphor-icons/react";
-import { Avatar, theme } from "antd";
+import { theme } from "antd";
 
 type UserAvatarProps = {
   user?: User | null;
@@ -37,19 +38,26 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ user }) => {
     const userColor = colors[parseInt(user._id) % colors.length];
 
     return (
-      <Avatar size={44} style={{ backgroundColor: userColor }}>
+      <Avatar style={{ backgroundColor: userColor }}>
         {user?.username?.[0]?.toUpperCase() || ""}
       </Avatar>
     );
   } else {
     return (
-      <Avatar
-        size={44}
-        style={{ backgroundColor: colorPrimaryBg }}
-        icon={<ReactUser color={colorPrimary} weight="duotone" />}
-      />
+      <Avatar style={{ backgroundColor: colorPrimaryBg }}>
+        <ReactUser color={colorPrimary} weight="duotone" />
+      </Avatar>
     );
   }
 };
 
 export default UserAvatar;
+
+const Avatar = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+`;
