@@ -77,14 +77,16 @@ const CategoryList = () => {
       },
     },
     {
-      title: "จำนวนเมนู",
+      title: "จำนวนเมนูทั้งหมด",
       dataIndex: "numberOfMenus",
       width: "100px",
+      align: "end",
     },
     {
       title: "ดำเนินการ",
       dataIndex: "action",
       width: "112px",
+      align: "end",
       render: (action: string, record) => {
         return (
           <StyledDiv>
@@ -172,6 +174,7 @@ export default CategoryList;
 
 const StyledDiv = styled.div`
   display: flex;
+  justify-content: flex-end;
   gap: 16px;
 `;
 

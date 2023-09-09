@@ -54,7 +54,7 @@ const MenuFormSection: React.FC = () => {
         form.setFieldsValue({
           title: initialData.title,
           price: initialData.price,
-          category: JSON.stringify(initialData.category).slice(1, -1),
+          category: initialData.category?._id,
           // ingredient: [], todo add ingredient field
           description: initialData.description,
           image: initialData.image,
@@ -71,9 +71,12 @@ const MenuFormSection: React.FC = () => {
           image: "loading...",
         });
       }
+    } else if (consoleSectionMode === "add-menu") {
+      form.resetFields();
     }
   }, [consoleSectionMode, editMenuId, form, initialData]);
   const handleFormSubmit = (values: FieldType) => {
+    console.log("values", values);
     if (consoleSectionMode === "add-menu") {
       createMenu(values);
     } else if (consoleSectionMode === "edit-menu") {
@@ -203,7 +206,6 @@ const MenuFormSection: React.FC = () => {
             name="category"
             label="หมวดหมู่"
             style={{ width: "100%" }}
-            valuePropName="value"
           >
             <Select allowClear>
               {allCategories?.map((category) => (
