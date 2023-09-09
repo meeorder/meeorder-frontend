@@ -1,21 +1,21 @@
 import { H4 } from "@/modules/common/components/Typography";
 import BasketFoodCard from "@/modules/user/basket/components/BasketFoodCard";
-import { type BasketOrder } from "@/modules/user/mock/orders";
+import { type BasketOrder } from "@/modules/user/basket/hooks/useBasketStore";
 import { List } from "antd";
 
 type BasketFoodListProp = {
-  orders: BasketOrder[];
+  basketOrders: BasketOrder[];
 };
 
-const BasketFoodList: React.FC<BasketFoodListProp> = ({ orders }) => {
+const BasketFoodList: React.FC<BasketFoodListProp> = ({ basketOrders }) => {
   return (
     <List
       size="large"
-      header={<H4>My Basket</H4>}
-      dataSource={orders}
+      header={<H4>ตะกร้าของฉัน</H4>}
+      dataSource={basketOrders}
       renderItem={(order) => (
         <List.Item>
-          <BasketFoodCard order={order} />
+          <BasketFoodCard basketOrder={order} />
         </List.Item>
       )}
       style={{ marginInline: "20px" }}

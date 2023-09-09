@@ -1,31 +1,48 @@
 import TextPrice from "@/modules/common/components/TextPrice";
 import { H5, Text } from "@/modules/common/components/Typography";
-import { type Order, type OrderStatus } from "@/modules/user/mock/orders";
+import { checkImageSrc } from "@/modules/common/utils";
+import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
+import { calculateOrderPrice } from "@/modules/user/order/utils";
 import styled from "@emotion/styled";
 import { Card, Tag, type TagProps } from "antd";
 import Image from "next/image";
+
+type Order = OrdersWithPriceData["orders"][number];
 
 type OrderCardProps = {
   order: Order;
 };
 
 const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
-  const colorTag = mapStatusToColor[order.status];
+  const colorTag =
+    mapStatusToColor[order?.cancelled_at ? "CANCEL" : order?.status];
   return (
     <StyledCard>
       <FlexBetweenRow>
         <FlexBetweenCol>
-          <H5>{order.food.name}</H5>
+          <H5>{order?.menu?.title}</H5>
           <Text type="secondary">
-            <TextPrice price={order.food.price} />
-            <StyledStatusTag color={colorTag}>{order.status}</StyledStatusTag>
+            <TextPrice price={calculateOrderPrice(order)} />
+            <StyledStatusTag color={colorTag}>
+              {mapOrderStatusTranslation[order.status]}
+            </StyledStatusTag>
           </Text>
+          {order?.addons?.map((addon) => {
+            return (
+              <Text type="secondary" key={addon?._id}>
+                {addon?.title}
+              </Text>
+            );
+          })}
+          {order?.additional_info && (
+            <Text type="secondary">เพิ่มเติม: {order?.additional_info}</Text>
+          )}
         </FlexBetweenCol>
         <StyledImage
           width={900}
           height={900}
-          src={order.food.imagePath ?? ""}
-          alt={order.food.name}
+          src={checkImageSrc(order?.menu?.image ?? "")}
+          alt={order?.menu?.title}
         />
       </FlexBetweenRow>
     </StyledCard>
@@ -71,12 +88,21 @@ const FlexBetweenCol = styled.div`
   gap: 8px;
 `;
 
-const mapStatusToColor: Record<OrderStatus, TagProps["color"]> = {
-  "In queue": "orange",
-  Preparing: "geekblue",
-  Ready: "blue",
-  Success: "green",
-  Cancel: "red",
+const mapStatusToColor: Record<Order["status"] | "CANCEL", TagProps["color"]> =
+  {
+    IN_QUEUE: "orange",
+    PREPARING: "geekblue",
+    READY_TO_SERVE: "blue",
+    DONE: "green",
+    CANCEL: "red",
+  };
+
+const mapOrderStatusTranslation: Record<Order["status"] | "CANCEL", string> = {
+  IN_QUEUE: "อยู่ในคิว",
+  PREPARING: "กำลังเตรียมการ",
+  READY_TO_SERVE: "พร้อมเสิร์ฟ",
+  DONE: "สำเร็จ",
+  CANCEL: "ยกเลิก",
 };
 
 export default OrderCard;

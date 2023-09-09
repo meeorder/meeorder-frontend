@@ -1,15 +1,24 @@
 import AppLayout from "@/modules/AppLayout";
 import { H4, H5 } from "@/modules/common/components/Typography";
+import { useClient } from "@/modules/common/hooks/useClient";
 import { pages } from "@/modules/pageConfig";
-import { ordersData } from "@/modules/user/mock/orders";
+import OrderCoupon from "@/modules/user/coupon/components/OrderCoupon";
 import OrderList from "@/modules/user/order/components/OrderList";
 import OrderSummaryPrice from "@/modules/user/order/components/OrderSummaryPrice";
+import useOrder from "@/modules/user/order/hooks/useOrder";
+import {
+  useRevalidateSession,
+  useSessionStore,
+} from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import Head from "next/head";
 
-const tableNumber = 10; // from session
-
 const Orders = () => {
+  const session = useSessionStore((state) => state.session);
+  const { data: ordersData } = useOrder(session?._id ?? "");
+  const { isClientLoaded } = useClient();
+  useRevalidateSession();
+
   return (
     <>
       <Head>
@@ -20,11 +29,24 @@ const Orders = () => {
       <AppLayout layoutType="user" currentPageId={pages.orders.id}>
         <OrderContainer>
           <OrderHeader>
-            <H4>My Order</H4>
-            <H5 type="secondary">Table {tableNumber}</H5>
+            <H4>รายการอาหารที่สั่ง</H4>
+            <H5 type="secondary">โต๊ะ {isClientLoaded && session?.table}</H5>
           </OrderHeader>
-          <OrderList orders={ordersData.orders} />
-          <OrderSummaryPrice priceData={ordersData.priceData} />
+          <OrderList
+            orders={
+              ordersData?.orders?.sort((a, b) =>
+                (b?.created_at + b?._id).localeCompare(a?.created_at + a?._id),
+              ) ?? []
+            }
+          />
+          <OrderCoupon />
+          <OrderSummaryPrice
+            priceData={{
+              total_price: ordersData?.total_price ?? 0,
+              discount_price: ordersData?.discount_price ?? 0,
+              net_price: ordersData?.net_price ?? 0,
+            }}
+          />
         </OrderContainer>
       </AppLayout>
     </>
@@ -34,7 +56,7 @@ const Orders = () => {
 export default Orders;
 
 const OrderContainer = styled.div`
-  background-color: ${(props) => props.theme.antd.colorBgLayout};
+  background-color: #fafafa;
   min-height: calc(100vh - 128px);
   height: 100%;
   padding: 20px;

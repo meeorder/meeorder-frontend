@@ -1,15 +1,28 @@
 import TextPrice from "@/modules/common/components/TextPrice";
+import { checkImageSrc } from "@/modules/common/utils";
 import { type Menu } from "@/modules/user/menu/types";
+import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import { Button, List } from "antd";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 type SimpleFoodCardProps = {
   menu: Menu;
 };
 
 const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
+  const router = useRouter();
+
+  const handleChooseMenu = () => {
+    void router.push({
+      pathname: `/menu/${menu._id}`,
+    });
+  };
+
+  const session = useSessionStore((state) => state.session);
+
   return (
     <List.Item
       style={{
@@ -18,12 +31,19 @@ const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
       extra={
         <>
           <StyledImage
-            src={menu.image ?? ""}
+            src={checkImageSrc(menu.image ?? "")}
             width={500}
             height={500}
             alt={menu.title}
           />
-          <StyledButton type="primary" shape="circle" icon={<PlusOutlined />} />
+          {!!session && (
+            <StyledButton
+              type="primary"
+              shape="circle"
+              icon={<PlusOutlined />}
+              onClick={handleChooseMenu}
+            />
+          )}
         </>
       }
     >

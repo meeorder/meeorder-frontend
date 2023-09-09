@@ -61,7 +61,7 @@ const MenuSectionCard = styled(Card)`
   }
 
   .ant-card-body {
-    padding: 20px 20px 20px 20px;
+    padding: 0px 20px;
     width: 100%;
     height: calc(100% - 64px);
     display: flex;

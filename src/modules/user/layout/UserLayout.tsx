@@ -1,7 +1,9 @@
+import { useClient } from "@/modules/common/hooks/useClient";
 import WireFrame from "@/modules/mock/components/WireFrame";
 import { type PageId } from "@/modules/pageConfig";
 import UserBottomNav from "@/modules/user/layout/components/UserBottomNav";
 import UserTopNav from "@/modules/user/layout/components/UserTopNav";
+import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 
 type UserLayoutProps = {
@@ -13,15 +15,20 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   mainNode = <WireFrame contentNode="Main" cardColor="red" height={"100vh"} />,
   currentPageId,
 }) => {
+  const session = useSessionStore((state) => state.session);
+  const { isClientLoaded } = useClient();
+
   return (
     <UserLayoutContainer>
       <UserTopNavContainer>
         <UserTopNav />
       </UserTopNavContainer>
       <UserMainContainer>{mainNode}</UserMainContainer>
-      <UserBottomNavContainer>
-        <UserBottomNav currentPageId={currentPageId} />
-      </UserBottomNavContainer>
+      {isClientLoaded && session && (
+        <UserBottomNavContainer>
+          <UserBottomNav currentPageId={currentPageId} />
+        </UserBottomNavContainer>
+      )}
     </UserLayoutContainer>
   );
 };

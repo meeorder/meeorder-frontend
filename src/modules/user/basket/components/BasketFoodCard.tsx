@@ -1,41 +1,55 @@
 import TextPrice from "@/modules/common/components/TextPrice";
 import { H5, Text } from "@/modules/common/components/Typography";
-import { type BasketOrder } from "@/modules/user/mock/orders";
+import { checkImageSrc } from "@/modules/common/utils";
+import { type BasketOrder } from "@/modules/user/basket/hooks/useBasketStore";
+import { calculateBasketOrderPrice } from "@/modules/user/basket/utils";
 import styled from "@emotion/styled";
-import { Button, theme } from "antd";
+import { Button, Typography, theme } from "antd";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/router";
 
 type BasketFoodCardProps = {
-  order: BasketOrder;
+  basketOrder: BasketOrder;
 };
 
-const BasketFoodCard: React.FC<BasketFoodCardProps> = ({ order }) => {
+const BasketFoodCard: React.FC<BasketFoodCardProps> = ({ basketOrder }) => {
   const { token } = theme.useToken();
+  const router = useRouter();
+  const handleEditOrder = () => {
+    const params = new URLSearchParams();
+    params.append("basket-order-id", basketOrder?.basketOrderId ?? "");
+    void router.push({
+      pathname: `/menu/${basketOrder?.menu?._id}`,
+      query: params.toString(),
+    });
+  };
+
   return (
     <BasketCardContainer>
       <FoodDetails>
         <ContentGroup>
-          <H5>{order.food.name}</H5>
-          {/* TODO calculate price from food and addons */}
-          <TextPrice price={order.food.price} color={token.colorText} />
+          <H5>{basketOrder?.menu?.title}</H5>
+          <TextPrice
+            price={calculateBasketOrderPrice(basketOrder)}
+            color={token.colorText}
+          />
         </ContentGroup>
         <ContentGroup>
-          {order.addons?.map((addon) => (
-            <Text key={addon.id} type="secondary">
-              {addon.name}
+          {basketOrder?.menu?.addons?.map((addon) => (
+            <Text key={addon?._id} type="secondary">
+              {addon?.title}
             </Text>
           ))}
+          {basketOrder?.menu?.additionalRequest && (
+            <Text>โน๊ต : {basketOrder?.menu?.additionalRequest}</Text>
+          )}
         </ContentGroup>
-        {/* TODO navigate to edit link */}
-        <Link href={"#"} style={{ color: token.colorPrimary }}>
-          Edit
-        </Link>
+        <Typography.Link onClick={handleEditOrder}>แก้ไข</Typography.Link>
       </FoodDetails>
       <ImageContainer>
         <Image
-          src={order.food.imagePath ?? ""}
-          alt={order.food.name}
+          src={checkImageSrc(basketOrder?.menu?.image ?? "")}
+          alt={basketOrder?.menu?.title}
           width={900}
           height={900}
           style={{
@@ -45,8 +59,13 @@ const BasketFoodCard: React.FC<BasketFoodCardProps> = ({ order }) => {
             height: "100px",
           }}
         />
-        <QuantityButton shape="circle" type="primary" ghost>
-          {order.quantity}
+        <QuantityButton
+          shape="circle"
+          type="primary"
+          ghost
+          onClick={handleEditOrder}
+        >
+          {basketOrder?.quantity}
         </QuantityButton>
       </ImageContainer>
     </BasketCardContainer>

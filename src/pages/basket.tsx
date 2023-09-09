@@ -1,12 +1,19 @@
 import AppLayout from "@/modules/AppLayout";
+import { useClient } from "@/modules/common/hooks/useClient";
 import { pages } from "@/modules/pageConfig";
 import BasketFoodList from "@/modules/user/basket/components/BasketFoodList";
 import BasketSummaryNav from "@/modules/user/basket/components/BasketSummaryNav";
-import { inBasketOrders } from "@/modules/user/mock/orders";
+import { useBasketStore } from "@/modules/user/basket/hooks/useBasketStore";
+import { calculateBasketOrdersPrice } from "@/modules/user/basket/utils";
+import { useRevalidateSession } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import Head from "next/head";
 
 const Basket = () => {
+  const basketOrders = useBasketStore((state) => state.basketOrders);
+  useRevalidateSession();
+  const { isClientLoaded } = useClient();
+
   return (
     <>
       <Head>
@@ -15,10 +22,15 @@ const Basket = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppLayout layoutType="user" currentPageId={pages.basket.id}>
-        <BasketMainContentWrapper>
-          <BasketFoodList orders={inBasketOrders} />
-          <BasketSummaryNav totalPrice={999} />
-        </BasketMainContentWrapper>
+        {isClientLoaded && (
+          <BasketMainContentWrapper>
+            <BasketFoodList basketOrders={basketOrders} />
+
+            <BasketSummaryNav
+              totalPrice={calculateBasketOrdersPrice(basketOrders)}
+            />
+          </BasketMainContentWrapper>
+        )}
       </AppLayout>
     </>
   );

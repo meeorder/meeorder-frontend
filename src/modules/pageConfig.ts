@@ -10,39 +10,39 @@ import {
   User,
 } from "@phosphor-icons/react";
 
-type PageMetaData = {
+export type PageMetaData = {
   id: string;
   label: string;
   path: string;
   layout: LayoutType;
-  Icon: React.FC;
+  Icon?: React.FC;
 };
 
 export const pages = {
   home: {
     id: "home",
-    label: "Home",
+    label: "หน้าหลัก",
     path: "/",
     layout: "user",
     Icon: House,
   },
   basket: {
     id: "basket",
-    label: "Basket",
+    label: "ตะกร้า",
     path: "/basket",
     layout: "user",
     Icon: Basket,
   },
   orders: {
     id: "orders",
-    label: "My Orders",
+    label: "รายการที่สั่ง",
     path: "/orders",
     layout: "user",
     Icon: ClipboardText,
   },
   adminDashboard: {
     id: "adminDashboard",
-    label: "Dashboard",
+    label: "แดชบอร์ด",
     path: "/admin",
     layout: "admin",
     Icon: Gauge,
@@ -60,6 +60,18 @@ export const pages = {
     path: "/admin/promotion",
     layout: "admin",
     Icon: ListBullets,
+  },
+  adminEditPoint: {
+    id: "adminEditPoint",
+    label: "จัดการสัดส่วนแต้ม",
+    path: "/admin/promotion/edit-point",
+    layout: "admin",
+  },
+  adminEditCoupon: {
+    id: "adminEditCoupon",
+    label: "จัดการคูปอง",
+    path: "/admin/promotion/edit-coupon",
+    layout: "admin",
   },
   adminSalesReport: {
     id: "adminSalesReport",
