@@ -293,7 +293,7 @@ export interface components {
       /** @description Menu Price */
       price: number;
       /** @description Menu Category */
-      category: string;
+      category?: string;
       /** @description Menu Addons */
       addons: string[];
     };
@@ -548,7 +548,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-08T18:08:15.153Z
+       * @default 2023-09-09T07:47:12.832Z
        */
       created_at: string;
       /**
