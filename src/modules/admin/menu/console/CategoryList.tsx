@@ -3,7 +3,7 @@ import { Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Popconfirm, Table, Typography } from "antd";
 import { type ColumnsType } from "antd/es/table";
-import { useState } from "react";
+import { useId, useState } from "react";
 
 import { categories } from "@/modules/admin/mock/categories";
 
@@ -101,6 +101,7 @@ const CategoryList = () => {
   ];
 
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
+  const dndId = useId();
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -127,6 +128,8 @@ const CategoryList = () => {
 
   return (
     <DndContext
+      key={dndId}
+      id={dndId}
       modifiers={[restrictToVerticalAxis]}
       sensors={sensors}
       collisionDetection={closestCenter}
