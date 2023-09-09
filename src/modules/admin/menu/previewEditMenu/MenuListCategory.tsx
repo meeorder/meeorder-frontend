@@ -1,8 +1,10 @@
+import { type MenuSectionMode } from "@/modules/admin/menu/hooks/useMenuSectionMode";
+import useUpdateCategoryById from "@/modules/admin/menu/hooks/useUpdateCategoryById";
 import Item from "@/modules/admin/menu/previewEditMenu/Item";
 import SortableItem from "@/modules/admin/menu/previewEditMenu/SortableItem";
 import { H4 } from "@/modules/common/components/Typography";
-import { type Category } from "@/modules/user/mock/categories";
-import { type Food } from "@/modules/user/mock/foods";
+import { type GetAllCategoriesResponse } from "@/modules/services/categories";
+import { type GetAllMenusResponse } from "@/modules/services/menus";
 import {
   DndContext,
   DragOverlay,
@@ -21,20 +23,32 @@ import {
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useId, useState } from "react";
 
+type MenuList = GetAllMenusResponse[number]["menus"];
+type Menu = MenuList[number];
 type MenuListCategoryProps = {
-  category: Category;
-  foods: Food[];
+  category: GetAllCategoriesResponse[number];
+  menus: MenuList;
+  menuSectionMode: MenuSectionMode;
+};
+
+const isPublish = (
+  menuSectionMode: MenuSectionMode,
+  menu: GetAllMenusResponse[number]["menus"][number],
+) => {
+  return menu.published_at != null || menuSectionMode === "edit";
 };
 
 const MenuListCategory: React.FC<MenuListCategoryProps> = ({
   category,
-  foods,
+  menus,
+  menuSectionMode,
 }) => {
-  const [foodList, setFoodList] = useState(foods);
-  const [activeFood, setActiveFood] = useState<Food>();
-
+  const [menuList, setMenuList] = useState<MenuList>(menus);
+  const [activeMenu, setActiveMenu] = useState<Menu>();
+  const { mutate: updateCategotyById } = useUpdateCategoryById();
+  const dndId = useId();
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor),
@@ -47,57 +61,83 @@ const MenuListCategory: React.FC<MenuListCategoryProps> = ({
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
-    setActiveFood(foodList.find((food) => food.id === active.id));
+    setActiveMenu(menuList.find((menu) => menu._id === active.id));
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over) return;
 
-    const activeFood = foodList.find((food) => food.id === active.id);
-    const overFood = foodList.find((food) => food.id === over.id);
+    const activeMenu = menuList.find((menu) => menu._id === active.id);
+    const overMenu = menuList.find((menu) => menu._id === over.id);
 
-    if (!activeFood || !overFood) {
+    if (!activeMenu || !overMenu) {
       return;
     }
 
-    const activeIndex = foodList.findIndex((food) => food.id === active.id);
-    const overIndex = foodList.findIndex((food) => food.id === over.id);
+    const activeIndex = menuList.findIndex((menu) => menu._id === active.id);
+    const overIndex = menuList.findIndex((menu) => menu._id === over.id);
+
+    const updateMenuList = arrayMove<Menu>(menuList, activeIndex, overIndex);
 
     if (activeIndex !== overIndex) {
-      setFoodList((prev) => arrayMove<Food>(prev, activeIndex, overIndex));
+      updateCategotyById({
+        id: category._id,
+        menus: updateMenuList.map((menu) => menu._id),
+      });
+      setMenuList(updateMenuList);
     }
-    setActiveFood(undefined);
+
+    setActiveMenu(undefined);
   };
 
   const handleDragCancel = () => {
-    setActiveFood(undefined);
+    setActiveMenu(undefined);
   };
+
   return (
-    <>
-      <DndContext
-        sensors={sensors}
-        modifiers={[restrictToVerticalAxis]}
-        collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-        onDragCancel={handleDragCancel}
+    <DndContext
+      key={dndId}
+      id={dndId}
+      sensors={sensors}
+      modifiers={[restrictToVerticalAxis]}
+      collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDragCancel={handleDragCancel}
+    >
+      <TextContainer>
+        <H4 medium={true}>{category?.title}</H4>
+      </TextContainer>
+      <SortableContext
+        items={menuList
+          .filter((menu) => isPublish(menuSectionMode, menu))
+          .map((menu) => ({
+            id: menu?._id,
+          }))}
+        strategy={rectSortingStrategy}
       >
-        <TextContainer>
-          <H4 medium={true}>{category?.name}</H4>
-        </TextContainer>
-        <SortableContext items={foodList} strategy={rectSortingStrategy}>
-          {foodList.map((food) => (
-            <SortableItem key={food.id} food={food} />
+        {menuList
+          .filter((menu) => isPublish(menuSectionMode, menu))
+          .map((menu) => (
+            <SortableItem
+              key={menu?._id}
+              menu={menu}
+              menuSectionMode={menuSectionMode}
+            />
           ))}
-        </SortableContext>
-        <DragOverlay adjustScale style={{ transformOrigin: "0 0 " }}>
-          {activeFood ? (
-            <Item key={activeFood.id} food={activeFood} isDragging />
-          ) : null}
-        </DragOverlay>
-      </DndContext>
-    </>
+      </SortableContext>
+      <DragOverlay adjustScale style={{ transformOrigin: "0 0 " }}>
+        {activeMenu ? (
+          <Item
+            isDragging
+            key={activeMenu._id}
+            menu={activeMenu}
+            menuSectionMode={menuSectionMode}
+          />
+        ) : null}
+      </DragOverlay>
+    </DndContext>
   );
 };
 

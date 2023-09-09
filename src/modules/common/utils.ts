@@ -13,6 +13,7 @@ export const checkImageSrc = (src: string) => {
   return src?.startsWith("http") || src?.startsWith("https")
     ? src
     : `https://source.unsplash.com/random/?food&plate&abc`;
+<<<<<<< HEAD
 };
 
 export const tuncateString = (str: string, num: number) => {
@@ -20,4 +21,6 @@ export const tuncateString = (str: string, num: number) => {
     return str;
   }
   return str.slice(0, num) + "...";
+=======
+>>>>>>> develop
 };

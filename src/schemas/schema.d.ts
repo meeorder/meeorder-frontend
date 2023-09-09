@@ -548,7 +548,11 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
+<<<<<<< HEAD
        * @default 2023-09-09T07:47:12.832Z
+=======
+       * @default 2023-09-09T09:29:11.275Z
+>>>>>>> develop
        */
       created_at: string;
       /**
@@ -625,8 +629,6 @@ export interface components {
   pathItems: never;
 }
 
-export type $defs = Record<string, never>;
-
 export type external = Record<string, never>;
 
 export interface operations {
@@ -682,9 +684,7 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a category by id */
@@ -696,13 +696,9 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Category not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Replace a category by id */
@@ -726,9 +722,7 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** order the categories' rank */
@@ -740,9 +734,7 @@ export interface operations {
     };
     responses: {
       /** @description Change category rank */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get all addons */
@@ -791,9 +783,7 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Replace a addon by id */
@@ -817,9 +807,7 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a addon by id */
@@ -831,13 +819,9 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Addon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   MenusController_getMenus: {
@@ -883,13 +867,9 @@ export interface operations {
     };
     responses: {
       /** @description The menus have been successfully deleted. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get a menu by id */
@@ -906,9 +886,7 @@ export interface operations {
         };
       };
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Replace a menu by id */
@@ -925,13 +903,9 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully updated. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a menu by id */
@@ -943,13 +917,9 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully deleted. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Publish a menu by id */
@@ -961,13 +931,9 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully published. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Unpublish a menu by id */
@@ -979,13 +945,9 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully unpublished. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Get all orders */
@@ -1007,9 +969,7 @@ export interface operations {
     };
     responses: {
       /** @description Create order */
-      201: {
-        content: never;
-      };
+      201: never;
     };
   };
   /** Change order status to preparing */
@@ -1022,9 +982,7 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to preparing */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Change order status to ready to serve */
@@ -1037,9 +995,7 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to ready to serve */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Change order status to done */
@@ -1052,9 +1008,7 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to done */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Cancel order */
@@ -1067,9 +1021,26 @@ export interface operations {
     };
     responses: {
       /** @description Cancel order */
-      204: {
-        content: never;
+      204: never;
+    };
+  };
+  /** Cancel order and disable addons */
+  OrdersController_cancelByAddons: {
+    parameters: {
+      path: {
+        /** @description Session ID (ObjectId) */
+        id: string;
       };
+    };
+    /** @description List of addons to disable */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DisableAddonsDto"];
+      };
+    };
+    responses: {
+      /** @description Cancel order with trigger disable addons */
+      204: never;
     };
   };
   /** Cancel order and disable addons */
@@ -1123,9 +1094,7 @@ export interface operations {
         };
       };
       /** @description Session already exists */
-      409: {
-        content: never;
-      };
+      409: never;
     };
   };
   /** Get a session by id */
@@ -1144,9 +1113,7 @@ export interface operations {
         };
       };
       /** @description Session not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a session by id */
@@ -1159,13 +1126,9 @@ export interface operations {
     };
     responses: {
       /** @description Session deleted */
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Session not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Get a session by table id */
@@ -1184,9 +1147,7 @@ export interface operations {
         };
       };
       /** @description No session found in the table */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Finish a session */
@@ -1199,13 +1160,9 @@ export interface operations {
     };
     responses: {
       /** @description Session finished */
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Session not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Get orders by session */
@@ -1278,13 +1235,9 @@ export interface operations {
     };
     responses: {
       /** @description Coupon is attached to session */
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Resource conflict (coupon quota has been reached) */
-      409: {
-        content: never;
-      };
+      409: never;
     };
   };
   /** Get all tables */
@@ -1332,9 +1285,7 @@ export interface operations {
   /** Logout */
   AuthController_signOut: {
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Customer's registraion */
@@ -1388,9 +1339,7 @@ export interface operations {
     };
     responses: {
       /** @description Create user */
-      201: {
-        content: never;
-      };
+      201: never;
     };
   };
   /** Delete user */
@@ -1402,9 +1351,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Reset user password */
@@ -1416,9 +1363,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get all coupons (Owner) */
@@ -1471,9 +1416,7 @@ export interface operations {
     };
     responses: {
       /** @description Coupon deleted */
-      200: {
-        content: never;
-      };
+      200: never;
     };
   };
   /** Update a coupon by id */
