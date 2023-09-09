@@ -1,6 +1,6 @@
 import { H3, H4 } from "@/modules/common/components/Typography";
+import { useUserStore } from "@/modules/common/hooks/useUserStore";
 import { commaFormat } from "@/modules/common/utils";
-import { session } from "@/modules/user/mock/session";
 import UserAvatar from "@/modules/user/user/UserAvatar";
 import styled from "@emotion/styled";
 import { Space, Tag, theme } from "antd";
@@ -11,27 +11,26 @@ const CouponPoint = () => {
     token: { colorPrimary, colorPrimaryBgHover },
   } = theme.useToken();
 
+  const user = useUserStore((state) => state.user);
+
   const router = useRouter();
   const onClickCouponPoint = () => {
-    if (!session.user) {
+    if (!user) {
       void router.push({
-        // TODO: redirect to signin path
-        pathname: "/sign-in",
+        pathname: "/signin",
       });
     }
   };
 
   return (
     <CouponPointContainer color={colorPrimary} onClick={onClickCouponPoint}>
-      <UserAvatar user={session.user} />
+      <UserAvatar user={user} />
 
-      {session.user ? (
+      {user ? (
         <Space direction="vertical" size={4}>
           <H4 style={{ color: colorPrimaryBgHover }}>คุณมี</H4>
           <FlexRow>
-            <H3 style={{ color: "inherit" }}>
-              {commaFormat(session.user?.point)}
-            </H3>
+            <H3 style={{ color: "inherit" }}>{commaFormat(user?.point)}</H3>
             <H4 style={{ color: "inherit" }}>แต้ม</H4>
           </FlexRow>
         </Space>
