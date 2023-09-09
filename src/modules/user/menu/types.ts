@@ -1,7 +1,4 @@
-import {
-  type GetAllMenusResponse,
-  type GetMenuByIdResponse,
-} from "@/modules/services/menus";
+import { type GetAllMenusResponse } from "@/modules/services/menus";
 
-export type Menu = GetMenuByIdResponse;
+export type Menu = GetAllMenusResponse[number]["menus"][number];
 export type Category = GetAllMenusResponse[number]["category"];

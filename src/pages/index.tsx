@@ -39,13 +39,15 @@ const Home = () => {
         <CategoryNav categories={categories?.data ?? []} />
         <MenuContainer>
           {allMenu?.data
-            ?.sort((a, b) => a?.category?.rank - b?.category?.rank)
+            ?.sort(
+              (a, b) => (a?.category?.rank ?? 0) - (b?.category?.rank ?? 0),
+            )
             ?.map((item) => {
               return (
                 <Category
                   key={item?.category?._id}
                   category={item?.category}
-                  menus={item?.menus}
+                  menus={item?.menus.filter((menu) => !!menu)}
                 />
               );
             })}
