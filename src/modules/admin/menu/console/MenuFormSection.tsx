@@ -37,7 +37,7 @@ const MenuFormSection: React.FC = () => {
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   // const [loadingDelete, setLoadingDelete] = useState(false);
-
+  const [imageURL, setImageURL] = useState("");
   const { mutate: createMenu } = useCreateMenu(changeToCategoryMode);
   const { mutate: editMenu } = useEditMenu(changeToCategoryMode);
   const { mutate: deleteMenu, isLoading: loadingDelete } =
@@ -245,7 +245,7 @@ const MenuFormSection: React.FC = () => {
         </GeneralFormItemsContainer>
         <ImageFormItemsContainer>
           <StyledImage
-            src={checkImageSrc(form.getFieldsValue().image ?? "")}
+            src={checkImageSrc(imageURL)}
             alt="Food image"
             width={296}
             height={296}
@@ -256,7 +256,10 @@ const MenuFormSection: React.FC = () => {
             label="URL รูปภาพ"
             style={{ width: "100%" }}
           >
-            <Input placeholder="https://..." />
+            <Input
+              placeholder="https://..."
+              onChange={(e) => setImageURL(e.target.value)}
+            />
           </Form.Item>
           {consoleSectionMode === "edit-menu" && (
             <div>
