@@ -293,7 +293,7 @@ export interface components {
       /** @description Menu Price */
       price: number;
       /** @description Menu Category */
-      category: string;
+      category?: string;
       /** @description Menu Addons */
       addons: string[];
     };
@@ -453,7 +453,7 @@ export interface components {
       /** @description User ID */
       user: string;
     };
-    ExampleCouponDto: {
+    CouponDto: {
       /** @description Coupon ID */
       _id: string;
       /** @description Coupon title */
@@ -548,7 +548,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-08T09:12:57.482Z
+       * @default 2023-09-09T09:29:11.275Z
        */
       created_at: string;
       /**
@@ -1190,7 +1190,7 @@ export interface operations {
       /** @description Get all redeemable coupon */
       200: {
         content: {
-          "application/json": components["schemas"]["ExampleCouponDto"];
+          "application/json": components["schemas"]["CouponDto"][];
         };
       };
     };

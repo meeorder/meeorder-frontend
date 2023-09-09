@@ -47,7 +47,7 @@ const Home = () => {
                 <Category
                   key={item?.category?._id}
                   category={item?.category}
-                  menus={item?.menus}
+                  menus={item?.menus?.filter((menu) => !!menu)}
                 />
               );
             })}
