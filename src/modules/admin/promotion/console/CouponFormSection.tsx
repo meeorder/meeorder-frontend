@@ -1,10 +1,11 @@
-import { getAllMenus } from "@/modules/admin/mock/menu";
 import useCouponById, {
   type Coupon,
 } from "@/modules/admin/promotion/hook/useCouponById";
 import useCreateCoupon from "@/modules/admin/promotion/hook/useCreateCoupon";
+import useUpdateCoupon from "@/modules/admin/promotion/hook/useUpdateCoupon";
 import { H4, H5, Text } from "@/modules/common/components/Typography";
 import { checkImageSrc } from "@/modules/common/utils";
+import { type GetAllMenusResponse } from "@/modules/services/menus";
 import useAllMenu from "@/modules/user/menu/hooks/useAllMenu";
 import styled from "@emotion/styled";
 
@@ -30,17 +31,6 @@ type CouponFormSectionModalProps = {
   setCouponId: (data: string) => void;
 };
 
-const menuByCategoryData = getAllMenus.map((items) => ({
-  key: items.category._id,
-  value: items.category._id,
-  title: items.category.title,
-  children: items.menu.map((menu) => ({
-    key: menu._id,
-    value: menu._id,
-    title: menu.title,
-  })),
-}));
-
 const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
   openModalForm,
   setOpenModalForm,
@@ -54,16 +44,24 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
     "https://source.unsplash.com/random/?food&plate&11",
   );
   const { mutate: createCoupon } = useCreateCoupon();
-  const { data: coupon, refetch } = useCouponById(couponId);
+  const { mutate: editCoupon } = useUpdateCoupon();
+  const { data: coupon } = useCouponById(couponId);
+  const { data: allMenu } = useAllMenu();
+
+  const menuByCategoryData = GetMenuByCategoryData(allMenu ?? []);
 
   const handleFormSubmit = (values: Coupon) => {
-    values.required_menus = GetAllMenuId(values.required_menus);
+    values.required_menus = GetAllMenuId(allMenu ?? [], values.required_menus);
     const editMode = couponId !== "";
     if (editMode) {
-      editCoupon(values);
+      editCoupon({
+        id: couponId,
+        ...values,
+      });
     } else {
       createCoupon(values);
     }
+    form.resetFields();
     setOpenModalForm(false);
     setCouponId("");
   };
@@ -78,10 +76,6 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
     setOpenModalForm(false);
     setCouponId("");
   };
-
-  useEffect(() => {
-    void refetch();
-  }, [couponId, refetch]);
 
   useEffect(() => {
     form.setFieldsValue(coupon);
@@ -191,7 +185,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
               style={{ width: "100%" }}
             >
               <InputNumber
-                addonAfter="เแต้ม"
+                addonAfter="แต้ม"
                 controls={false}
                 placeholder="100"
                 style={{ width: "100%" }}
@@ -251,7 +245,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
               unoptimized
             />
             <Form.Item<Coupon>
-              // name=""
+              name="image"
               label="ลิงค์รูปภาพ"
               style={{ width: "100%" }}
             >
@@ -325,25 +319,53 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
 
 export default CouponFormSectionModal;
 
-const GetAllMenuId = (requried_menus: string[]) => {
-  const { data: allMenu } = useAllMenu();
-
+const GetAllMenuId = (
+  allMenu: GetAllMenusResponse,
+  required_menus: string[],
+) => {
   const allRedeemableMenuId = [];
-  for (let i = 0; i < requried_menus.length; i++) {
-    const item_id = requried_menus[i];
-    const itemCategory = allMenu?.find((item) => item.category._id === item_id);
-    if (itemCategory) {
-      const menuList = itemCategory.menus;
-      for (let j = 0; j < menuList.length; j++) {
-        const menuId = menuList[j]?._id;
-        allRedeemableMenuId.push(menuId);
+  if (required_menus) {
+    for (let i = 0; i < required_menus.length; i++) {
+      const item_id = required_menus[i];
+      const itemCategory = allMenu?.find(
+        (item) => item.category._id === item_id,
+      );
+      if (itemCategory) {
+        const menuList = itemCategory.menus;
+        for (let j = 0; j < menuList.length; j++) {
+          const menuId = menuList[j]?._id;
+          allRedeemableMenuId.push(menuId);
+        }
+      } else {
+        allRedeemableMenuId.push(item_id);
       }
-    } else {
-      allRedeemableMenuId.push(item_id);
     }
+    return allRedeemableMenuId.map((item) => (item ? item?.toString() : ""));
+  } else {
+    for (let i = 0; i < allMenu.length; i++) {
+      const menuList = allMenu[i]?.menus;
+      for (let j = 0; j < (menuList?.length ?? 0); j++) {
+        const menuId = (menuList ?? [])[j]?._id?.toString();
+        if (menuId) {
+          allRedeemableMenuId.push(menuId);
+        }
+      }
+    }
+    return allRedeemableMenuId;
   }
-  return allRedeemableMenuId.map((item) => (item ? item?.toString() : ""));
 };
+
+const GetMenuByCategoryData = (allMenu: GetAllMenusResponse) =>
+  allMenu.map((items) => ({
+    key: items.category._id,
+    value: items.category._id,
+    title: items.category.title,
+    children: items.menus.map((menu) => ({
+      key: menu._id,
+      value: menu._id,
+      title: menu.title,
+    })),
+  }));
 
 const CouponFormCard = styled(Card)`
   flex: 2;

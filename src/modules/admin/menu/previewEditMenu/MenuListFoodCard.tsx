@@ -2,44 +2,27 @@ import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionM
 import TextPrice from "@/modules/common/components/TextPrice";
 import { H5 } from "@/modules/common/components/Typography";
 import { checkImageSrc } from "@/modules/common/utils";
-import { type Food } from "@/modules/user/mock/foods";
+import { type GetAllMenusResponse } from "@/modules/services/menus";
 import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
-import { Button, Tag, theme } from "antd";
+import { Button, Tag } from "antd";
 import Image from "next/image";
 
+type Menu = GetAllMenusResponse[number]["menus"][number];
+
 type MenuListFoodCardProps = {
-  food: Food;
+  menu: Menu;
 };
 
-const MenuListFoodCard: React.FC<MenuListFoodCardProps> = ({ food }) => {
+const getIsFoodPublished = (menu: Menu) => {
+  return !!menu.published_at;
+};
+
+const MenuListFoodCard: React.FC<MenuListFoodCardProps> = ({ menu }) => {
   const { changeToEditMenuMode } = useConsoleSectionMode();
 
-  const getIsFoodPublished = (food: Food) => {
-    // return food.published_at == null ? false : true;
-    // random 0 or 1
-    return parseInt(food.id) > 2 ? false : true;
-    // return true;
-  };
-
-  const { editMenuId } = useConsoleSectionMode();
-  const {
-    token: { colorPrimaryBorder },
-  } = theme.useToken();
-
   return (
-    <CardContainer
-      style={{
-        ...(editMenuId === food.id
-          ? { border: `2px solid ${colorPrimaryBorder}` }
-          : null),
-        borderRadius: "8px",
-      }}
-      onClick={() => {
-        if (editMenuId === food.id) return;
-        changeToEditMenuMode(food.id);
-      }}
-    >
+    <CardContainer onClick={() => changeToEditMenuMode(menu._id)}>
       <TextContainer>
         <div>
           <H5
@@ -47,23 +30,23 @@ const MenuListFoodCard: React.FC<MenuListFoodCardProps> = ({ food }) => {
               display: "inline-block",
             }}
           >
-            {food.name}
+            {menu?.title}
           </H5>
-          {!getIsFoodPublished(food) && (
+          {!getIsFoodPublished(menu) && (
             <StyledStatusTag color="orange">ร่าง</StyledStatusTag>
           )}
         </div>
-        <TextPrice price={food.price} />
+        <TextPrice price={menu.price} />
       </TextContainer>
       <PhotoContainer>
         <StyledImage
-          src={checkImageSrc(food.imagePath ?? "")}
+          src={checkImageSrc(menu.image ?? "")}
           width={500}
           height={500}
-          alt={food.name}
+          alt={menu.title}
         />
         <StyledButton
-          id={food.id}
+          id={menu._id}
           type="primary"
           shape="circle"
           icon={<PlusOutlined />}

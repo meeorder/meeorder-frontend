@@ -57,7 +57,7 @@ export type UpdateCategoryByIdResponse =
 export const updateCategoryById = async (
   params: UpdateCategoryByIdPathParam & UpdateCategoryByIdBodyParam,
 ): Promise<UpdateCategoryByIdResponse> => {
-  const { data } = await axiosInstance.put<UpdateCategoryByIdResponse>(
+  const { data } = await axiosInstance.patch<UpdateCategoryByIdResponse>(
     `/categories/${params.id}`,
     params,
   );

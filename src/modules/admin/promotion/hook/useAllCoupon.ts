@@ -1,7 +1,7 @@
 import {
   getAllCoupons,
   type GetAllCouponsResponse,
-} from "@/modules/services/coupon";
+} from "@/modules/services/coupons";
 import { useQuery } from "@tanstack/react-query";
 
 export type AllCouponsData = GetAllCouponsResponse;

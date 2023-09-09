@@ -1,26 +1,44 @@
+import { type MenuSectionMode } from "@/modules/admin/menu/hooks/useMenuSectionMode";
 import MenuListFoodCard from "@/modules/admin/menu/previewEditMenu/MenuListFoodCard";
-import { type Food } from "@/modules/user/mock/foods";
+import { type GetAllMenusResponse } from "@/modules/services/menus";
 import { forwardRef, type CSSProperties, type HTMLAttributes } from "react";
 
+type Menu = GetAllMenusResponse[number]["menus"][number];
+
 type Props = {
-  food: Food;
+  menu: Menu;
   isOpacityEnabled?: boolean;
   isDragging?: boolean;
+  isDisable?: boolean;
+  menuSectionMode: MenuSectionMode;
 } & HTMLAttributes<HTMLDivElement>;
 
 const Item = forwardRef<HTMLDivElement, Props>(
-  ({ food, isOpacityEnabled, isDragging, style, ...props }, ref) => {
+  (
+    {
+      menu,
+      isOpacityEnabled,
+      isDragging,
+      style,
+      isDisable,
+      menuSectionMode,
+      ...props
+    },
+    ref,
+  ) => {
     const styles: CSSProperties = {
       opacity: isOpacityEnabled ? "0.4" : "1",
-      cursor: isDragging ? "grabbing" : "grab",
+      cursor: isDragging ? "grabbing" : isDisable ? "auto" : "grab",
       lineHeight: "0.5",
       transform: isDragging ? "scale(1.05)" : "scale(1)",
       ...style,
     };
 
+    if (!menuSectionMode) return null;
+
     return (
       <div ref={ref} style={styles} {...props}>
-        <MenuListFoodCard food={food} />
+        <MenuListFoodCard menu={menu} />
       </div>
     );
   },
