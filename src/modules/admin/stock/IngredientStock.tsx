@@ -1,11 +1,30 @@
-import WireFrame from "@/modules/mock/components/WireFrame";
+import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import styled from "@emotion/styled";
-import { Card } from "antd";
+import { Card, Table } from "antd";
+import { type ColumnsType } from "antd/es/table";
+
+const columns:ColumnsType<> = [
+
+]
 
 const IngredientStock = () => {
   return (
-    <StyledCard title={<div>IngredientStock</div>}>
-      <WireFrame height={"500px"} />
+    <StyledCard
+      title={
+        <div style={{
+          display: "flex",
+          alignItems: "baseline",
+          gap: "8px",
+        }}>IngredientStock</div>
+      }
+      extra={
+        <CenterContentButton type="primary">
+          เติมวัตถุดิบทั้งหมด
+        </CenterContentButton>
+      }>
+      <Table
+        columns={columns}
+        pagination={false}/>
     </StyledCard>
   );
 };
