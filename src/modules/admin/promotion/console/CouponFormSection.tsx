@@ -280,7 +280,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
                     : token.colorText,
                 }}
               >
-                แบบร่าง
+                ฉบับร่าง
               </H5>
               <Form.Item<Coupon>
                 name="activated"
@@ -288,7 +288,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
                 valuePropName="checked"
               >
                 <Switch
-                  title="ปรับเปลี่ยนระหว่างสถานะ แบบร่าง/วางขาย"
+                  title="ปรับเปลี่ยนระหว่างสถานะ ฉบับร่าง และ แผยแพร่"
                   checked={published}
                   onChange={(checked) => {
                     setPublished(checked);
@@ -307,7 +307,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
                     : token.colorTextQuaternary,
                 }}
               >
-                วางขาย
+                แผยแพร่
               </H5>
             </div>
           </ImageFormItemsContainer>

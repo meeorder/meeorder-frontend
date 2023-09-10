@@ -24,7 +24,9 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
           <Text type="secondary">
             <TextPrice price={calculateOrderPrice(order)} />
             <StyledStatusTag color={colorTag}>
-              {mapOrderStatusTranslation[order.status]}
+              {order?.cancelled_at
+                ? "ยกเลิก"
+                : mapOrderStatusTranslation[order.status]}
             </StyledStatusTag>
           </Text>
           {order?.addons?.map((addon) => {
