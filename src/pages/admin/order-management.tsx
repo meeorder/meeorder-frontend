@@ -80,16 +80,14 @@ const OrderContainer = styled.div`
   gap: 24px;
 `;
 
-export type OrderStatus =
-  | OrdersWithPriceData["orders"][number]["status"]
-  | "CANCEL";
+export type OrderStatus = OrdersWithPriceData["orders"][number]["status"];
 
 export const allOrderStatus = [
   "IN_QUEUE",
   "PREPARING",
   "READY_TO_SERVE",
   "DONE",
-  "CANCEL",
+  "CANCELLED",
 ] as const satisfies Readonly<OrderStatus[]>;
 
 export const orderStatusTranslation: Record<OrderStatus, string> = {
@@ -97,5 +95,5 @@ export const orderStatusTranslation: Record<OrderStatus, string> = {
   PREPARING: "กำลังเตรียมอาหาร",
   READY_TO_SERVE: "พร้อมเสิร์ฟ",
   DONE: "เสร็จสิ้น",
-  CANCEL: "ยกเลิก",
+  CANCELLED: "ยกเลิก",
 };
