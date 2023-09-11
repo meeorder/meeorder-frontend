@@ -1,10 +1,21 @@
+import { useSelectedAddonsStore } from "@/modules/admin/menu/hooks/useAddons";
 import { getMenuById } from "@/modules/services/menus";
 import { useQuery } from "@tanstack/react-query";
 
 const useMenu = (id: string) => {
+  const { selectedAddonIds, setSelectedAddonIds } = useSelectedAddonsStore();
   return useQuery({
     queryKey: ["menu", id],
     queryFn: () => getMenuById({ id }),
+    onSuccess: (data) => {
+      if (!selectedAddonIds) {
+        setSelectedAddonIds(
+          data.addons
+            .filter((addon) => !addon.deleted_at)
+            .map((addon) => addon._id),
+        );
+      }
+    },
     onError: (error) => {
       alert(error);
     },
