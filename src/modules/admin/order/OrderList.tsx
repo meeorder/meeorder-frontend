@@ -9,7 +9,7 @@ type OrderListCardProps = {
   orders: GetAllOrdersResponse;
 };
 
-const badgecolor = {
+const badgeColor = {
   IN_QUEUE: "#FFA940",
   PREPARING: "#597EF7",
   READY_TO_SERVE: "#40A9FF",
@@ -20,9 +20,10 @@ const badgecolor = {
 const OrderList: React.FC<OrderListCardProps> = ({ status, orders }) => {
   return (
     <StyledCard
+      status={status}
       title={<div>{status}</div>}
       extra={
-        <Badge count={orders?.length} color={badgecolor[status]} showZero />
+        <Badge count={orders?.length} color={badgeColor[status]} showZero />
       }
     >
       {orders.map((order) => {
@@ -74,14 +75,18 @@ const OrderList: React.FC<OrderListCardProps> = ({ status, orders }) => {
 
 export default OrderList;
 
-const StyledCard = styled(Card)`
+const StyledCard = styled(Card)<{ status: OrderStatus }>`
   flex: 1;
   display: flex;
   flex-direction: column;
   height: calc(100vh - 144px);
+  border: 1px solid green;
   .ant-card-body {
     flex: 1;
     overflow-y: auto;
     padding: 0;
+  }
+  .ant-card-head {
+    background-color: ${(props) => badgeColor[props.status]};
   }
 `;
