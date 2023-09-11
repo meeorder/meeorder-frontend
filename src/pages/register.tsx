@@ -18,7 +18,6 @@ const Register = () => {
   const [form] = Form.useForm<FieldType>();
   const { mutate: register, isLoading, isSuccess, isError } = useRegister();
   const handleRegister = (values: FieldType) => {
-    console.log(values);
     register(values);
   };
   const {
