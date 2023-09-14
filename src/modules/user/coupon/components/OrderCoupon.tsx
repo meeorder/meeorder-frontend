@@ -36,12 +36,16 @@ const OrderCoupon = () => {
       <StyledCard>
         <OrderCouponContent>
           <UserAvatar
-            user={{
-              _id: session?.user?._id ?? "",
-              username: session?.user?.username ?? "",
-              point: session?.user?.point ?? 0,
-              role: session?.user?.role.toString() ?? "1",
-            }}
+            user={
+              session?.user
+                ? {
+                    _id: session?.user?._id ?? "",
+                    username: session?.user?.username ?? "",
+                    point: session?.user?.point ?? 0,
+                    role: session?.user?.role.toString() ?? "1",
+                  }
+                : null
+            }
           />
           <FlexBetweenCol>
             {coupon ? (
