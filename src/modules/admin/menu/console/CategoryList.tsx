@@ -51,7 +51,6 @@ const CategoryList = () => {
 
   const { mutate: updateCategory } = useUpdateCategory();
   const onChange = (value: string, _id: string) => {
-    console.log(value, _id);
     updateCategory({ id: _id, title: value });
   };
   const { mutate: deleteCategory } = useDeleteCategory();

@@ -1,6 +1,10 @@
 import AddOnModal from "@/modules/admin/menu/console/AddOnModal";
+import {
+  useAllAddons,
+  useSelectedAddonsStore,
+  type Addon,
+} from "@/modules/admin/menu/hooks/useAddons";
 import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
-import { addOnData, type AddOnDataType } from "@/modules/admin/mock/addon";
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import { H4, Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
@@ -8,7 +12,7 @@ import { Card, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
 import { useState } from "react";
 
-const columns: ColumnsType<AddOnDataType> = [
+const columns: ColumnsType<Addon> = [
   {
     title: "ชื่อ",
     dataIndex: "title",
@@ -17,12 +21,15 @@ const columns: ColumnsType<AddOnDataType> = [
     title: "ราคา",
     dataIndex: "price",
     width: "100px",
+    align: "right",
   },
 ];
 
 const AddOnFormSection: React.FC = () => {
+  const { data: allAddons } = useAllAddons();
   const { consoleSectionMode, editMenuId } = useConsoleSectionMode();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { selectedAddonIds } = useSelectedAddonsStore();
   return (
     <>
       <AddOnFormCard
@@ -52,11 +59,15 @@ const AddOnFormSection: React.FC = () => {
       >
         <Table
           columns={columns}
-          dataSource={addOnData}
+          dataSource={
+            allAddons?.filter(
+              (addon) => selectedAddonIds?.find((id) => addon._id === id),
+            ) ?? []
+          }
           scroll={{ y: "20vh", x: "max-content" }}
           pagination={false}
           style={{ width: "99%" }}
-          rowKey={(record) => record.id}
+          rowKey={(record) => record._id}
         />
       </AddOnFormCard>
       <AddOnModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
