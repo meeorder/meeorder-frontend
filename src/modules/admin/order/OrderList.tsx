@@ -1,4 +1,4 @@
-import WireFrame from "@/modules/mock/components/WireFrame";
+import OrderListCard from "@/modules/admin/order/OrderListCard";
 import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import { type OrderStatus } from "@/pages/admin/order-management";
 import styled from "@emotion/styled";
@@ -27,48 +27,14 @@ const OrderList: React.FC<OrderListCardProps> = ({ status, orders }) => {
       }
     >
       {orders.map((order) => {
-        return <div key={order._id}>{order._id}</div>;
+        return (
+          <OrderListCard
+            order={order}
+            key={order._id}
+            color={badgeColor[status]}
+          />
+        );
       })}
-      <WireFrame
-        height={"200px"}
-        contentNode={status + " order"}
-        cardColor="lightcoral"
-      />
-      <WireFrame
-        height={"200px"}
-        contentNode={status + " order"}
-        cardColor="lightseagreen"
-      />
-      <WireFrame
-        height={"200px"}
-        contentNode={status + " order"}
-        cardColor="lightsteelblue"
-      />
-      <WireFrame
-        height={"200px"}
-        contentNode={status + " order"}
-        cardColor="lightpink"
-      />
-      <WireFrame
-        height={"200px"}
-        contentNode={status + " order"}
-        cardColor="lightcoral"
-      />
-      <WireFrame
-        height={"200px"}
-        contentNode={status + " order"}
-        cardColor="lightseagreen"
-      />
-      <WireFrame
-        height={"200px"}
-        contentNode={status + " order"}
-        cardColor="lightsteelblue"
-      />
-      <WireFrame
-        height={"200px"}
-        contentNode={status + " order"}
-        cardColor="lightpink"
-      />
     </StyledCard>
   );
 };
