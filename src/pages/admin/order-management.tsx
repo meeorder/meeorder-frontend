@@ -18,13 +18,12 @@ const OrderManagement = () => {
           <H1>ออเดอร์ภายในร้าน</H1>
           <StyledPopover
             trigger="click"
-            placement="bottomRight"
+            title={<StyledTitle>ตัวเลือกแสดงข้อมูล</StyledTitle>}
             content={
-              <StyledContent>
-                <h1>ตัวเลือกแสดงข้อมูล</h1>
+              <StyledContentContainer>
                 <p>Content</p>
                 <p>Content</p>
-              </StyledContent>
+              </StyledContentContainer>
             }
           >
             <CenterContentButton
@@ -103,15 +102,15 @@ export const orderStatusTranslation: Record<OrderStatus, string> = {
 };
 
 const StyledPopover = styled(Popover)`
-  .ant-popover-inner{
-    padding: 0 !important;
-  }
+  position: relative;
 `;
 
-const StyledContent = styled.div`
-  h1 {
-    width: 100%;
-    font-size: 16px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  }
-`
+const StyledTitle = styled.div`
+  position: absolute;
+  left: 8px;
+  border: 1px solid #e8e8e8;
+`;
+
+const StyledContentContainer = styled.div`
+  margin-top: 36px;
+`;
