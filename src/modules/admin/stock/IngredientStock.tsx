@@ -1,30 +1,57 @@
+import {
+  stockIngredientData,
+  type StockIngredientDataType,
+} from "@/modules/admin/mock/stock";
+
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import styled from "@emotion/styled";
-import { Card, Table } from "antd";
+import { Card, Switch, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
-
-const columns:ColumnsType<> = [
-
-]
+import { useState } from "react";
 
 const IngredientStock = () => {
+  const [dataSource, setDataSource] = useState(stockIngredientData);
+
+  const stockIngredientColumns: ColumnsType<StockIngredientDataType> = [
+    {
+      title: "ชื่อวัตถุดิบ",
+      dataIndex: "name",
+      key: "name",
+      width: "120px",
+    },
+    {
+      title: "เมนูที่ใช้วัตถุดิบ",
+      dataIndex: "used_in_menu",
+      width: "120px",
+    },
+    {
+      title: "วัตถุดิบคงเหลือ",
+      dataIndex: "can_use_ingredient",
+      key: "can_use_ingredient",
+      width: "120px",
+      render: (text: string, rec) => (
+        <>
+          <Switch checked={rec.can_use_ingredient} />
+        </>
+      ),
+    },
+  ];
+
   return (
     <StyledCard
-      title={
-        <div style={{
-          display: "flex",
-          alignItems: "baseline",
-          gap: "8px",
-        }}>IngredientStock</div>
-      }
+      title={<div>จัดการวัตถุดิบ</div>}
       extra={
         <CenterContentButton type="primary">
           เติมวัตถุดิบทั้งหมด
         </CenterContentButton>
-      }>
+      }
+    >
       <Table
-        columns={columns}
-        pagination={false}/>
+        pagination={false}
+        dataSource={dataSource}
+        columns={stockIngredientColumns}
+        scroll={{ y: "70vh", x: "max-content" }}
+      />
     </StyledCard>
   );
 };

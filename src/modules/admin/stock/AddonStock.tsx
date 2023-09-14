@@ -1,11 +1,18 @@
-import WireFrame from "@/modules/mock/components/WireFrame";
+import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import styled from "@emotion/styled";
-import { Card } from "antd";
+import { Card, Table } from "antd";
 
 const AddonStock = () => {
   return (
-    <StyledCard title={<div>addonStock</div>}>
-      <WireFrame height={"500px"} />
+    <StyledCard
+      title={<div>จัดการท็อปปิ้ง</div>}
+      extra={
+        <CenterContentButton type="primary">
+          เติมท็อปปิ้งทั้งหมด
+        </CenterContentButton>
+      }
+    >
+      <Table pagination={false} />
     </StyledCard>
   );
 };
