@@ -1,80 +1,64 @@
 import {
-  addOnModalData,
-  type AddOnModalDataType,
-} from "@/modules/admin/mock/addon";
+  useAllAddons,
+  useCreateAddon,
+  useDeleteAddon,
+  useEditAddon,
+  useSelectedAddonsStore,
+  type Addon,
+} from "@/modules/admin/menu/hooks/useAddons";
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import { H4, Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Plus } from "@phosphor-icons/react";
 import { Button, Input, Modal, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { type Key } from "antd/es/table/interface";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 
 type AddOnModalProps = {
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
-};
-
-const row_selection = {
-  onChange: (
-    selectedRowKeys: React.Key[],
-    selectedRows: AddOnModalDataType[],
-  ) => {
-    console.log(
-      "selectedRowKeys: ",
-      selectedRowKeys,
-      "selectedRows: ",
-      selectedRows,
-    );
-  },
-  getCheckboxProps: (record: AddOnModalDataType) => {
-    console.log(record);
-    return {
-      key: record.key.toString(),
-      id: record.id,
-      title: record.title,
-      price: record.price,
-    };
-  },
+  initialData?: Addon[];
 };
 
 const AddOnModal: React.FC<AddOnModalProps> = ({
   isModalOpen,
   setIsModalOpen,
 }) => {
-  const [dataSource, setDataSource] = useState(addOnModalData);
-  const handleDelete = (id: string) => {
-    setDataSource((prev) => [...prev.filter((rec) => rec.id !== id)]);
-  };
-  const handleTitleChange = (id: string, new_title: string) => {
-    setDataSource((prev) => [
-      ...prev.map((rec) =>
-        rec.id === id ? { ...rec, title: new_title } : rec,
-      ),
-    ]);
-  };
-  const handlePriceChange = (id: string, new_price: string) => {
-    const new_price_number = parseFloat(new_price);
-    if (!Number.isNaN(new_price_number)) {
-      setDataSource((prev) => [
-        ...prev.map((rec) =>
-          rec.id === id ? { ...rec, price: parseFloat(new_price) } : rec,
-        ),
-      ]);
+  const { data: dataSource } = useAllAddons();
+  const { mutate: deleteAddon } = useDeleteAddon();
+  const { mutate: createAddon } = useCreateAddon();
+  const { mutate: editAddon } = useEditAddon();
+  const { selectedAddonIds, setSelectedAddonIds } = useSelectedAddonsStore();
+  const [newSelectedAddonIds, setNewSelectedAddonIds] =
+    useState<Addon["_id"][]>();
+  useEffect(() => {
+    if (selectedAddonIds) {
+      setNewSelectedAddonIds(selectedAddonIds);
     }
+  }, [selectedAddonIds, setSelectedAddonIds, isModalOpen]);
+  const row_selection = {
+    onChange: (selectedRowKeys: Key[]) => {
+      setNewSelectedAddonIds(selectedRowKeys as Addon["_id"][]);
+    },
+    selectedRowKeys: newSelectedAddonIds ?? [],
+  };
+
+  const handleDelete = (id: string) => {
+    deleteAddon({ id });
+  };
+  const handleTitleChange = (addon: Addon, new_title: string) => {
+    if (new_title.trim() === "") return;
+    editAddon({ ...addon, title: new_title, id: addon._id });
+  };
+  const handlePriceChange = (addon: Addon, new_price: string) => {
+    if (isNaN(Number(new_price))) return;
+    editAddon({ ...addon, price: Number(new_price), id: addon._id });
   };
   const handleCreateAddOn = () => {
-    setDataSource((prev) => [
-      {
-        id: new Date().toString(),
-        key: new Date().toString(),
-        title: "New Addon",
-        price: 100,
-      },
-      ...prev,
-    ]);
+    createAddon({ title: "New Addon", price: 0 });
   };
-  const modal_columns: ColumnsType<AddOnModalDataType> = [
+  const modal_columns: ColumnsType<Addon> = [
     {
       title: "ชื่อ",
       dataIndex: "title",
@@ -82,7 +66,7 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
         <Text
           editable={{
             onChange: (value) => {
-              handleTitleChange(rec.id, value);
+              handleTitleChange(rec, value);
             },
           }}
         >
@@ -98,7 +82,7 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
         <Text
           editable={{
             onChange: (value) => {
-              handlePriceChange(rec.id, value);
+              handlePriceChange(rec, value);
             },
           }}
         >
@@ -113,7 +97,7 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
           <Button
             type="link"
             onClick={() => {
-              handleDelete(rec.id);
+              handleDelete(rec._id);
             }}
           >
             ลบ
@@ -122,6 +106,10 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
       },
     },
   ];
+  const handleConfirmSelectAddon = () => {
+    setSelectedAddonIds(newSelectedAddonIds ?? []);
+    setIsModalOpen(false);
+  };
 
   return (
     <Modal
@@ -139,7 +127,7 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
             </CenterContentButton>
             <CenterContentButton
               type="primary"
-              onClick={() => setIsModalOpen(false)}
+              onClick={handleConfirmSelectAddon}
             >
               ยืนยัน
             </CenterContentButton>
@@ -151,6 +139,9 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
       closeIcon={false}
       centered={true}
       width={"50%"}
+      onCancel={() => {
+        setIsModalOpen(false);
+      }}
     >
       <Input.Search
         style={{
@@ -161,6 +152,7 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
         allowClear
       />
       <Table
+        rowKey={(record) => record._id}
         rowSelection={row_selection}
         columns={modal_columns}
         dataSource={dataSource}

@@ -1,3 +1,4 @@
+import { useSelectedAddonsStore } from "@/modules/admin/menu/hooks/useAddons";
 import useChangePublishMenu from "@/modules/admin/menu/hooks/useChangePublishMenu";
 import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionMode";
 import useCreateMenu from "@/modules/admin/menu/hooks/useCreateMenu";
@@ -44,6 +45,7 @@ const MenuFormSection: React.FC = () => {
     useDeleteMenu(changeToCategoryMode);
   const { data: initialData } = useMenu(editMenuId ?? "");
   const { publishMenu, unPublishMenu } = useChangePublishMenu();
+  const { selectedAddonIds, setSelectedAddonIds } = useSelectedAddonsStore();
   useEffect(() => {
     form.resetFields();
   }, [form]);
@@ -75,17 +77,22 @@ const MenuFormSection: React.FC = () => {
       }
     } else if (consoleSectionMode === "add-menu") {
       form.resetFields();
+      setSelectedAddonIds([]);
     }
-  }, [consoleSectionMode, editMenuId, form, initialData]);
+  }, [consoleSectionMode, editMenuId, form, initialData, setSelectedAddonIds]);
   const handleFormSubmit = (values: FieldType) => {
-    console.log("values", values);
     if (consoleSectionMode === "add-menu") {
-      createMenu(values);
+      createMenu({
+        ...values,
+        addons: selectedAddonIds ?? [],
+      });
     } else if (consoleSectionMode === "edit-menu") {
       if (editMenuId) {
-        console.log("editMenu", { id: editMenuId, ...values });
-        console.log("initialData", initialData);
-        editMenu({ id: editMenuId, ...values });
+        editMenu({
+          id: editMenuId,
+          ...values,
+          addons: selectedAddonIds ?? [],
+        });
         if (published && !initialData?.published_at) {
           publishMenu({ id: editMenuId });
         } else if (!published && initialData?.published_at) {

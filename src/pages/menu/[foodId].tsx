@@ -39,9 +39,6 @@ const FoodDetail = () => {
       basketOrder = basketOrders.find(
         (order) => order.basketOrderId === basketOrderId.toString(),
       );
-      console.log("basketOrderId", basketOrderId);
-      console.log("basketOrder", basketOrder);
-      console.log("basketOrders", basketOrders);
     } else {
       setIsNewOrder(true);
     }

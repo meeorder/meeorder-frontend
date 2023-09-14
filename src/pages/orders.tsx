@@ -33,7 +33,7 @@ const Orders = () => {
           <OrderHeader>
             <H4>รายการอาหารที่สั่ง</H4>
             <H5 type="secondary">
-              โต๊ะ {isClientLoaded && session?.table.title}
+              โต๊ะ {isClientLoaded && session?.table?.title}
             </H5>
           </OrderHeader>
           <OrderList
