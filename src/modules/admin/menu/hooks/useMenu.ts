@@ -3,12 +3,14 @@ import { getMenuById } from "@/modules/services/menus";
 import { useQuery } from "@tanstack/react-query";
 
 const useMenu = (id: string) => {
-  const { selectedAddonIds, setSelectedAddonIds } = useSelectedAddonsStore();
+  const { menuId, setMenuId, selectedAddonIds, setSelectedAddonIds } =
+    useSelectedAddonsStore();
   return useQuery({
     queryKey: ["menu", id],
     queryFn: () => getMenuById({ id }),
     onSuccess: (data) => {
-      if (!selectedAddonIds) {
+      if (!selectedAddonIds || menuId !== id) {
+        setMenuId(id);
         setSelectedAddonIds(
           data.addons
             .filter((addon) => !addon.deleted_at)

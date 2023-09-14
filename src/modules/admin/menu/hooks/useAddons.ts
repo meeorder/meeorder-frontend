@@ -12,11 +12,17 @@ import { create } from "zustand";
 export type Addon = GetAllAddonsResponse[number];
 
 type SelectedAddonsStore = {
+  menuId: string | null;
+  setMenuId: (menuId: string | null) => void;
   selectedAddonIds: Addon["_id"][] | null;
   setSelectedAddonIds: (addonIds: Addon["_id"][] | null) => void;
 };
 
 export const useSelectedAddonsStore = create<SelectedAddonsStore>()((set) => ({
+  menuId: null,
+  setMenuId: (menuId) => {
+    set({ menuId });
+  },
   selectedAddonIds: null,
   setSelectedAddonIds: (addonIds) => {
     set({ selectedAddonIds: addonIds });
