@@ -13,6 +13,7 @@ const useOrder = (sessionId: string) => {
       getOrdersBySessionId({
         id: sessionId,
       }),
+    refetchInterval: 1000,
   });
 };
 

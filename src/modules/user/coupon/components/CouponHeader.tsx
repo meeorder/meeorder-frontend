@@ -1,6 +1,7 @@
 import { H3, H5 } from "@/modules/common/components/Typography";
+import { useClient } from "@/modules/common/hooks/useClient";
 import CouponPoint from "@/modules/user/coupon/components/CouponPoint";
-import { session } from "@/modules/user/mock/session";
+import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { Button, Tag, theme } from "antd";
@@ -18,6 +19,9 @@ const CouponHeader = () => {
     });
   };
 
+  const session = useSessionStore((state) => state.session);
+  const { isClientLoaded } = useClient();
+
   return (
     <CouponHeaderContainer>
       <CouponSubHeader>
@@ -29,7 +33,9 @@ const CouponHeader = () => {
           icon={<ArrowLeft size={16} />}
         />
         <StyledTableTag color={colorPrimary}>
-          <H5 style={{ color: "inherit" }}>โต๊ะ {session.tableNumber}</H5>
+          <H5 style={{ color: "inherit" }}>
+            โต๊ะ {isClientLoaded && session?.table.title}
+          </H5>
         </StyledTableTag>
       </CouponSubHeader>
       <CouponPoint />

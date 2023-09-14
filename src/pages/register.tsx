@@ -16,7 +16,15 @@ type FieldType = {
 
 const Register = () => {
   const [form] = Form.useForm<FieldType>();
-  const { mutate: register, isLoading, isSuccess, isError } = useRegister();
+  const {
+    mutate: register,
+    isLoading,
+    isError,
+  } = useRegister({
+    onSuccess: () => {
+      void router.push("/signin");
+    },
+  });
   const handleRegister = (values: FieldType) => {
     register(values);
   };
@@ -24,13 +32,7 @@ const Register = () => {
     token: { colorPrimary, colorBorder },
   } = theme.useToken();
   const router = useRouter();
-  useEffect(() => {
-    if (isSuccess) {
-      void router.push({
-        href: "/signin",
-      });
-    }
-  }, [isSuccess, router]);
+
   useEffect(() => {
     if (isError) {
       form.setFields([

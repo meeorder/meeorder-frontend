@@ -9,6 +9,7 @@ import useOrder from "@/modules/user/order/hooks/useOrder";
 import {
   useRevalidateSession,
   useSessionStore,
+  useSetNewSessionBySessionId,
 } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import Head from "next/head";
@@ -18,6 +19,7 @@ const Orders = () => {
   const { data: ordersData } = useOrder(session?._id ?? "");
   const { isClientLoaded } = useClient();
   useRevalidateSession();
+  useSetNewSessionBySessionId(session?._id ?? "");
 
   return (
     <>
