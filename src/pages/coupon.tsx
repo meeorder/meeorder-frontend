@@ -61,9 +61,6 @@ const Orders = () => {
       setModalOpen(true);
     } else if (isRedeemable && !hasCouponInUse) {
       updateCouponInSession({ coupon_id: coupon._id });
-      void router.push({
-        pathname: "/orders",
-      });
     }
   };
 
