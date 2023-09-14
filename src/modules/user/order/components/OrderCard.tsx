@@ -14,8 +14,7 @@ type OrderCardProps = {
 };
 
 const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
-  const colorTag =
-    mapStatusToColor[order?.cancelled_at ? "CANCEL" : order?.status];
+  const colorTag = mapStatusToColor[order?.status];
   return (
     <StyledCard>
       <FlexBetweenRow>
@@ -88,21 +87,20 @@ const FlexBetweenCol = styled.div`
   gap: 8px;
 `;
 
-const mapStatusToColor: Record<Order["status"] | "CANCEL", TagProps["color"]> =
-  {
-    IN_QUEUE: "orange",
-    PREPARING: "geekblue",
-    READY_TO_SERVE: "blue",
-    DONE: "green",
-    CANCEL: "red",
+const mapStatusToColor: Record<Order["status"], TagProps["color"]> = {
+  IN_QUEUE: "orange",
+  PREPARING: "geekblue",
+  READY_TO_SERVE: "blue",
+  DONE: "green",
+  CANCELLED: "red",
   };
 
-const mapOrderStatusTranslation: Record<Order["status"] | "CANCEL", string> = {
-  IN_QUEUE: "อยู่ในคิว",
-  PREPARING: "กำลังเตรียมอาหาร",
-  READY_TO_SERVE: "พร้อมเสิร์ฟ",
-  DONE: "สำเร็จ",
-  CANCEL: "ยกเลิก",
-};
+  const mapOrderStatusTranslation: Record<Order["status"], string> = {
+    IN_QUEUE: "อยู่ในคิว",
+    PREPARING: "กำลังเตรียมอาหาร",
+    READY_TO_SERVE: "พร้อมเสิร์ฟ",
+    DONE: "สำเร็จ",
+    CANCELLED: "ยกเลิก",
+  };
 
 export default OrderCard;

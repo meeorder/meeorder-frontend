@@ -10,21 +10,21 @@ import { Popover } from "antd";
 
 const OrderManagement = () => {
   const { data: allOrder } = useAllOrders();
-  // console.log("allOrder:", allOrder);
+  console.log("allOrder:", allOrder);
   return (
     <AppLayout layoutType="admin" currentPageId="employeeOrderManagement">
       <Container>
         <PageHeader>
           <H1>ออเดอร์ภายในร้าน</H1>
-          <Popover
+          <StyledPopover
             trigger="click"
             placement="bottomRight"
-            title="ตัวเลือกแสดงข้อมูล"
             content={
-              <>
+              <StyledContent>
+                <h1>ตัวเลือกแสดงข้อมูล</h1>
                 <p>Content</p>
                 <p>Content</p>
-              </>
+              </StyledContent>
             }
           >
             <CenterContentButton
@@ -34,7 +34,7 @@ const OrderManagement = () => {
             >
               ตัวเลือกแสดงข้อมูล
             </CenterContentButton>
-          </Popover>
+          </StyledPopover>
         </PageHeader>
         <OrderContainer>
           {allOrderStatus
@@ -46,7 +46,8 @@ const OrderManagement = () => {
               // allOrder.filter((order) => order.status === status)
               return {
                 status,
-                orders: allOrder?.filter((order) => order.status === status)??[],
+                orders:
+                  allOrder?.filter((order) => order.status === status) ?? [],
               };
             })
             .map(({ status, orders }) => (
@@ -83,16 +84,14 @@ const OrderContainer = styled.div`
   gap: 24px;
 `;
 
-export type OrderStatus =
-  | OrdersWithPriceData["orders"][number]["status"]
-  | "CANCEL";
+export type OrderStatus = OrdersWithPriceData["orders"][number]["status"];
 
 export const allOrderStatus = [
   "IN_QUEUE",
   "PREPARING",
   "READY_TO_SERVE",
   "DONE",
-  "CANCEL",
+  "CANCELLED",
 ] as const satisfies Readonly<OrderStatus[]>;
 
 export const orderStatusTranslation: Record<OrderStatus, string> = {
@@ -100,5 +99,19 @@ export const orderStatusTranslation: Record<OrderStatus, string> = {
   PREPARING: "กำลังเตรียมอาหาร",
   READY_TO_SERVE: "พร้อมเสิร์ฟ",
   DONE: "เสร็จสิ้น",
-  CANCEL: "ยกเลิก",
+  CANCELLED: "ยกเลิก",
 };
+
+const StyledPopover = styled(Popover)`
+  .ant-popover-inner{
+    padding: 0 !important;
+  }
+`;
+
+const StyledContent = styled.div`
+  h1 {
+    width: 100%;
+    font-size: 16px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+`

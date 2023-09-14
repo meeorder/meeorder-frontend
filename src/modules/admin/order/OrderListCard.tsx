@@ -1,19 +1,23 @@
 import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import styled from "@emotion/styled";
-import { ArrowLineRight } from "@phosphor-icons/react";
-import { Divider } from "antd";
+import { ArrowLineRight, CheckCircle, Trash } from "@phosphor-icons/react";
+import { Divider, theme } from "antd";
 import React from "react";
 type OrderListCardProps = {
   order: GetAllOrdersResponse[number];
   color: string;
 };
 
-const OrderListCard: React.FC<OrderListCardProps> = ({ order,color }) => {
+const OrderListCard: React.FC<OrderListCardProps> = ({ order, color }) => {
+  const { token } = theme.useToken();
   return (
     <CardContainer>
       <TextContainer>{order._id}</TextContainer>
-      <Divider type="vertical" />
-      <ArrowLineRight size={60} />
+      <Divider type="vertical" />({order.status === "DONE"}?{" "}
+      <CheckCircle size={44} color="blue" />
+      :({order.status === "CANCELLED"}? <Trash size={44} />:
+      <ArrowLineRight size={44} />
+      ))
     </CardContainer>
   );
 };
