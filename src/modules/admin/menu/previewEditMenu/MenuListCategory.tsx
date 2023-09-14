@@ -23,7 +23,7 @@ import {
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import styled from "@emotion/styled";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 type MenuList = GetAllMenusResponse[number]["menus"];
 type Menu = MenuList[number];
@@ -45,9 +45,9 @@ const MenuListCategory: React.FC<MenuListCategoryProps> = ({
   menus,
   menuSectionMode,
 }) => {
-  const [menuList, setMenuList] = useState<MenuList>(menus);
+  const [menuList, setMenuList] = useState<MenuList>([]);
   const [activeMenu, setActiveMenu] = useState<Menu>();
-  const { mutate: updateCategotyById } = useUpdateCategoryById();
+  const { mutate: updateCategoryById } = useUpdateCategoryById();
   const dndId = useId();
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -58,6 +58,10 @@ const MenuListCategory: React.FC<MenuListCategoryProps> = ({
       },
     }),
   );
+
+  useEffect(() => {
+    setMenuList(menus);
+  }, [menus]);
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
@@ -81,7 +85,7 @@ const MenuListCategory: React.FC<MenuListCategoryProps> = ({
     const updateMenuList = arrayMove<Menu>(menuList, activeIndex, overIndex);
 
     if (activeIndex !== overIndex) {
-      updateCategotyById({
+      updateCategoryById({
         id: category._id,
         menus: updateMenuList.map((menu) => menu._id),
       });

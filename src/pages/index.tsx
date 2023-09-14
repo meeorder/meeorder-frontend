@@ -1,10 +1,10 @@
 import AppLayout from "@/modules/AppLayout";
+import useCategories from "@/modules/common/hooks/useCategory";
 import { useSetSessionUser } from "@/modules/common/hooks/useSetSessionUser";
 import { pages } from "@/modules/pageConfig";
 import Category from "@/modules/user/menu/components/Category";
 import CategoryNav from "@/modules/user/menu/components/CategoryNav";
 import useAllMenu from "@/modules/user/menu/hooks/useAllMenu";
-import useCategories from "@/modules/user/menu/hooks/useCategory";
 import { useSetNewSessionBySessionId } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import Head from "next/head";

@@ -1,4 +1,4 @@
-import CatergoryList from "@/modules/admin/menu/console/CategoryList";
+import CategoryList from "@/modules/admin/menu/console/CategoryList";
 import useCreateCategory from "@/modules/admin/menu/hooks/useCreateCategory";
 import { H4 } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
@@ -19,7 +19,7 @@ const CategoryOverview = () => {
         </Button>
       }
     >
-      <CatergoryList />
+      <CategoryList />
     </CategoryOverviewCard>
   );
 };
