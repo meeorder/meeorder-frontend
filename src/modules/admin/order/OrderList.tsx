@@ -53,7 +53,7 @@ const OrderList: React.FC<OrderListCardProps> = ({ status, orders }) => {
           <OrderListCard
             order={order}
             key={order._id}
-            color={badgeColor[status]??"white"}
+            color={borderColor[status]??"white"}
           />
         );
       })}
@@ -68,6 +68,7 @@ const StyledCard = styled(Card)<{ status: OrderStatus }>`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 144px);
+    width: 252px !important;
   border: 1px solid;
   border-color: ${(props) => borderColor[props.status]};
   .ant-card-body {
