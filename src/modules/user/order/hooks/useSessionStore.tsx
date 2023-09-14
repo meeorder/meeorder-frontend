@@ -53,13 +53,11 @@ export const useSetNewSessionBySessionId = (
       const data = await getSessionById({
         id: sessionId,
       });
-      console.log("Refetch or something", data);
       setSession(data);
       return data;
     },
     refetchInterval: 1000,
     onSuccess: (newSession) => {
-      console.log("Refetch or something success newSession", newSession);
       if (newSession?.finished_at !== null) {
         clearSession();
         return;

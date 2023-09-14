@@ -44,7 +44,14 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ user }) => {
     const userColor = colors[parseInt(user._id) % colors.length];
 
     return (
-      <Avatar size={44} style={{ backgroundColor: userColor }}>
+      <Avatar
+        size={44}
+        style={{
+          backgroundColor: userColor,
+          textAlign: "center",
+          alignItems: "center",
+        }}
+      >
         {user.username?.[0]?.toUpperCase() || ""}
       </Avatar>
     );

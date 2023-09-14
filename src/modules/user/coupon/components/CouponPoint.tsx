@@ -39,7 +39,8 @@ const CouponPoint = () => {
             <H3 style={{ color: "inherit" }}>
               {commaFormat(
                 isHeadTable
-                  ? (user?.point ?? 0) - (session?.coupon?.required_point ?? 0)
+                  ? (session?.user?.point ?? 0) -
+                      (session?.coupon?.required_point ?? 0)
                   : user.point,
               )}
             </H3>

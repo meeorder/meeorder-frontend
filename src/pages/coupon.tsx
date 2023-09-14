@@ -98,7 +98,7 @@ const Orders = () => {
           margin: "0 auto",
           borderRadius: "20px",
         }}
-        style={{ borderRadius: "20px" }}
+        style={{ borderRadius: "20px 20px 0 0" }}
       >
         <CouponDrawerContent
           coupon={coupon}
