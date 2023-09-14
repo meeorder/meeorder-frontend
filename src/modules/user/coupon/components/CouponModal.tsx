@@ -41,7 +41,6 @@ const CouponModal: React.FC<CouponModalProps> = ({
         setModalOpen(false);
         if (modalType === "changeHeadTable") {
           setSessionUser();
-          console.log("refetchCoupons");
           void refetchCoupons();
         } else if (coupon) {
           updateCouponInSession({ coupon_id: coupon?._id });

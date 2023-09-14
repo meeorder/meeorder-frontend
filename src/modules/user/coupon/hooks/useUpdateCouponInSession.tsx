@@ -17,7 +17,6 @@ export const useUpdateCouponInSession = () => {
         coupon_id: payload.coupon_id,
       }),
     onSuccess: async () => {
-      console.log("useUpdateCouponInSession success");
       await refetch();
     },
   });
