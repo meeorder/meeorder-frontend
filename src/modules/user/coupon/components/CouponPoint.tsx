@@ -34,7 +34,7 @@ const CouponPoint = () => {
 
       {isClientLoaded && user ? (
         <Space direction="vertical" size={4}>
-          <H4 style={{ color: colorPrimaryBgHover }}>คุณมี</H4>
+          <H4 style={{ color: colorPrimaryBgHover }}>คุณมีแต้มคงเหลือ</H4>
           <FlexRow>
             <H3 style={{ color: "inherit" }}>
               {commaFormat(

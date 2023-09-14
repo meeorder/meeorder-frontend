@@ -1,7 +1,7 @@
 import { H5, Text } from "@/modules/common/components/Typography";
 import { useClient } from "@/modules/common/hooks/useClient";
 import { useUserStore } from "@/modules/common/hooks/useUserStore";
-import { tuncateString } from "@/modules/common/utils";
+import { truncateString } from "@/modules/common/utils";
 import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
 import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import UserAvatar from "@/modules/user/user/UserAvatar";
@@ -59,7 +59,7 @@ const OrderCoupon = () => {
             )}
             {isClientLoaded && !isHeadTable && (
               <Text type="secondary">
-                {tuncateString(session?.user?.username ?? "", 15)}{" "}
+                {truncateString(session?.user?.username ?? "", 15)}{" "}
                 เป็นเจ้าของบิล
               </Text>
             )}
