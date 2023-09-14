@@ -1,7 +1,7 @@
+import { useClient } from "@/modules/common/hooks/useClient";
 import { type User } from "@/modules/services/auth";
-import styled from "@emotion/styled";
 import { User as ReactUser } from "@phosphor-icons/react";
-import { theme } from "antd";
+import { Avatar, theme } from "antd";
 
 type UserAvatarProps = {
   user?: User | null;
@@ -11,6 +11,12 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ user }) => {
   const {
     token: { colorPrimary, colorPrimaryBg },
   } = theme.useToken();
+
+  const { isClientLoaded } = useClient();
+
+  if (!isClientLoaded) {
+    return null;
+  }
 
   if (user) {
     const colors = [
@@ -38,26 +44,19 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ user }) => {
     const userColor = colors[parseInt(user._id) % colors.length];
 
     return (
-      <Avatar style={{ backgroundColor: userColor }}>
-        {user?.username?.[0]?.toUpperCase() || ""}
+      <Avatar size={44} style={{ backgroundColor: userColor }}>
+        {user.username?.[0]?.toUpperCase() || ""}
       </Avatar>
     );
   } else {
     return (
-      <Avatar style={{ backgroundColor: colorPrimaryBg }}>
-        <ReactUser color={colorPrimary} weight="duotone" />
-      </Avatar>
+      <Avatar
+        size={44}
+        icon={<ReactUser color={colorPrimary} weight="duotone" />}
+        style={{ backgroundColor: colorPrimaryBg }}
+      />
     );
   }
 };
 
 export default UserAvatar;
-
-const Avatar = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-`;

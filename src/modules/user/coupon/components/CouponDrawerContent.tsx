@@ -1,12 +1,13 @@
 import { H3, H5, Text } from "@/modules/common/components/Typography";
-import { commaFormat } from "@/modules/common/utils";
-import { type Coupon } from "@/modules/user/mock/coupons";
+import { checkImageSrc, commaFormat } from "@/modules/common/utils";
+import { type Coupon } from "@/modules/user/coupon/types";
+import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import { Button } from "antd";
 import Image from "next/image";
 
 type CouponDrawerContentProps = {
-  coupon: Coupon | undefined;
+  coupon?: Coupon;
   onClickCouponButton: (coupon: Coupon) => void;
 };
 
@@ -14,11 +15,12 @@ const CouponDrawerContent: React.FC<CouponDrawerContentProps> = ({
   coupon,
   onClickCouponButton,
 }) => {
+  const session = useSessionStore((state) => state.session);
+
   if (!coupon) return;
 
-  // TODO: Change this to relate with BE
-  const isDisabled = coupon.status === "disabled";
-  const isInUsed = coupon.status === "inUsed";
+  const isInUsed = coupon._id === session?.coupon?._id;
+  const isDisabled = !isInUsed && !coupon.redeemable;
   const statusText = isInUsed
     ? "นำคูปองออก"
     : `แลกใช้ ${commaFormat(coupon.required_point)} แต้ม`;
@@ -27,7 +29,7 @@ const CouponDrawerContent: React.FC<CouponDrawerContentProps> = ({
     <CouponDrawerContentContainer>
       <CouponHeader>
         <CouponHeaderImage
-          src={coupon.image}
+          src={checkImageSrc(coupon.image)}
           alt="Coupon image"
           width={900}
           height={900}

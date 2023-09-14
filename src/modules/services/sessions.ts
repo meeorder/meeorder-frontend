@@ -113,14 +113,11 @@ export const getOrdersBySessionId = async (
 
 export type UpdateSessionUserByIdPathParam =
   paths["/sessions/{id}/user"]["patch"]["parameters"]["path"];
-export type UpdateSessionUserByIdBodyParam =
-  paths["/sessions/{id}/user"]["patch"]["requestBody"]["content"]["application/json"];
-
 export type UpdateSessionUserByIdResponse =
-  paths["/sessions/{id}/user"]["patch"]["responses"]["200"]["content"]["application/json"];
+  paths["/sessions/{id}/user"]["patch"]["responses"]["204"]["content"]["application/json"];
 
 export const updateSessionUserById = async (
-  params: UpdateSessionUserByIdPathParam & UpdateSessionUserByIdBodyParam,
+  params: UpdateSessionUserByIdPathParam,
 ): Promise<UpdateSessionUserByIdResponse> => {
   const { data } = await axiosInstance.patch<UpdateSessionUserByIdResponse>(
     `/sessions/${params.id}/user`,

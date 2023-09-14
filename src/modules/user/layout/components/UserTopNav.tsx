@@ -13,7 +13,6 @@ const UserTopNav = () => {
   const { isClientLoaded } = useClient();
 
   const session = useSessionStore((state) => state.session);
-
   const user = useUserStore((state) => state.user);
 
   return (
@@ -41,9 +40,13 @@ const UserTopNav = () => {
       <StyledButton
         type="default"
         shape="circle"
-        icon={<UserAvatar user={user} />}
-        onClick={() => void router.push("/signin")}
-      />
+        // TODO: If already signed in, go to profile page?
+        onClick={() => {
+          if (isClientLoaded && !user) void router.push("/signin");
+        }}
+      >
+        <UserAvatar user={user} />
+      </StyledButton>
     </>
   );
 };

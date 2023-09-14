@@ -1,26 +1,42 @@
 import CouponCard from "@/modules/user/coupon/components/CouponCard";
-import { type Coupon } from "@/modules/user/mock/coupons";
+import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
+import { type Coupon } from "@/modules/user/coupon/types";
+import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import { Space } from "antd";
 import React from "react";
 
 type CouponListProps = {
-  coupons: Coupon[];
   onClickCoupon: (coupon: Coupon) => void;
   onClickCouponButton: (coupon: Coupon) => void;
 };
 
 const CouponList: React.FC<CouponListProps> = ({
-  coupons,
   onClickCoupon,
   onClickCouponButton,
 }) => {
+  const session = useSessionStore((state) => state.session);
+  const { data: coupons } = useAllUsableCouponsInSession();
+
+  const inUsedArray =
+    coupons?.filter((coupon) => coupon._id === session?.coupon?._id) ?? [];
+  const redeemableArray =
+    coupons?.filter(
+      (coupon) => coupon.redeemable && !inUsedArray?.includes(coupon),
+    ) ?? [];
+  const disableArray =
+    coupons?.filter(
+      (coupon) => !coupon.redeemable && !inUsedArray?.includes(coupon),
+    ) ?? [];
+
+  const sortedCoupons = [...inUsedArray, ...redeemableArray, ...disableArray];
+
   return (
     <StyledSpace direction="vertical" size={8} style={{ display: "flex" }}>
-      {coupons.map((coupon) => {
+      {sortedCoupons?.map((coupon) => {
         return (
           <CouponCard
-            key={coupon.id}
+            key={coupon._id}
             coupon={coupon}
             onClickCoupon={onClickCoupon}
             onClickCouponButton={onClickCouponButton}

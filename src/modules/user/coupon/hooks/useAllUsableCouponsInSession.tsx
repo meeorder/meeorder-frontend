@@ -9,6 +9,9 @@ export const useAllUsableCouponsInSession = () => {
     queryKey: ["getAllUsableCouponsInSession", session?._id],
     queryFn: () => getAllUsableCouponsInSession({ id: session?._id || "" }),
     retry: false,
+    onSuccess: (data) => {
+      console.log("useAllUsableCouponsInSession", data);
+    },
     enabled: !!session,
   });
 

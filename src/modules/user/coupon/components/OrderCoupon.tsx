@@ -1,4 +1,5 @@
 import { H5, Text } from "@/modules/common/components/Typography";
+import { useClient } from "@/modules/common/hooks/useClient";
 import { useUserStore } from "@/modules/common/hooks/useUserStore";
 import { tuncateString } from "@/modules/common/utils";
 import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
@@ -15,35 +16,32 @@ const OrderCoupon = () => {
   } = theme.useToken();
 
   const router = useRouter();
+
+  const { isClientLoaded } = useClient();
+  const session = useSessionStore((state) => state.session);
+  const user = useUserStore((state) => state.user);
+  const { data: coupons } = useAllUsableCouponsInSession();
+
   const onClickOrderCoupon = () => {
     void router.push({
       pathname: "/coupon",
     });
   };
 
-  const session = useSessionStore((state) => state.session);
-  const user = useUserStore((state) => state.user);
-  const { data: coupons } = useAllUsableCouponsInSession();
-
-  const isHeadTable = session?.user === user?._id;
-
-  const coupon = coupons?.find((coupon) => coupon._id === session?.coupon);
+  const isHeadTable = session?.user?._id === user?._id;
+  const coupon = coupons?.find((coupon) => coupon._id === session?.coupon?._id);
 
   return (
     <OrderCouponContainer onClick={onClickOrderCoupon}>
       <StyledCard>
         <OrderCouponContent>
           <UserAvatar
-            user={
-              isHeadTable
-                ? user
-                : {
-                    _id: session?.user || "",
-                    username: session?.user || "",
-                    point: 0,
-                    role: "user",
-                  }
-            }
+            user={{
+              _id: session?.user?._id ?? "",
+              username: session?.user?.username ?? "",
+              point: session?.user?.point ?? 0,
+              role: session?.user?.role.toString() ?? "1",
+            }}
           />
           <FlexBetweenCol>
             {coupon ? (
@@ -55,9 +53,10 @@ const OrderCoupon = () => {
             ) : (
               <H5>เลือกใช้คูปอง</H5>
             )}
-            {!isHeadTable && (
+            {isClientLoaded && !isHeadTable && (
               <Text type="secondary">
-                {tuncateString(session?.user || "", 15)} เป็นเจ้าของบิล
+                {tuncateString(session?.user?.username ?? "", 15)}{" "}
+                เป็นเจ้าของบิล
               </Text>
             )}
           </FlexBetweenCol>

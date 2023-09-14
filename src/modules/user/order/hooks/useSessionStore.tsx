@@ -34,7 +34,7 @@ export const useSessionStore = create<SessionStore>()(
 
 export const useSetNewSessionBySessionId = (
   sessionId: string,
-  autoClearBasket = true,
+  autoClearBasket = false,
 ) => {
   const { clearSession, setSession, session } = useSessionStore((state) => ({
     session: state.session,
@@ -49,11 +49,17 @@ export const useSetNewSessionBySessionId = (
   const { data: sessionData, refetch } = useQuery({
     queryKey: ["getSessionById", sessionId],
     retry: false,
-    queryFn: () =>
-      getSessionById({
+    queryFn: async () => {
+      const data = await getSessionById({
         id: sessionId,
-      }),
+      });
+      console.log("Refetch or something", data);
+      setSession(data);
+      return data;
+    },
+    refetchInterval: 1000,
     onSuccess: (newSession) => {
+      console.log("Refetch or something success newSession", newSession);
       if (newSession?.finished_at !== null) {
         clearSession();
         return;
@@ -70,7 +76,7 @@ export const useSetNewSessionBySessionId = (
       clearSession();
       deleteAllBasketOrder();
     },
-    enabled: !!sessionId && session?._id !== sessionId,
+    enabled: !!sessionId,
   });
 
   return { refetch };

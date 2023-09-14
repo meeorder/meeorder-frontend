@@ -15,8 +15,8 @@ const Home = () => {
   const allMenu = useAllMenu();
   const categories = useCategories();
   const [sessionId, setSessionId] = useState<string>("");
-  useSetNewSessionBySessionId(sessionId);
-  const { mutate: setSessionUser } = useSetSessionUser({ isForce: true });
+  useSetNewSessionBySessionId(sessionId, true);
+  const { mutate: setSessionUser } = useSetSessionUser();
 
   const router = useRouter();
 

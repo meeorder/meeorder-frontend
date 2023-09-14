@@ -1,9 +1,11 @@
+import { useUserStore } from "@/modules/common/hooks/useUserStore";
 import CouponDrawerContent from "@/modules/user/coupon/components/CouponDrawerContent";
 import CouponHeader from "@/modules/user/coupon/components/CouponHeader";
 import CouponList from "@/modules/user/coupon/components/CouponList";
 import CouponModal from "@/modules/user/coupon/components/CouponModal";
-import { coupons, type Coupon } from "@/modules/user/mock/coupons";
-import { session } from "@/modules/user/mock/session";
+import { useUpdateCouponInSession } from "@/modules/user/coupon/hooks/useUpdateCouponInSession";
+import { type Coupon } from "@/modules/user/coupon/types";
+import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import { Drawer } from "antd";
 import Head from "next/head";
@@ -15,11 +17,15 @@ const Orders = () => {
   const [coupon, setCoupon] = useState<Coupon>();
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalType, setModalType] = useState<"headTable" | "changeCoupon">(
-    "changeCoupon",
-  );
+  const [modalType, setModalType] = useState<
+    "changeHeadTable" | "changeCoupon"
+  >("changeCoupon");
 
   const router = useRouter();
+
+  const session = useSessionStore((state) => state.session);
+  const user = useUserStore((state) => state.user);
+  const { mutate: updateCouponInSession } = useUpdateCouponInSession();
 
   const onClickCoupon = (coupon: Coupon) => {
     setCoupon(coupon);
@@ -27,34 +33,34 @@ const Orders = () => {
   };
 
   const onClickCouponButton = (coupon: Coupon) => {
-    if (!session.user) {
+    setCoupon(coupon);
+    if (!user) {
       void router.push({
-        // TODO: redirect to signin path
-        pathname: "/sign-in",
+        pathname: "/signin",
       });
       return;
     }
 
-    const isHeadTable = session.user === session.headTableUser;
+    const isHeadTable = user?._id === session?.user?._id;
     if (!isHeadTable) {
       setDrawerOpen(false);
-      setModalType("headTable");
+      setModalType("changeHeadTable");
       setModalOpen(true);
       return;
     }
 
-    const isInUsed = coupon.status === "inUsed";
-    const isRedeemable = coupon.status === "redeemable";
-    const hasCouponInUse = !!session.coupon;
+    const isInUsed = coupon._id === session?.coupon?._id;
+    const isRedeemable = coupon.redeemable;
+    const hasCouponInUse = !!session?.coupon;
 
     if (isInUsed) {
-      // TODO: remove coupon BE
+      updateCouponInSession({ coupon_id: null });
     } else if (isRedeemable && hasCouponInUse) {
       setDrawerOpen(false);
       setModalType("changeCoupon");
       setModalOpen(true);
     } else if (isRedeemable && !hasCouponInUse) {
-      // TODO: add coupon BE
+      updateCouponInSession({ coupon_id: coupon._id });
       void router.push({
         pathname: "/orders",
       });
@@ -71,16 +77,17 @@ const Orders = () => {
       <CouponHeader />
       <CouponContainer>
         <CouponList
-          coupons={coupons}
           onClickCoupon={onClickCoupon}
           onClickCouponButton={onClickCouponButton}
         />
       </CouponContainer>
       <CouponModal
+        coupon={coupon}
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
         modalType={modalType}
       />
+
       <Drawer
         placement="bottom"
         closable={false}
