@@ -48,8 +48,6 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ user }) => {
         size={44}
         style={{
           backgroundColor: userColor,
-          textAlign: "center",
-          alignItems: "center",
         }}
       >
         {user.username?.[0]?.toUpperCase() || ""}
