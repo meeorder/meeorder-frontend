@@ -1,7 +1,7 @@
 import { H3, H5, Text } from "@/modules/common/components/Typography";
 import { checkImageSrc, commaFormat } from "@/modules/common/utils";
 import { type Coupon } from "@/modules/user/coupon/types";
-import { useSession } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import { Button } from "antd";
 import Image from "next/image";

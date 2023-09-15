@@ -2,7 +2,7 @@ import { Text } from "@/modules/common/components/Typography";
 import UserAvatar from "@/modules/common/components/UserAvatar";
 import { useClient } from "@/modules/common/hooks/useClient";
 import { useUser } from "@/modules/common/hooks/useUserStore";
-import { useSession } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import { Button } from "antd";
 import Image from "next/image";

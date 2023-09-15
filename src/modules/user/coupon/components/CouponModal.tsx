@@ -3,7 +3,7 @@ import { useSetSessionUser } from "@/modules/common/hooks/useSetSessionUser";
 import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
 import { useUpdateCouponInSession } from "@/modules/user/coupon/hooks/useUpdateCouponInSession";
 import { type Coupon } from "@/modules/user/coupon/types";
-import { useSession } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import { Modal } from "antd";
 
 type CouponModalProps = {

@@ -1,5 +1,5 @@
 import { updateCouponInSession } from "@/modules/services/sessions";
-import { useSessionIdStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSessionIdStore } from "@/modules/user/order/hooks/useSession";
 import { queryClient } from "@/pages/_app";
 import { useMutation } from "@tanstack/react-query";
 

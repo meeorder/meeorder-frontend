@@ -1,7 +1,7 @@
 import CouponCard from "@/modules/user/coupon/components/CouponCard";
 import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
 import { type Coupon } from "@/modules/user/coupon/types";
-import { useSession } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import { Space } from "antd";
 import React from "react";

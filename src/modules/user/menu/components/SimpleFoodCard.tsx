@@ -1,7 +1,7 @@
 import TextPrice from "@/modules/common/components/TextPrice";
 import { checkImageSrc } from "@/modules/common/utils";
 import { type Menu } from "@/modules/user/menu/types";
-import { useSession } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import { Button, List } from "antd";

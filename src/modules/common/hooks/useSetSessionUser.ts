@@ -1,5 +1,5 @@
 import { updateSessionUserById } from "@/modules/services/sessions";
-import { useSession } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import { queryClient } from "@/pages/_app";
 import { useMutation } from "@tanstack/react-query";
 

@@ -3,7 +3,7 @@ import {
   type CreateOrderBodyParam,
 } from "@/modules/services/orders";
 import { type Menu } from "@/modules/user/menu/types";
-import { useSessionIdStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSessionIdStore } from "@/modules/user/order/hooks/useSession";
 import { useMutation } from "@tanstack/react-query";
 import { randomBytes } from "crypto";
 import { useRouter } from "next/router";

@@ -5,7 +5,7 @@ import { pages } from "@/modules/pageConfig";
 import Category from "@/modules/user/menu/components/Category";
 import CategoryNav from "@/modules/user/menu/components/CategoryNav";
 import useAllMenu from "@/modules/user/menu/hooks/useAllMenu";
-import { useSessionIdStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSessionIdStore } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import Head from "next/head";
 import { useRouter } from "next/router";

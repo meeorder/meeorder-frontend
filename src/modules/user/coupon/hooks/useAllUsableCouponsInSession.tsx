@@ -1,5 +1,5 @@
 import { getAllUsableCouponsInSession } from "@/modules/services/sessions";
-import { useSessionIdStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSessionIdStore } from "@/modules/user/order/hooks/useSession";
 import { useQuery } from "@tanstack/react-query";
 
 export const useAllUsableCouponsInSession = () => {

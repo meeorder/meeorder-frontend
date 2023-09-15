@@ -4,7 +4,7 @@ import { useClient } from "@/modules/common/hooks/useClient";
 import { useUser } from "@/modules/common/hooks/useUserStore";
 import { truncateString } from "@/modules/common/utils";
 import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
-import { useSession } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import { CaretRight } from "@phosphor-icons/react";
 import { Button, Card, theme } from "antd";

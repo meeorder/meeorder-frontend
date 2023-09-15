@@ -6,7 +6,7 @@ import OrderCoupon from "@/modules/user/coupon/components/OrderCoupon";
 import OrderList from "@/modules/user/order/components/OrderList";
 import OrderSummaryPrice from "@/modules/user/order/components/OrderSummaryPrice";
 import useOrder from "@/modules/user/order/hooks/useOrder";
-import { useSession } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import Head from "next/head";
 

@@ -3,7 +3,7 @@ import WireFrame from "@/modules/mock/components/WireFrame";
 import { type PageId } from "@/modules/pageConfig";
 import UserBottomNav from "@/modules/user/layout/components/UserBottomNav";
 import UserTopNav from "@/modules/user/layout/components/UserTopNav";
-import { useSession } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 
 type UserLayoutProps = {

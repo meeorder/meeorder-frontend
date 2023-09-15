@@ -5,7 +5,7 @@ import CouponList from "@/modules/user/coupon/components/CouponList";
 import CouponModal from "@/modules/user/coupon/components/CouponModal";
 import { useUpdateCouponInSession } from "@/modules/user/coupon/hooks/useUpdateCouponInSession";
 import { type Coupon } from "@/modules/user/coupon/types";
-import { useSession } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import { Drawer } from "antd";
 import Head from "next/head";
