@@ -1,7 +1,7 @@
 import { H5, Text } from "@/modules/common/components/Typography";
 import UserAvatar from "@/modules/common/components/UserAvatar";
 import { useClient } from "@/modules/common/hooks/useClient";
-import { useUserStore } from "@/modules/common/hooks/useUserStore";
+import { useUser } from "@/modules/common/hooks/useUserStore";
 import { truncateString } from "@/modules/common/utils";
 import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
 import { useSession } from "@/modules/user/order/hooks/useSessionStore";
@@ -19,7 +19,7 @@ const OrderCoupon = () => {
 
   const { isClientLoaded } = useClient();
   const { data: session } = useSession();
-  const user = useUserStore((state) => state.user);
+  const { data: user } = useUser();
   const { data: coupons } = useAllUsableCouponsInSession();
 
   const onClickOrderCoupon = () => {

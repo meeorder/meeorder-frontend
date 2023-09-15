@@ -1,7 +1,7 @@
 import { Text } from "@/modules/common/components/Typography";
 import UserAvatar from "@/modules/common/components/UserAvatar";
 import { useClient } from "@/modules/common/hooks/useClient";
-import { useUserStore } from "@/modules/common/hooks/useUserStore";
+import { useUser } from "@/modules/common/hooks/useUserStore";
 import { useSession } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import { Button } from "antd";
@@ -12,7 +12,7 @@ const UserTopNav = () => {
   const router = useRouter();
   const { isClientLoaded } = useClient();
   const { data: session } = useSession();
-  const user = useUserStore((state) => state.user);
+  const { data: user } = useUser();
 
   return (
     <>

@@ -29,6 +29,8 @@ const CouponCard: React.FC<CouponCardProps> = ({
     ? "นำคูปองออก"
     : `แลก ${commaFormat(coupon.required_point)} แต้ม`;
 
+  if (!coupon || !session) return null;
+
   return (
     <StyledCard
       style={{ borderColor: isInUsed ? colorPrimary : "" }}
@@ -52,6 +54,9 @@ const CouponCard: React.FC<CouponCardProps> = ({
             type="primary"
             ghost={isInUsed}
             disabled={isDisabled}
+            style={{
+              transition: "none",
+            }}
             onClick={(e) => {
               e.stopPropagation();
               onClickCouponButton(coupon);

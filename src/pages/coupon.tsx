@@ -1,4 +1,4 @@
-import { useUserStore } from "@/modules/common/hooks/useUserStore";
+import { useUser } from "@/modules/common/hooks/useUserStore";
 import CouponDrawerContent from "@/modules/user/coupon/components/CouponDrawerContent";
 import CouponHeader from "@/modules/user/coupon/components/CouponHeader";
 import CouponList from "@/modules/user/coupon/components/CouponList";
@@ -24,7 +24,7 @@ const Orders = () => {
   const router = useRouter();
 
   const { data: session } = useSession();
-  const user = useUserStore((state) => state.user);
+  const { data: user } = useUser();
   const { mutate: updateCouponInSession } = useUpdateCouponInSession();
 
   const onClickCoupon = (coupon: Coupon) => {

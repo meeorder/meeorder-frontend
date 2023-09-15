@@ -1,7 +1,7 @@
 import { H3, H4 } from "@/modules/common/components/Typography";
 import UserAvatar from "@/modules/common/components/UserAvatar";
 import { useClient } from "@/modules/common/hooks/useClient";
-import { useUserStore } from "@/modules/common/hooks/useUserStore";
+import { useUser } from "@/modules/common/hooks/useUserStore";
 import { commaFormat } from "@/modules/common/utils";
 import { useSession } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
@@ -14,7 +14,7 @@ const CouponPoint = () => {
   } = theme.useToken();
 
   const { isClientLoaded } = useClient();
-  const user = useUserStore((state) => state.user);
+  const { data: user } = useUser();
   const { data: session } = useSession();
 
   const router = useRouter();
@@ -27,8 +27,6 @@ const CouponPoint = () => {
   };
 
   const isHeadTable = session?.user?._id === user?._id;
-  console.log("isHeadTable", isHeadTable);
-  console.log("session?.user", session?.user);
 
   return (
     <CouponPointContainer color={colorPrimary} onClick={onClickCouponPoint}>

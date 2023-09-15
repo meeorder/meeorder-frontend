@@ -16,6 +16,7 @@ export const useSetSessionUser = (isForce = false) => {
     },
     onSuccess: () => {
       void queryClient.invalidateQueries(["getSessionById"]);
+      void queryClient.invalidateQueries(["getCurrentUser"]);
     },
   });
 };
