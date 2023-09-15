@@ -3,7 +3,7 @@ import { useSetSessionUser } from "@/modules/common/hooks/useSetSessionUser";
 import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
 import { useUpdateCouponInSession } from "@/modules/user/coupon/hooks/useUpdateCouponInSession";
 import { type Coupon } from "@/modules/user/coupon/types";
-import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSessionStore";
 import { Modal } from "antd";
 
 type CouponModalProps = {
@@ -19,7 +19,7 @@ const CouponModal: React.FC<CouponModalProps> = ({
   setModalOpen,
   modalType,
 }) => {
-  const session = useSessionStore((state) => state.session);
+  const { data: session } = useSession();
   const { mutate: setSessionUser } = useSetSessionUser(true);
   const { refetch: refetchCoupons } = useAllUsableCouponsInSession();
   const { mutate: updateCouponInSession } = useUpdateCouponInSession();

@@ -5,18 +5,17 @@ import { pages } from "@/modules/pageConfig";
 import Category from "@/modules/user/menu/components/Category";
 import CategoryNav from "@/modules/user/menu/components/CategoryNav";
 import useAllMenu from "@/modules/user/menu/hooks/useAllMenu";
-import { useSetNewSessionBySessionId } from "@/modules/user/order/hooks/useSessionStore";
+import { useSessionIdStore } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const Home = () => {
   const allMenu = useAllMenu();
   const categories = useCategories();
-  const [sessionId, setSessionId] = useState<string>("");
-  useSetNewSessionBySessionId(sessionId, true);
   const { mutate: setSessionUser } = useSetSessionUser();
+  const setSessionId = useSessionIdStore((state) => state.setSessionId);
 
   const router = useRouter();
 
@@ -25,7 +24,7 @@ const Home = () => {
       return;
     }
     const sessionId = router.query["session-id"];
-    if (typeof sessionId === "string") {
+    if (typeof sessionId === "string" && sessionId.length > 0) {
       setSessionId(sessionId);
     }
   }, [router]);

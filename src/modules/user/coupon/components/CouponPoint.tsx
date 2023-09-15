@@ -3,7 +3,7 @@ import UserAvatar from "@/modules/common/components/UserAvatar";
 import { useClient } from "@/modules/common/hooks/useClient";
 import { useUserStore } from "@/modules/common/hooks/useUserStore";
 import { commaFormat } from "@/modules/common/utils";
-import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import { Space, Tag, theme } from "antd";
 import { useRouter } from "next/router";
@@ -15,7 +15,7 @@ const CouponPoint = () => {
 
   const { isClientLoaded } = useClient();
   const user = useUserStore((state) => state.user);
-  const session = useSessionStore((state) => state.session);
+  const { data: session } = useSession();
 
   const router = useRouter();
   const onClickCouponPoint = () => {
@@ -27,6 +27,8 @@ const CouponPoint = () => {
   };
 
   const isHeadTable = session?.user?._id === user?._id;
+  console.log("isHeadTable", isHeadTable);
+  console.log("session?.user", session?.user);
 
   return (
     <CouponPointContainer color={colorPrimary} onClick={onClickCouponPoint}>

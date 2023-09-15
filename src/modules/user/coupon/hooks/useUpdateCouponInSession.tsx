@@ -1,23 +1,20 @@
 import { updateCouponInSession } from "@/modules/services/sessions";
-import {
-  useSessionStore,
-  useSetNewSessionBySessionId,
-} from "@/modules/user/order/hooks/useSessionStore";
+import { useSessionIdStore } from "@/modules/user/order/hooks/useSessionStore";
+import { queryClient } from "@/pages/_app";
 import { useMutation } from "@tanstack/react-query";
 
 export const useUpdateCouponInSession = () => {
-  const { session } = useSessionStore();
-  const { refetch } = useSetNewSessionBySessionId(session?._id || "");
+  const sessionId = useSessionIdStore((state) => state.sessionId);
 
   const { mutate } = useMutation({
     mutationKey: ["updateCouponInSession"],
     mutationFn: (payload: { coupon_id: string | null }) =>
       updateCouponInSession({
-        id: session?._id || "",
+        id: sessionId || "",
         coupon_id: payload.coupon_id,
       }),
-    onSuccess: async () => {
-      await refetch();
+    onSuccess: () => {
+      void queryClient.invalidateQueries(["getSessionById"]);
     },
   });
 

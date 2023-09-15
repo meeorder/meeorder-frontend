@@ -1,7 +1,7 @@
 import { H5, Text } from "@/modules/common/components/Typography";
 import { checkImageSrc, commaFormat } from "@/modules/common/utils";
 import { type Coupon } from "@/modules/user/coupon/types";
-import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import { Button, Card, Divider, theme } from "antd";
 import Image from "next/image";
@@ -21,7 +21,7 @@ const CouponCard: React.FC<CouponCardProps> = ({
     token: { colorPrimary },
   } = theme.useToken();
 
-  const session = useSessionStore((state) => state.session);
+  const { data: session } = useSession();
 
   const isInUsed = coupon._id === session?.coupon?._id;
   const isDisabled = !isInUsed && !coupon.redeemable;

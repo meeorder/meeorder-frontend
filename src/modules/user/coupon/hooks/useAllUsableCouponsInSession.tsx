@@ -1,16 +1,14 @@
 import { getAllUsableCouponsInSession } from "@/modules/services/sessions";
-import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSessionIdStore } from "@/modules/user/order/hooks/useSessionStore";
 import { useQuery } from "@tanstack/react-query";
 
 export const useAllUsableCouponsInSession = () => {
-  const session = useSessionStore((state) => state.session);
+  const sessionId = useSessionIdStore((state) => state.sessionId);
 
-  const { data, refetch } = useQuery({
-    queryKey: ["getAllUsableCouponsInSession", session?._id],
-    queryFn: () => getAllUsableCouponsInSession({ id: session?._id || "" }),
+  return useQuery({
+    queryKey: ["getAllUsableCouponsInSession", sessionId],
+    queryFn: () => getAllUsableCouponsInSession({ id: sessionId || "" }),
     retry: false,
-    enabled: !!session,
+    enabled: !!sessionId,
   });
-
-  return { data, refetch };
 };

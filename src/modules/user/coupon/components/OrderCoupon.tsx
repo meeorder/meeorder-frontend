@@ -4,7 +4,7 @@ import { useClient } from "@/modules/common/hooks/useClient";
 import { useUserStore } from "@/modules/common/hooks/useUserStore";
 import { truncateString } from "@/modules/common/utils";
 import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
-import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import { CaretRight } from "@phosphor-icons/react";
 import { Button, Card, theme } from "antd";
@@ -18,7 +18,7 @@ const OrderCoupon = () => {
   const router = useRouter();
 
   const { isClientLoaded } = useClient();
-  const session = useSessionStore((state) => state.session);
+  const { data: session } = useSession();
   const user = useUserStore((state) => state.user);
   const { data: coupons } = useAllUsableCouponsInSession();
 

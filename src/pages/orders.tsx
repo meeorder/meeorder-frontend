@@ -6,20 +6,14 @@ import OrderCoupon from "@/modules/user/coupon/components/OrderCoupon";
 import OrderList from "@/modules/user/order/components/OrderList";
 import OrderSummaryPrice from "@/modules/user/order/components/OrderSummaryPrice";
 import useOrder from "@/modules/user/order/hooks/useOrder";
-import {
-  useRevalidateSession,
-  useSessionStore,
-  useSetNewSessionBySessionId,
-} from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import Head from "next/head";
 
 const Orders = () => {
-  const session = useSessionStore((state) => state.session);
+  const { data: session } = useSession();
   const { data: ordersData } = useOrder(session?._id ?? "");
   const { isClientLoaded } = useClient();
-  useRevalidateSession();
-  useSetNewSessionBySessionId(session?._id ?? "");
 
   return (
     <>

@@ -13,93 +13,40 @@ import { persist } from "zustand/middleware";
 const { confirm } = Modal;
 export type Session = GetSessionByIdResponse;
 
-type SessionStore = {
-  session: Session | null;
-  setSession: (session: Session) => void;
-  clearSession: () => void;
+type SessionIdStore = {
+  sessionId: string | null;
+  setSessionId: (sessionId: string) => void;
+  clearSessionId: () => void;
 };
 
-export const useSessionStore = create<SessionStore>()(
+export const useSessionIdStore = create<SessionIdStore>()(
   persist(
     (set) => ({
-      session: null,
-      setSession: (session) => set({ session }),
-      clearSession: () => set({ session: null }),
+      sessionId: null,
+      setSessionId: (sessionId) => set({ sessionId }),
+      clearSessionId: () => set({ sessionId: null }),
     }),
     {
-      name: "session",
+      name: "sessionId",
     },
   ),
 );
 
-export const useSetNewSessionBySessionId = (
-  sessionId: string,
-  autoClearBasket = false,
-) => {
-  const { clearSession, setSession } = useSessionStore((state) => ({
-    session: state.session,
-    setSession: state.setSession,
-    clearSession: state.clearSession,
-  }));
-
-  const deleteAllBasketOrder = useBasketStore(
-    (state) => state.deleteAllBasketOrder,
-  );
-
-  const { refetch } = useQuery({
-    queryKey: ["getSessionById", sessionId],
-    retry: false,
-    queryFn: async () => {
-      const data = await getSessionById({
-        id: sessionId,
-      });
-      setSession(data);
-      return data;
-    },
-    refetchInterval: 1000,
-    onSuccess: (newSession) => {
-      if (newSession?.finished_at !== null) {
-        clearSession();
-        return;
-      }
-
-      if (autoClearBasket) {
-        deleteAllBasketOrder();
-      }
-
-      setSession(newSession);
-    },
-    onError: () => {
-      console.error("Session not found");
-      clearSession();
-      deleteAllBasketOrder();
-    },
-    enabled: !!sessionId,
-  });
-
-  return { refetch };
-};
-
-export const useRevalidateSession = () => {
-  const { session, clearSession } = useSessionStore((state) => ({
-    session: state.session,
-    setSession: state.setSession,
-    clearSession: state.clearSession,
-  }));
-
-  const deleteAllBasketOrder = useBasketStore(
-    (state) => state.deleteAllBasketOrder,
-  );
-
+export const useSession = () => {
+  const { sessionId, clearSessionId } = useSessionIdStore();
+  const { deleteAllBasketOrder } = useBasketStore();
   const router = useRouter();
-  useQuery({
-    queryKey: ["getSessionById", session?._id],
+  const session = useQuery({
+    queryKey: ["getSessionById", sessionId],
     queryFn: () =>
       getSessionById({
-        id: session?._id ?? "",
+        id: sessionId ?? "",
       }),
+    enabled: !!sessionId,
     onSuccess: (newSession) => {
       if (newSession?.finished_at !== null) {
+        clearSessionId();
+        deleteAllBasketOrder();
         confirm({
           title: (
             <div
@@ -117,8 +64,7 @@ export const useRevalidateSession = () => {
           icon: null,
           centered: true,
           onOk() {
-            clearSession();
-            deleteAllBasketOrder();
+            Modal.destroyAll();
             void router.push({
               pathname: "/",
             });
@@ -128,10 +74,10 @@ export const useRevalidateSession = () => {
           },
           cancelButtonProps: { style: { display: "none" } },
         });
-        clearSession();
-        deleteAllBasketOrder();
         return;
       }
     },
   });
+
+  return session;
 };

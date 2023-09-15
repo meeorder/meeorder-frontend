@@ -1,7 +1,7 @@
 import { H3, H5 } from "@/modules/common/components/Typography";
 import { useClient } from "@/modules/common/hooks/useClient";
 import CouponPoint from "@/modules/user/coupon/components/CouponPoint";
-import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { Button, Tag, theme } from "antd";
@@ -19,7 +19,7 @@ const CouponHeader = () => {
     });
   };
 
-  const session = useSessionStore((state) => state.session);
+  const { data: session } = useSession();
   const { isClientLoaded } = useClient();
 
   return (
