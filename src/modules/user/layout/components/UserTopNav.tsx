@@ -1,8 +1,8 @@
 import { Text } from "@/modules/common/components/Typography";
+import UserAvatar from "@/modules/common/components/UserAvatar";
 import { useClient } from "@/modules/common/hooks/useClient";
 import { useUserStore } from "@/modules/common/hooks/useUserStore";
 import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
-import UserAvatar from "@/modules/user/user/UserAvatar";
 import styled from "@emotion/styled";
 import { Button } from "antd";
 import Image from "next/image";

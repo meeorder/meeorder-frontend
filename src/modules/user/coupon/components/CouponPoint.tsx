@@ -1,9 +1,9 @@
 import { H3, H4 } from "@/modules/common/components/Typography";
+import UserAvatar from "@/modules/common/components/UserAvatar";
 import { useClient } from "@/modules/common/hooks/useClient";
 import { useUserStore } from "@/modules/common/hooks/useUserStore";
 import { commaFormat } from "@/modules/common/utils";
 import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
-import UserAvatar from "@/modules/user/user/UserAvatar";
 import styled from "@emotion/styled";
 import { Space, Tag, theme } from "antd";
 import { useRouter } from "next/router";
