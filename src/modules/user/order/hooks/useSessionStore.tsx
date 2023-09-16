@@ -34,9 +34,9 @@ export const useSessionStore = create<SessionStore>()(
 
 export const useSetNewSessionBySessionId = (
   sessionId: string,
-  autoClearBasket = true,
+  autoClearBasket = false,
 ) => {
-  const { clearSession, setSession, session } = useSessionStore((state) => ({
+  const { clearSession, setSession } = useSessionStore((state) => ({
     session: state.session,
     setSession: state.setSession,
     clearSession: state.clearSession,
@@ -46,13 +46,17 @@ export const useSetNewSessionBySessionId = (
     (state) => state.deleteAllBasketOrder,
   );
 
-  const { data: sessionData, refetch } = useQuery({
+  const { refetch } = useQuery({
     queryKey: ["getSessionById", sessionId],
     retry: false,
-    queryFn: () =>
-      getSessionById({
+    queryFn: async () => {
+      const data = await getSessionById({
         id: sessionId,
-      }),
+      });
+      setSession(data);
+      return data;
+    },
+    refetchInterval: 1000,
     onSuccess: (newSession) => {
       if (newSession?.finished_at !== null) {
         clearSession();
@@ -70,12 +74,14 @@ export const useSetNewSessionBySessionId = (
       clearSession();
       deleteAllBasketOrder();
     },
-    enabled: !!sessionId && session?._id !== sessionId,
+    enabled: !!sessionId,
   });
+
+  return { refetch };
 };
 
 export const useRevalidateSession = () => {
-  const { session, setSession, clearSession } = useSessionStore((state) => ({
+  const { session, clearSession } = useSessionStore((state) => ({
     session: state.session,
     setSession: state.setSession,
     clearSession: state.clearSession,

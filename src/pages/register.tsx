@@ -5,6 +5,7 @@ import { LockSimple, User } from "@phosphor-icons/react";
 import { Button, Form, Input, theme } from "antd";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 type FieldType = {
@@ -15,19 +16,23 @@ type FieldType = {
 
 const Register = () => {
   const [form] = Form.useForm<FieldType>();
-  const { mutate: register, isLoading, isSuccess, isError } = useRegister();
+  const {
+    mutate: register,
+    isLoading,
+    isError,
+  } = useRegister({
+    onSuccess: () => {
+      void router.push("/signin");
+    },
+  });
   const handleRegister = (values: FieldType) => {
-    console.log(values);
     register(values);
   };
   const {
     token: { colorPrimary, colorBorder },
   } = theme.useToken();
-  useEffect(() => {
-    if (isSuccess) {
-      window.location.href = "/signin";
-    }
-  }, [isSuccess]);
+  const router = useRouter();
+
   useEffect(() => {
     if (isError) {
       form.setFields([
@@ -37,7 +42,7 @@ const Register = () => {
         },
       ]);
     }
-  }, [isError]);
+  }, [isError, form]);
   return (
     <Container>
       <FormContainer>

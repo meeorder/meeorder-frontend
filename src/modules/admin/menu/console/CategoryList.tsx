@@ -51,7 +51,6 @@ const CategoryList = () => {
 
   const { mutate: updateCategory } = useUpdateCategory();
   const onChange = (value: string, _id: string) => {
-    console.log(value, _id);
     updateCategory({ id: _id, title: value });
   };
   const { mutate: deleteCategory } = useDeleteCategory();
@@ -67,7 +66,7 @@ const CategoryList = () => {
     {
       title: "ชื่อหมวดหมู่",
       dataIndex: "title",
-      width: "346px",
+      width: "200px",
       render: (title: string, record) => {
         return (
           <Text editable={{ onChange: (value) => onChange(value, record._id) }}>
@@ -77,14 +76,16 @@ const CategoryList = () => {
       },
     },
     {
-      title: "จำนวนเมนู",
+      title: "จำนวนเมนูทั้งหมด",
       dataIndex: "numberOfMenus",
-      width: "232px",
+      width: "100px",
+      align: "end",
     },
     {
       title: "ดำเนินการ",
       dataIndex: "action",
       width: "112px",
+      align: "end",
       render: (action: string, record) => {
         return (
           <StyledDiv>
@@ -172,6 +173,7 @@ export default CategoryList;
 
 const StyledDiv = styled.div`
   display: flex;
+  justify-content: flex-end;
   gap: 16px;
 `;
 

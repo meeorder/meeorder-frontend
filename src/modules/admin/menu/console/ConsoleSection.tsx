@@ -27,5 +27,5 @@ const ConsoleSectionContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  flex: 1;
+  width: calc(100% - 424px);
 `;

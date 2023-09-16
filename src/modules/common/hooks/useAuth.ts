@@ -19,10 +19,17 @@ export const useLogin = () => {
   });
 };
 
-export const useRegister = () => {
+type UseRegisterParams = {
+  onSuccess?: () => void;
+};
+
+export const useRegister = (params: UseRegisterParams = {}) => {
   return useMutation({
     mutationFn: ({ username, password }: RegisterBodyParam) =>
       register({ username, password }),
+    onSuccess: () => {
+      params.onSuccess?.();
+    },
   });
 };
 

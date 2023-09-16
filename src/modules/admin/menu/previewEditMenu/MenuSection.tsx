@@ -55,6 +55,7 @@ export default MenuSection;
 const MenuSectionCard = styled(Card)`
   width: 400px;
   height: 100%;
+  flex-shrink: 0;
   .ant-card-head {
     height: 64px;
     padding: 16px 20px;

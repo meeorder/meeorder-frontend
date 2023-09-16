@@ -1,5 +1,6 @@
 import { Text } from "@/modules/common/components/Typography";
 import { useClient } from "@/modules/common/hooks/useClient";
+import { useUserStore } from "@/modules/common/hooks/useUserStore";
 import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import UserAvatar from "@/modules/user/user/UserAvatar";
 import styled from "@emotion/styled";
@@ -12,6 +13,7 @@ const UserTopNav = () => {
   const { isClientLoaded } = useClient();
 
   const session = useSessionStore((state) => state.session);
+  const user = useUserStore((state) => state.user);
 
   return (
     <>
@@ -38,9 +40,13 @@ const UserTopNav = () => {
       <StyledButton
         type="default"
         shape="circle"
-        icon={<UserAvatar />}
-        onClick={() => void router.push("/signin")}
-      />
+        // TODO: If already signed in, go to profile page?
+        onClick={() => {
+          if (isClientLoaded && !user) void router.push("/signin");
+        }}
+      >
+        <UserAvatar user={user} />
+      </StyledButton>
     </>
   );
 };

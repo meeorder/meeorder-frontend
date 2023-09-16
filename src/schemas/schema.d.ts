@@ -436,7 +436,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-12T15:55:51.012Z
+       * @default 2023-09-14T15:03:50.427Z
        */
       created_at: string;
       /**
@@ -1142,9 +1142,7 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to done */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /**
@@ -1158,12 +1156,8 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
-      404: {
-        content: never;
-      };
+      204: never;
+      404: never;
     };
   };
   /** Get all sessions */
@@ -1310,9 +1304,7 @@ export interface operations {
     };
     responses: {
       /** @description Updated session user */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get all redeemable coupon */
@@ -1396,9 +1388,7 @@ export interface operations {
         };
       };
       /** @description Coupon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a coupon by id */
@@ -1410,13 +1400,9 @@ export interface operations {
     };
     responses: {
       /** @description Coupon deleted */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description Coupon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Update a coupon by id */
@@ -1439,9 +1425,7 @@ export interface operations {
         };
       };
       /** @description Coupon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Get all tables */
@@ -1603,9 +1587,7 @@ export interface operations {
         };
       };
       /** @description Ingredient already exists */
-      409: {
-        content: never;
-      };
+      409: never;
     };
   };
   /** Get a ingredient by id */
@@ -1622,9 +1604,7 @@ export interface operations {
         };
       };
       /** @description Ingredient not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a ingredient by id */
@@ -1636,13 +1616,9 @@ export interface operations {
     };
     responses: {
       /** @description Ingredient deleted */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description Ingredient not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Update a ingredient by id */
@@ -1665,13 +1641,9 @@ export interface operations {
         };
       };
       /** @description Ingredient not found */
-      404: {
-        content: never;
-      };
+      404: never;
       /** @description Ingredient already exists */
-      409: {
-        content: never;
-      };
+      409: never;
     };
   };
 }

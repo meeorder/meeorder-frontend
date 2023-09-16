@@ -1,4 +1,5 @@
-import { type User } from "@/modules/user/mock/user";
+import { useClient } from "@/modules/common/hooks/useClient";
+import { type User } from "@/modules/services/auth";
 import { User as ReactUser } from "@phosphor-icons/react";
 import { Avatar, theme } from "antd";
 
@@ -10,6 +11,12 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ user }) => {
   const {
     token: { colorPrimary, colorPrimaryBg },
   } = theme.useToken();
+
+  const { isClientLoaded } = useClient();
+
+  if (!isClientLoaded) {
+    return null;
+  }
 
   if (user) {
     const colors = [
@@ -34,19 +41,24 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ user }) => {
       "#f43f5e",
     ];
 
-    const userColor = colors[parseInt(user.id) % colors.length];
+    const userColor = colors[parseInt(user._id) % colors.length];
 
     return (
-      <Avatar size={44} style={{ backgroundColor: userColor }}>
-        {user.name[0]}
+      <Avatar
+        size={44}
+        style={{
+          backgroundColor: userColor,
+        }}
+      >
+        {user.username?.[0]?.toUpperCase() || ""}
       </Avatar>
     );
   } else {
     return (
       <Avatar
         size={44}
-        style={{ backgroundColor: colorPrimaryBg }}
         icon={<ReactUser color={colorPrimary} weight="duotone" />}
+        style={{ backgroundColor: colorPrimaryBg }}
       />
     );
   }

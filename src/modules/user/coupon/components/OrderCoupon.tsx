@@ -1,6 +1,9 @@
 import { H5, Text } from "@/modules/common/components/Typography";
-import { coupons } from "@/modules/user/mock/coupons";
-import { session } from "@/modules/user/mock/session";
+import { useClient } from "@/modules/common/hooks/useClient";
+import { useUserStore } from "@/modules/common/hooks/useUserStore";
+import { truncateString } from "@/modules/common/utils";
+import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
+import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import UserAvatar from "@/modules/user/user/UserAvatar";
 import styled from "@emotion/styled";
 import { CaretRight } from "@phosphor-icons/react";
@@ -13,27 +16,39 @@ const OrderCoupon = () => {
   } = theme.useToken();
 
   const router = useRouter();
+
+  const { isClientLoaded } = useClient();
+  const session = useSessionStore((state) => state.session);
+  const user = useUserStore((state) => state.user);
+  const { data: coupons } = useAllUsableCouponsInSession();
+
   const onClickOrderCoupon = () => {
     void router.push({
       pathname: "/coupon",
     });
   };
 
-  // TODO: get from session
-  const couponInUsed = !!session.coupon;
-  const isHeadTable = session.user?.id === session.headTableUser?.id;
-
-  const coupon = coupons.find((coupon) => coupon.id === session.coupon);
+  const isHeadTable = session?.user?._id === user?._id;
+  const coupon = coupons?.find((coupon) => coupon._id === session?.coupon?._id);
 
   return (
     <OrderCouponContainer onClick={onClickOrderCoupon}>
       <StyledCard>
         <OrderCouponContent>
           <UserAvatar
-            user={!isHeadTable ? session.headTableUser : session.user}
+            user={
+              session?.user
+                ? {
+                    _id: session?.user?._id ?? "",
+                    username: session?.user?.username ?? "",
+                    point: session?.user?.point ?? 0,
+                    role: session?.user?.role.toString() ?? "1",
+                  }
+                : null
+            }
           />
           <FlexBetweenCol>
-            {couponInUsed ? (
+            {coupon ? (
               <CouponTitle>
                 {'"'}
                 {coupon?.title}
@@ -42,16 +57,14 @@ const OrderCoupon = () => {
             ) : (
               <H5>เลือกใช้คูปอง</H5>
             )}
-            {!isHeadTable && (
+            {isClientLoaded && !isHeadTable && (
               <Text type="secondary">
-                {session.headTableUser?.name} เป็นเจ้าของบิล
+                {truncateString(session?.user?.username ?? "", 15)}{" "}
+                เป็นเจ้าของบิล
               </Text>
             )}
           </FlexBetweenCol>
-          <StyledCaretRight
-            size={32}
-            color={couponInUsed ? colorPrimary : ""}
-          />
+          <StyledCaretRight size={32} color={coupon ? colorPrimary : ""} />
         </OrderCouponContent>
       </StyledCard>
     </OrderCouponContainer>

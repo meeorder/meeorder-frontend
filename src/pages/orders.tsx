@@ -9,6 +9,7 @@ import useOrder from "@/modules/user/order/hooks/useOrder";
 import {
   useRevalidateSession,
   useSessionStore,
+  useSetNewSessionBySessionId,
 } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import Head from "next/head";
@@ -18,6 +19,7 @@ const Orders = () => {
   const { data: ordersData } = useOrder(session?._id ?? "");
   const { isClientLoaded } = useClient();
   useRevalidateSession();
+  useSetNewSessionBySessionId(session?._id ?? "");
 
   return (
     <>
@@ -30,7 +32,9 @@ const Orders = () => {
         <OrderContainer>
           <OrderHeader>
             <H4>รายการอาหารที่สั่ง</H4>
-            <H5 type="secondary">โต๊ะ {isClientLoaded && session?.table}</H5>
+            <H5 type="secondary">
+              โต๊ะ {isClientLoaded && session?.table?.title}
+            </H5>
           </OrderHeader>
           <OrderList
             orders={

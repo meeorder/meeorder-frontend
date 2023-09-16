@@ -1,6 +1,7 @@
 import { H5, Text } from "@/modules/common/components/Typography";
-import { commaFormat } from "@/modules/common/utils";
-import { type Coupon } from "@/modules/user/mock/coupons";
+import { checkImageSrc, commaFormat } from "@/modules/common/utils";
+import { type Coupon } from "@/modules/user/coupon/types";
+import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
 import styled from "@emotion/styled";
 import { Button, Card, Divider, theme } from "antd";
 import Image from "next/image";
@@ -20,9 +21,10 @@ const CouponCard: React.FC<CouponCardProps> = ({
     token: { colorPrimary },
   } = theme.useToken();
 
-  // TODO: Change this to relate with BE
-  const isDisabled = coupon.status === "disabled";
-  const isInUsed = coupon.status === "inUsed";
+  const session = useSessionStore((state) => state.session);
+
+  const isInUsed = coupon._id === session?.coupon?._id;
+  const isDisabled = !isInUsed && !coupon.redeemable;
   const statusText = isInUsed
     ? "นำคูปองออก"
     : `แลก ${commaFormat(coupon.required_point)} แต้ม`;
@@ -37,12 +39,12 @@ const CouponCard: React.FC<CouponCardProps> = ({
           width={900}
           height={900}
           style={{ filter: isDisabled ? "grayscale(100%)" : "" }}
-          src={coupon.image}
+          src={checkImageSrc(coupon.image)}
           alt="Coupon image"
         />
         <Divider type="vertical" dashed style={{ height: "80px" }} />
         <FlexBetweenCol>
-          <H5>{coupon.title}</H5>
+          <CouponTitle>{coupon.title}</CouponTitle>
           <CouponDescription type="secondary">
             {coupon.description}
           </CouponDescription>
@@ -108,9 +110,14 @@ const StyledStatusButton = styled(Button)`
   padding-block: 4px;
 `;
 
+const CouponTitle = styled(H5)`
+  text-align: right;
+`;
+
 const CouponDescription = styled(Text)`
   width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: right;
 `;

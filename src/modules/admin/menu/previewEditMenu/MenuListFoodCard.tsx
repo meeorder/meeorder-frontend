@@ -5,7 +5,7 @@ import { checkImageSrc } from "@/modules/common/utils";
 import { type GetAllMenusResponse } from "@/modules/services/menus";
 import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
-import { Button, Tag } from "antd";
+import { Button, Tag, theme } from "antd";
 import Image from "next/image";
 
 type Menu = GetAllMenusResponse[number]["menus"][number];
@@ -19,10 +19,17 @@ const getIsFoodPublished = (menu: Menu) => {
 };
 
 const MenuListFoodCard: React.FC<MenuListFoodCardProps> = ({ menu }) => {
-  const { changeToEditMenuMode } = useConsoleSectionMode();
-
+  const { changeToEditMenuMode, editMenuId } = useConsoleSectionMode();
+  const { token } = theme.useToken();
   return (
-    <CardContainer onClick={() => changeToEditMenuMode(menu._id)}>
+    <CardContainer
+      onClick={() => changeToEditMenuMode(menu._id)}
+      style={
+        editMenuId === menu._id
+          ? { border: `2px solid ${token?.colorPrimaryBorder}` }
+          : {}
+      }
+    >
       <TextContainer>
         <div>
           <H5
@@ -82,7 +89,8 @@ const CardContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 120px;
-  border: 1px solid ${(props) => props.theme.antd.colorBorderSecondary};
+  border: 2px solid ${(props) => props.theme.antd.colorBorderSecondary};
+  border-radius: 8px;
 `;
 
 const TextContainer = styled.div`
