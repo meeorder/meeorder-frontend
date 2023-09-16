@@ -57,7 +57,18 @@ const IngredientStock = () => {
     <StyledCard
       title={<div>จัดการวัตถุดิบ</div>}
       extra={
-        <CenterContentButton type="primary">
+        <CenterContentButton
+          type="primary"
+          onClick={function () {
+            console.log("bruh all ingredients");
+            setDataSource((prev) => [
+              ...prev.map(function (rec) {
+                rec.can_use_ingredient = true;
+                return rec;
+              }),
+            ]);
+          }}
+        >
           เติมวัตถุดิบทั้งหมด
         </CenterContentButton>
       }

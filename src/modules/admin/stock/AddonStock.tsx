@@ -56,7 +56,18 @@ const AddonStock = () => {
     <StyledCard
       title={<div>จัดการท็อปปิ้ง</div>}
       extra={
-        <CenterContentButton type="primary">
+        <CenterContentButton
+          type="primary"
+          onClick={function () {
+            console.log("bruh all addon");
+            setDataSource((prev) => [
+              ...prev.map(function (rec) {
+                rec.can_use_addon = true;
+                return rec;
+              }),
+            ]);
+          }}
+        >
           เติมท็อปปิ้งทั้งหมด
         </CenterContentButton>
       }
