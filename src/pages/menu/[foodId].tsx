@@ -141,7 +141,7 @@ export default FoodDetail;
 const LayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100dvh;
   max-width: 500px;
   margin: 0 auto;
   background-color: ${(props) => props.theme.antd.colorBgLayout};

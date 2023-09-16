@@ -66,7 +66,7 @@ export default Home;
 
 const MenuContainer = styled.div`
   background-color: ${(props) => props.theme.antd.colorBgBase};
-  min-height: calc(100vh - 128px);
+  min-height: calc(100dvh - 128px);
   height: 100%;
   padding-inline: 20px;
   padding-top: 48px;

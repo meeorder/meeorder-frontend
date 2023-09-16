@@ -12,7 +12,7 @@ type UserLayoutProps = {
 };
 
 const UserLayout: React.FC<UserLayoutProps> = ({
-  mainNode = <WireFrame contentNode="Main" cardColor="red" height={"100vh"} />,
+  mainNode = <WireFrame contentNode="Main" cardColor="red" height={"100dvh"} />,
   currentPageId,
 }) => {
   const { data: session } = useSession();
@@ -36,7 +36,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
 export default UserLayout;
 
 const UserLayoutContainer = styled.div`
-  min-height: 100vh;
+  min-height: 100dvh;
   max-width: 500px;
   margin: 0 auto;
   background-color: ${(props) => props.theme.antd.colorBgBase};

@@ -55,7 +55,7 @@ export default Orders;
 
 const OrderContainer = styled.div`
   background-color: #fafafa;
-  min-height: calc(100vh - 128px);
+  min-height: calc(100dvh - 128px);
   height: 100%;
   padding: 20px;
 `;

@@ -109,14 +109,14 @@ const Orders = () => {
 export default Orders;
 
 const CouponLayoutContainer = styled.div`
-  min-height: 100vh;
+  min-height: 100dvh;
   max-width: 500px;
   margin: 0 auto;
   background-color: #fafafa;
 `;
 
 const CouponContainer = styled.div`
-  min-height: calc(100vh - 128px);
+  min-height: calc(100dvh - 128px);
   height: 100%;
   padding: 20px;
   padding-top: 180px;
