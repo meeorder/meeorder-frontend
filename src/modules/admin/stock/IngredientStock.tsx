@@ -31,7 +31,23 @@ const IngredientStock = () => {
       width: "60px",
       render: (text: string, rec) => (
         <>
-          <Switch checked={rec.can_use_ingredient} />
+          <Switch
+            checked={rec.can_use_ingredient}
+            onClick={() => {
+              console.log(`bruh ingredient ${rec.id} ${text}`);
+              const id = rec.id;
+              const value = !rec.can_use_ingredient;
+              setDataSource((prev) => [
+                ...prev.map(function (rec) {
+                  //ไม่ชิน arrow function
+                  if (rec.id == id) {
+                    rec.can_use_ingredient = value;
+                  }
+                  return rec;
+                }),
+              ]);
+            }}
+          />
         </>
       ),
     },

@@ -30,7 +30,23 @@ const AddonStock = () => {
       width: "50px",
       render: (text: string, rec) => (
         <>
-          <Switch checked={rec.can_use_addon} />
+          <Switch
+            checked={rec.can_use_addon}
+            onClick={() => {
+              console.log(`bruh ingredient ${rec.id} ${text}`);
+              const id = rec.id;
+              const value = !rec.can_use_addon;
+              setDataSource((prev) => [
+                ...prev.map(function (rec) {
+                  //ไม่ชิน arrow function
+                  if (rec.id == id) {
+                    rec.can_use_addon = value;
+                  }
+                  return rec;
+                }),
+              ]);
+            }}
+          />
         </>
       ),
     },
