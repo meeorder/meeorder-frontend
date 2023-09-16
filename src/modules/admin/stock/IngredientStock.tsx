@@ -17,18 +17,18 @@ const IngredientStock = () => {
       title: "ชื่อวัตถุดิบ",
       dataIndex: "name",
       key: "name",
-      width: "120px",
+      width: "70px",
     },
     {
       title: "เมนูที่ใช้วัตถุดิบ",
       dataIndex: "used_in_menu",
-      width: "120px",
+      width: "60px",
     },
     {
       title: "วัตถุดิบคงเหลือ",
       dataIndex: "can_use_ingredient",
       key: "can_use_ingredient",
-      width: "120px",
+      width: "60px",
       render: (text: string, rec) => (
         <>
           <Switch checked={rec.can_use_ingredient} />
@@ -60,4 +60,5 @@ export default IngredientStock;
 
 const StyledCard = styled(Card)`
   flex: 1;
+  width: 40vw;
 `;

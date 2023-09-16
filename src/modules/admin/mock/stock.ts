@@ -24,13 +24,13 @@ export type StockAddOnDataType = {
   used_in_menu: number;
   can_use_addon: boolean;
 };
-export const stockAddOnData: StockAddOnDataType[] = [];
+export const stockAddonData: StockAddOnDataType[] = [];
 for (let i = 1; i <= 20; i++) {
-  stockIngredientData.push({
+  stockAddonData.push({
     name: `AddOn ${i}`,
     id: i.toString(),
     key: i.toString(),
     used_in_menu: 20 - i,
-    can_use_ingredient: i % 2 === 0,
+    can_use_addon: i % 2 === 0,
   });
 }
