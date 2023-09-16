@@ -1,14 +1,13 @@
 import OrderListCard from "@/modules/admin/order/OrderListCard";
 import { type GetAllOrdersResponse } from "@/modules/services/orders";
-import { OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
+import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
 import {
   orderStatusTranslation,
   type OrderStatus,
 } from "@/pages/admin/order-management";
-import { orange,blue,geekblue,green,red } from "@ant-design/colors";
+import { blue, geekblue, green, orange, red } from "@ant-design/colors";
 import styled from "@emotion/styled";
 import { Badge, Card } from "antd";
-
 
 type Order = OrdersWithPriceData["orders"][number];
 
@@ -45,7 +44,12 @@ const OrderList: React.FC<OrderListCardProps> = ({ status, orders }) => {
       status={status}
       title={<div>{orderStatusTranslation[status]}</div>}
       extra={
-        <StyledBadge status={status} count={orders?.length} color={badgeColor[status]} showZero />
+        <StyledBadge
+          status={status}
+          count={orders?.length}
+          color={badgeColor[status]}
+          showZero
+        />
       }
     >
       {orders.map((order) => {
@@ -53,7 +57,7 @@ const OrderList: React.FC<OrderListCardProps> = ({ status, orders }) => {
           <OrderListCard
             order={order}
             key={order._id}
-            color={borderColor[status]??"white"}
+            color={borderColor[status] ?? "white"}
           />
         );
       })}
@@ -68,7 +72,6 @@ const StyledCard = styled(Card)<{ status: OrderStatus }>`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 144px);
-    width: 252px !important;
   border: 1px solid;
   border-color: ${(props) => borderColor[props.status]};
   .ant-card-body {
@@ -86,4 +89,4 @@ const StyledBadge = styled(Badge)<{ status: OrderStatus }>`
   .ant-badge-count {
     box-shadow: 0 0 0 1px ${(props) => badgeColor[props.status]};
   }
- `;
+`;

@@ -1,3 +1,6 @@
+import useUpadateOrderStatusToDone from "@/modules/admin/order/hook/useUpdateOrderStatusToDone";
+import useUpadateOrderStatusToPreparing from "@/modules/admin/order/hook/useUpdateOrderStatusToPreparing";
+import useUpadateOrderStatusToReadyToServe from "@/modules/admin/order/hook/useUpdateOrderStatusToReadyToServe";
 import { H5, Text } from "@/modules/common/components/Typography";
 import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import { blue, green, red } from "@ant-design/colors";
@@ -12,18 +15,32 @@ type OrderListCardProps = {
 };
 
 const OrderListCard: React.FC<OrderListCardProps> = ({ order, color }) => {
+  const { mutate: updateOrderStatusToPreparing } =
+    useUpadateOrderStatusToPreparing();
+  const { mutate: updateOrderStatusToReadyToServe } =
+    useUpadateOrderStatusToReadyToServe();
+  const { mutate: updateOrderStatusToDone } = useUpadateOrderStatusToDone();
+  const handelOnclick = (id: string, status: string) => {
+    if (status === "PREPARING") updateOrderStatusToReadyToServe({ id: id });
+    if (status === "IN_QUEUE") updateOrderStatusToPreparing({ id: id });
+    if (status === "READY_TO_SERVE") updateOrderStatusToDone({ id: id });
+  };
   return (
     <CardContainer color={color}>
       <TextContainer>
         {<H5>{order.menu.title}</H5>}
-        {<StyledTable color={blue[6]}>kuy</StyledTable>}
-        <Paragraph style={{ margin: 0 }}>
+        {
+          <StyledTable color={blue.primary}>
+            {order.session?.table?.title || "no session"}
+          </StyledTable>
+        }
+        <StyledParagraph style={{ margin: 0 }}>
           <ul>
             {order.addons.map((addon) => {
               return <li key={addon._id}>{addon.title}</li>;
             })}
           </ul>
-        </Paragraph>
+        </StyledParagraph>
         {order.additional_info && (
           <StyledAddInfo ellipsis={{ rows: 2 }}>
             Note: {order.additional_info}
@@ -34,7 +51,13 @@ const OrderListCard: React.FC<OrderListCardProps> = ({ order, color }) => {
       {(order.status === "PREPARING" ||
         order.status === "IN_QUEUE" ||
         order.status === "READY_TO_SERVE") && (
-        <StyledArrowLineRight size={44} color={blue.primary} />
+        <StyledArrowLineRight
+          size={44}
+          color={blue.primary}
+          onClick={() => {
+            handelOnclick(order._id, order.status);
+          }}
+        />
       )}
       {order.status === "CANCELLED" && <StyledTrash size={44} color={red[6]} />}
       {order.status === "DONE" && (
@@ -48,10 +71,11 @@ const CardContainer = styled.div<{ color: string }>`
   display: flex;
   align-items: center;
   position: relative;
-  border: 1px solid ${(props) => props.color};
+  border-bottom: 1px solid ${(props) => props.color};
   padding: 24px;
-  width: 252px;
+  width: 100%;
   padding-right: 8px;
+  margin: 0;
 `;
 const TextContainer = styled.div`
   height: 100%;
@@ -89,5 +113,12 @@ const StyledTable = styled(Text)<{ color: string }>`
   position: absolute;
   top: 24px;
   right: 68px;
+`;
+
+const StyledParagraph = styled(Paragraph)`
+  ul {
+    margin: 0;
+    padding: 0;
+  }
 `;
 export default OrderListCard;

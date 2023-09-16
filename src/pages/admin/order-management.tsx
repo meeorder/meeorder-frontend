@@ -1,16 +1,22 @@
 import AppLayout from "@/modules/AppLayout";
 import OrderList from "@/modules/admin/order/OrderList";
-import useAllOrders from "@/modules/admin/order/hook/useAllOrders";
+import useAllOrders, {
+  type AllOrdersData,
+} from "@/modules/admin/order/hook/useAllOrders";
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import { H1 } from "@/modules/common/components/Typography";
 import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
 import styled from "@emotion/styled";
 import { Funnel } from "@phosphor-icons/react";
-import { Popover } from "antd";
+import { Divider, Popover } from "antd";
+import { useEffect, useState } from "react";
 
 const OrderManagement = () => {
   const { data: allOrder } = useAllOrders();
-  console.log("allOrder:", allOrder);
+  const [allOrderSource, setAllOrderSource] = useState<AllOrdersData>();
+  useEffect(() => {
+    setAllOrderSource(allOrder ?? []);
+  }, [allOrder]);
   return (
     <AppLayout layoutType="admin" currentPageId="employeeOrderManagement">
       <Container>
@@ -18,7 +24,12 @@ const OrderManagement = () => {
           <H1>ออเดอร์ภายในร้าน</H1>
           <StyledPopover
             trigger="click"
-            title={<StyledTitle>ตัวเลือกแสดงข้อมูล</StyledTitle>}
+            title={
+              <>
+                <div>ตัวเลือกแสดงข้อมูล</div>
+                <Divider style={{ margin: "8px" }} />
+              </>
+            }
             content={
               <StyledContentContainer>
                 <p>Content</p>
@@ -46,7 +57,8 @@ const OrderManagement = () => {
               return {
                 status,
                 orders:
-                  allOrder?.filter((order) => order.status === status) ?? [],
+                  allOrderSource?.filter((order) => order.status === status) ??
+                  [],
               };
             })
             .map(({ status, orders }) => (
@@ -105,12 +117,6 @@ const StyledPopover = styled(Popover)`
   position: relative;
 `;
 
-const StyledTitle = styled.div`
-  position: absolute;
-  left: 8px;
-  border: 1px solid #e8e8e8;
-`;
-
 const StyledContentContainer = styled.div`
-  margin-top: 36px;
+  width: 100%;
 `;
