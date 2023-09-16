@@ -1,4 +1,5 @@
 import AppLayout from "@/modules/AppLayout";
+import useAllCategory from "@/modules/admin/menu/hooks/useCategory";
 import OrderList from "@/modules/admin/order/OrderList";
 import useAllOrders, {
   type AllOrdersData,
@@ -8,11 +9,17 @@ import { H1 } from "@/modules/common/components/Typography";
 import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
 import styled from "@emotion/styled";
 import { Funnel } from "@phosphor-icons/react";
-import { Divider, Popover } from "antd";
+import { Divider, Popover, Select, type SelectProps } from "antd";
 import { useEffect, useState } from "react";
 
 const OrderManagement = () => {
   const { data: allOrder } = useAllOrders();
+  const { data: allCategory } = useAllCategory();
+  const options: SelectProps["options"] = allCategory?.map((category) => ({
+    label: category.title,
+    value: category._id,
+  }));
+  const [changeOptions, setChangeOptions] = useState<string[]>([]);
   const [allOrderSource, setAllOrderSource] = useState<AllOrdersData>();
   useEffect(() => {
     setAllOrderSource(allOrder ?? []);
@@ -32,7 +39,16 @@ const OrderManagement = () => {
             }
             content={
               <StyledContentContainer>
-                <p>Content</p>
+                <Select
+                  mode="multiple"
+                  allowClear
+                  style={{ width: "100%" }}
+                  options={options}
+                  onChange={(value: string[]) => {
+                    setChangeOptions(value);
+                  }}
+                />
+
                 <p>Content</p>
               </StyledContentContainer>
             }

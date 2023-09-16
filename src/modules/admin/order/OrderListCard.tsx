@@ -7,7 +7,6 @@ import { blue, green, red } from "@ant-design/colors";
 import styled from "@emotion/styled";
 import { ArrowLineRight, CheckCircle, Trash } from "@phosphor-icons/react";
 import { Divider } from "antd";
-import Paragraph from "antd/es/typography/Paragraph";
 import React from "react";
 type OrderListCardProps = {
   order: GetAllOrdersResponse[number];
@@ -34,13 +33,11 @@ const OrderListCard: React.FC<OrderListCardProps> = ({ order, color }) => {
             {order.session?.table?.title || "no session"}
           </StyledTable>
         }
-        <StyledParagraph style={{ margin: 0 }}>
-          <ul>
-            {order.addons.map((addon) => {
-              return <li key={addon._id}>{addon.title}</li>;
-            })}
-          </ul>
-        </StyledParagraph>
+        <ul style={{ margin: "0" }}>
+          {order.addons.map((addon) => {
+            return <li key={addon._id}>{addon.title}</li>;
+          })}
+        </ul>
         {order.additional_info && (
           <StyledAddInfo ellipsis={{ rows: 2 }}>
             Note: {order.additional_info}
@@ -115,10 +112,4 @@ const StyledTable = styled(Text)<{ color: string }>`
   right: 68px;
 `;
 
-const StyledParagraph = styled(Paragraph)`
-  ul {
-    margin: 0;
-    padding: 0;
-  }
-`;
 export default OrderListCard;
