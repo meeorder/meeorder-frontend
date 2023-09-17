@@ -2,8 +2,8 @@ export type StockIngredientDataType = {
   id: string;
   key: React.Key;
   name: string;
-  used_in_menu: number;
-  can_use_ingredient: boolean;
+  usedInMenu: number;
+  available: boolean;
 };
 
 export const stockIngredientData: StockIngredientDataType[] = [];
@@ -12,8 +12,8 @@ for (let i = 1; i <= 20; i++) {
     name: `Ingredient ${i}`,
     id: i.toString(),
     key: i.toString(),
-    used_in_menu: 20 - i,
-    can_use_ingredient: i % 2 === 0,
+    usedInMenu: 20 - i,
+    available: i % 2 === 0,
   });
 }
 
@@ -21,8 +21,8 @@ export type StockAddOnDataType = {
   id: string;
   key: React.Key;
   name: string;
-  used_in_menu: number;
-  can_use_addon: boolean;
+  usedInMenu: number;
+  available: boolean;
 };
 export const stockAddonData: StockAddOnDataType[] = [];
 for (let i = 1; i <= 20; i++) {
@@ -30,7 +30,7 @@ for (let i = 1; i <= 20; i++) {
     name: `AddOn ${i}`,
     id: i.toString(),
     key: i.toString(),
-    used_in_menu: 20 - i,
-    can_use_addon: i % 2 === 0,
+    usedInMenu: 20 - i,
+    available: i % 2 === 0,
   });
 }

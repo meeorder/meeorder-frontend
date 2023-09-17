@@ -20,27 +20,28 @@ const AddonStock = () => {
     },
     {
       title: "เมนูที่ใช้ท็อปปิ้ง",
-      dataIndex: "used_in_menu",
+      dataIndex: "usedInMenu",
       width: "50px",
+      align: "end",
     },
     {
       title: "ท็อปปิ้งคงเหลือ",
-      dataIndex: "can_use_addon",
-      key: "can_use_addon",
+      dataIndex: "available",
       width: "50px",
+      align: "end",
       render: (text: string, rec) => (
         <>
           <Switch
-            checked={rec.can_use_addon}
+            checked={rec.available}
             onClick={() => {
-              console.log(`bruh ingredient ${rec.id} ${text}`);
+              console.log(`bruh addon ${rec.id} ${text}`);
               const id = rec.id;
-              const value = !rec.can_use_addon;
+              const value = !rec.available;
               setDataSource((prev) => [
                 ...prev.map(function (rec) {
                   //ไม่ชิน arrow function
                   if (rec.id == id) {
-                    rec.can_use_addon = value;
+                    rec.available = value;
                   }
                   return rec;
                 }),
@@ -62,7 +63,7 @@ const AddonStock = () => {
             console.log("bruh all addon");
             setDataSource((prev) => [
               ...prev.map(function (rec) {
-                rec.can_use_addon = true;
+                rec.available = true;
                 return rec;
               }),
             ]);

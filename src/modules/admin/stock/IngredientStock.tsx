@@ -21,27 +21,28 @@ const IngredientStock = () => {
     },
     {
       title: "เมนูที่ใช้วัตถุดิบ",
-      dataIndex: "used_in_menu",
+      dataIndex: "usedInMenu",
       width: "60px",
+      align: "end",
     },
     {
       title: "วัตถุดิบคงเหลือ",
-      dataIndex: "can_use_ingredient",
-      key: "can_use_ingredient",
+      dataIndex: "available",
       width: "60px",
+      align: "end",
       render: (text: string, rec) => (
         <>
           <Switch
-            checked={rec.can_use_ingredient}
+            checked={rec.available}
             onClick={() => {
               console.log(`bruh ingredient ${rec.id} ${text}`);
               const id = rec.id;
-              const value = !rec.can_use_ingredient;
+              const value = !rec.available;
               setDataSource((prev) => [
                 ...prev.map(function (rec) {
                   //ไม่ชิน arrow function
                   if (rec.id == id) {
-                    rec.can_use_ingredient = value;
+                    rec.available = value;
                   }
                   return rec;
                 }),
@@ -63,7 +64,7 @@ const IngredientStock = () => {
             console.log("bruh all ingredients");
             setDataSource((prev) => [
               ...prev.map(function (rec) {
-                rec.can_use_ingredient = true;
+                rec.available = true;
                 return rec;
               }),
             ]);
