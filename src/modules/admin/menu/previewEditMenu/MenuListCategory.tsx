@@ -99,6 +99,12 @@ const MenuListCategory: React.FC<MenuListCategoryProps> = ({
     setActiveMenu(undefined);
   };
 
+  if (
+    menuList.filter((menu) => isPublish(menuSectionMode, menu)).length === 0
+  ) {
+    return null;
+  }
+
   return (
     <DndContext
       key={dndId}

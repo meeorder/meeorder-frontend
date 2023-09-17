@@ -3,7 +3,7 @@ import {
   type CreateOrderBodyParam,
 } from "@/modules/services/orders";
 import { type Menu } from "@/modules/user/menu/types";
-import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSessionIdStore } from "@/modules/user/order/hooks/useSession";
 import { useMutation } from "@tanstack/react-query";
 import { randomBytes } from "crypto";
 import { useRouter } from "next/router";
@@ -100,10 +100,10 @@ export const useConfirmOrder = () => {
     basketOrders: state.basketOrders,
     deleteAllBasketOrder: state.deleteAllBasketOrder,
   }));
-  const session = useSessionStore((state) => state.session);
+  const sessionId = useSessionIdStore((state) => state.sessionId);
 
   const allBasketOrders: CreateOrderBodyParam = {
-    session: session?._id ?? "",
+    session: sessionId ?? "",
     orders: [],
   };
 

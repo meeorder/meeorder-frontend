@@ -1,7 +1,7 @@
 import CouponCard from "@/modules/user/coupon/components/CouponCard";
 import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
 import { type Coupon } from "@/modules/user/coupon/types";
-import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import { Space } from "antd";
 import React from "react";
@@ -15,7 +15,7 @@ const CouponList: React.FC<CouponListProps> = ({
   onClickCoupon,
   onClickCouponButton,
 }) => {
-  const session = useSessionStore((state) => state.session);
+  const { data: session } = useSession();
   const { data: coupons } = useAllUsableCouponsInSession();
 
   const inUsedArray =

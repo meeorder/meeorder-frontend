@@ -1,11 +1,11 @@
-import { useUserStore } from "@/modules/common/hooks/useUserStore";
+import { useUser } from "@/modules/common/hooks/useUserStore";
 import CouponDrawerContent from "@/modules/user/coupon/components/CouponDrawerContent";
 import CouponHeader from "@/modules/user/coupon/components/CouponHeader";
 import CouponList from "@/modules/user/coupon/components/CouponList";
 import CouponModal from "@/modules/user/coupon/components/CouponModal";
 import { useUpdateCouponInSession } from "@/modules/user/coupon/hooks/useUpdateCouponInSession";
 import { type Coupon } from "@/modules/user/coupon/types";
-import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import { Drawer } from "antd";
 import Head from "next/head";
@@ -23,8 +23,8 @@ const Orders = () => {
 
   const router = useRouter();
 
-  const session = useSessionStore((state) => state.session);
-  const user = useUserStore((state) => state.user);
+  const { data: session } = useSession();
+  const { data: user } = useUser();
   const { mutate: updateCouponInSession } = useUpdateCouponInSession();
 
   const onClickCoupon = (coupon: Coupon) => {
@@ -109,14 +109,14 @@ const Orders = () => {
 export default Orders;
 
 const CouponLayoutContainer = styled.div`
-  min-height: 100vh;
+  min-height: 100dvh;
   max-width: 500px;
   margin: 0 auto;
   background-color: #fafafa;
 `;
 
 const CouponContainer = styled.div`
-  min-height: calc(100vh - 128px);
+  min-height: calc(100dvh - 128px);
   height: 100%;
   padding: 20px;
   padding-top: 180px;

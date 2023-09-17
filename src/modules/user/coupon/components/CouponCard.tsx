@@ -1,7 +1,7 @@
 import { H5, Text } from "@/modules/common/components/Typography";
 import { checkImageSrc, commaFormat } from "@/modules/common/utils";
 import { type Coupon } from "@/modules/user/coupon/types";
-import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import { Button, Card, Divider, theme } from "antd";
 import Image from "next/image";
@@ -21,13 +21,15 @@ const CouponCard: React.FC<CouponCardProps> = ({
     token: { colorPrimary },
   } = theme.useToken();
 
-  const session = useSessionStore((state) => state.session);
+  const { data: session } = useSession();
 
   const isInUsed = coupon._id === session?.coupon?._id;
   const isDisabled = !isInUsed && !coupon.redeemable;
   const statusText = isInUsed
     ? "นำคูปองออก"
     : `แลก ${commaFormat(coupon.required_point)} แต้ม`;
+
+  if (!coupon || !session) return null;
 
   return (
     <StyledCard
@@ -52,6 +54,9 @@ const CouponCard: React.FC<CouponCardProps> = ({
             type="primary"
             ghost={isInUsed}
             disabled={isDisabled}
+            style={{
+              transition: "none",
+            }}
             onClick={(e) => {
               e.stopPropagation();
               onClickCouponButton(coupon);

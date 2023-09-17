@@ -65,7 +65,7 @@ const StyledCard = styled(Card)`
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 144px);
+  height: calc(100dvh - 144px);
 
   .ant-card-body {
     flex: 1;

@@ -17,7 +17,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   return (
     <Layout
       style={{
-        height: "100vh",
+        height: "100dvh",
       }}
     >
       <AdminSideNav currentPageId={currentPageId} />

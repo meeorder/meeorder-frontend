@@ -1,7 +1,7 @@
 import TextPrice from "@/modules/common/components/TextPrice";
 import { checkImageSrc } from "@/modules/common/utils";
 import { type Menu } from "@/modules/user/menu/types";
-import { useSessionStore } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import { PlusOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import { Button, List } from "antd";
@@ -21,7 +21,7 @@ const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
     });
   };
 
-  const session = useSessionStore((state) => state.session);
+  const { data: session } = useSession();
 
   return (
     <List.Item
