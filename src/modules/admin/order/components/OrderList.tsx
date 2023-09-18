@@ -1,4 +1,4 @@
-import OrderListCard from "@/modules/admin/order/OrderListCard";
+import OrderListCard from "@/modules/admin/order/components/OrderListCard";
 import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
 import {

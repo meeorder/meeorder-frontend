@@ -1,6 +1,6 @@
 import AppLayout from "@/modules/AppLayout";
 import useAllCategory from "@/modules/admin/menu/hooks/useCategory";
-import OrderList from "@/modules/admin/order/OrderList";
+import OrderList from "@/modules/admin/order/components/OrderList";
 import useAllOrders, {
   type AllOrdersData,
 } from "@/modules/admin/order/hook/useAllOrders";
@@ -9,7 +9,7 @@ import { H1 } from "@/modules/common/components/Typography";
 import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
 import styled from "@emotion/styled";
 import { Funnel } from "@phosphor-icons/react";
-import { Divider, Popover, Select, type SelectProps } from "antd";
+import { Button, Divider, Popover, Select, type SelectProps } from "antd";
 import { useEffect, useState } from "react";
 
 const OrderManagement = () => {
@@ -20,6 +20,7 @@ const OrderManagement = () => {
     value: category._id,
   }));
   const [changeOptions, setChangeOptions] = useState<string[]>([]);
+  const [filterOrder, setFliterOrder] = useState<string[]>([]);
   const [allOrderSource, setAllOrderSource] = useState<AllOrdersData>();
   useEffect(() => {
     setAllOrderSource(allOrder ?? []);
@@ -30,26 +31,33 @@ const OrderManagement = () => {
         <PageHeader>
           <H1>ออเดอร์ภายในร้าน</H1>
           <StyledPopover
+            placement="bottomRight"
             trigger="click"
             title={
               <>
-                <div>ตัวเลือกแสดงข้อมูล</div>
+                <div>ตัวเลือกแสดงข้อมูล:</div>
                 <Divider style={{ margin: "8px" }} />
               </>
             }
             content={
               <StyledContentContainer>
-                <Select
-                  mode="multiple"
-                  allowClear
-                  style={{ width: "100%" }}
-                  options={options}
-                  onChange={(value: string[]) => {
-                    setChangeOptions(value);
-                  }}
-                />
-
-                <p>Content</p>
+                <StyledSelectSection>
+                  <div>Category</div>
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    style={{ width: "25vw" }}
+                    options={options}
+                    onChange={(value: string[]) => {
+                      setChangeOptions(value);
+                    }}
+                  />
+                </StyledSelectSection>
+                <BottonGroup>
+                  <Button>save</Button>
+                  <Button>cancel</Button>
+                  <Button>reset</Button>
+                </BottonGroup>
               </StyledContentContainer>
             }
           >
@@ -128,6 +136,22 @@ export const orderStatusTranslation: Record<OrderStatus, string> = {
   DONE: "เสร็จสิ้น",
   CANCELLED: "ยกเลิก",
 };
+
+const StyledSelectSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  margin-top: 12px;
+`;
+
+const BottonGroup = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  width: 100%;
+`;
 
 const StyledPopover = styled(Popover)`
   position: relative;
