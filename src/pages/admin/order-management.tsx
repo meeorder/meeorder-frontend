@@ -1,17 +1,15 @@
 import AppLayout from "@/modules/AppLayout";
 import useAllCategory from "@/modules/admin/menu/hooks/useCategory";
 import OrderList from "@/modules/admin/order/components/OrderList";
+import PopOverFilter from "@/modules/admin/order/components/PopOverFilter";
 import useAllOrders, {
   type AllOrdersData,
 } from "@/modules/admin/order/hook/useAllOrders";
-import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import { H1 } from "@/modules/common/components/Typography";
 import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
 import styled from "@emotion/styled";
-import { Funnel } from "@phosphor-icons/react";
-import { Button, Divider, Popover, Select, type SelectProps } from "antd";
+import { type SelectProps } from "antd";
 import { useEffect, useState } from "react";
-
 const OrderManagement = () => {
   const { data: allOrder } = useAllOrders();
   const { data: allCategory } = useAllCategory();
@@ -20,7 +18,7 @@ const OrderManagement = () => {
     value: category._id,
   }));
   const [changeOptions, setChangeOptions] = useState<string[]>([]);
-  const [filterOrder, setFliterOrder] = useState<string[]>([]);
+  const [filterCategory, setFliterCategory] = useState<string[]>([]);
   const [allOrderSource, setAllOrderSource] = useState<AllOrdersData>();
   useEffect(() => {
     setAllOrderSource(allOrder ?? []);
@@ -30,45 +28,11 @@ const OrderManagement = () => {
       <Container>
         <PageHeader>
           <H1>ออเดอร์ภายในร้าน</H1>
-          <StyledPopover
-            placement="bottomRight"
-            trigger="click"
-            title={
-              <>
-                <div>ตัวเลือกแสดงข้อมูล:</div>
-                <Divider style={{ margin: "8px" }} />
-              </>
-            }
-            content={
-              <StyledContentContainer>
-                <StyledSelectSection>
-                  <div>Category</div>
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    style={{ width: "25vw" }}
-                    options={options}
-                    onChange={(value: string[]) => {
-                      setChangeOptions(value);
-                    }}
-                  />
-                </StyledSelectSection>
-                <BottonGroup>
-                  <Button>save</Button>
-                  <Button>cancel</Button>
-                  <Button>reset</Button>
-                </BottonGroup>
-              </StyledContentContainer>
-            }
-          >
-            <CenterContentButton
-              type="primary"
-              shape="round"
-              icon={<Funnel size={16} />}
-            >
-              ตัวเลือกแสดงข้อมูล
-            </CenterContentButton>
-          </StyledPopover>
+          <PopOverFilter
+            options={options}
+            setFilterCategory={setFliterCategory}
+            filterCategory={filterCategory}
+          />
         </PageHeader>
         <OrderContainer>
           {allOrderStatus
@@ -83,6 +47,15 @@ const OrderManagement = () => {
                 orders:
                   allOrderSource?.filter((order) => order.status === status) ??
                   [],
+              };
+            })
+            .map(({ status, orders }) => {
+              return {
+                status,
+                orders: orders.filter((order) => {
+                  if (filterCategory.length === 0) return true;
+                  return filterCategory.includes(order.menu.category?._id);
+                }),
               };
             })
             .map(({ status, orders }) => (
@@ -136,27 +109,3 @@ export const orderStatusTranslation: Record<OrderStatus, string> = {
   DONE: "เสร็จสิ้น",
   CANCELLED: "ยกเลิก",
 };
-
-const StyledSelectSection = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-  margin-top: 12px;
-`;
-
-const BottonGroup = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  width: 100%;
-`;
-
-const StyledPopover = styled(Popover)`
-  position: relative;
-`;
-
-const StyledContentContainer = styled.div`
-  width: 100%;
-`;

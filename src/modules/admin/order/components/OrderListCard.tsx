@@ -1,4 +1,3 @@
-
 import useUpadateOrderStatusToDone from "@/modules/admin/order/hook/useUpdateOrderStatusToDone";
 import useUpadateOrderStatusToPreparing from "@/modules/admin/order/hook/useUpdateOrderStatusToPreparing";
 import useUpadateOrderStatusToReadyToServe from "@/modules/admin/order/hook/useUpdateOrderStatusToReadyToServe";
@@ -26,11 +25,11 @@ const OrderListCard: React.FC<OrderListCardProps> = ({ order, color }) => {
     if (status === "READY_TO_SERVE") updateOrderStatusToDone({ id: id });
   };
   return (
-    <CardContainer color={color}>
+    <CardContainer key={order._id} color={color}>
       <TextContainer>
         {<H5>{order.menu.title}</H5>}
         {
-          <StyledTable color={blue.primary}>
+          <StyledTable color={blue.primary ?? "blue"}>
             {order.session?.table?.title || "no session"}
           </StyledTable>
         }
@@ -40,7 +39,7 @@ const OrderListCard: React.FC<OrderListCardProps> = ({ order, color }) => {
           })}
         </ul>
         {order.additional_info && (
-          <StyledAddInfo ellipsis={{ rows: 2 }}>
+          <StyledAddInfo ellipsis={true}>
             Note: {order.additional_info}
           </StyledAddInfo>
         )}
