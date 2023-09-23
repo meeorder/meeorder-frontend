@@ -35,7 +35,7 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
 
   const router = useRouter();
 
-  const items: MenuProps["items"] | MenuProps["items"][] = [
+  const adminPages = [
     adminDashboard,
     adminAddEditMenu,
     [adminAddEditPromotion, adminEditPoint, adminEditCoupon],
@@ -43,12 +43,19 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     adminSetting,
     employeeStock,
     employeeOrderManagement,
-  ].map((page) => {
-    if (Array.isArray(page)) {
-      return getItem(page[0] as PageMetaData, page.slice(1) as PageMetaData[]);
-    }
-    return getItem(page);
-  });
+  ];
+
+  const items: MenuProps["items"] | MenuProps["items"][] = adminPages.map(
+    (page) => {
+      if (Array.isArray(page)) {
+        return getItem(
+          page[0] as PageMetaData,
+          page.slice(1) as PageMetaData[],
+        );
+      }
+      return getItem(page);
+    },
+  );
 
   const [collapsed, setCollapsed] = useState(false);
 
