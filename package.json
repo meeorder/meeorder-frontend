@@ -2,11 +2,6 @@
   "name": "meeorder-frontend",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "npm": "please-use-yarn",
-    "node": ">= 16.0.0",
-    "yarn": ">= 1.22.19"
-  },
   "scripts": {
     "gen:types": "npx openapi-typescript ./swagger.json -o ./src/schemas/schema.d.ts",
     "dev": "next dev",
