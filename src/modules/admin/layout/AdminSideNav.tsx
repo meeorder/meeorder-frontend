@@ -32,19 +32,20 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     employeeStock,
     employeeOrderManagement,
   } = pages;
+
   const router = useRouter();
 
-  const items: MenuProps["items"] = [
+  const items: MenuProps["items"] | MenuProps["items"][] = [
     adminDashboard,
     adminAddEditMenu,
-    adminAddEditPromotion,
+    [adminAddEditPromotion, adminEditPoint, adminEditCoupon],
     adminSalesReport,
     adminSetting,
     employeeStock,
     employeeOrderManagement,
   ].map((page) => {
-    if (page.id == adminAddEditPromotion.id) {
-      return getItem(page, [adminEditPoint, adminEditCoupon]);
+    if (Array.isArray(page)) {
+      return getItem(page[0] as PageMetaData, page.slice(1) as PageMetaData[]);
     }
     return getItem(page);
   });
