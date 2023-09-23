@@ -1,8 +1,6 @@
 import { axiosInstance } from "@/modules/services/axios";
 import { type paths } from "@/schemas/schema";
 
-//================>>>> Common Types <<<<===========================================//
-
 //================>>>> Create a coupon <<<<========================================//
 export type CreateCouponBodyParam =
   paths["/coupons"]["post"]["requestBody"]["content"]["application/json"];
