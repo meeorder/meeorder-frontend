@@ -83,7 +83,7 @@ export const getSessionByTableId = async (
 export type SetSessionFinishByIdPathParam =
   paths["/sessions/{id}/finish"]["patch"]["parameters"]["path"];
 export type SetSessionFinishByIdResponse =
-  paths["/sessions/{id}/finish"]["patch"]["responses"]["204"];
+  paths["/sessions/{id}/finish"]["patch"]["responses"]["200"];
 
 export const setSessionFinishById = async (
   params: SetSessionFinishByIdPathParam,
@@ -96,7 +96,6 @@ export const setSessionFinishById = async (
 //================>>>> Get orders by session id <<<<================================//
 export type GetOrdersBySessionIdPathParam =
   paths["/sessions/{id}/orders"]["get"]["parameters"]["path"];
-
 export type GetOrdersBySessionIdResponse =
   paths["/sessions/{id}/orders"]["get"]["responses"]["200"]["content"]["application/json"];
 
@@ -110,7 +109,6 @@ export const getOrdersBySessionId = async (
 };
 
 //================>>>> Update session user <<<<====================================//
-
 export type UpdateSessionUserByIdPathParam =
   paths["/sessions/{id}/user"]["patch"]["parameters"]["path"];
 export type UpdateSessionUserByIdResponse =
@@ -127,7 +125,6 @@ export const updateSessionUserById = async (
 };
 
 //================>>>> Get all usable coupons in session <<<<======================//
-
 export type GetAllUsableCouponsInSessionPathParam =
   paths["/sessions/{id}/coupon/all"]["get"]["parameters"]["path"];
 export type GetAllUsableCouponsInSessionResponse =
@@ -144,12 +141,10 @@ export const getAllUsableCouponsInSession = async (
 };
 
 //================>>>> Update coupon in session <<<<===============================//
-
 export type UpdateCouponInSessionPathParam =
   paths["/sessions/{id}/coupon"]["patch"]["parameters"]["path"];
 export type UpdateCouponInSessionBodyParam =
   paths["/sessions/{id}/coupon"]["patch"]["requestBody"]["content"]["application/json"];
-
 export type UpdateCouponInSessionResponse =
   paths["/sessions/{id}/coupon"]["patch"]["responses"]["204"];
 

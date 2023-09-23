@@ -1,34 +1,33 @@
 import { axiosInstance } from "@/modules/services/axios";
 import { type paths } from "@/schemas/schema";
 
-//================>>>> Common Types <<<<===========================================//
+export type Role = OwnerCreateUserBodyParam["role"];
+export type RoleNumber = GetAllUsersResponse[number]["role"];
 
-export type Role = "Owner" | "Cashier" | "Employee" | "Customer";
+export const roleNumberToRole: Record<RoleNumber, Role> = {
+  "1": "Customer",
+  "25": "Employee",
+  "50": "Cashier",
+  "100": "Owner",
+};
 
-export const mapRoleNameToRolePriority: Record<
-  Role,
-  OwnerCreateUserBodyParam["role"]
-> = {
-  Owner: 100,
-  Cashier: 50,
-  Employee: 25,
+export const roleToRoleNumber: Record<Role, RoleNumber> = {
   Customer: 1,
+  Employee: 25,
+  Cashier: 50,
+  Owner: 100,
 };
 
 //================>>>> Owner Create a user <<<<====================================//
 export type OwnerCreateUserBodyParam =
   paths["/users"]["post"]["requestBody"]["content"]["application/json"];
 export type OwnerCreateUserResponse =
-  paths["/users"]["post"]["responses"]["201"]["content"]["application/json"];
+  paths["/users"]["post"]["responses"]["201"];
 
 export const ownerCreateUser = async (
   params: OwnerCreateUserBodyParam,
-): Promise<OwnerCreateUserResponse> => {
-  const { data } = await axiosInstance.post<OwnerCreateUserResponse>(
-    "/users",
-    params,
-  );
-  return data;
+): Promise<void> => {
+  await axiosInstance.post<OwnerCreateUserResponse>("/users", params);
 };
 
 //================>>>> Get all users <<<<==========================================//
