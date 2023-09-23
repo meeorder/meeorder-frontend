@@ -1,11 +1,13 @@
 import AppLayout from "@/modules/AppLayout";
 import useAllCategory from "@/modules/admin/menu/hooks/useCategory";
 import OrderList from "@/modules/admin/order/components/OrderList";
+import OrderModal from "@/modules/admin/order/components/OrderModal";
 import PopOverFilter from "@/modules/admin/order/components/PopOverFilter";
 import useAllOrders, {
   type AllOrdersData,
 } from "@/modules/admin/order/hook/useAllOrders";
 import { H1 } from "@/modules/common/components/Typography";
+import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
 import styled from "@emotion/styled";
 import { type SelectProps } from "antd";
@@ -15,10 +17,18 @@ const OrderManagement = () => {
   const { data: allCategory } = useAllCategory();
   const options: SelectProps["options"] = allCategory?.map((category) => ({
     label: category.title,
-    value: category._id,
+    value: category.title,
   }));
-  const [changeOptions, setChangeOptions] = useState<string[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalData, setModalData] = useState<GetAllOrdersResponse[number]>();
   const [filterCategory, setFliterCategory] = useState<string[]>([]);
+  const [filterStatus, setFilterStatus] = useState<string[]>([
+    "IN_QUEUE",
+    "PREPARING",
+    "READY_TO_SERVE",
+    "DONE",
+    "CANCELLED",
+  ]);
   const [allOrderSource, setAllOrderSource] = useState<AllOrdersData>();
   useEffect(() => {
     setAllOrderSource(allOrder ?? []);
@@ -30,14 +40,19 @@ const OrderManagement = () => {
           <H1>ออเดอร์ภายในร้าน</H1>
           <PopOverFilter
             options={options}
-            setFilterCategory={setFliterCategory}
             filterCategory={filterCategory}
+            setFilterCategory={setFliterCategory}
+            filterStatus={filterStatus}
+            setFilterStatus={setFilterStatus}
           />
         </PageHeader>
         <OrderContainer>
           {allOrderStatus
             .filter(
-              (status) => status,
+              (status) => {
+                if (filterStatus.length === 0) return true;
+                return filterStatus.includes(status);
+              },
               // todo: filter order status by selected status
             )
             .map((status) => {
@@ -54,15 +69,28 @@ const OrderManagement = () => {
                 status,
                 orders: orders.filter((order) => {
                   if (filterCategory.length === 0) return true;
-                  return filterCategory.includes(order.menu.category?._id);
+                  return filterCategory.includes(
+                    order.menu.category?.title ?? "Not Found",
+                  );
                 }),
               };
             })
             .map(({ status, orders }) => (
-              <OrderList key={status} status={status} orders={orders} />
+              <OrderList
+                key={status}
+                status={status}
+                orders={orders}
+                setIsModalOpen={setIsModalOpen}
+                setModalData={setModalData}
+              />
             ))}
         </OrderContainer>
       </Container>
+      <OrderModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        modalData={modalData}
+      />
     </AppLayout>
   );
 };
