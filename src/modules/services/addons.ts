@@ -4,7 +4,6 @@ import { type paths } from "@/schemas/schema";
 //================>>>> Create an addon <<<<========================================//
 export type CreateAddonBodyParam =
   paths["/addons"]["post"]["requestBody"]["content"]["application/json"];
-
 export type CreateAddonResponse =
   paths["/addons"]["post"]["responses"]["201"]["content"]["application/json"];
 
@@ -22,7 +21,6 @@ export const createAddon = async (
 
 export type GetAllAddonsQueryParams =
   paths["/addons"]["get"]["parameters"]["query"];
-
 export type GetAllAddonsResponse =
   paths["/addons"]["get"]["responses"]["200"]["content"]["application/json"];
 
@@ -39,7 +37,6 @@ export const getAllAddons = async (
 
 export type GetAddonByIdPathParam =
   paths["/addons/{id}"]["get"]["parameters"]["path"];
-
 export type GetAddonByIdResponse =
   paths["/addons/{id}"]["get"]["responses"]["200"]["content"]["application/json"];
 
@@ -55,10 +52,8 @@ export const getAddonById = async (
 //================>>>> Update an addon by id <<<<==================================//
 export type UpdateAddonByIdPathParam =
   paths["/addons/{id}"]["put"]["parameters"]["path"];
-
 export type UpdateAddonByIdBodyParam =
   paths["/addons/{id}"]["put"]["requestBody"]["content"]["application/json"];
-
 export type UpdateAddonByIdResponse =
   paths["/addons/{id}"]["put"]["responses"]["200"]["content"]["application/json"];
 
@@ -75,7 +70,6 @@ export const updateAddonById = async (
 //================>>>> Delete an addon by id <<<<==================================//
 export type DeleteAddonByIdPathParam =
   paths["/addons/{id}"]["delete"]["parameters"]["path"];
-
 export type DeleteAddonByIdResponse =
   paths["/addons/{id}"]["delete"]["responses"]["204"];
 
@@ -83,4 +77,27 @@ export const deleteAddonById = async (
   params: DeleteAddonByIdPathParam,
 ): Promise<void> => {
   await axiosInstance.delete<DeleteAddonByIdResponse>(`/addons/${params.id}`);
+};
+
+//================>>>> Change an addon status by id <<<<============================//
+export type ChangeAddonStatusByIdPathParam =
+  paths["/addons/{id}/activate"]["patch"]["parameters"]["path"];
+export type ChangeAddonStatusByIdResponse =
+  paths["/addons/{id}/activate"]["patch"]["responses"]["204"];
+
+export const changeAddonStatusById = async (
+  id: ChangeAddonStatusByIdPathParam["id"],
+  status: "activate" | "deactivate",
+): Promise<void> => {
+  await axiosInstance.patch<ChangeAddonStatusByIdResponse>(
+    `/addons/${id}/${status}`,
+  );
+};
+
+//================>>>> Activate all addons <<<<=====================================//
+export type ActivateAllAddonsResponse =
+  paths["/addons/activate/all"]["post"]["responses"]["204"];
+
+export const activateAllAddons = async (): Promise<void> => {
+  await axiosInstance.post<ActivateAllAddonsResponse>("/addons/activate/all");
 };
