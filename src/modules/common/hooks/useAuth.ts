@@ -11,8 +11,9 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: ({ username, password }: LoginBodyParam) =>
       login({ username, password }),
-    onSuccess: () => {
+    onSuccess: (data) => {
       void queryClient.invalidateQueries(["getCurrentUser"]);
+      localStorage.setItem("jwt-meeorder", data?.access_token); // TODO: use cookie instead
     },
   });
 };
