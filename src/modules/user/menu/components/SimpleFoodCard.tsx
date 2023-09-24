@@ -25,6 +25,7 @@ const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
 
   return (
     <List.Item
+      onClick={handleChooseMenu}
       style={{
         position: "relative",
       }}
@@ -41,7 +42,6 @@ const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
               type="primary"
               shape="circle"
               icon={<PlusOutlined />}
-              onClick={handleChooseMenu}
             />
           )}
         </>
