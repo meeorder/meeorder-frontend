@@ -27,7 +27,7 @@ const Home = () => {
     if (typeof sessionId === "string" && sessionId.length > 0) {
       setSessionId(sessionId);
     }
-  }, [router]);
+  }, [router, setSessionId]);
 
   useEffect(() => {
     setSessionUser();

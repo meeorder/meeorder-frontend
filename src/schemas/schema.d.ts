@@ -84,6 +84,9 @@ export interface paths {
     /** Create order */
     post: operations["OrdersController_createOrder"];
   };
+  "/orders/{id}": {
+    patch: operations["OrdersController_updateOrder"];
+  };
   "/orders/{id}/preparing": {
     /** Change order status to preparing */
     patch: operations["OrdersController_preparing"];
@@ -464,6 +467,38 @@ export interface components {
       session: components["schemas"]["SessionWithTableDto"];
       menu: components["schemas"]["PopulatedCategoryMenuDto"];
     };
+    UpdateOrderDto: {
+      addons: string[];
+      additional_info: string;
+    };
+    OrdersSchema: {
+      _id: string;
+      /**
+       * Format: date-time
+       * @description Order creation date
+       */
+      created_at: string;
+      /**
+       * @description Order status
+       * @enum {string}
+       */
+      status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
+      /** @description Session of the order */
+      session: components["schemas"]["SessionSchema"] | string;
+      /** @description Menu of the order */
+      menu: components["schemas"]["MenuSchema"] | string;
+      /** @description Addons of the order */
+      addons: (string | components["schemas"]["AddonSchema"])[];
+      /** @description Additional info */
+      additional_info: string;
+      /**
+       * Format: date-time
+       * @description Order cancellation date
+       */
+      cancelled_at: string;
+      /** @description Reason for cancel order */
+      cancel_reason: string;
+    };
     CancelOrderDto: {
       /**
        * @description Ingredients that out of stock (not implemented yet)
@@ -496,7 +531,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-23T08:26:08.318Z
+       * @default 2023-09-23T17:52:27.819Z
        */
       created_at: string;
       /**
@@ -582,6 +617,26 @@ export interface components {
        * @description Session deletion date
        */
       deleted_at: string | null;
+    };
+    ReceiptMenuSchema: {
+      _id: string;
+      title: string;
+      price: number;
+    };
+    ReceiptCouponSchema: {
+      _id: string;
+      title: string;
+      discount: number;
+    };
+    ReceiptSchema: {
+      session: string;
+      menus: components["schemas"]["ReceiptMenuSchema"][];
+      coupon: components["schemas"]["ReceiptCouponSchema"];
+      total_price: number;
+      discount_price: number;
+      net_price: number;
+      /** Format: date-time */
+      created_at: string;
     };
     MenusResponseDto: {
       /** @description Menu ID */
@@ -713,6 +768,8 @@ export interface components {
       required_point?: number;
     };
     CouponResponseDTO: {
+      /** @description Coupon ID */
+      _id: string;
       /** @description Coupon Code */
       title: string;
       /** @description Coupon Description */
@@ -1190,11 +1247,31 @@ export interface operations {
       201: never;
     };
   };
+  OrdersController_updateOrder: {
+    parameters: {
+      path: {
+        /** @description Order ID */
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateOrderDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["OrdersSchema"];
+        };
+      };
+    };
+  };
   /** Change order status to preparing */
   OrdersController_preparing: {
     parameters: {
       path: {
-        /** @description Session ID (ObjectId) */
+        /** @description Order ID (ObjectId) */
         id: string;
       };
     };
@@ -1207,7 +1284,7 @@ export interface operations {
   OrdersController_readyToServe: {
     parameters: {
       path: {
-        /** @description Session ID (ObjectId) */
+        /** @description Order ID (ObjectId) */
         id: string;
       };
     };
@@ -1340,7 +1417,11 @@ export interface operations {
     };
     responses: {
       /** @description Receipt of session */
-      200: never;
+      200: {
+        content: {
+          "application/json": components["schemas"]["ReceiptSchema"];
+        };
+      };
       /** @description Session not found */
       404: never;
     };
