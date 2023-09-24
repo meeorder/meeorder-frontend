@@ -53,6 +53,7 @@ export interface paths {
     post: operations["AddonsController_activateAllAddon"];
   };
   "/menus": {
+    /** Get all menus */
     get: operations["MenusController_getMenus"];
     /** Create a menu */
     post: operations["MenusController_createMenu"];
@@ -217,6 +218,10 @@ export interface paths {
     /** Update user role */
     patch: operations["UsersController_updateUserRole"];
   };
+  "/dashboard/customer_report/{date}": {
+    /** Get total registered users */
+    get: operations["DashboardController_getDashboard"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -287,6 +292,8 @@ export interface components {
       description: string | null;
       /** @description Menu Price */
       price: number;
+      /** @description Menu Ingredients ID */
+      ingredients: string[];
       /** @description Menu Addons */
       addons: components["schemas"]["AddonSchema"][];
       /**
@@ -319,6 +326,8 @@ export interface components {
       price: number;
       /** @description Menu Category */
       category: components["schemas"]["CategorySchema"];
+      /** @description Menu Ingredients ID */
+      ingredients: string[];
       /** @description Menu Addons */
       addons: components["schemas"]["AddonSchema"][];
       /**
@@ -531,7 +540,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-23T17:52:27.819Z
+       * @default 2023-09-24T15:27:13.534Z
        */
       created_at: string;
       /**
@@ -865,6 +874,14 @@ export interface components {
       /** @description New Password */
       newPassword: string;
     };
+    GetUserAmountDto: {
+      /** @description Total registered users */
+      total_user: number;
+      /** @description Total old registered users */
+      old_user: number;
+      /** @description Total new registered users */
+      new_user: number;
+    };
   };
   responses: never;
   parameters: never;
@@ -1099,6 +1116,7 @@ export interface operations {
       204: never;
     };
   };
+  /** Get all menus */
   MenusController_getMenus: {
     parameters: {
       query: {
@@ -1818,6 +1836,22 @@ export interface operations {
     };
     responses: {
       204: never;
+    };
+  };
+  /** Get total registered users */
+  DashboardController_getDashboard: {
+    parameters: {
+      path: {
+        date: number;
+      };
+    };
+    responses: {
+      /** @description Total registered users */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserAmountDto"];
+        };
+      };
     };
   };
 }
