@@ -97,8 +97,9 @@ const FoodDetail = () => {
           <Image
             src={checkImageSrc(menu?.image ?? "")}
             alt={menu?.title ?? ""}
-            width={1000}
-            height={1000}
+            width={500}
+            height={500}
+            priority
             style={{
               objectFit: "cover",
               objectPosition: "center",
