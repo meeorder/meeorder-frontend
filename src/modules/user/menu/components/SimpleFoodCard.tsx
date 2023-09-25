@@ -15,13 +15,16 @@ type SimpleFoodCardProps = {
 const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
   const router = useRouter();
 
+  const { data: session } = useSession();
+
   const handleChooseMenu = () => {
+    if (!session) {
+      return;
+    }
     void router.push({
       pathname: `/menu/${menu._id}`,
     });
   };
-
-  const { data: session } = useSession();
 
   return (
     <List.Item

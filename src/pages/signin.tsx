@@ -62,9 +62,7 @@ const SignIn = () => {
           }}
         >
           <H2>ยินดีต้อนรับ!</H2>
-          <H5 type="secondary">
-            เข้าสู่ระบบเพื่อสะสมแต้มและรับสิทธิพิเศษเฉพาะคุณ!
-          </H5>
+          <H5 type="secondary">เข้าสู่ระบบเพื่อสะสมแต้มและรับสิทธิพิเศษ!</H5>
         </div>
         <Form<FieldType>
           form={form}
@@ -82,11 +80,11 @@ const SignIn = () => {
           </Form.Item>
           <Form.Item<FieldType>
             name="password"
-            rules={[{ required: true, message: "Please input your Password!" }]}
+            rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
           >
             <Input.Password
               prefix={<LockSimple size={14} color={colorBorder} />}
-              placeholder="Password"
+              placeholder="รหัสผ่าน"
             />
           </Form.Item>
           <Form.Item<FieldType> style={{ textAlign: "end" }}>
