@@ -13,12 +13,16 @@ import { ArrowLineLeft, ArrowLineRight, Trash } from "@phosphor-icons/react";
 type OrderModalProps = {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
+  isCancleModalOpen: boolean;
+  setIsCancleModalOpen: (value: boolean) => void;
   modalData?: GetAllOrdersResponse[number];
 };
 
 const OrderModal: React.FC<OrderModalProps> = ({
   isModalOpen,
   setIsModalOpen,
+  isCancleModalOpen,
+  setIsCancleModalOpen,
   modalData,
 }) => {
   const { token } = theme.useToken();
@@ -45,6 +49,10 @@ const OrderModal: React.FC<OrderModalProps> = ({
   const handleUpdateOrderStatusToDone = (id: string) => {
     updateOrderStatusToDone({ id: id });
     setIsModalOpen(false);
+  };
+  const hadleCancelOrder = () => {
+    setIsModalOpen(false);
+    setIsCancleModalOpen(true);
   };
   return (
     <StyledModal
@@ -125,7 +133,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
           {modalData?.status !== "CANCELLED" &&
             modalData?.status !== "DONE" && (
               <ButtonContainer>
-                <StyledButton type="primary" danger>
+                <StyledButton type="primary" danger onClick={hadleCancelOrder}>
                   ยกเลิกออเดอร์นี้
                 </StyledButton>
                 <StyledButton

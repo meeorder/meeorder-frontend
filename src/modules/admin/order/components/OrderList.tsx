@@ -5,7 +5,6 @@ import {
   orderStatusTranslation,
   type OrderStatus,
 } from "@/pages/admin/order-management";
-import { blue, geekblue, green, orange, red } from "@ant-design/colors";
 import styled from "@emotion/styled";
 import { Badge, Card, theme } from "antd";
 
@@ -22,7 +21,7 @@ const OrderList: React.FC<OrderListCardProps> = ({
   setIsModalOpen,
   setModalData,
 }) => {
-  const {token} = theme.useToken();
+  const { token } = theme.useToken();
   const badgeColor = {
     IN_QUEUE: token["orange-5"],
     PREPARING: token["geekblue-5"],
@@ -55,7 +54,9 @@ const OrderList: React.FC<OrderListCardProps> = ({
   return (
     <StyledCard
       title={
-        <CardTitle textColor={textColor[status]}>{orderStatusTranslation[status]}</CardTitle>
+        <CardTitle textColor={textColor[status]}>
+          {orderStatusTranslation[status]}
+        </CardTitle>
       }
       extra={
         <StyledBadge
@@ -85,7 +86,7 @@ const OrderList: React.FC<OrderListCardProps> = ({
 
 export default OrderList;
 
-const StyledCard = styled(Card)<{ borderColor:string , headerColor:string }>`
+const StyledCard = styled(Card)<{ borderColor: string; headerColor: string }>`
   min-width: 160px !important;
   flex: 1;
   display: flex;
@@ -104,12 +105,12 @@ const StyledCard = styled(Card)<{ borderColor:string , headerColor:string }>`
     border-color: ${(props) => props.borderColor};
   }
 `;
-const StyledBadge = styled(Badge)<{ badgeColor:string }>`
+const StyledBadge = styled(Badge)<{ badgeColor: string }>`
   .ant-badge-count {
     box-shadow: 0 0 0 1px ${(props) => props.badgeColor};
   }
 `;
-const CardTitle = styled(H4)<{ textColor:string }>`
+const CardTitle = styled(H4)<{ textColor: string }>`
   color: ${(props) => props.textColor} !important;
   width: 100%;
   text-overflow: ellipsis !important;

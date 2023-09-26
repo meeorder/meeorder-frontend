@@ -1,5 +1,6 @@
 import AppLayout from "@/modules/AppLayout";
 import useAllCategory from "@/modules/admin/menu/hooks/useCategory";
+import CancelOrderModal from "@/modules/admin/order/components/CancelOrderModal";
 import OrderList from "@/modules/admin/order/components/OrderList";
 import OrderModal from "@/modules/admin/order/components/OrderModal";
 import PopOverFilter from "@/modules/admin/order/components/PopOverFilter";
@@ -20,6 +21,7 @@ const OrderManagement = () => {
     value: category.title,
   }));
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCancleModalOpen, setIsCancleModalOpen] = useState(false);
   const [modalData, setModalData] = useState<GetAllOrdersResponse[number]>();
   const [filterCategory, setFliterCategory] = useState<string[]>([]);
   const [filterStatus, setFilterStatus] = useState<string[]>([
@@ -89,6 +91,14 @@ const OrderManagement = () => {
       <OrderModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
+        modalData={modalData}
+        isCancleModalOpen={isCancleModalOpen}
+        setIsCancleModalOpen={setIsCancleModalOpen}
+      />
+      <CancelOrderModal 
+        setIsModalOpen={setIsModalOpen}
+        isCancleModalOpen={isCancleModalOpen}
+        setIsCancleModalOpen={setIsCancleModalOpen}
         modalData={modalData}
       />
     </AppLayout>
