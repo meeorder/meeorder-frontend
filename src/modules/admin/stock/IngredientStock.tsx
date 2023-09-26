@@ -1,22 +1,26 @@
 import {
-  stockIngredientData,
-  type StockIngredientDataType,
-} from "@/modules/admin/mock/stock";
+  useActivateAllIngredients,
+  useAllIngredients,
+  useUpdateIngredient,
+  type Ingredient,
+} from "@/modules/admin/stock/useIngredients";
 
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import styled from "@emotion/styled";
 import { Card, Switch, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
-import { useState } from "react";
 
 const IngredientStock = () => {
-  const [dataSource, setDataSource] = useState(stockIngredientData);
+  // const [dataSource, setDataSource] = useState(stockIngredientData);
+  const { data: dataSource } = useAllIngredients();
+  const { mutate: updateIngredient } = useUpdateIngredient();
+  const { mutate: activateAllIngredients } = useActivateAllIngredients();
 
-  const stockIngredientColumns: ColumnsType<StockIngredientDataType> = [
+  const stockIngredientColumns: ColumnsType<Ingredient> = [
     {
       title: "ชื่อวัตถุดิบ",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "title",
+      key: "title",
       width: "70px",
     },
     {
@@ -35,18 +39,20 @@ const IngredientStock = () => {
           <Switch
             checked={rec.available}
             onClick={() => {
-              console.log(`bruh ingredient ${rec.id} ${text}`);
-              const id = rec.id;
-              const value = !rec.available;
-              setDataSource((prev) => [
-                ...prev.map(function (rec) {
-                  //ไม่ชิน arrow function
-                  if (rec.id == id) {
-                    rec.available = value;
-                  }
-                  return rec;
-                }),
-              ]);
+              console.log(`bruh ingredient ${rec._id} ${text}`);
+              const id = rec._id;
+              const available = !rec.available;
+              updateIngredient({ id, available });
+
+              // setDataSource((prev) => [
+              //   ...prev.map(function (rec) {
+              //     //ไม่ชิน arrow function
+              //     if (rec.id == id) {
+              //       rec.available = value;
+              //     }
+              //     return rec;
+              //   }),
+              // ]);
             }}
           />
         </>
@@ -62,12 +68,13 @@ const IngredientStock = () => {
           type="primary"
           onClick={function () {
             console.log("bruh all ingredients");
-            setDataSource((prev) => [
-              ...prev.map(function (rec) {
-                rec.available = true;
-                return rec;
-              }),
-            ]);
+            activateAllIngredients();
+            // setDataSource((prev) => [
+            //   ...prev.map(function (rec) {
+            //     rec.available = true;
+            //     return rec;
+            //   }),
+            // ]);
           }}
         >
           เติมวัตถุดิบทั้งหมด
@@ -79,6 +86,7 @@ const IngredientStock = () => {
         dataSource={dataSource}
         columns={stockIngredientColumns}
         scroll={{ y: "70vh", x: "max-content" }}
+        rowKey={(rec) => rec._id}
       />
     </StyledCard>
   );

@@ -85,12 +85,12 @@ export type ChangeAddonStatusByIdPathParam =
 export type ChangeAddonStatusByIdResponse =
   paths["/addons/{id}/activate"]["patch"]["responses"]["204"];
 
-export const changeAddonStatusById = async (
-  id: ChangeAddonStatusByIdPathParam["id"],
-  status: "activate" | "deactivate",
-): Promise<void> => {
+export const changeAddonStatusById = async (params: {
+  id: ChangeAddonStatusByIdPathParam["id"];
+  status: "activate" | "deactivate";
+}): Promise<void> => {
   await axiosInstance.patch<ChangeAddonStatusByIdResponse>(
-    `/addons/${id}/${status}`,
+    `/addons/${params.id}/${params.status}`,
   );
 };
 
