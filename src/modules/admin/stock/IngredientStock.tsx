@@ -11,7 +11,6 @@ import { Card, Switch, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
 
 const IngredientStock = () => {
-  // const [dataSource, setDataSource] = useState(stockIngredientData);
   const { data: dataSource } = useAllIngredients();
   const { mutate: updateIngredient } = useUpdateIngredient();
   const { mutate: activateAllIngredients } = useActivateAllIngredients();
@@ -25,7 +24,7 @@ const IngredientStock = () => {
     },
     {
       title: "เมนูที่ใช้วัตถุดิบ",
-      dataIndex: "usedInMenu",
+      dataIndex: "menus_applied",
       width: "60px",
       align: "end",
     },
@@ -43,16 +42,6 @@ const IngredientStock = () => {
               const id = rec._id;
               const available = !rec.available;
               updateIngredient({ id, available });
-
-              // setDataSource((prev) => [
-              //   ...prev.map(function (rec) {
-              //     //ไม่ชิน arrow function
-              //     if (rec.id == id) {
-              //       rec.available = value;
-              //     }
-              //     return rec;
-              //   }),
-              // ]);
             }}
           />
         </>
@@ -69,12 +58,6 @@ const IngredientStock = () => {
           onClick={function () {
             console.log("bruh all ingredients");
             activateAllIngredients();
-            // setDataSource((prev) => [
-            //   ...prev.map(function (rec) {
-            //     rec.available = true;
-            //     return rec;
-            //   }),
-            // ]);
           }}
         >
           เติมวัตถุดิบทั้งหมด

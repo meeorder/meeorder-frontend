@@ -24,7 +24,7 @@ const AddonStock = () => {
     },
     {
       title: "เมนูที่ใช้ท็อปปิ้ง",
-      dataIndex: "usedInMenu",
+      dataIndex: "menus_applied",
       width: "50px",
       align: "end",
     },
@@ -42,15 +42,6 @@ const AddonStock = () => {
               const id = rec._id;
               const status = !rec.available ? "activate" : "deactivate";
               changeAddonStatus({ id, status });
-              // setDataSource((prev) => [
-              //   ...prev.map(function (rec) {
-              //     //ไม่ชิน arrow function
-              //     if (rec._id == id) {
-              //       rec.available = value;
-              //     }
-              //     return rec;
-              //   }),
-              // ]);
             }}
           />
         </>
@@ -67,12 +58,6 @@ const AddonStock = () => {
           onClick={function () {
             console.log("bruh all addon");
             activateAllAddons();
-            // setDataSource((prev) => [
-            //   ...prev.map(function (rec) {
-            //     rec.available = true;
-            //     return rec;
-            //   }),
-            // ]);
           }}
         >
           เติมท็อปปิ้งทั้งหมด
