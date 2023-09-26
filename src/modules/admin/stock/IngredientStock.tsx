@@ -3,7 +3,7 @@ import {
   useAllIngredients,
   useUpdateIngredient,
   type Ingredient,
-} from "@/modules/admin/stock/useIngredients";
+} from "@/modules/admin/menu/hooks/useIngredients";
 
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import styled from "@emotion/styled";
