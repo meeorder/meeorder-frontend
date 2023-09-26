@@ -1,10 +1,9 @@
-import useCouponById, {
-  type Coupon,
-} from "@/modules/admin/promotion/hook/useCouponById";
+import useCouponById from "@/modules/admin/promotion/hook/useCouponById";
 import useCreateCoupon from "@/modules/admin/promotion/hook/useCreateCoupon";
 import useUpdateCoupon from "@/modules/admin/promotion/hook/useUpdateCoupon";
 import { H4, H5, Text } from "@/modules/common/components/Typography";
 import { checkImageSrc } from "@/modules/common/utils";
+import { type CreateCouponBodyParam } from "@/modules/services/coupons";
 import { type GetAllMenusResponse } from "@/modules/services/menus";
 import useAllMenu from "@/modules/user/menu/hooks/useAllMenu";
 import styled from "@emotion/styled";
@@ -38,7 +37,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
   setCouponId,
 }) => {
   const { token } = theme.useToken();
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<CreateCouponBodyParam>();
   const [published, setPublished] = useState(true);
   const [imageURL, setImageURL] = useState(
     "https://source.unsplash.com/random/?food&plate&11",
@@ -50,8 +49,11 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
 
   const menuByCategoryData = GetMenuByCategoryData(allMenu ?? []);
 
-  const handleFormSubmit = (values: Coupon) => {
-    values.required_menus = GetAllMenuId(allMenu ?? [], values.required_menus);
+  const handleFormSubmit = (values: CreateCouponBodyParam) => {
+    values.required_menus = GetAllMenuId(
+      allMenu ?? [],
+      values.required_menus ?? [],
+    );
     const editMode = couponId !== "";
     if (editMode) {
       editCoupon({
@@ -78,7 +80,12 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
   };
 
   useEffect(() => {
-    form.setFieldsValue(coupon);
+    form.setFieldsValue({
+      ...coupon,
+      required_menus: coupon?.required_menus?.map((item) =>
+        item ? item?._id?.toString() : "",
+      ),
+    });
   }, [coupon, form]);
 
   return (
@@ -141,7 +148,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
           requiredMark="optional"
         >
           <GeneralFormItemsContainer>
-            <Form.Item<Coupon>
+            <Form.Item<CreateCouponBodyParam>
               name="title"
               label={
                 <Text>
@@ -154,7 +161,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
               <Input placeholder="ตำไทยถูก" />
             </Form.Item>
 
-            <Form.Item<Coupon>
+            <Form.Item<CreateCouponBodyParam>
               name="discount"
               label={
                 <Text>
@@ -174,7 +181,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
               />
             </Form.Item>
 
-            <Form.Item<Coupon>
+            <Form.Item<CreateCouponBodyParam>
               name="required_point"
               label={
                 <Text>
@@ -192,7 +199,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
               />
             </Form.Item>
 
-            <Form.Item<Coupon>
+            <Form.Item<CreateCouponBodyParam>
               name="required_menus"
               label={<Text>เมนูที่ใช้คูปองได้</Text>}
               style={{ width: "100%" }}
@@ -206,7 +213,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
               />
             </Form.Item>
 
-            <Form.Item<Coupon>
+            <Form.Item<CreateCouponBodyParam>
               name="quota"
               label={
                 <Text>
@@ -223,7 +230,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
               />
             </Form.Item>
 
-            <Form.Item<Coupon>
+            <Form.Item<CreateCouponBodyParam>
               name="description"
               label="คำอธิบาย"
               style={{ width: "100%", height: "100%" }}
@@ -244,7 +251,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
               height={296}
               unoptimized
             />
-            <Form.Item<Coupon>
+            <Form.Item<CreateCouponBodyParam>
               name="image"
               label="ลิงค์รูปภาพ"
               style={{ width: "100%" }}
@@ -282,7 +289,7 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
               >
                 ฉบับร่าง
               </H5>
-              <Form.Item<Coupon>
+              <Form.Item<CreateCouponBodyParam>
                 name="activated"
                 style={{ width: "auto", display: "inline-block" }}
                 valuePropName="checked"
@@ -385,7 +392,7 @@ const ButtonGroup = styled.div`
   gap: 8px;
 `;
 
-const CouponFormContainer = styled(Form<Coupon>)`
+const CouponFormContainer = styled(Form<CreateCouponBodyParam>)`
   display: flex;
   padding: 12px 12px 0px 12px;
   justify-content: space-between;

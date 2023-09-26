@@ -1,13 +1,10 @@
 import { updateSessionUserById } from "@/modules/services/sessions";
-import {
-  useSessionStore,
-  useSetNewSessionBySessionId,
-} from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
+import { queryClient } from "@/pages/_app";
 import { useMutation } from "@tanstack/react-query";
 
 export const useSetSessionUser = (isForce = false) => {
-  const { session } = useSessionStore();
-  const { refetch } = useSetNewSessionBySessionId(session?._id || "");
+  const { data: session } = useSession();
 
   return useMutation({
     mutationFn: async () => {
@@ -17,8 +14,9 @@ export const useSetSessionUser = (isForce = false) => {
         id: session?._id || "",
       });
     },
-    onSuccess: async () => {
-      await refetch();
+    onSuccess: () => {
+      void queryClient.invalidateQueries(["getSessionById"]);
+      void queryClient.invalidateQueries(["getCurrentUser"]);
     },
   });
 };

@@ -40,7 +40,20 @@ export interface paths {
     /** Delete a addon by id */
     delete: operations["AddonsController_deleteAddon"];
   };
+  "/addons/{id}/activate": {
+    /** Change addon status to available */
+    patch: operations["AddonsController_setAvailable"];
+  };
+  "/addons/{id}/deactivate": {
+    /** Change addon status to unavailable */
+    patch: operations["AddonsController_setUnavailable"];
+  };
+  "/addons/activate/all": {
+    /** Make all addons available */
+    post: operations["AddonsController_activateAllAddon"];
+  };
   "/menus": {
+    /** Get all menus */
     get: operations["MenusController_getMenus"];
     /** Create a menu */
     post: operations["MenusController_createMenu"];
@@ -72,6 +85,9 @@ export interface paths {
     /** Create order */
     post: operations["OrdersController_createOrder"];
   };
+  "/orders/{id}": {
+    patch: operations["OrdersController_updateOrder"];
+  };
   "/orders/{id}/preparing": {
     /** Change order status to preparing */
     patch: operations["OrdersController_preparing"];
@@ -87,7 +103,7 @@ export interface paths {
   "/orders/{id}/cancel": {
     /**
      * Cancel order
-     * @description Cancel order and disable addons, ingredients(not implemented) if included
+     * @description Cancel order and disable addons, ingredients if included
      */
     patch: operations["OrdersController_cancelOrder"];
   };
@@ -129,6 +145,24 @@ export interface paths {
   "/sessions/{id}/coupon": {
     /** Update coupon in session */
     patch: operations["SessionController_updateSessionCoupon"];
+  };
+  "/ingredients": {
+    /** Get all ingredients */
+    get: operations["IngredientsController_findAll"];
+    /** Create a ingredient */
+    post: operations["IngredientsController_create"];
+  };
+  "/ingredients/{id}": {
+    /** Get a ingredient by id */
+    get: operations["IngredientsController_findOne"];
+    /** Delete a ingredient by id */
+    delete: operations["IngredientsController_remove"];
+    /** Update a ingredient by id */
+    patch: operations["IngredientsController_updateIngredient"];
+  };
+  "/ingredients/activate/all": {
+    /** Make all ingredient available */
+    post: operations["IngredientsController_activateAllIngredient"];
   };
   "/coupons": {
     /** Get all coupons */
@@ -173,24 +207,20 @@ export interface paths {
     post: operations["UsersController_createUser"];
     /** Delete user */
     delete: operations["UsersController_deleteUser"];
+    /** Update User info */
+    patch: operations["UsersController_updateUserInfo"];
   };
   "/users/reset/password": {
     /** Reset user password */
     post: operations["UsersController_updateUser"];
   };
-  "/ingredients": {
-    /** Get all ingredients */
-    get: operations["IngredientsController_findAll"];
-    /** Create a ingredient */
-    post: operations["IngredientsController_create"];
+  "/users/{id}/role": {
+    /** Update user role */
+    patch: operations["UsersController_updateUserRole"];
   };
-  "/ingredients/{id}": {
-    /** Get a ingredient by id */
-    get: operations["IngredientsController_findOne"];
-    /** Delete a ingredient by id */
-    delete: operations["IngredientsController_remove"];
-    /** Update a ingredient by id */
-    patch: operations["IngredientsController_updateIngredient"];
+  "/dashboard/customer_report/{date}": {
+    /** Get total registered users */
+    get: operations["DashboardController_getDashboard"];
   };
 }
 
@@ -214,6 +244,8 @@ export interface components {
       menus: string[];
       /** @description Category rank */
       rank: number | null;
+      /** Format: date-time */
+      created_at: string;
     };
     UpdateCategoryDto: {
       /** @description Category title */
@@ -240,8 +272,14 @@ export interface components {
        * @description Addon deletion date
        */
       deleted_at: string | null;
+      /** Format: date-time */
+      created_at: string;
       /** @description Addon status */
       available: boolean;
+    };
+    UpdateAddonDto: {
+      title: string;
+      price: number;
     };
     MenuDtoForAllMenu: {
       /** @description Menu ID */
@@ -254,6 +292,8 @@ export interface components {
       description: string | null;
       /** @description Menu Price */
       price: number;
+      /** @description Menu Ingredients ID */
+      ingredients: string[];
       /** @description Menu Addons */
       addons: components["schemas"]["AddonSchema"][];
       /**
@@ -286,6 +326,8 @@ export interface components {
       price: number;
       /** @description Menu Category */
       category: components["schemas"]["CategorySchema"];
+      /** @description Menu Ingredients ID */
+      ingredients: string[];
       /** @description Menu Addons */
       addons: components["schemas"]["AddonSchema"][];
       /**
@@ -358,6 +400,8 @@ export interface components {
       _id: string;
       /** @description Table number */
       title: string;
+      /** Format: date-time */
+      created_at: string;
     };
     SessionWithTableDto: {
       /** @description Session ID */
@@ -384,6 +428,34 @@ export interface components {
        */
       deleted_at: string | null;
     };
+    PopulatedCategoryMenuDto: {
+      /** @description Menu ID */
+      _id: string;
+      /** @description Menu image */
+      image: string | null;
+      /** @description Menu title */
+      title: string;
+      /** @description Menu description */
+      description: string | null;
+      /** @description Menu price */
+      price: number;
+      /** @description Menu category */
+      category: components["schemas"]["CategorySchema"] | null;
+      /** @description Menu addons */
+      addons: string[];
+      /** @description Menu ingredients */
+      ingredients: string[];
+      /**
+       * Format: date-time
+       * @description Menu publication date
+       */
+      published_at: string;
+      /**
+       * Format: date-time
+       * @description Menu deletion date
+       */
+      deleted_at: string | null;
+    };
     OrderGetDto: {
       /** @description Orders ID */
       _id: string;
@@ -402,7 +474,39 @@ export interface components {
       cancelled_at: string;
       /** @description Session (table populated) */
       session: components["schemas"]["SessionWithTableDto"];
-      menu: components["schemas"]["MenuSchema"];
+      menu: components["schemas"]["PopulatedCategoryMenuDto"];
+    };
+    UpdateOrderDto: {
+      addons: string[];
+      additional_info: string;
+    };
+    OrdersSchema: {
+      _id: string;
+      /**
+       * Format: date-time
+       * @description Order creation date
+       */
+      created_at: string;
+      /**
+       * @description Order status
+       * @enum {string}
+       */
+      status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
+      /** @description Session of the order */
+      session: components["schemas"]["SessionSchema"] | string;
+      /** @description Menu of the order */
+      menu: components["schemas"]["MenuSchema"] | string;
+      /** @description Addons of the order */
+      addons: (string | components["schemas"]["AddonSchema"])[];
+      /** @description Additional info */
+      additional_info: string;
+      /**
+       * Format: date-time
+       * @description Order cancellation date
+       */
+      cancelled_at: string;
+      /** @description Reason for cancel order */
+      cancel_reason: string;
     };
     CancelOrderDto: {
       /**
@@ -436,7 +540,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-14T15:03:50.427Z
+       * @default 2023-09-24T15:27:13.534Z
        */
       created_at: string;
       /**
@@ -466,6 +570,8 @@ export interface components {
       activated: boolean;
       /** @description Coupon required point */
       required_point: number;
+      /** Format: date-time */
+      created_at: string;
     };
     GetSessionDto: {
       /** @description Session ID */
@@ -520,6 +626,26 @@ export interface components {
        * @description Session deletion date
        */
       deleted_at: string | null;
+    };
+    ReceiptMenuSchema: {
+      _id: string;
+      title: string;
+      price: number;
+    };
+    ReceiptCouponSchema: {
+      _id: string;
+      title: string;
+      discount: number;
+    };
+    ReceiptSchema: {
+      session: string;
+      menus: components["schemas"]["ReceiptMenuSchema"][];
+      coupon: components["schemas"]["ReceiptCouponSchema"];
+      total_price: number;
+      discount_price: number;
+      net_price: number;
+      /** Format: date-time */
+      created_at: string;
     };
     MenusResponseDto: {
       /** @description Menu ID */
@@ -600,12 +726,36 @@ export interface components {
       activated: boolean;
       /** @description Coupon required point */
       required_point: number;
+      /** Format: date-time */
+      created_at: string;
       /** @description The coupon is redeemable or not */
       redeemable: boolean;
     };
     UpdateSessionCouponDto: {
       /** @description Coupon ID */
       coupon_id: string | null;
+    };
+    CreateIngredientDto: {
+      /** @description Ingredient title */
+      title: string;
+      /** @description Ingredient status */
+      available: boolean;
+    };
+    IngredientSchema: {
+      /** @description Ingredient ID */
+      _id: string;
+      /** @description Ingredient title */
+      title: string;
+      /** @description Ingredient status */
+      available: boolean;
+      /** Format: date-time */
+      created_at: string;
+    };
+    UpdateIngredientDto: {
+      /** @description Ingredient title */
+      title?: string;
+      /** @description Ingredient status */
+      available?: boolean;
     };
     CreateCouponDto: {
       /** @description Coupon Code */
@@ -625,6 +775,27 @@ export interface components {
       activated: boolean;
       /** @description Coupon Required Point */
       required_point?: number;
+    };
+    CouponResponseDTO: {
+      /** @description Coupon ID */
+      _id: string;
+      /** @description Coupon Code */
+      title: string;
+      /** @description Coupon Description */
+      description: string;
+      /** @description Coupon image */
+      image: string;
+      required_menus: components["schemas"]["MenuSchema"][];
+      /** @description Discount price of Coupon */
+      discount: number;
+      /** @description Quota of the coupon */
+      quota: number;
+      /** @description Number of coupons that have been redeemed */
+      redeemed: number;
+      /** @description Coupon status */
+      activated: boolean;
+      /** @description Coupon Required Point */
+      required_point: number;
     };
     UpdateCouponDto: {
       /** @description Coupon Code */
@@ -687,25 +858,29 @@ export interface components {
        */
       role: "Owner" | "Cashier" | "Employee" | "Customer";
     };
-    CreateIngredientDto: {
-      /** @description Ingredient title */
-      title: string;
-      /** @description Ingredient status */
-      available: boolean;
+    UpdateRoleDto: {
+      /**
+       * @description select role from enum UserRole example: Owner, Cashier, Employee, Customer
+       * @example Owner
+       * @enum {string}
+       */
+      role: "Owner" | "Cashier" | "Employee" | "Customer";
     };
-    IngredientSchema: {
-      /** @description Ingredient ID */
-      _id: string;
-      /** @description Ingredient title */
-      title: string;
-      /** @description Ingredient status */
-      available: boolean;
+    UpdateInfoDto: {
+      /** @description New Username */
+      newUsername: string;
+      /** @description Old Password */
+      oldPassword: string;
+      /** @description New Password */
+      newPassword: string;
     };
-    UpdateIngredientDto: {
-      /** @description Ingredient title */
-      title?: string;
-      /** @description Ingredient status */
-      available?: boolean;
+    GetUserAmountDto: {
+      /** @description Total registered users */
+      total_user: number;
+      /** @description Total old registered users */
+      old_user: number;
+      /** @description Total new registered users */
+      new_user: number;
     };
   };
   responses: never;
@@ -896,7 +1071,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["CreateAddonDto"];
+        "application/json": components["schemas"]["UpdateAddonDto"];
       };
     };
     responses: {
@@ -930,6 +1105,38 @@ export interface operations {
       };
     };
   };
+  /** Change addon status to available */
+  AddonsController_setAvailable: {
+    parameters: {
+      path: {
+        /** @description Addon ID (ObjectID) */
+        id: string;
+      };
+    };
+    responses: {
+      204: never;
+    };
+  };
+  /** Change addon status to unavailable */
+  AddonsController_setUnavailable: {
+    parameters: {
+      path: {
+        /** @description Addon ID (ObjectID) */
+        id: string;
+      };
+    };
+    responses: {
+      204: never;
+    };
+  };
+  /** Make all addons available */
+  AddonsController_activateAllAddon: {
+    responses: {
+      /** @description All addons is now available */
+      204: never;
+    };
+  };
+  /** Get all menus */
   MenusController_getMenus: {
     parameters: {
       query: {
@@ -1102,11 +1309,31 @@ export interface operations {
       };
     };
   };
+  OrdersController_updateOrder: {
+    parameters: {
+      path: {
+        /** @description Order ID */
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateOrderDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["OrdersSchema"];
+        };
+      };
+    };
+  };
   /** Change order status to preparing */
   OrdersController_preparing: {
     parameters: {
       path: {
-        /** @description Session ID (ObjectId) */
+        /** @description Order ID (ObjectId) */
         id: string;
       };
     };
@@ -1121,7 +1348,7 @@ export interface operations {
   OrdersController_readyToServe: {
     parameters: {
       path: {
-        /** @description Session ID (ObjectId) */
+        /** @description Order ID (ObjectId) */
         id: string;
       };
     };
@@ -1147,7 +1374,7 @@ export interface operations {
   };
   /**
    * Cancel order
-   * @description Cancel order and disable addons, ingredients(not implemented) if included
+   * @description Cancel order and disable addons, ingredients if included
    */
   OrdersController_cancelOrder: {
     requestBody: {
@@ -1265,9 +1492,11 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Session finished */
-      204: {
-        content: never;
+      /** @description Receipt of session */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ReceiptSchema"];
+        };
       };
       /** @description Session not found */
       404: {
@@ -1348,12 +1577,103 @@ export interface operations {
       };
     };
   };
+  /** Get all ingredients */
+  IngredientsController_findAll: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["IngredientSchema"][];
+        };
+      };
+    };
+  };
+  /** Create a ingredient */
+  IngredientsController_create: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateIngredientDto"];
+      };
+    };
+    responses: {
+      /** @description Ingredient created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["IngredientSchema"];
+        };
+      };
+      /** @description Ingredient already exists */
+      409: never;
+    };
+  };
+  /** Get a ingredient by id */
+  IngredientsController_findOne: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["IngredientSchema"];
+        };
+      };
+      /** @description Ingredient not found */
+      404: never;
+    };
+  };
+  /** Delete a ingredient by id */
+  IngredientsController_remove: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Ingredient deleted */
+      200: never;
+      /** @description Ingredient not found */
+      404: never;
+    };
+  };
+  /** Update a ingredient by id */
+  IngredientsController_updateIngredient: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateIngredientDto"];
+      };
+    };
+    responses: {
+      /** @description Ingredient updated */
+      200: {
+        content: {
+          "application/json": components["schemas"]["IngredientSchema"];
+        };
+      };
+      /** @description Ingredient not found */
+      404: never;
+      /** @description Ingredient already exists */
+      409: never;
+    };
+  };
+  /** Make all ingredient available */
+  IngredientsController_activateAllIngredient: {
+    responses: {
+      /** @description All ingredient is now available */
+      204: never;
+    };
+  };
   /** Get all coupons */
   CouponsController_findAll: {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["CouponSchema"][];
+          "application/json": components["schemas"]["CouponResponseDTO"][];
         };
       };
     };
@@ -1384,7 +1704,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["CouponSchema"];
+          "application/json": components["schemas"]["CouponResponseDTO"];
         };
       };
       /** @description Coupon not found */
@@ -1548,6 +1868,17 @@ export interface operations {
       };
     };
   };
+  /** Update User info */
+  UsersController_updateUserInfo: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateInfoDto"];
+      };
+    };
+    responses: {
+      204: never;
+    };
+  };
   /** Reset user password */
   UsersController_updateUser: {
     parameters: {
@@ -1562,88 +1893,37 @@ export interface operations {
       };
     };
   };
-  /** Get all ingredients */
-  IngredientsController_findAll: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["IngredientSchema"][];
-        };
-      };
-    };
-  };
-  /** Create a ingredient */
-  IngredientsController_create: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateIngredientDto"];
-      };
-    };
-    responses: {
-      /** @description Ingredient created */
-      201: {
-        content: {
-          "application/json": components["schemas"]["IngredientSchema"];
-        };
-      };
-      /** @description Ingredient already exists */
-      409: never;
-    };
-  };
-  /** Get a ingredient by id */
-  IngredientsController_findOne: {
+  /** Update user role */
+  UsersController_updateUserRole: {
     parameters: {
       path: {
-        id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["IngredientSchema"];
-        };
-      };
-      /** @description Ingredient not found */
-      404: never;
-    };
-  };
-  /** Delete a ingredient by id */
-  IngredientsController_remove: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description Ingredient deleted */
-      200: never;
-      /** @description Ingredient not found */
-      404: never;
-    };
-  };
-  /** Update a ingredient by id */
-  IngredientsController_updateIngredient: {
-    parameters: {
-      path: {
+        /** @description User id (ObjectId) */
         id: string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UpdateIngredientDto"];
+        "application/json": components["schemas"]["UpdateRoleDto"];
       };
     };
     responses: {
-      /** @description Ingredient updated */
+      204: never;
+    };
+  };
+  /** Get total registered users */
+  DashboardController_getDashboard: {
+    parameters: {
+      path: {
+        date: number;
+      };
+    };
+    responses: {
+      /** @description Total registered users */
       200: {
         content: {
-          "application/json": components["schemas"]["IngredientSchema"];
+          "application/json": components["schemas"]["GetUserAmountDto"];
         };
       };
-      /** @description Ingredient not found */
-      404: never;
-      /** @description Ingredient already exists */
-      409: never;
     };
   };
 }

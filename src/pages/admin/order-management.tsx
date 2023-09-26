@@ -112,7 +112,7 @@ const Container = styled.div`
   flex-direction: column;
   gap: 24px;
   flex: 1;
-  height: calc(100vh - 48px);
+  height: calc(100dvh - 48px);
   overflow: hidden;
 `;
 

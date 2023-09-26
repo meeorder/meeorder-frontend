@@ -97,8 +97,9 @@ const FoodDetail = () => {
           <Image
             src={checkImageSrc(menu?.image ?? "")}
             alt={menu?.title ?? ""}
-            width={1000}
-            height={1000}
+            width={500}
+            height={500}
+            priority
             style={{
               objectFit: "cover",
               objectPosition: "center",
@@ -141,7 +142,7 @@ export default FoodDetail;
 const LayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100dvh;
   max-width: 500px;
   margin: 0 auto;
   background-color: ${(props) => props.theme.antd.colorBgLayout};

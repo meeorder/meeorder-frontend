@@ -5,14 +5,14 @@ import BasketFoodList from "@/modules/user/basket/components/BasketFoodList";
 import BasketSummaryNav from "@/modules/user/basket/components/BasketSummaryNav";
 import { useBasketStore } from "@/modules/user/basket/hooks/useBasketStore";
 import { calculateBasketOrdersPrice } from "@/modules/user/basket/utils";
-import { useRevalidateSession } from "@/modules/user/order/hooks/useSessionStore";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import Head from "next/head";
 
 const Basket = () => {
   const basketOrders = useBasketStore((state) => state.basketOrders);
-  useRevalidateSession();
   const { isClientLoaded } = useClient();
+  useSession();
 
   return (
     <>
