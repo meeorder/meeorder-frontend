@@ -24,6 +24,7 @@
     "next": "^13.4.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-highlight-words": "^0.20.0",
     "sharp": "^0.32.5",
     "zod": "^3.21.4",
     "zustand": "^4.3.9"
