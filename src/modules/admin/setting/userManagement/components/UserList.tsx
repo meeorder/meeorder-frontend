@@ -2,9 +2,9 @@ import useAllUser from "@/modules/admin/setting/userManagement/hooks/useAllUser"
 import useResetUserPassword from "@/modules/admin/setting/userManagement/hooks/useResetUserPassword";
 import useUpdateUserRole from "@/modules/admin/setting/userManagement/hooks/useUpdateUserRole";
 import { H5, Text } from "@/modules/common/components/Typography";
+import { useUser } from "@/modules/common/hooks/useUserStore";
 import {
   roleNumberToRole,
-  roleToRoleNumber,
   type GetAllUsersResponse,
   type RoleNumber,
 } from "@/modules/services/users";
@@ -61,6 +61,8 @@ const UserList: React.FC<UserListProps> = ({ setIdUserToDelete }) => {
 
   const [searchText, setSearchText] = useState("");
   const searchInput = useRef<InputRef>(null);
+
+  const { data: user } = useUser();
 
   const [selectedRole, setSelectedRole] = useState<RoleNumber | null>(null);
   const { mutate: updateUserRole } = useUpdateUserRole();
@@ -269,8 +271,6 @@ const UserList: React.FC<UserListProps> = ({ setIdUserToDelete }) => {
       title: "ดำเนินการ",
       width: "20%",
       render: (_: string, record: TableRow) => {
-        if (record.role === roleToRoleNumber["Owner"]) return null;
-
         return (
           <ActionContainer>
             <Popover
@@ -330,7 +330,12 @@ const UserList: React.FC<UserListProps> = ({ setIdUserToDelete }) => {
                 </RoleEditContainer>
               }
             >
-              <Typography.Link key="editRole">แก้ไขหน้าที่</Typography.Link>
+              <Typography.Link
+                key="editRole"
+                disabled={user?._id === record._id}
+              >
+                แก้ไขหน้าที่
+              </Typography.Link>
             </Popover>
             <Popover
               trigger="click"
@@ -388,12 +393,16 @@ const UserList: React.FC<UserListProps> = ({ setIdUserToDelete }) => {
                 </ResetPasswordContainer>
               }
             >
-              <Typography.Link key="resetPassword">
+              <Typography.Link
+                key="resetPassword"
+                disabled={user?._id === record._id}
+              >
                 รีเซ็ตรหัสผ่าน
               </Typography.Link>
             </Popover>
             <Typography.Link
               key="delete"
+              disabled={user?._id === record._id}
               onClick={() => setIdUserToDelete(record._id)}
             >
               ลบ
