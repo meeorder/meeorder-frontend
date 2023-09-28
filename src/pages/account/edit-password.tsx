@@ -1,18 +1,14 @@
 import { H4, H5, Text } from "@/modules/common/components/Typography";
 import { useUser } from "@/modules/common/hooks/useUserStore";
+import BackButton from "@/modules/user/account/components/BackButton";
 import styled from "@emotion/styled";
-import { CaretLeft } from "@phosphor-icons/react";
-import { Button, Input } from "antd";
+import { Input } from "antd";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
 const EditPassword = () => {
   const { data: user } = useUser();
   const router = useRouter();
-
-  const onClickBackButton = () => {
-    void router.back();
-  };
 
   return (
     <>
@@ -23,10 +19,7 @@ const EditPassword = () => {
       </Head>
       <ScreenContainer>
         <Container>
-          <BackButtonContainer onClick={() => onClickBackButton()}>
-            <CaretLeft size={32} />
-            <Text>กลับสู่หน้าโพรไฟล์</Text>
-          </BackButtonContainer>
+          <BackButton text={"กลับสู่หน้าโพรไฟล์"} />
           <ProfileContainer>
             <H4>แก้ไขรหัสผ่าน</H4>
             <Text type="secondary">ป้อนรหัสผ่านปัจจุบันและรหัสผ่านใหม่</Text>
@@ -112,18 +105,6 @@ const Container = styled.div`
       ${(props) => props.theme.antd.colorPrimaryBorder} -27.67%,
       #fff 18.01%
     );
-`;
-
-const BackButtonContainer = styled(Button)`
-  display: flex;
-  justify-content: space-between;
-  width: 30%;
-  align-items: center;
-  min-width: 175px;
-  margin-bottom: 12px;
-  border: none;
-  box-shadow: none;
-  background: none;
 `;
 
 const ProfileContainer = styled.div`

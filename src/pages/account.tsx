@@ -1,8 +1,9 @@
 import { H4, H5, Text } from "@/modules/common/components/Typography";
 import { useUser } from "@/modules/common/hooks/useUserStore";
+import BackButton from "@/modules/user/account/components/BackButton";
 import UserData from "@/modules/user/account/components/UserData";
 import styled from "@emotion/styled";
-import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { CaretRight } from "@phosphor-icons/react";
 import { Button } from "antd";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -10,10 +11,6 @@ import { useRouter } from "next/router";
 const Account = () => {
   const { data: user } = useUser();
   const router = useRouter();
-
-  const onClickBackButton = () => {
-    void router.back();
-  };
 
   const onClickUsernameButton = () => {
     void router.push({
@@ -36,10 +33,7 @@ const Account = () => {
       </Head>
       <ScreenContainer>
         <Container>
-          <BackButtonContainer onClick={() => onClickBackButton()}>
-            <CaretLeft size={32} />
-            <Text>กลับสู่หน้าหลัก</Text>
-          </BackButtonContainer>
+          <BackButton text={"กลับสู่หน้าหลัก"} />
           <UserData />
           <ProfileContainer>
             <H4>ตั้งค่าโพรไฟล์</H4>
@@ -101,18 +95,6 @@ const Container = styled.div`
       ${(props) => props.theme.antd.colorPrimaryBorder} -27.67%,
       #fff 25.01%
     );
-`;
-
-const BackButtonContainer = styled(Button)`
-  display: flex;
-  justify-content: space-between;
-  width: 30%;
-  align-items: center;
-  min-width: 136px;
-  margin-bottom: 12px;
-  border: none;
-  box-shadow: none;
-  background: none;
 `;
 
 const ProfileContainer = styled.div`
