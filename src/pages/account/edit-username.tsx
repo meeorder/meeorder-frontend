@@ -10,10 +10,6 @@ const EditUsername = () => {
   const { data: user } = useUser();
   const router = useRouter();
 
-  const onClickBackButton = () => {
-    void router.back();
-  };
-
   return (
     <>
       <Head>
