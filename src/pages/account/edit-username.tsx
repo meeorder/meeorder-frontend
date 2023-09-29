@@ -65,17 +65,17 @@ const EditUsername = () => {
               <H4>แก้ไขชื่อผู้ใช้</H4>
               <Text type="secondary">ป้อนชื่อผู้ใช้ใหม่และรหัสผ่านของคุณ</Text>
               <FieldContainer>
+                <H5
+                  style={{
+                    marginBottom: "8px",
+                  }}
+                >
+                  ชื่อผู้ใช้
+                </H5>
                 <Form.Item<FieldType>
                   name="username"
                   rules={[{ required: true, message: "กรุณากรอกชื่อผู้ใช้" }]}
                 >
-                  <H5
-                    style={{
-                      marginBottom: "8px",
-                    }}
-                  >
-                    ชื่อผู้ใช้
-                  </H5>
                   <Input
                     style={{
                       marginBottom: "8px",
@@ -84,17 +84,17 @@ const EditUsername = () => {
                     placeholder="example"
                   ></Input>
                 </Form.Item>
+                <H5
+                  style={{
+                    marginBottom: "8px",
+                  }}
+                >
+                  รหัสผ่านปัจจุบัน
+                </H5>
                 <Form.Item<FieldType>
                   name="password"
                   rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
                 >
-                  <H5
-                    style={{
-                      marginBottom: "8px",
-                    }}
-                  >
-                    รหัสผ่านปัจจุบัน
-                  </H5>
                   <Input.Password
                     style={{
                       marginBottom: "8px",
