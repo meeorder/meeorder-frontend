@@ -53,6 +53,7 @@ export interface paths {
     post: operations["AddonsController_activateAllAddon"];
   };
   "/menus": {
+    /** Get all menus */
     get: operations["MenusController_getMenus"];
     /** Create a menu */
     post: operations["MenusController_createMenu"];
@@ -83,6 +84,9 @@ export interface paths {
     get: operations["OrdersController_getOrders"];
     /** Create order */
     post: operations["OrdersController_createOrder"];
+  };
+  "/orders/{id}": {
+    patch: operations["OrdersController_updateOrder"];
   };
   "/orders/{id}/preparing": {
     /** Change order status to preparing */
@@ -214,6 +218,10 @@ export interface paths {
     /** Update user role */
     patch: operations["UsersController_updateUserRole"];
   };
+  "/dashboard/customer_report/{date}": {
+    /** Get total registered users */
+    get: operations["DashboardController_getDashboard"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -264,10 +272,34 @@ export interface components {
        * @description Addon deletion date
        */
       deleted_at: string | null;
-      /** Format: date-time */
+      /**
+       * Format: date-time
+       * @default 2023-09-28T16:57:12.590Z
+       */
       created_at: string;
       /** @description Addon status */
       available: boolean;
+    };
+    GetAddonDto: {
+      /** @description Addon ID */
+      _id: string;
+      /** @description Addon Title */
+      title: string;
+      /** @description Addon Price */
+      price: number;
+      /**
+       * Format: date-time
+       * @description Addon deletion date
+       */
+      deleted_at: string | null;
+      /**
+       * Format: date-time
+       * @default 2023-09-28T16:57:12.590Z
+       */
+      created_at: string;
+      /** @description Addon status */
+      available: boolean;
+      menus_applied: number;
     };
     UpdateAddonDto: {
       title: string;
@@ -284,6 +316,8 @@ export interface components {
       description: string | null;
       /** @description Menu Price */
       price: number;
+      /** @description Menu Ingredients ID */
+      ingredients: string[];
       /** @description Menu Addons */
       addons: components["schemas"]["AddonSchema"][];
       /**
@@ -316,6 +350,8 @@ export interface components {
       price: number;
       /** @description Menu Category */
       category: components["schemas"]["CategorySchema"];
+      /** @description Menu Ingredients ID */
+      ingredients: string[];
       /** @description Menu Addons */
       addons: components["schemas"]["AddonSchema"][];
       /**
@@ -340,6 +376,8 @@ export interface components {
       price: number;
       /** @description Menu Category */
       category?: string;
+      /** @description Menu Ingredients */
+      ingredients: string[];
       /** @description Menu Addons */
       addons: string[];
     };
@@ -444,25 +482,77 @@ export interface components {
        */
       deleted_at: string | null;
     };
-    OrderGetDto: {
-      /** @description Orders ID */
+    IngredientSchema: {
+      /** @description Ingredient ID */
       _id: string;
+      /** @description Ingredient title */
+      title: string;
+      /** @description Ingredient status */
+      available: boolean;
       /** Format: date-time */
       created_at: string;
-      /** @enum {string} */
+    };
+    OrderCancelResponseDto: {
+      reasons: string;
+      ingredients: components["schemas"]["IngredientSchema"][];
+      addons: components["schemas"]["AddonSchema"][];
+      /** Format: date-time */
+      cancelled_at: string;
+    };
+    OrderGetDto: {
+      _id: string;
+      /**
+       * Format: date-time
+       * @description Order creation date
+       */
+      created_at: string;
+      /**
+       * @description Order status
+       * @enum {string}
+       */
       status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
+      /** @description Session (table populated) */
+      session: components["schemas"]["SessionSchema"] | string;
+      /** @description Menu of the order */
+      menu: components["schemas"]["MenuSchema"] | string;
       /** @description Array of MenuID */
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
       additional_info: string;
+      cancel: components["schemas"]["OrderCancelResponseDto"] | null;
+    };
+    UpdateOrderDto: {
+      addons: string[];
+      additional_info: string;
+    };
+    OrderCancelSchema: {
+      reasons: string;
+      ingredients: string[];
+      addons: string[];
+      /** Format: date-time */
+      cancelled_at: string;
+    };
+    OrdersSchema: {
+      _id: string;
       /**
        * Format: date-time
-       * @description for cancel status
+       * @description Order creation date
        */
-      cancelled_at: string;
-      /** @description Session (table populated) */
-      session: components["schemas"]["SessionWithTableDto"];
-      menu: components["schemas"]["PopulatedCategoryMenuDto"];
+      created_at: string;
+      /**
+       * @description Order status
+       * @enum {string}
+       */
+      status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
+      /** @description Session of the order */
+      session: components["schemas"]["SessionSchema"] | string;
+      /** @description Menu of the order */
+      menu: components["schemas"]["MenuSchema"] | string;
+      /** @description Addons of the order */
+      addons: (string | components["schemas"]["AddonSchema"])[];
+      /** @description Additional info */
+      additional_info: string;
+      cancel: components["schemas"]["OrderCancelSchema"] | null;
     };
     CancelOrderDto: {
       /**
@@ -477,9 +567,9 @@ export interface components {
       addons?: string[];
       /**
        * @description Reason for cancel order
-       * @default null
+       * @default []
        */
-      reason: string;
+      reasons: string[];
     };
     UserSchema: {
       /** @description User ID */
@@ -496,7 +586,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-23T08:26:08.318Z
+       * @default 2023-09-28T16:57:12.598Z
        */
       created_at: string;
       /**
@@ -583,6 +673,26 @@ export interface components {
        */
       deleted_at: string | null;
     };
+    ReceiptMenuSchema: {
+      _id: string;
+      title: string;
+      price: number;
+    };
+    ReceiptCouponSchema: {
+      _id: string;
+      title: string;
+      discount: number;
+    };
+    ReceiptSchema: {
+      session: string;
+      menus: components["schemas"]["ReceiptMenuSchema"][];
+      coupon: components["schemas"]["ReceiptCouponSchema"];
+      total_price: number;
+      discount_price: number;
+      net_price: number;
+      /** Format: date-time */
+      created_at: string;
+    };
     MenusResponseDto: {
       /** @description Menu ID */
       _id: string;
@@ -624,11 +734,7 @@ export interface components {
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
       additional_info: string | null;
-      /**
-       * Format: date-time
-       * @description for cancel status
-       */
-      cancelled_at: string;
+      cancel: components["schemas"]["OrderCancelResponseDto"] | null;
     };
     OrdersListDto: {
       /** @description table id */
@@ -677,7 +783,7 @@ export interface components {
       /** @description Ingredient status */
       available: boolean;
     };
-    IngredientSchema: {
+    GetIngredientDto: {
       /** @description Ingredient ID */
       _id: string;
       /** @description Ingredient title */
@@ -686,6 +792,7 @@ export interface components {
       available: boolean;
       /** Format: date-time */
       created_at: string;
+      menus_applied: number;
     };
     UpdateIngredientDto: {
       /** @description Ingredient title */
@@ -713,6 +820,8 @@ export interface components {
       required_point?: number;
     };
     CouponResponseDTO: {
+      /** @description Coupon ID */
+      _id: string;
       /** @description Coupon Code */
       title: string;
       /** @description Coupon Description */
@@ -807,6 +916,14 @@ export interface components {
       oldPassword: string;
       /** @description New Password */
       newPassword: string;
+    };
+    GetUserAmountDto: {
+      /** @description Total registered users */
+      total_user: number;
+      /** @description Total old registered users */
+      old_user: number;
+      /** @description Total new registered users */
+      new_user: number;
     };
   };
   responses: never;
@@ -934,7 +1051,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["AddonSchema"][];
+          "application/json": components["schemas"]["GetAddonDto"][];
         };
       };
     };
@@ -966,7 +1083,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["AddonSchema"];
+          "application/json": components["schemas"]["GetAddonDto"];
         };
       };
       /** @description Addon not found */
@@ -1042,6 +1159,7 @@ export interface operations {
       204: never;
     };
   };
+  /** Get all menus */
   MenusController_getMenus: {
     parameters: {
       query: {
@@ -1190,11 +1308,31 @@ export interface operations {
       201: never;
     };
   };
+  OrdersController_updateOrder: {
+    parameters: {
+      path: {
+        /** @description Order ID */
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateOrderDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["OrdersSchema"];
+        };
+      };
+    };
+  };
   /** Change order status to preparing */
   OrdersController_preparing: {
     parameters: {
       path: {
-        /** @description Session ID (ObjectId) */
+        /** @description Order ID (ObjectId) */
         id: string;
       };
     };
@@ -1207,7 +1345,7 @@ export interface operations {
   OrdersController_readyToServe: {
     parameters: {
       path: {
-        /** @description Session ID (ObjectId) */
+        /** @description Order ID (ObjectId) */
         id: string;
       };
     };
@@ -1220,7 +1358,7 @@ export interface operations {
   OrdersController_done: {
     parameters: {
       path: {
-        /** @description Session ID (ObjectId) */
+        /** @description Order ID (ObjectId) */
         id: string;
       };
     };
@@ -1234,6 +1372,11 @@ export interface operations {
    * @description Cancel order and disable addons, ingredients if included
    */
   OrdersController_cancelOrder: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["CancelOrderDto"];
@@ -1340,7 +1483,11 @@ export interface operations {
     };
     responses: {
       /** @description Receipt of session */
-      200: never;
+      200: {
+        content: {
+          "application/json": components["schemas"]["ReceiptSchema"];
+        };
+      };
       /** @description Session not found */
       404: never;
     };
@@ -1419,7 +1566,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["IngredientSchema"][];
+          "application/json": components["schemas"]["GetIngredientDto"][];
         };
       };
     };
@@ -1452,7 +1599,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["IngredientSchema"];
+          "application/json": components["schemas"]["GetIngredientDto"];
         };
       };
       /** @description Ingredient not found */
@@ -1737,6 +1884,22 @@ export interface operations {
     };
     responses: {
       204: never;
+    };
+  };
+  /** Get total registered users */
+  DashboardController_getDashboard: {
+    parameters: {
+      path: {
+        date: number;
+      };
+    };
+    responses: {
+      /** @description Total registered users */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserAmountDto"];
+        };
+      };
     };
   };
 }

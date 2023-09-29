@@ -19,13 +19,23 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
     <StyledCard>
       <FlexBetweenRow>
         <FlexBetweenCol>
+          <Text
+            type="secondary"
+            style={{
+              fontSize: 12,
+              marginBlock: -8,
+            }}
+          >
+            {new Date(order?.created_at).toLocaleTimeString("th-TH", {
+              hour12: false,
+              timeStyle: "short",
+            })}
+          </Text>
           <H5>{order?.menu?.title}</H5>
           <Text type="secondary">
             <TextPrice price={calculateOrderPrice(order)} />
             <StyledStatusTag color={colorTag}>
-              {order?.cancelled_at
-                ? "ยกเลิก"
-                : mapOrderStatusTranslation[order.status]}
+              {mapOrderStatusTranslation[order.status]}
             </StyledStatusTag>
           </Text>
           {order?.addons?.map((addon) => {

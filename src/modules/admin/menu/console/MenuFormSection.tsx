@@ -37,7 +37,6 @@ const MenuFormSection: React.FC = () => {
   const [published, setPublished] = useState(true);
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  // const [loadingDelete, setLoadingDelete] = useState(false);
   const [imageURL, setImageURL] = useState("");
   const { mutate: createMenu } = useCreateMenu(changeToCategoryMode);
   const { mutate: editMenu } = useEditMenu(changeToCategoryMode);
@@ -57,7 +56,7 @@ const MenuFormSection: React.FC = () => {
           title: initialData.title,
           price: initialData.price,
           category: initialData.category?._id,
-          // ingredient: [], todo add ingredient field
+          // ingredient: initialData.ingredient,
           description: initialData.description,
           image: initialData.image,
         });
@@ -247,7 +246,8 @@ const MenuFormSection: React.FC = () => {
             <Input.TextArea
               placeholder="เมนูที่อร่อยที่สุดในโลก"
               showCount
-              maxLength={100}
+              maxLength={200}
+              rows={3}
               size="large"
             />
           </Form.Item>

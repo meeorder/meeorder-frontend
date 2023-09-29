@@ -3,6 +3,7 @@ import { useRegister } from "@/modules/common/hooks/useAuth";
 import styled from "@emotion/styled";
 import { LockSimple, User } from "@phosphor-icons/react";
 import { Button, Form, Input, theme } from "antd";
+import { type AxiosError } from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -20,6 +21,7 @@ const Register = () => {
     mutate: register,
     isLoading,
     isError,
+    error,
   } = useRegister({
     onSuccess: () => {
       void router.push("/signin");
@@ -38,7 +40,21 @@ const Register = () => {
       form.setFields([
         {
           name: "username",
-          errors: ["ไม่สามารถใช้ชื่อผู้ใช้นี้ได้"],
+          errors: [" "],
+        },
+        {
+          name: "password",
+          errors: [" "],
+        },
+        {
+          name: "confirmPassword",
+          errors: [
+            (
+              error as AxiosError<{
+                message: string;
+              }>
+            )?.response?.data?.message || " ",
+          ],
         },
       ]);
     }
@@ -65,7 +81,11 @@ const Register = () => {
           <H2>ยินดีต้อนรับ!</H2>
           <H5 type="secondary">สมัครสมาชิกแล้วเริ่มเก็บแต้มของคุณเลย!</H5>
         </div>
-        <Form onFinish={handleRegister} style={{ width: "100%" }}>
+        <Form<FieldType>
+          onFinish={handleRegister}
+          style={{ width: "100%" }}
+          form={form}
+        >
           <Form.Item<FieldType>
             name="username"
             rules={[{ required: true, message: "กรุณากรอกชื่อผู้ใช้" }]}

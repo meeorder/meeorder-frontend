@@ -3,6 +3,7 @@ import { useLogin } from "@/modules/common/hooks/useAuth";
 import styled from "@emotion/styled";
 import { LockSimple, User } from "@phosphor-icons/react";
 import { Button, Form, Input, theme } from "antd";
+import { type AxiosError } from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -16,7 +17,7 @@ type FieldType = {
 const SignIn = () => {
   const [form] = Form.useForm<FieldType>();
   const router = useRouter();
-  const { mutate: login, isLoading, isSuccess, isError } = useLogin();
+  const { mutate: login, isLoading, isSuccess, isError, error } = useLogin();
   const handleSignIn = (values: FieldType) => {
     login(values);
   };
@@ -32,7 +33,13 @@ const SignIn = () => {
         },
         {
           name: "password",
-          errors: ["ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"],
+          errors: [
+            (
+              error as AxiosError<{
+                message: string;
+              }>
+            )?.response?.data?.message || " ",
+          ],
         },
       ]);
     }
@@ -62,9 +69,7 @@ const SignIn = () => {
           }}
         >
           <H2>ยินดีต้อนรับ!</H2>
-          <H5 type="secondary">
-            เข้าสู่ระบบเพื่อสะสมแต้มและรับสิทธิพิเศษเฉพาะคุณ!
-          </H5>
+          <H5 type="secondary">เข้าสู่ระบบเพื่อสะสมแต้มและรับสิทธิพิเศษ!</H5>
         </div>
         <Form<FieldType>
           form={form}
@@ -82,11 +87,11 @@ const SignIn = () => {
           </Form.Item>
           <Form.Item<FieldType>
             name="password"
-            rules={[{ required: true, message: "Please input your Password!" }]}
+            rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
           >
             <Input.Password
               prefix={<LockSimple size={14} color={colorBorder} />}
-              placeholder="Password"
+              placeholder="รหัสผ่าน"
             />
           </Form.Item>
           <Form.Item<FieldType> style={{ textAlign: "end" }}>

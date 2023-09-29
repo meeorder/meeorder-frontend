@@ -43,6 +43,7 @@ export const useSession = () => {
         id: sessionId ?? "",
       }),
     enabled: !!sessionId,
+    refetchInterval: 1000,
     onSuccess: (newSession) => {
       if (newSession?.finished_at !== null) {
         clearSessionId();
