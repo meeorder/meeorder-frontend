@@ -6,25 +6,34 @@ import { useUser } from "@/modules/common/hooks/useUserStore";
 import styled from "@emotion/styled";
 import { Collapse, type CollapseProps } from "antd";
 import { useRouter } from "next/router";
-
-const EditUsername = () => {
-  const { data: user } = useUser();
-  const router = useRouter();
-};
+import { useState } from "react";
 
 const AccountManagemant = () => {
+  const [activeKeys, setActiveKeys] = useState<string[]>(["1", "2"]);
+  const { data: user } = useUser();
+  const router = useRouter();
   const EditAccount: CollapseProps["items"] = [
     {
       key: "1",
       label: "ชื่อผู้ใช้งาน",
-      children: <EditUsernameContainer />,
-      extra: "ชื่อผู้ใช้งาน",
+      children: (
+        <EditUsernameContainer
+          activeKeys={activeKeys}
+          setActiveKeys={setActiveKeys}
+        />
+      ),
+      extra: user?.username ?? "ชื่อผู้ใช้งาน",
     },
     {
       key: "2",
       label: "รหัสผ่าน",
-      children: <EditPasswordContainer />,
-      extra: "รหัสผ่าน",
+      children: (
+        <EditPasswordContainer
+          activeKeys={activeKeys}
+          setActiveKeys={setActiveKeys}
+        />
+      ),
+      extra: "********",
     },
   ];
 
@@ -37,10 +46,24 @@ const AccountManagemant = () => {
             <H4>ข้อมูลส่วนตัว</H4>
             <Collapse
               items={EditAccount}
-              defaultActiveKey={["1"]}
+              activeKey={activeKeys}
+              defaultActiveKey={[]}
               collapsible="icon"
-              expandIcon={() => <H1 style={{ color: "#1890FF" }}>แก้ไข</H1>}
-              expandIconPosition="end"
+              expandIcon={() => (
+                <H1
+                  style={{ color: "#1890FF" }}
+                  onClick={(e) => {
+                    setActiveKeys(
+                      e.currentTarget.id
+                        .split(",")
+                        .filter((key) => key !== "1"),
+                    );
+                  }}
+                >
+                  แก้ไข
+                </H1>
+              )}
+              expandIconPosition="start"
             />
           </EditContainer>
         </SecondContainer>
