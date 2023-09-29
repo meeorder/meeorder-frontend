@@ -2,13 +2,18 @@ import { H4, H5, Text } from "@/modules/common/components/Typography";
 import { useUser } from "@/modules/common/hooks/useUserStore";
 import BackButton from "@/modules/user/account/components/BackButton";
 import styled from "@emotion/styled";
-import { Input } from "antd";
+import { Button, Input } from "antd";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const EditPassword = () => {
   const { data: user } = useUser();
   const router = useRouter();
+
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
     <>
@@ -38,6 +43,10 @@ const EditPassword = () => {
                     width: "100%",
                   }}
                   placeholder="example"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                 ></Input>
               </UsernameContainer>
               <PasswordContainer>
@@ -54,6 +63,10 @@ const EditPassword = () => {
                     width: "100%",
                   }}
                   placeholder="example"
+                  value={newPassword}
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                  }}
                 ></Input>
               </PasswordContainer>
               <PasswordContainer>
@@ -70,9 +83,20 @@ const EditPassword = () => {
                     width: "100%",
                   }}
                   placeholder="example"
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                  }}
                 ></Input>
               </PasswordContainer>
             </FieldContainer>
+            <ChangePasswordButton
+              onClick={() => {
+                console.log(password, newPassword, confirmPassword);
+              }}
+            >
+              <Text style={{ color: "#fff" }}>เปลี่ยนรหัสผ่าน</Text>
+            </ChangePasswordButton>
           </ProfileContainer>
         </Container>
       </ScreenContainer>
@@ -132,4 +156,15 @@ const FieldContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding: 8px;
+`;
+
+const ChangePasswordButton = styled(Button)`
+  width: 120px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2px;
+  background-color: ${(props) => props.theme.antd.colorPrimary};
+  border-radius: 1px solid ${(props) => props.theme.antd.colorPrimary};
 `;
