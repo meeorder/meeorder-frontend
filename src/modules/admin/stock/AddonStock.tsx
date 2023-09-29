@@ -38,7 +38,6 @@ const AddonStock = () => {
           <Switch
             checked={rec.available}
             onClick={() => {
-              console.log(`bruh addon ${rec._id} ${text}`);
               const id = rec._id;
               const status = !rec.available ? "activate" : "deactivate";
               changeAddonStatus({ id, status });
@@ -56,7 +55,6 @@ const AddonStock = () => {
         <CenterContentButton
           type="primary"
           onClick={function () {
-            console.log("bruh all addon");
             activateAllAddons();
           }}
         >

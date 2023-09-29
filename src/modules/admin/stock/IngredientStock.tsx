@@ -38,7 +38,6 @@ const IngredientStock = () => {
           <Switch
             checked={rec.available}
             onClick={() => {
-              console.log(`bruh ingredient ${rec._id} ${text}`);
               const id = rec._id;
               const available = !rec.available;
               updateIngredient({ id, available });
@@ -56,7 +55,6 @@ const IngredientStock = () => {
         <CenterContentButton
           type="primary"
           onClick={function () {
-            console.log("bruh all ingredients");
             activateAllIngredients();
           }}
         >
