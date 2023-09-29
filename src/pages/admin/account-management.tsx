@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 const AccountManagemant = () => {
-  const [activeKeys, setActiveKeys] = useState<string[]>(["1", "2"]);
+  const [activeKeys, setActiveKeys] = useState<string[]>([]);
   const { data: user } = useUser();
   const router = useRouter();
   const EditAccount: CollapseProps["items"] = [
@@ -45,25 +45,15 @@ const AccountManagemant = () => {
             <H3>จัดการบัญชีส่วนตัว</H3>
             <H4>ข้อมูลส่วนตัว</H4>
             <Collapse
+              onChange={(key) => {
+                setActiveKeys(key as string[]);
+              }}
               items={EditAccount}
               activeKey={activeKeys}
               defaultActiveKey={[]}
               collapsible="icon"
-              expandIcon={() => (
-                <H1
-                  style={{ color: "#1890FF" }}
-                  onClick={(e) => {
-                    setActiveKeys(
-                      e.currentTarget.id
-                        .split(",")
-                        .filter((key) => key !== "1"),
-                    );
-                  }}
-                >
-                  แก้ไข
-                </H1>
-              )}
-              expandIconPosition="start"
+              expandIcon={() => <H1 style={{ color: "#1890FF" }}>แก้ไข</H1>}
+              expandIconPosition="end"
             />
           </EditContainer>
         </SecondContainer>
