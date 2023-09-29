@@ -272,10 +272,34 @@ export interface components {
        * @description Addon deletion date
        */
       deleted_at: string | null;
-      /** Format: date-time */
+      /**
+       * Format: date-time
+       * @default 2023-09-28T16:57:12.590Z
+       */
       created_at: string;
       /** @description Addon status */
       available: boolean;
+    };
+    GetAddonDto: {
+      /** @description Addon ID */
+      _id: string;
+      /** @description Addon Title */
+      title: string;
+      /** @description Addon Price */
+      price: number;
+      /**
+       * Format: date-time
+       * @description Addon deletion date
+       */
+      deleted_at: string | null;
+      /**
+       * Format: date-time
+       * @default 2023-09-28T16:57:12.590Z
+       */
+      created_at: string;
+      /** @description Addon status */
+      available: boolean;
+      menus_applied: number;
     };
     UpdateAddonDto: {
       title: string;
@@ -352,6 +376,8 @@ export interface components {
       price: number;
       /** @description Menu Category */
       category?: string;
+      /** @description Menu Ingredients */
+      ingredients: string[];
       /** @description Menu Addons */
       addons: string[];
     };
@@ -456,29 +482,55 @@ export interface components {
        */
       deleted_at: string | null;
     };
-    OrderGetDto: {
-      /** @description Orders ID */
+    IngredientSchema: {
+      /** @description Ingredient ID */
       _id: string;
+      /** @description Ingredient title */
+      title: string;
+      /** @description Ingredient status */
+      available: boolean;
       /** Format: date-time */
       created_at: string;
-      /** @enum {string} */
+    };
+    OrderCancelResponseDto: {
+      reasons: string;
+      ingredients: components["schemas"]["IngredientSchema"][];
+      addons: components["schemas"]["AddonSchema"][];
+      /** Format: date-time */
+      cancelled_at: string;
+    };
+    OrderGetDto: {
+      _id: string;
+      /**
+       * Format: date-time
+       * @description Order creation date
+       */
+      created_at: string;
+      /**
+       * @description Order status
+       * @enum {string}
+       */
       status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
+      /** @description Session (table populated) */
+      session: components["schemas"]["SessionSchema"] | string;
+      /** @description Menu of the order */
+      menu: components["schemas"]["MenuSchema"] | string;
       /** @description Array of MenuID */
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
       additional_info: string;
-      /**
-       * Format: date-time
-       * @description for cancel status
-       */
-      cancelled_at: string;
-      /** @description Session (table populated) */
-      session: components["schemas"]["SessionWithTableDto"];
-      menu: components["schemas"]["PopulatedCategoryMenuDto"];
+      cancel: components["schemas"]["OrderCancelResponseDto"] | null;
     };
     UpdateOrderDto: {
       addons: string[];
       additional_info: string;
+    };
+    OrderCancelSchema: {
+      reasons: string;
+      ingredients: string[];
+      addons: string[];
+      /** Format: date-time */
+      cancelled_at: string;
     };
     OrdersSchema: {
       _id: string;
@@ -500,13 +552,7 @@ export interface components {
       addons: (string | components["schemas"]["AddonSchema"])[];
       /** @description Additional info */
       additional_info: string;
-      /**
-       * Format: date-time
-       * @description Order cancellation date
-       */
-      cancelled_at: string;
-      /** @description Reason for cancel order */
-      cancel_reason: string;
+      cancel: components["schemas"]["OrderCancelSchema"] | null;
     };
     CancelOrderDto: {
       /**
@@ -521,9 +567,9 @@ export interface components {
       addons?: string[];
       /**
        * @description Reason for cancel order
-       * @default null
+       * @default []
        */
-      reason: string;
+      reasons: string[];
     };
     UserSchema: {
       /** @description User ID */
@@ -540,7 +586,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-24T15:27:13.534Z
+       * @default 2023-09-28T16:57:12.598Z
        */
       created_at: string;
       /**
@@ -688,11 +734,7 @@ export interface components {
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
       additional_info: string | null;
-      /**
-       * Format: date-time
-       * @description for cancel status
-       */
-      cancelled_at: string;
+      cancel: components["schemas"]["OrderCancelResponseDto"] | null;
     };
     OrdersListDto: {
       /** @description table id */
@@ -741,7 +783,7 @@ export interface components {
       /** @description Ingredient status */
       available: boolean;
     };
-    IngredientSchema: {
+    GetIngredientDto: {
       /** @description Ingredient ID */
       _id: string;
       /** @description Ingredient title */
@@ -750,6 +792,7 @@ export interface components {
       available: boolean;
       /** Format: date-time */
       created_at: string;
+      menus_applied: number;
     };
     UpdateIngredientDto: {
       /** @description Ingredient title */
@@ -1008,7 +1051,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["AddonSchema"][];
+          "application/json": components["schemas"]["GetAddonDto"][];
         };
       };
     };
@@ -1040,7 +1083,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["AddonSchema"];
+          "application/json": components["schemas"]["GetAddonDto"];
         };
       };
       /** @description Addon not found */
@@ -1315,7 +1358,7 @@ export interface operations {
   OrdersController_done: {
     parameters: {
       path: {
-        /** @description Session ID (ObjectId) */
+        /** @description Order ID (ObjectId) */
         id: string;
       };
     };
@@ -1329,6 +1372,11 @@ export interface operations {
    * @description Cancel order and disable addons, ingredients if included
    */
   OrdersController_cancelOrder: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["CancelOrderDto"];
@@ -1518,7 +1566,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["IngredientSchema"][];
+          "application/json": components["schemas"]["GetIngredientDto"][];
         };
       };
     };
@@ -1551,7 +1599,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["IngredientSchema"];
+          "application/json": components["schemas"]["GetIngredientDto"];
         };
       };
       /** @description Ingredient not found */
