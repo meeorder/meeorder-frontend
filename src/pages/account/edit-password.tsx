@@ -72,17 +72,17 @@ const EditPassword = () => {
               <H4>แก้ไขรหัสผ่าน</H4>
               <Text type="secondary">ป้อนรหัสผ่านปัจจุบันและรหัสผ่านใหม่</Text>
               <FieldContainer>
+                <H5
+                  style={{
+                    marginBottom: "8px",
+                  }}
+                >
+                  รหัสผ่านปัจจุบัน
+                </H5>
                 <Form.Item<FieldType>
                   name="oldPassword"
                   rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
                 >
-                  <H5
-                    style={{
-                      marginBottom: "8px",
-                    }}
-                  >
-                    รหัสผ่านปัจจุบัน
-                  </H5>
                   <Input.Password
                     style={{
                       marginBottom: "8px",
@@ -91,17 +91,17 @@ const EditPassword = () => {
                     placeholder="example"
                   ></Input.Password>
                 </Form.Item>
+                <H5
+                  style={{
+                    marginBottom: "8px",
+                  }}
+                >
+                  รหัสผ่านใหม่
+                </H5>
                 <Form.Item<FieldType>
                   name="newPassword"
                   rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
                 >
-                  <H5
-                    style={{
-                      marginBottom: "8px",
-                    }}
-                  >
-                    รหัสผ่านใหม่
-                  </H5>
                   <Input.Password
                     style={{
                       marginBottom: "8px",
@@ -110,6 +110,13 @@ const EditPassword = () => {
                     placeholder="example"
                   ></Input.Password>
                 </Form.Item>
+                <H5
+                  style={{
+                    marginBottom: "8px",
+                  }}
+                >
+                  ยืนยันรหัสผ่านใหม่
+                </H5>
                 <Form.Item<FieldType>
                   name="confirmPassword"
                   dependencies={["newPassword"]}
@@ -131,13 +138,6 @@ const EditPassword = () => {
                     }),
                   ]}
                 >
-                  <H5
-                    style={{
-                      marginBottom: "8px",
-                    }}
-                  >
-                    ยืนยันรหัสผ่านใหม่
-                  </H5>
                   <Input.Password
                     style={{
                       marginBottom: "8px",
