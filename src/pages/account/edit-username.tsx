@@ -1,14 +1,54 @@
 import { H4, H5, Text } from "@/modules/common/components/Typography";
-import { useUser } from "@/modules/common/hooks/useUserStore";
 import BackButton from "@/modules/user/account/components/BackButton";
+import { useUpdateUser } from "@/modules/user/account/hooks/useUpdateUser";
 import styled from "@emotion/styled";
-import { Button, Input } from "antd";
+import { Button, Form, Input } from "antd";
+import { type AxiosError } from "axios";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import { useEffect } from "react";
+
+type FieldType = {
+  username: string;
+  password: string;
+};
 
 const EditUsername = () => {
-  const { data: user } = useUser();
-  const router = useRouter();
+  const [form] = Form.useForm<FieldType>();
+  const { mutate: editUsername, isSuccess, isError, error } = useUpdateUser();
+
+  const handleEditUsername = (values: FieldType) => {
+    const { username, password } = values;
+    editUsername({
+      newUsername: username,
+      oldPassword: password,
+      newPassword: password,
+    });
+  };
+
+  useEffect(() => {
+    if (isError) {
+      form.setFields([
+        {
+          name: "username",
+          errors: [""],
+        },
+        {
+          name: "password",
+          errors: [
+            (
+              error as AxiosError<{
+                message: string;
+              }>
+            )?.response?.data?.message || " ",
+          ],
+        },
+      ]);
+    }
+  }, [isError, form, error]);
+
+  useEffect(() => {
+    console.log(form.getFieldValue("username"));
+  }, [isSuccess, form]);
 
   return (
     <>
@@ -20,47 +60,57 @@ const EditUsername = () => {
       <ScreenContainer>
         <Container>
           <BackButton text={"กลับสู่หน้าโพรไฟล์"} />
-          <ProfileContainer>
-            <H4>แก้ไขชื่อผู้ใช้</H4>
-            <Text type="secondary">ป้อนชื่อผู้ใช้ใหม่และรหัสผ่านของคุณ</Text>
-            <FieldContainer>
-              <UsernameContainer>
-                <H5
-                  style={{
-                    marginBottom: "8px",
-                  }}
+          <Form<FieldType> form={form} onFinish={handleEditUsername}>
+            <ProfileContainer>
+              <H4>แก้ไขชื่อผู้ใช้</H4>
+              <Text type="secondary">ป้อนชื่อผู้ใช้ใหม่และรหัสผ่านของคุณ</Text>
+              <FieldContainer>
+                <Form.Item<FieldType>
+                  name="username"
+                  rules={[{ required: true, message: "กรุณากรอกชื่อผู้ใช้" }]}
                 >
-                  ชื่อผู้ใช้
-                </H5>
-                <Input
-                  style={{
-                    marginBottom: "8px",
-                    width: "100%",
-                  }}
-                  placeholder="example"
-                ></Input>
-              </UsernameContainer>
-              <PasswordContainer>
-                <H5
-                  style={{
-                    marginBottom: "8px",
-                  }}
+                  <H5
+                    style={{
+                      marginBottom: "8px",
+                    }}
+                  >
+                    ชื่อผู้ใช้
+                  </H5>
+                  <Input
+                    style={{
+                      marginBottom: "8px",
+                      width: "100%",
+                    }}
+                    placeholder="example"
+                  ></Input>
+                </Form.Item>
+                <Form.Item<FieldType>
+                  name="password"
+                  rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
                 >
-                  รหัสผ่านปัจจุบัน
-                </H5>
-                <Input
-                  style={{
-                    marginBottom: "8px",
-                    width: "100%",
-                  }}
-                  placeholder="example"
-                ></Input>
-              </PasswordContainer>
-            </FieldContainer>
-            <ChangeUsernameButton>
-              <Text style={{ color: "#fff" }}>เปลี่ยนชื่อผู้ใช้</Text>
-            </ChangeUsernameButton>
-          </ProfileContainer>
+                  <H5
+                    style={{
+                      marginBottom: "8px",
+                    }}
+                  >
+                    รหัสผ่านปัจจุบัน
+                  </H5>
+                  <Input.Password
+                    style={{
+                      marginBottom: "8px",
+                      width: "100%",
+                    }}
+                    placeholder="example"
+                  ></Input.Password>
+                </Form.Item>
+              </FieldContainer>
+              <Form.Item<FieldType> style={{ textAlign: "end" }}>
+                <ChangeUsernameButton htmlType="submit">
+                  <Text style={{ color: "#fff" }}>เปลี่ยนชื่อผู้ใช้</Text>
+                </ChangeUsernameButton>
+              </Form.Item>
+            </ProfileContainer>
+          </Form>
         </Container>
       </ScreenContainer>
     </>
@@ -103,21 +153,8 @@ const ProfileContainer = styled.div`
   background: #fff;
 `;
 
-const UsernameContainer = styled.div`
-  margin-bottom: 12px;
-  width: 100%;
-`;
-
-const PasswordContainer = styled.div`
-  margin-bottom: 12px;
-  width: 100%;
-`;
-
 const FieldContainer = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   padding: 8px;
 `;
 

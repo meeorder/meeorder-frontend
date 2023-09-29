@@ -1,19 +1,61 @@
 import { H4, H5, Text } from "@/modules/common/components/Typography";
 import { useUser } from "@/modules/common/hooks/useUserStore";
 import BackButton from "@/modules/user/account/components/BackButton";
+import { useUpdateUser } from "@/modules/user/account/hooks/useUpdateUser";
 import styled from "@emotion/styled";
-import { Button, Input } from "antd";
+import { Button, Form, Input } from "antd";
+import { type AxiosError } from "axios";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect } from "react";
+
+type FieldType = {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};
 
 const EditPassword = () => {
+  const [form] = Form.useForm<FieldType>();
   const { data: user } = useUser();
-  const router = useRouter();
+  const { mutate: editUsername, isSuccess, isError, error } = useUpdateUser();
 
-  const [password, setPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const handleEditPassword = (values: FieldType) => {
+    const { oldPassword, newPassword } = values;
+    editUsername({
+      newUsername: user?.username || "",
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+    });
+  };
+
+  useEffect(() => {
+    if (isError) {
+      form.setFields([
+        {
+          name: "oldPassword",
+          errors: [
+            (
+              error as AxiosError<{
+                message: string;
+              }>
+            )?.response?.data?.message || " ",
+          ],
+        },
+        {
+          name: "newPassword",
+          errors: [""],
+        },
+        {
+          name: "confirmPassword",
+          errors: [""],
+        },
+      ]);
+    }
+  }, [isError, form, error]);
+
+  useEffect(() => {
+    console.log(form.getFieldValue("newPassword"));
+  }, [isSuccess, form]);
 
   return (
     <>
@@ -25,79 +67,93 @@ const EditPassword = () => {
       <ScreenContainer>
         <Container>
           <BackButton text={"กลับสู่หน้าโพรไฟล์"} />
-          <ProfileContainer>
-            <H4>แก้ไขรหัสผ่าน</H4>
-            <Text type="secondary">ป้อนรหัสผ่านปัจจุบันและรหัสผ่านใหม่</Text>
-            <FieldContainer>
-              <UsernameContainer>
-                <H5
-                  style={{
-                    marginBottom: "8px",
-                  }}
+          <Form<FieldType> form={form} onFinish={handleEditPassword}>
+            <ProfileContainer>
+              <H4>แก้ไขรหัสผ่าน</H4>
+              <Text type="secondary">ป้อนรหัสผ่านปัจจุบันและรหัสผ่านใหม่</Text>
+              <FieldContainer>
+                <Form.Item<FieldType>
+                  name="oldPassword"
+                  rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
                 >
-                  รหัสผ่านปัจจุบัน
-                </H5>
-                <Input
-                  style={{
-                    marginBottom: "8px",
-                    width: "100%",
-                  }}
-                  placeholder="example"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
-                ></Input>
-              </UsernameContainer>
-              <PasswordContainer>
-                <H5
-                  style={{
-                    marginBottom: "8px",
-                  }}
+                  <H5
+                    style={{
+                      marginBottom: "8px",
+                    }}
+                  >
+                    รหัสผ่านปัจจุบัน
+                  </H5>
+                  <Input.Password
+                    style={{
+                      marginBottom: "8px",
+                      width: "100%",
+                    }}
+                    placeholder="example"
+                  ></Input.Password>
+                </Form.Item>
+                <Form.Item<FieldType>
+                  name="newPassword"
+                  rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
                 >
-                  รหัสผ่านใหม่
-                </H5>
-                <Input
-                  style={{
-                    marginBottom: "8px",
-                    width: "100%",
-                  }}
-                  placeholder="example"
-                  value={newPassword}
-                  onChange={(e) => {
-                    setNewPassword(e.target.value);
-                  }}
-                ></Input>
-              </PasswordContainer>
-              <PasswordContainer>
-                <H5
-                  style={{
-                    marginBottom: "8px",
-                  }}
+                  <H5
+                    style={{
+                      marginBottom: "8px",
+                    }}
+                  >
+                    รหัสผ่านใหม่
+                  </H5>
+                  <Input.Password
+                    style={{
+                      marginBottom: "8px",
+                      width: "100%",
+                    }}
+                    placeholder="example"
+                  ></Input.Password>
+                </Form.Item>
+                <Form.Item<FieldType>
+                  name="confirmPassword"
+                  dependencies={["newPassword"]}
+                  hasFeedback
+                  rules={[
+                    {
+                      required: true,
+                      message: "กรุณากรอกยืนยันรหัสผ่าน",
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue("newPassword") === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(
+                          new Error("ยืนยันรหัสผ่านไม่ตรงกับรหัสผ่าน"),
+                        );
+                      },
+                    }),
+                  ]}
                 >
-                  ยืนยันรหัสผ่านใหม่
-                </H5>
-                <Input
-                  style={{
-                    marginBottom: "8px",
-                    width: "100%",
-                  }}
-                  placeholder="example"
-                  value={confirmPassword}
-                  onChange={(e) => {
-                    setConfirmPassword(e.target.value);
-                  }}
-                ></Input>
-              </PasswordContainer>
-            </FieldContainer>
-            <ChangePasswordButton
-              onClick={() => {
-                console.log(password, newPassword, confirmPassword);
-              }}
-            >
-              <Text style={{ color: "#fff" }}>เปลี่ยนรหัสผ่าน</Text>
-            </ChangePasswordButton>
-          </ProfileContainer>
+                  <H5
+                    style={{
+                      marginBottom: "8px",
+                    }}
+                  >
+                    ยืนยันรหัสผ่านใหม่
+                  </H5>
+                  <Input.Password
+                    style={{
+                      marginBottom: "8px",
+                      width: "100%",
+                    }}
+                    placeholder="example"
+                  ></Input.Password>
+                </Form.Item>
+              </FieldContainer>
+              <Form.Item<FieldType> style={{ textAlign: "end" }}>
+                <ChangePasswordButton htmlType="submit">
+                  <Text style={{ color: "#fff" }}>เปลี่ยนรหัสผ่าน</Text>
+                </ChangePasswordButton>
+              </Form.Item>
+            </ProfileContainer>
+          </Form>
         </Container>
       </ScreenContainer>
     </>
@@ -140,21 +196,8 @@ const ProfileContainer = styled.div`
   background: #fff;
 `;
 
-const UsernameContainer = styled.div`
-  margin-bottom: 12px;
-  width: 100%;
-`;
-
-const PasswordContainer = styled.div`
-  margin-bottom: 12px;
-  width: 100%;
-`;
-
 const FieldContainer = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   padding: 8px;
 `;
 
