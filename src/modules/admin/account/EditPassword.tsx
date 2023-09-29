@@ -98,7 +98,7 @@ const EditPasswordContainer: React.FC<Props> = ({
             </Form.Item>
           </div>
           <div>
-            <Text>ยืนยันรหัสผ่าน</Text>
+            <Text>ยืนยันรหัสผ่านใหม่</Text>
             <Form.Item<FieldType>
               name="confirmPassword"
               dependencies={["newPassword"]}
@@ -120,7 +120,7 @@ const EditPasswordContainer: React.FC<Props> = ({
                 }),
               ]}
             >
-              <Input.Password placeholder="ยืนยันรหัสผ่าน" />
+              <Input.Password placeholder="ยืนยันรหัสผ่านใหม่" />
             </Form.Item>
           </div>
           <ButtonContainer>

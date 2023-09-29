@@ -82,12 +82,12 @@ const EditUsernameContainer: React.FC<Props> = ({
             </Form.Item>
           </div>
           <div>
-            <Text>รหัสผ่าน</Text>
+            <Text>รหัสผ่านปัจจุบัน</Text>
             <Form.Item<FieldType>
               name="password"
               rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
             >
-              <Input.Password placeholder="รหัสผ่าน" />
+              <Input.Password placeholder="รหัสผ่านปัจจุบัน" />
             </Form.Item>
           </div>
           <ButtonContainer>
