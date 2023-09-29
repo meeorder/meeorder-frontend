@@ -94,3 +94,15 @@ export const updateUserRole = async (
     params,
   );
 };
+
+//================>>>> Update a user (Username & Password) <<<<==================================//
+
+export type UpdateUserBodyParam =
+  paths["/users"]["patch"]["requestBody"]["content"]["application/json"];
+export type UpdateUserResponse = paths["/users"]["patch"]["responses"]["204"];
+
+export const updateUser = async (
+  params: UpdateUserBodyParam,
+): Promise<void> => {
+  await axiosInstance.patch<UpdateUserResponse>("/users", params);
+};
