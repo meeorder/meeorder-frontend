@@ -159,6 +159,7 @@ const AddToCardButtonNav = styled.div`
   justify-content: space-between;
   padding: 20px 32px;
   align-items: center;
+  z-index: 100;
 `;
 
 const BackButton = styled(Button)`
