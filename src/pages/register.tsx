@@ -3,6 +3,7 @@ import { useRegister } from "@/modules/common/hooks/useAuth";
 import styled from "@emotion/styled";
 import { LockSimple, User } from "@phosphor-icons/react";
 import { Button, Form, Input, theme } from "antd";
+import { type AxiosError } from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -20,6 +21,7 @@ const Register = () => {
     mutate: register,
     isLoading,
     isError,
+    error,
   } = useRegister({
     onSuccess: () => {
       void router.push("/signin");
@@ -46,11 +48,17 @@ const Register = () => {
         },
         {
           name: "confirmPassword",
-          errors: ["เกิดข้อผิดพลาดบางอย่าง โปรดลองใหม่อีกครั้ง"],
+          errors: [
+            (
+              error as AxiosError<{
+                message: string;
+              }>
+            )?.response?.data?.message || " ",
+          ],
         },
       ]);
     }
-  }, [isError, form]);
+  }, [isError, form, error]);
   return (
     <Container>
       <FormContainer>

@@ -29,6 +29,7 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     adminEditCoupon,
     adminSalesReport,
     adminSetting,
+    adminUserManagement,
     employeeStock,
     employeeOrderManagement,
     accountManagement,
@@ -41,7 +42,7 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     adminAddEditMenu,
     [adminAddEditPromotion, adminEditPoint, adminEditCoupon],
     adminSalesReport,
-    adminSetting,
+    [adminSetting, adminUserManagement],
     employeeStock,
     employeeOrderManagement,
     accountManagement,
@@ -89,11 +90,14 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
             (id) => id == currentPageId,
           )
             ? [adminAddEditPromotion.id]
+            : [adminUserManagement.id].some((id) => id == currentPageId)
+            ? [adminSetting.id]
             : []
         }
         onClick={({ key }) => {
           const page = pages[key as PageId];
           if (page.id == adminAddEditPromotion.id) return;
+          if (page.id == adminSetting.id) return;
 
           if (router.pathname !== page.path) {
             void router.push(page.path);
