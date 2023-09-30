@@ -293,6 +293,10 @@ const MenuFormSection: React.FC = () => {
                       onKeyDown={(e) => {
                         if (e.key === "Backspace") {
                           return e.stopPropagation();
+                        } else if (e.key === "Enter") {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleCreateIngredient();
                         }
                       }}
                       allowClear
