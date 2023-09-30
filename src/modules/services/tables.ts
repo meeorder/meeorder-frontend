@@ -4,12 +4,17 @@ import { type paths } from "@/schemas/schema";
 //================>>>> Create a table <<<<=========================================//
 export type CreateTableBodyParam =
   paths["/tables"]["post"]["requestBody"]["content"]["application/json"];
-export type CreateTableResponse = paths["/tables"]["post"]["responses"]["201"];
+export type CreateTableResponse =
+  paths["/tables"]["post"]["responses"]["201"]["content"]["application/json"];
 
 export const createTable = async (
   params: CreateTableBodyParam,
-): Promise<void> => {
-  await axiosInstance.post<CreateTableResponse>("/tables", params);
+): Promise<CreateTableResponse> => {
+  const { data } = await axiosInstance.post<CreateTableResponse>(
+    "/tables",
+    params,
+  );
+  return data;
 };
 
 //================>>>> Get all tables <<<<=========================================//
