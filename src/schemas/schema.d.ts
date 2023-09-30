@@ -86,7 +86,16 @@ export interface paths {
     post: operations["OrdersController_createOrder"];
   };
   "/orders/{id}": {
+    /**
+     * Delete order
+     * @description Delete order
+     */
+    delete: operations["OrdersController_deleteOrder"];
     patch: operations["OrdersController_updateOrder"];
+  };
+  "/orders/{id}/in_queue": {
+    /** Change order status to in_queue */
+    patch: operations["OrdersController_inQueue"];
   };
   "/orders/{id}/preparing": {
     /** Change order status to preparing */
@@ -222,6 +231,10 @@ export interface paths {
     /** Get total registered users */
     get: operations["DashboardController_getDashboard"];
   };
+  "/dashboard/incomes_report": {
+    /** Get net income & discount in range date */
+    get: operations["DashboardController_getIncomeReport"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -272,10 +285,34 @@ export interface components {
        * @description Addon deletion date
        */
       deleted_at: string | null;
-      /** Format: date-time */
+      /**
+       * Format: date-time
+       * @default 2023-09-30T13:37:05.297Z
+       */
       created_at: string;
       /** @description Addon status */
       available: boolean;
+    };
+    GetAddonDto: {
+      /** @description Addon ID */
+      _id: string;
+      /** @description Addon Title */
+      title: string;
+      /** @description Addon Price */
+      price: number;
+      /**
+       * Format: date-time
+       * @description Addon deletion date
+       */
+      deleted_at: string | null;
+      /**
+       * Format: date-time
+       * @default 2023-09-30T13:37:05.297Z
+       */
+      created_at: string;
+      /** @description Addon status */
+      available: boolean;
+      menus_applied: number;
     };
     UpdateAddonDto: {
       title: string;
@@ -352,6 +389,8 @@ export interface components {
       price: number;
       /** @description Menu Category */
       category?: string;
+      /** @description Menu Ingredients */
+      ingredients: string[];
       /** @description Menu Addons */
       addons: string[];
     };
@@ -395,6 +434,23 @@ export interface components {
       session: string;
       orders: components["schemas"]["Orders"][];
     };
+    IngredientSchema: {
+      /** @description Ingredient ID */
+      _id: string;
+      /** @description Ingredient title */
+      title: string;
+      /** @description Ingredient status */
+      available: boolean;
+      /** Format: date-time */
+      created_at: string;
+    };
+    OrderCancelResponseDto: {
+      reasons: string;
+      ingredients: components["schemas"]["IngredientSchema"][];
+      addons: components["schemas"]["AddonSchema"][];
+      /** Format: date-time */
+      cancelled_at: string;
+    };
     TablesSchema: {
       /** @description Table ID */
       _id: string;
@@ -428,7 +484,7 @@ export interface components {
        */
       deleted_at: string | null;
     };
-    PopulatedCategoryMenuDto: {
+    PopulatedCategoryIngredientMenuDto: {
       /** @description Menu ID */
       _id: string;
       /** @description Menu image */
@@ -444,7 +500,7 @@ export interface components {
       /** @description Menu addons */
       addons: string[];
       /** @description Menu ingredients */
-      ingredients: string[];
+      ingredients: components["schemas"]["IngredientSchema"][];
       /**
        * Format: date-time
        * @description Menu publication date
@@ -467,18 +523,21 @@ export interface components {
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
       additional_info: string;
-      /**
-       * Format: date-time
-       * @description for cancel status
-       */
-      cancelled_at: string;
+      cancel: components["schemas"]["OrderCancelResponseDto"] | null;
       /** @description Session (table populated) */
       session: components["schemas"]["SessionWithTableDto"];
-      menu: components["schemas"]["PopulatedCategoryMenuDto"];
+      menu: components["schemas"]["PopulatedCategoryIngredientMenuDto"];
     };
     UpdateOrderDto: {
       addons: string[];
       additional_info: string;
+    };
+    OrderCancelSchema: {
+      reasons: string;
+      ingredients: string[];
+      addons: string[];
+      /** Format: date-time */
+      cancelled_at: string;
     };
     OrdersSchema: {
       _id: string;
@@ -493,7 +552,7 @@ export interface components {
        */
       status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
       /** @description Session of the order */
-      session: components["schemas"]["SessionSchema"] | string;
+      session: components["schemas"]["undefined"] | string;
       /** @description Menu of the order */
       menu: components["schemas"]["MenuSchema"] | string;
       /** @description Addons of the order */
@@ -502,11 +561,10 @@ export interface components {
       additional_info: string;
       /**
        * Format: date-time
-       * @description Order cancellation date
+       * @description Order deletion date
        */
-      cancelled_at: string;
-      /** @description Reason for cancel order */
-      cancel_reason: string;
+      deleted_at: string | null;
+      cancel: components["schemas"]["OrderCancelSchema"] | null;
     };
     CancelOrderDto: {
       /**
@@ -521,9 +579,9 @@ export interface components {
       addons?: string[];
       /**
        * @description Reason for cancel order
-       * @default null
+       * @default []
        */
-      reason: string;
+      reasons: string[];
     };
     UserSchema: {
       /** @description User ID */
@@ -540,7 +598,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-24T15:27:13.534Z
+       * @default 2023-09-30T13:37:05.339Z
        */
       created_at: string;
       /**
@@ -688,11 +746,7 @@ export interface components {
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
       additional_info: string | null;
-      /**
-       * Format: date-time
-       * @description for cancel status
-       */
-      cancelled_at: string;
+      cancel: components["schemas"]["OrderCancelResponseDto"] | null;
     };
     OrdersListDto: {
       /** @description table id */
@@ -741,7 +795,7 @@ export interface components {
       /** @description Ingredient status */
       available: boolean;
     };
-    IngredientSchema: {
+    GetIngredientDto: {
       /** @description Ingredient ID */
       _id: string;
       /** @description Ingredient title */
@@ -750,6 +804,7 @@ export interface components {
       available: boolean;
       /** Format: date-time */
       created_at: string;
+      menus_applied: number;
     };
     UpdateIngredientDto: {
       /** @description Ingredient title */
@@ -881,6 +936,14 @@ export interface components {
       old_user: number;
       /** @description Total new registered users */
       new_user: number;
+    };
+    GetNetIncomeDto: {
+      /** @description Total income */
+      totalIncome: number;
+      /** @description Total discount */
+      totalDiscount: number;
+      /** @description Total net income (income - discount) */
+      totalNetIncome: number;
     };
   };
   responses: never;
@@ -1020,7 +1083,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["AddonSchema"][];
+          "application/json": components["schemas"]["GetAddonDto"][];
         };
       };
     };
@@ -1052,7 +1115,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["AddonSchema"];
+          "application/json": components["schemas"]["GetAddonDto"];
         };
       };
       /** @description Addon not found */
@@ -1114,7 +1177,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Change addon status to unavailable */
@@ -1126,14 +1191,18 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Make all addons available */
   AddonsController_activateAllAddon: {
     responses: {
       /** @description All addons is now available */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all menus */
@@ -1309,6 +1378,23 @@ export interface operations {
       };
     };
   };
+  /**
+   * Delete order
+   * @description Delete order
+   */
+  OrdersController_deleteOrder: {
+    parameters: {
+      path: {
+        /** @description Order ID (ObjectId) */
+        id: string;
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
+    };
+  };
   OrdersController_updateOrder: {
     parameters: {
       path: {
@@ -1326,6 +1412,21 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["OrdersSchema"];
         };
+      };
+    };
+  };
+  /** Change order status to in_queue */
+  OrdersController_inQueue: {
+    parameters: {
+      path: {
+        /** @description Order ID (ObjectId) */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Set order status to in_queue */
+      204: {
+        content: never;
       };
     };
   };
@@ -1363,13 +1464,15 @@ export interface operations {
   OrdersController_done: {
     parameters: {
       path: {
-        /** @description Session ID (ObjectId) */
+        /** @description Order ID (ObjectId) */
         id: string;
       };
     };
     responses: {
       /** @description Set order status to done */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /**
@@ -1377,14 +1480,23 @@ export interface operations {
    * @description Cancel order and disable addons, ingredients if included
    */
   OrdersController_cancelOrder: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["CancelOrderDto"];
       };
     };
     responses: {
-      204: never;
-      404: never;
+      204: {
+        content: never;
+      };
+      404: {
+        content: never;
+      };
     };
   };
   /** Get all sessions */
@@ -1533,7 +1645,9 @@ export interface operations {
     };
     responses: {
       /** @description Updated session user */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all redeemable coupon */
@@ -1582,7 +1696,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["IngredientSchema"][];
+          "application/json": components["schemas"]["GetIngredientDto"][];
         };
       };
     };
@@ -1602,7 +1716,9 @@ export interface operations {
         };
       };
       /** @description Ingredient already exists */
-      409: never;
+      409: {
+        content: never;
+      };
     };
   };
   /** Get a ingredient by id */
@@ -1615,11 +1731,13 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["IngredientSchema"];
+          "application/json": components["schemas"]["GetIngredientDto"];
         };
       };
       /** @description Ingredient not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a ingredient by id */
@@ -1631,9 +1749,13 @@ export interface operations {
     };
     responses: {
       /** @description Ingredient deleted */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description Ingredient not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Update a ingredient by id */
@@ -1656,16 +1778,22 @@ export interface operations {
         };
       };
       /** @description Ingredient not found */
-      404: never;
+      404: {
+        content: never;
+      };
       /** @description Ingredient already exists */
-      409: never;
+      409: {
+        content: never;
+      };
     };
   };
   /** Make all ingredient available */
   IngredientsController_activateAllIngredient: {
     responses: {
       /** @description All ingredient is now available */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all coupons */
@@ -1708,7 +1836,9 @@ export interface operations {
         };
       };
       /** @description Coupon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a coupon by id */
@@ -1720,9 +1850,13 @@ export interface operations {
     };
     responses: {
       /** @description Coupon deleted */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description Coupon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Update a coupon by id */
@@ -1745,7 +1879,9 @@ export interface operations {
         };
       };
       /** @description Coupon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Get all tables */
@@ -1876,7 +2012,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Reset user password */
@@ -1907,7 +2045,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get total registered users */
@@ -1922,6 +2062,25 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetUserAmountDto"];
+        };
+      };
+    };
+  };
+  /** Get net income & discount in range date */
+  DashboardController_getIncomeReport: {
+    parameters: {
+      query: {
+        /** @description Start Date (UnixTimeStamp) */
+        from: number;
+        /** @description End Date (UnixTimeStamp) */
+        end: number;
+      };
+    };
+    responses: {
+      /** @description Net income & Discount in range date */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetNetIncomeDto"];
         };
       };
     };
