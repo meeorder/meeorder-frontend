@@ -1,21 +1,36 @@
-import { H5, Text } from "@/modules/common/components/Typography";
+import { H3, H5, Text } from "@/modules/common/components/Typography";
 import { useUpdateUser } from "@/modules/user/account/hooks/useUpdateUser";
 import styled from "@emotion/styled";
-import { Button, Form, Input } from "antd";
+import { CheckCircle, XCircle } from "@phosphor-icons/react";
+import { Button, Form, Input, notification } from "antd";
+import { type NotificationPlacement } from "antd/es/notification/interface";
 import { type AxiosError } from "axios";
-import { useEffect } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 
 type FieldType = {
   username: string;
   password: string;
 };
 
-const EditUsernameContainer = () => {
+type Props = {
+  activeKeys: string[];
+  setActiveKeys: (activeKeys: string[]) => void;
+};
+
+const EditUsernameContainer: React.FC<Props> = ({
+  activeKeys,
+  setActiveKeys,
+}) => {
   const [form] = Form.useForm<FieldType>();
   const { mutate: editUsername, isSuccess, isError, error } = useUpdateUser();
+  const [api, contextHolder] = notification.useNotification();
+  const router = useRouter();
 
   const handleCancelForm = () => {
     form.resetFields();
+    const newActiveKeys = activeKeys.filter((key) => key !== "1");
+    setActiveKeys(newActiveKeys);
   };
 
   const handleEditUsername = (values: FieldType) => {
@@ -47,13 +62,52 @@ const EditUsernameContainer = () => {
         },
       ]);
     }
-  }, [isError, form, error]);
+    if (isSuccess) {
+      form.resetFields();
+      const newActiveKeys = activeKeys.filter((key) => key !== "1");
+      setActiveKeys(newActiveKeys);
+    }
+  }, [isError, form, error, isSuccess, setActiveKeys]);
 
   useEffect(() => {
-    console.log(form.getFieldValue("username"));
-  }, [isSuccess, form]);
+    const openNotification = (
+      placement: NotificationPlacement,
+      header: React.ReactNode,
+      desciption: React.ReactNode,
+      icon?: React.ReactNode,
+      onClose?: () => void,
+    ) => {
+      api.destroy();
+      api.info({
+        message: header,
+        placement,
+        description: desciption,
+        icon: icon,
+        onClose: onClose,
+      });
+    };
+
+    if (isSuccess) {
+      openNotification(
+        "topRight",
+        <H3 style={{ marginLeft: "4px" }}>สำเร็จ</H3>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อผู้ใช้สำเร็จ</Text>,
+        <CheckCircle size={32} color="#A0D911" weight="fill" />,
+      );
+    }
+    if (isError) {
+      openNotification(
+        "topRight",
+        <H3 style={{ marginLeft: "4px" }}>ไม่สำเร็จ</H3>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อผู้ใช้ไม่สำเร็จ</Text>,
+        <XCircle size={32} color="#F5222D" weight="fill" />,
+      );
+    }
+  }, [isSuccess, isError, api, router, setActiveKeys]);
+
   return (
     <>
+      {contextHolder}
       <Container>
         <Form<FieldType> form={form} onFinish={handleEditUsername}>
           <div>
