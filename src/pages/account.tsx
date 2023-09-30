@@ -1,16 +1,22 @@
 import { H4, H5, Text } from "@/modules/common/components/Typography";
+import { useLogout } from "@/modules/common/hooks/useAuth";
 import { useUser } from "@/modules/common/hooks/useUserStore";
 import BackButton from "@/modules/user/account/components/BackButton";
 import UserData from "@/modules/user/account/components/UserData";
 import styled from "@emotion/styled";
 import { CaretRight } from "@phosphor-icons/react";
-import { Button } from "antd";
+import { Button, Typography } from "antd";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
 const Account = () => {
   const { data: user } = useUser();
   const router = useRouter();
+  const { mutate: logout } = useLogout({
+    onSuccess: () => {
+      void router.push("/");
+    },
+  });
 
   const onClickUsernameButton = () => {
     void router.push({
@@ -64,6 +70,18 @@ const Account = () => {
               </span>
             </UsernameAndPasswordContainer>
           </ProfileContainer>
+          <LogoutContainer onClick={() => logout()}>
+            <Typography.Text
+              style={{
+                textAlign: "center",
+                textDecorationLine: "underline",
+                marginTop: "12px",
+                cursor: "pointer",
+              }}
+            >
+              ออกจากระบบ
+            </Typography.Text>
+          </LogoutContainer>
         </Container>
       </ScreenContainer>
     </>
@@ -112,4 +130,10 @@ const UsernameAndPasswordContainer = styled(Button)`
   justify-content: space-between;
   border: none;
   box-shadow: none;
+`;
+
+const LogoutContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;

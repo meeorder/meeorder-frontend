@@ -1,5 +1,6 @@
 import {
   login,
+  logout,
   register,
   type LoginBodyParam,
   type RegisterBodyParam,
@@ -27,6 +28,21 @@ export const useRegister = (params: UseRegisterParams = {}) => {
     mutationFn: ({ username, password }: RegisterBodyParam) =>
       register({ username, password }),
     onSuccess: () => {
+      params.onSuccess?.();
+    },
+  });
+};
+
+type UseLogoutParams = {
+  onSuccess?: () => void;
+};
+
+export const useLogout = (params: UseLogoutParams = {}) => {
+  return useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      localStorage.removeItem("jwt-meeorder"); // TODO: use cookie instead
+      void queryClient.clear();
       params.onSuccess?.();
     },
   });
