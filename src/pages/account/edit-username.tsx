@@ -32,6 +32,13 @@ const EditUsername = () => {
 
   useEffect(() => {
     if (isError) {
+      const axiosErrorMessage =
+        (
+          error as AxiosError<{
+            message: string;
+          }>
+        )?.response?.data?.message[0] || " ";
+
       form.setFields([
         {
           name: "username",
@@ -40,11 +47,10 @@ const EditUsername = () => {
         {
           name: "password",
           errors: [
-            (
-              error as AxiosError<{
-                message: string;
-              }>
-            )?.response?.data?.message || " ",
+            axiosErrorMessage ===
+            "newUsername must be longer than or equal to 4 characters"
+              ? "ชื่อผู้ใช้ต้องมีความยาวมากกว่าหรือเท่ากับ 4 ตัวอักษร"
+              : axiosErrorMessage,
           ],
         },
       ]);
