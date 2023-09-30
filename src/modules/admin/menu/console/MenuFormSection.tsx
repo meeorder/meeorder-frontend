@@ -318,6 +318,7 @@ const MenuFormCard = styled(Card)`
   .ant-card-head {
     padding: 0;
     height: 64px;
+    border-bottom: none;
   }
   .ant-card-body {
     padding: 0;
