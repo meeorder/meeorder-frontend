@@ -88,6 +88,12 @@ export const pages = {
     layout: "admin",
     Icon: User,
   },
+  adminUserManagement: {
+    id: "adminUserManagement",
+    label: "จัดการบัญชีทั้งหมด",
+    path: "/admin/setting/user-management",
+    layout: "admin",
+  },
   employeeStock: {
     id: "employeeStock",
     label: "จัดการวัตถุดิบ",

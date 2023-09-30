@@ -3,6 +3,7 @@ import { useLogin } from "@/modules/common/hooks/useAuth";
 import styled from "@emotion/styled";
 import { LockSimple, User } from "@phosphor-icons/react";
 import { Button, Form, Input, theme } from "antd";
+import { type AxiosError } from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -16,7 +17,7 @@ type FieldType = {
 const SignIn = () => {
   const [form] = Form.useForm<FieldType>();
   const router = useRouter();
-  const { mutate: login, isLoading, isSuccess, isError } = useLogin();
+  const { mutate: login, isLoading, isSuccess, isError, error } = useLogin();
   const handleSignIn = (values: FieldType) => {
     login(values);
   };
@@ -32,7 +33,13 @@ const SignIn = () => {
         },
         {
           name: "password",
-          errors: ["ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"],
+          errors: [
+            (
+              error as AxiosError<{
+                message: string;
+              }>
+            )?.response?.data?.message || " ",
+          ],
         },
       ]);
     }

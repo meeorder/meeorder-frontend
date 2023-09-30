@@ -512,13 +512,39 @@ export interface components {
        */
       deleted_at: string | null;
     };
-    OrderGetDto: {
-      /** @description Orders ID */
+    IngredientSchema: {
+      /** @description Ingredient ID */
       _id: string;
+      /** @description Ingredient title */
+      title: string;
+      /** @description Ingredient status */
+      available: boolean;
       /** Format: date-time */
       created_at: string;
-      /** @enum {string} */
+    };
+    OrderCancelResponseDto: {
+      reasons: string;
+      ingredients: components["schemas"]["IngredientSchema"][];
+      addons: components["schemas"]["AddonSchema"][];
+      /** Format: date-time */
+      cancelled_at: string;
+    };
+    OrderGetDto: {
+      _id: string;
+      /**
+       * Format: date-time
+       * @description Order creation date
+       */
+      created_at: string;
+      /**
+       * @description Order status
+       * @enum {string}
+       */
       status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
+      /** @description Session (table populated) */
+      session: components["schemas"]["SessionSchema"] | string;
+      /** @description Menu of the order */
+      menu: components["schemas"]["MenuSchema"] | string;
       /** @description Array of MenuID */
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */

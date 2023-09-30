@@ -1,26 +1,29 @@
 import {
-  stockAddonData,
-  type StockAddOnDataType,
-} from "@/modules/admin/mock/stock";
+  useActivateAllAddons,
+  useAllAddons,
+  useChangeAddonStatus,
+  type Addon,
+} from "@/modules/admin/menu/hooks/useAddons";
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import styled from "@emotion/styled";
 import { Card, Switch, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
-import { useState } from "react";
 
 const AddonStock = () => {
-  const [dataSource, setDataSource] = useState(stockAddonData);
+  const { data: dataSource } = useAllAddons();
+  const { mutate: changeAddonStatus } = useChangeAddonStatus();
+  const { mutate: activateAllAddons } = useActivateAllAddons();
 
-  const stockAddonColumns: ColumnsType<StockAddOnDataType> = [
+  const stockAddonColumns: ColumnsType<Addon> = [
     {
       title: "ชื่อท็อปปิ้ง",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "title",
+      key: "title",
       width: "70px",
     },
     {
       title: "เมนูที่ใช้ท็อปปิ้ง",
-      dataIndex: "usedInMenu",
+      dataIndex: "menus_applied",
       width: "50px",
       align: "end",
     },
@@ -34,18 +37,9 @@ const AddonStock = () => {
           <Switch
             checked={rec.available}
             onClick={() => {
-              console.log(`bruh addon ${rec.id} ${text}`);
-              const id = rec.id;
-              const value = !rec.available;
-              setDataSource((prev) => [
-                ...prev.map(function (rec) {
-                  //ไม่ชิน arrow function
-                  if (rec.id == id) {
-                    rec.available = value;
-                  }
-                  return rec;
-                }),
-              ]);
+              const id = rec._id;
+              const status = !rec.available ? "activate" : "deactivate";
+              changeAddonStatus({ id, status });
             }}
           />
         </>
@@ -60,13 +54,7 @@ const AddonStock = () => {
         <CenterContentButton
           type="primary"
           onClick={function () {
-            console.log("bruh all addon");
-            setDataSource((prev) => [
-              ...prev.map(function (rec) {
-                rec.available = true;
-                return rec;
-              }),
-            ]);
+            activateAllAddons();
           }}
         >
           เติมท็อปปิ้งทั้งหมด
@@ -78,6 +66,7 @@ const AddonStock = () => {
         dataSource={dataSource}
         columns={stockAddonColumns}
         scroll={{ y: "70vh", x: "max-content" }}
+        rowKey={(rec) => rec._id}
       />
     </StyledCard>
   );

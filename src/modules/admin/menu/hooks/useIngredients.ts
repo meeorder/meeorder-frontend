@@ -1,4 +1,5 @@
 import {
+  activateAllIngredients,
   createIngredient,
   deleteIngredientById,
   getAllIngredients,
@@ -9,6 +10,7 @@ import { queryClient } from "@/pages/_app";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export type Ingredient = GetAllIngredientsResponse[number];
+
 
 export const useCreateIngredient = () => {
   return useMutation({
@@ -29,6 +31,15 @@ export const useAllIngredients = () => {
 export const useUpdateIngredient = () => {
   return useMutation({
     mutationFn: updateIngredientById,
+    onSuccess: () => {
+      void queryClient.invalidateQueries(["useAllIngredients"]);
+    },
+  });
+};
+
+export const useActivateAllIngredients = () => {
+  return useMutation({
+    mutationFn: activateAllIngredients,
     onSuccess: () => {
       void queryClient.invalidateQueries(["useAllIngredients"]);
     },
