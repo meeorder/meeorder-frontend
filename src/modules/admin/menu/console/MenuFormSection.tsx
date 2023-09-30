@@ -4,22 +4,31 @@ import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionM
 import useCreateMenu from "@/modules/admin/menu/hooks/useCreateMenu";
 import useDeleteMenu from "@/modules/admin/menu/hooks/useDeleteMenu";
 import useEditMenu from "@/modules/admin/menu/hooks/useEditMenu";
-import { useAllIngredients } from "@/modules/admin/menu/hooks/useIngredients";
+import {
+  useAllIngredients,
+  useCreateIngredient,
+  useDeleteIngredient,
+  useUpdateIngredient,
+} from "@/modules/admin/menu/hooks/useIngredients";
 import useMenu from "@/modules/admin/menu/hooks/useMenu";
 import { H4, H5, Text } from "@/modules/common/components/Typography";
 import useCategories from "@/modules/common/hooks/useCategory";
 import { checkImageSrc } from "@/modules/common/utils";
 import { type CreateMenuBodyParam } from "@/modules/services/menus";
 import styled from "@emotion/styled";
+import { Plus, Trash } from "@phosphor-icons/react";
 import {
   Button,
   Card,
+  Divider,
   Form,
   Input,
   InputNumber,
   Modal,
+  Popconfirm,
   Result,
   Select,
+  Space,
   Switch,
   theme,
 } from "antd";
@@ -46,6 +55,10 @@ const MenuFormSection: React.FC = () => {
     useDeleteMenu(changeToCategoryMode);
   const { data: initialData } = useMenu(editMenuId ?? "");
   const { publishMenu, unPublishMenu } = useChangePublishMenu();
+
+  const { mutate: createIngredient } = useCreateIngredient();
+  const { mutate: deleteIngredient } = useDeleteIngredient();
+  const { mutate: updateIngredient } = useUpdateIngredient();
   const { selectedAddonIds, setSelectedAddonIds } = useSelectedAddonsStore();
   useEffect(() => {
     form.resetFields();
@@ -117,6 +130,26 @@ const MenuFormSection: React.FC = () => {
         id: editMenuId,
       });
     }
+  };
+
+  const [newIngredientInput, setNewIngredientInput] = useState("");
+
+  const handleCreateIngredient = () => {
+    if (newIngredientInput) {
+      createIngredient({ title: newIngredientInput, available: true });
+      setNewIngredientInput("");
+    }
+  };
+
+  const handleRemoveIngredient = (id: string) => {
+    deleteIngredient({ id });
+    form.setFieldsValue({
+      ingredients: (form.getFieldValue("ingredients") as string[])?.filter(
+        (i: string) => {
+          return i !== id;
+        },
+      ),
+    });
   };
 
   return (
@@ -231,10 +264,113 @@ const MenuFormSection: React.FC = () => {
             label="ส่วนประกอบ"
             style={{ width: "100%" }}
           >
-            <Select mode="tags" placeholder="ไข่" allowClear>
+            <Select
+              mode="multiple"
+              optionLabelProp="label"
+              maxTagTextLength={10}
+              placeholder="ไข่"
+              virtual={false}
+              allowClear
+              onBlur={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              dropdownRender={(menu) => (
+                <div
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  {menu}
+                  <Divider style={{ margin: "8px 0" }} />
+                  <Space style={{ padding: "0 8px 4px", width: "100%" }}>
+                    <Input
+                      style={{ width: "100% !important" }}
+                      placeholder="Please enter item"
+                      value={newIngredientInput}
+                      onChange={(e) => setNewIngredientInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Backspace") {
+                          return e.stopPropagation();
+                        }
+                      }}
+                      allowClear
+                    />
+                    <Button
+                      type="text"
+                      icon={<Plus />}
+                      onClick={handleCreateIngredient}
+                    >
+                      Add item
+                    </Button>
+                  </Space>
+                </div>
+              )}
+            >
               {allIngredients?.map((ingredient) => (
-                <Select.Option key={ingredient._id} value={ingredient._id}>
-                  {ingredient.title}
+                <Select.Option
+                  key={ingredient._id}
+                  value={ingredient._id}
+                  label={ingredient?.title}
+                >
+                  <Space
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginRight: "12px",
+                    }}
+                  >
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      onKeyDown={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      <Text
+                        editable={{
+                          onChange: (value) => {
+                            updateIngredient({
+                              id: ingredient._id,
+                              title: value,
+                            });
+                          },
+                        }}
+                      >
+                        {ingredient?.title}
+                      </Text>
+                    </div>
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      <Popconfirm
+                        title={`ลบวัตถุดิบ ${ingredient?.title} ออกจากระบบ?`}
+                        description="วัตถุดิบที่ถูกลบออกจะไม่สามารถนำกลับมาใช้ได้อีกในทุกเมนู"
+                        onConfirm={(e) => {
+                          e?.stopPropagation();
+                          handleRemoveIngredient(ingredient._id);
+                        }}
+                        onCancel={(e) => {
+                          e?.stopPropagation();
+                        }}
+                        okText="ยืนยันการลบ"
+                        cancelText="ยกเลิกการลบ"
+                      >
+                        <Button
+                          icon={<Trash />}
+                          danger
+                          type="text"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        />
+                      </Popconfirm>
+                    </div>
+                  </Space>
                 </Select.Option>
               ))}
             </Select>
