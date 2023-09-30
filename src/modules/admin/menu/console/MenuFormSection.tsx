@@ -4,8 +4,8 @@ import useConsoleSectionMode from "@/modules/admin/menu/hooks/useConsoleSectionM
 import useCreateMenu from "@/modules/admin/menu/hooks/useCreateMenu";
 import useDeleteMenu from "@/modules/admin/menu/hooks/useDeleteMenu";
 import useEditMenu from "@/modules/admin/menu/hooks/useEditMenu";
+import { useAllIngredients } from "@/modules/admin/menu/hooks/useIngredients";
 import useMenu from "@/modules/admin/menu/hooks/useMenu";
-import { ingredientData } from "@/modules/admin/mock/ingredient";
 import { H4, H5, Text } from "@/modules/common/components/Typography";
 import useCategories from "@/modules/common/hooks/useCategory";
 import { checkImageSrc } from "@/modules/common/utils";
@@ -32,6 +32,8 @@ const MenuFormSection: React.FC = () => {
   const { consoleSectionMode, editMenuId, changeToCategoryMode } =
     useConsoleSectionMode();
   const { data: allCategories } = useCategories();
+  const { data: allIngredients } = useAllIngredients();
+
   const { token } = theme.useToken();
   const [form] = Form.useForm<FieldType>();
   const [published, setPublished] = useState(true);
@@ -56,7 +58,7 @@ const MenuFormSection: React.FC = () => {
           title: initialData.title,
           price: initialData.price,
           category: initialData.category?._id,
-          // ingredient: initialData.ingredient,
+          ingredients: initialData.ingredients,
           description: initialData.description,
           image: initialData.image,
         });
@@ -68,7 +70,7 @@ const MenuFormSection: React.FC = () => {
           title: "loading...",
           price: 0,
           category: "loading...",
-          // ingredient: [], todo add ingredient field
+          ingredients: ["loading..."],
           description: "loading...",
           image: "loading...",
         });
@@ -225,14 +227,14 @@ const MenuFormSection: React.FC = () => {
           </Form.Item>
 
           <Form.Item<FieldType>
-            // name="ingredient" todo add ingredient field
+            name="ingredients"
             label="ส่วนประกอบ"
             style={{ width: "100%" }}
           >
             <Select mode="tags" placeholder="ไข่" allowClear>
-              {ingredientData.map((ingredient) => (
-                <Select.Option key={ingredient.id} value={ingredient.name}>
-                  {ingredient.name}
+              {allIngredients?.map((ingredient) => (
+                <Select.Option key={ingredient._id} value={ingredient._id}>
+                  {ingredient.title}
                 </Select.Option>
               ))}
             </Select>
