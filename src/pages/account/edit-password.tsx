@@ -3,7 +3,9 @@ import { useUser } from "@/modules/common/hooks/useUserStore";
 import BackButton from "@/modules/user/account/components/BackButton";
 import { useUpdateUser } from "@/modules/user/account/hooks/useUpdateUser";
 import styled from "@emotion/styled";
-import { Button, Form, Input } from "antd";
+import { CheckCircle, XCircle } from "@phosphor-icons/react";
+import { Button, Form, Input, notification } from "antd";
+import { type NotificationPlacement } from "antd/es/notification/interface";
 import { type AxiosError } from "axios";
 import Head from "next/head";
 import { useEffect } from "react";
@@ -18,6 +20,22 @@ const EditPassword = () => {
   const [form] = Form.useForm<FieldType>();
   const { data: user } = useUser();
   const { mutate: editUsername, isSuccess, isError, error } = useUpdateUser();
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotification = (
+    placement: NotificationPlacement,
+    header: string,
+    description?: string,
+    icon?: React.ReactNode,
+  ) => {
+    api.destroy();
+    api.info({
+      message: header,
+      description: description ?? "",
+      placement,
+      icon: icon,
+    });
+  };
 
   const handleEditPassword = (values: FieldType) => {
     const { oldPassword, newPassword } = values;
@@ -51,11 +69,29 @@ const EditPassword = () => {
         },
       ]);
     }
-  }, [isError, form, error]);
+    if (isSuccess) {
+      form.resetFields();
+    }
+  }, [isError, form, error, isSuccess]);
 
   useEffect(() => {
-    console.log(form.getFieldValue("newPassword"));
-  }, [isSuccess, form]);
+    if (isSuccess) {
+      openNotification(
+        "top",
+        "สำเร็จ",
+        "แก้ไขรหัสผ่านสำเร็จ",
+        <CheckCircle size={24} color="#A0D911" weight="fill" />,
+      );
+    }
+    if (isError) {
+      openNotification(
+        "top",
+        "ไม่สำเร็จ",
+        "แก้ไขรหัสผ่านไม่สำเร็จ",
+        <XCircle size={24} color="#F5222D" weight="fill" />,
+      );
+    }
+  }, [isSuccess, isError]);
 
   return (
     <>
@@ -65,6 +101,7 @@ const EditPassword = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ScreenContainer>
+        {contextHolder}
         <Container>
           <BackButton text={"กลับสู่หน้าโพรไฟล์"} />
           <Form<FieldType> form={form} onFinish={handleEditPassword}>
