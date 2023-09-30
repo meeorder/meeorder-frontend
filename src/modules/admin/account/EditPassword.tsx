@@ -2,8 +2,11 @@ import { H5, Text } from "@/modules/common/components/Typography";
 import { useUser } from "@/modules/common/hooks/useUserStore";
 import { useUpdateUser } from "@/modules/user/account/hooks/useUpdateUser";
 import styled from "@emotion/styled";
-import { Button, Form, Input } from "antd";
+import { CheckCircle, XCircle } from "@phosphor-icons/react";
+import { Button, Form, Input, notification } from "antd";
+import { type NotificationPlacement } from "antd/es/notification/interface";
 import { type AxiosError } from "axios";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 type FieldType = {
@@ -12,13 +15,25 @@ type FieldType = {
   confirmPassword: string;
 };
 
-const EditPasswordContainer = () => {
+type Props = {
+  activeKeys: string[];
+  setActiveKeys: (activeKeys: string[]) => void;
+};
+
+const EditPasswordContainer: React.FC<Props> = ({
+  activeKeys,
+  setActiveKeys,
+}) => {
   const [form] = Form.useForm<FieldType>();
+  const router = useRouter();
   const { data: user } = useUser();
   const { mutate: editUsername, isSuccess, isError, error } = useUpdateUser();
+  const [api, contextHolder] = notification.useNotification();
 
   const handleCancelForm = () => {
     form.resetFields();
+    const newActiveKeys = activeKeys.filter((key) => key !== "2");
+    setActiveKeys(newActiveKeys);
   };
 
   const handleEditPassword = (values: FieldType) => {
@@ -53,14 +68,48 @@ const EditPasswordContainer = () => {
         },
       ]);
     }
-  }, [isError, form, error]);
+    if (isSuccess) {
+      form.resetFields();
+      const newActiveKeys = activeKeys.filter((key) => key !== "2");
+      setActiveKeys(newActiveKeys);
+    }
+  }, [isError, form, error, isSuccess, setActiveKeys]);
 
   useEffect(() => {
-    console.log(form.getFieldValue("newPassword"));
-  }, [isSuccess, form]);
+    const openNotification = (
+      placement: NotificationPlacement,
+      header: string,
+      icon?: React.ReactNode,
+      onClose?: () => void,
+    ) => {
+      api.destroy();
+      api.info({
+        message: header,
+        placement,
+        icon: icon,
+        onClose: onClose,
+      });
+    };
+
+    if (isSuccess) {
+      openNotification(
+        "topRight",
+        "แก้ไขรหัสผ่านสำเร็จ",
+        <CheckCircle size={24} color="#A0D911" weight="fill" />,
+      );
+    }
+    if (isError) {
+      openNotification(
+        "topRight",
+        "แก้ไขรหัสผ่านไม่สำเร็จ",
+        <XCircle size={24} color="#F5222D" weight="fill" />,
+      );
+    }
+  }, [isSuccess, isError, api, router]);
 
   return (
     <>
+      {contextHolder}
       <Container>
         <Form<FieldType> form={form} onFinish={handleEditPassword}>
           <div>
