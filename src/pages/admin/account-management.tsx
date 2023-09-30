@@ -51,6 +51,7 @@ const AccountManagemant = () => {
             <H3>จัดการบัญชีส่วนตัว</H3>
             <H4>ข้อมูลส่วนตัว</H4>
             <Collapse
+              accordion
               onChange={(key) => {
                 setActiveKeys(key as string[]);
               }}

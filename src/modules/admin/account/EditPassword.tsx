@@ -1,4 +1,4 @@
-import { H5, Text } from "@/modules/common/components/Typography";
+import { H3, H5, Text } from "@/modules/common/components/Typography";
 import { useUser } from "@/modules/common/hooks/useUserStore";
 import { useUpdateUser } from "@/modules/user/account/hooks/useUpdateUser";
 import styled from "@emotion/styled";
@@ -7,7 +7,7 @@ import { Button, Form, Input, notification } from "antd";
 import { type NotificationPlacement } from "antd/es/notification/interface";
 import { type AxiosError } from "axios";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 type FieldType = {
   oldPassword: string;
@@ -78,7 +78,8 @@ const EditPasswordContainer: React.FC<Props> = ({
   useEffect(() => {
     const openNotification = (
       placement: NotificationPlacement,
-      header: string,
+      header: React.ReactNode,
+      description: React.ReactNode,
       icon?: React.ReactNode,
       onClose?: () => void,
     ) => {
@@ -86,6 +87,7 @@ const EditPasswordContainer: React.FC<Props> = ({
       api.info({
         message: header,
         placement,
+        description: description,
         icon: icon,
         onClose: onClose,
       });
@@ -94,15 +96,17 @@ const EditPasswordContainer: React.FC<Props> = ({
     if (isSuccess) {
       openNotification(
         "topRight",
-        "แก้ไขรหัสผ่านสำเร็จ",
-        <CheckCircle size={24} color="#A0D911" weight="fill" />,
+        <H3 style={{ marginLeft: "4px" }}>สำเร็จ</H3>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขรหัสผ่านสำเร็จ</Text>,
+        <CheckCircle size={32} color="#A0D911" weight="fill" />,
       );
     }
     if (isError) {
       openNotification(
         "topRight",
-        "แก้ไขรหัสผ่านไม่สำเร็จ",
-        <XCircle size={24} color="#F5222D" weight="fill" />,
+        <H3 style={{ marginLeft: "4px" }}>ไม่สำเร็จ</H3>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขรหัสผ่านไม่สำเร็จ</Text>,
+        <XCircle size={32} color="#F5222D" weight="fill" />,
       );
     }
   }, [isSuccess, isError, api, router]);

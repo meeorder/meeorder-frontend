@@ -1,4 +1,4 @@
-import { H5, Text } from "@/modules/common/components/Typography";
+import { H3, H5, Text } from "@/modules/common/components/Typography";
 import { useUpdateUser } from "@/modules/user/account/hooks/useUpdateUser";
 import styled from "@emotion/styled";
 import { CheckCircle, XCircle } from "@phosphor-icons/react";
@@ -72,7 +72,8 @@ const EditUsernameContainer: React.FC<Props> = ({
   useEffect(() => {
     const openNotification = (
       placement: NotificationPlacement,
-      header: string,
+      header: React.ReactNode,
+      desciption: React.ReactNode,
       icon?: React.ReactNode,
       onClose?: () => void,
     ) => {
@@ -80,6 +81,7 @@ const EditUsernameContainer: React.FC<Props> = ({
       api.info({
         message: header,
         placement,
+        description: desciption,
         icon: icon,
         onClose: onClose,
       });
@@ -88,15 +90,17 @@ const EditUsernameContainer: React.FC<Props> = ({
     if (isSuccess) {
       openNotification(
         "topRight",
-        "แก้ไขชื่อผู้ใช้สำเร็จ",
-        <CheckCircle size={24} color="#A0D911" weight="fill" />,
+        <H3 style={{ marginLeft: "4px" }}>สำเร็จ</H3>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อผู้ใช้สำเร็จ</Text>,
+        <CheckCircle size={32} color="#A0D911" weight="fill" />,
       );
     }
     if (isError) {
       openNotification(
         "topRight",
-        "แก้ไขชื่อผู้ใช้ไม่สำเร็จ",
-        <XCircle size={24} color="#F5222D" weight="fill" />,
+        <H3 style={{ marginLeft: "4px" }}>ไม่สำเร็จ</H3>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อผู้ใช้ไม่สำเร็จ</Text>,
+        <XCircle size={32} color="#F5222D" weight="fill" />,
       );
     }
   }, [isSuccess, isError, api, router, setActiveKeys]);
