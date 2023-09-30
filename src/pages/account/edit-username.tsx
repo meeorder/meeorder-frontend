@@ -75,8 +75,8 @@ const EditUsername = () => {
     if (isSuccess) {
       openNotification(
         "top",
-        "สำเร็จ",
         "แก้ไขชื่อผู้ใช้สำเร็จ",
+        "กดปิดเพื่อกลับไปหน้าโพรไฟล์",
         <CheckCircle size={24} color="#A0D911" weight="fill" />,
         () => void router.push("/account"),
       );
@@ -84,8 +84,8 @@ const EditUsername = () => {
     if (isError) {
       openNotification(
         "top",
-        "ไม่สำเร็จ",
         "แก้ไขชื่อผู้ใช้ไม่สำเร็จ",
+        "",
         <XCircle size={24} color="#F5222D" weight="fill" />,
       );
     }
