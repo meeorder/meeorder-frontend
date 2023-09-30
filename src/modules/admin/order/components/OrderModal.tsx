@@ -146,50 +146,56 @@ const OrderModal: React.FC<OrderModalProps> = ({
             {modalData?.additional_info && (
               <H4>Note: {modalData?.additional_info}</H4>
             )}
-            {modalData?.status==="CANCELLED"&&modalData.cancel?.ingredients.length!=0 && (
-          <ConfigProvider
-            theme={{
-              token: {
-                colorSplit: token["red-3"],
-              },
-            }}
-          >
-            <OutOfStockContainer>
-              <IngredientReasonDivider orientation="left">วัตถุดิบหลัก</IngredientReasonDivider>
-              <TagGroup>
-                {modalData.cancel?.ingredients.map((ingredient) => {
-                  return (
-                    <IngredientTag key={modalData._id + ingredient._id}>
-                      {ingredient.title}
-                    </IngredientTag>
-                  );
-                })}
-              </TagGroup>
-            </OutOfStockContainer>
-          </ConfigProvider>
-        )}
-        {modalData?.status==="CANCELLED"&&modalData.cancel?.addons.length!=0&& (
-          <ConfigProvider
-            theme={{
-              token: {
-                colorSplit: token["orange-3"],
-              },
-            }}
-          >
-            <OutOfStockContainer>
-              <AddOnsReasonDivider orientation="left">ท็อปปิ้ง</AddOnsReasonDivider>
-              <TagGroup>
-                {modalData.cancel?.addons.map((addon) => {
-                  return (
-                    <AddOnsTag key={modalData._id + addon._id}>
-                      {addon.title}
-                    </AddOnsTag>
-                  );
-                })}
-              </TagGroup>
-            </OutOfStockContainer>
-          </ConfigProvider>
-        )}
+            {modalData?.status === "CANCELLED" &&
+              modalData.cancel?.ingredients.length != 0 && (
+                <ConfigProvider
+                  theme={{
+                    token: {
+                      colorSplit: token["red-3"],
+                    },
+                  }}
+                >
+                  <OutOfStockContainer>
+                    <IngredientReasonDivider orientation="left">
+                      วัตถุดิบหลัก
+                    </IngredientReasonDivider>
+                    <TagGroup>
+                      {modalData.cancel?.ingredients.map((ingredient) => {
+                        return (
+                          <IngredientTag key={modalData._id + ingredient._id}>
+                            {ingredient.title}
+                          </IngredientTag>
+                        );
+                      })}
+                    </TagGroup>
+                  </OutOfStockContainer>
+                </ConfigProvider>
+              )}
+            {modalData?.status === "CANCELLED" &&
+              modalData.cancel?.addons.length != 0 && (
+                <ConfigProvider
+                  theme={{
+                    token: {
+                      colorSplit: token["orange-3"],
+                    },
+                  }}
+                >
+                  <OutOfStockContainer>
+                    <AddOnsReasonDivider orientation="left">
+                      ท็อปปิ้ง
+                    </AddOnsReasonDivider>
+                    <TagGroup>
+                      {modalData.cancel?.addons.map((addon) => {
+                        return (
+                          <AddOnsTag key={modalData._id + addon._id}>
+                            {addon.title}
+                          </AddOnsTag>
+                        );
+                      })}
+                    </TagGroup>
+                  </OutOfStockContainer>
+                </ConfigProvider>
+              )}
           </OrderInfo>
           {modalData?.status !== "CANCELLED" &&
             modalData?.status !== "DONE" && (
