@@ -93,3 +93,17 @@ export const setOrderStatusToCancelById = async (
     params,
   );
 };
+
+//================>>>> Delete a order by id <<<<===============//
+export type DeleteOrderByIdPathParam =
+  paths["/orders/{id}"]["delete"]["parameters"]["path"];
+export type DeleteOrderByIdResponse =
+  paths["/orders/{id}"]["delete"]["responses"]["204"];
+
+export const DeleteOrderById = async (
+  params: DeleteOrderByIdPathParam,
+): Promise<void> => {
+  await axiosInstance.delete<DeleteOrderByIdResponse>(
+    `/orders/${params.id}`,
+  );
+};

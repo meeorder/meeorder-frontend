@@ -1,3 +1,4 @@
+import useDeleteOrder from "@/modules/admin/order/hook/useDeleteOrder";
 import useUpdateOrderStatusToDone from "@/modules/admin/order/hook/useUpdateOrderStatusToDone";
 import useUpdateOrderStatusToPreparing from "@/modules/admin/order/hook/useUpdateOrderStatusToPreparing";
 import useUpdateOrderStatusToReadyToServe from "@/modules/admin/order/hook/useUpdateOrderStatusToReadyToServe";
@@ -25,10 +26,12 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
   const { mutate: updateOrderStatusToReadyToServe } =
     useUpdateOrderStatusToReadyToServe();
   const { mutate: updateOrderStatusToDone } = useUpdateOrderStatusToDone();
+  const { mutate: deleteOrder } = useDeleteOrder();
   const handelOnclick = (id: string, status: string) => {
     if (status === "PREPARING") updateOrderStatusToReadyToServe({ id: id });
     if (status === "IN_QUEUE") updateOrderStatusToPreparing({ id: id });
     if (status === "READY_TO_SERVE") updateOrderStatusToDone({ id: id });
+    if (status === "CANCELLED") deleteOrder({ id: id });
   };
   const onClickCard = (order: GetAllOrdersResponse[number]) => {
     setIsModalOpen(true);
@@ -55,29 +58,30 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
             Note: {order.additional_info}
           </StyledAddInfo>
         )}
-        {order.status==="CANCELLED"&&order.cancel?.ingredients.length!=0 && (
-          <ConfigProvider
-            theme={{
-              token: {
-                colorSplit: token["red-3"],
-              },
-            }}
-          >
-            <OutOfStockContainer>
-              <IngredientReasonDivider>วัตถุดิบหลัก</IngredientReasonDivider>
-              <TagGroup>
-                {order.cancel?.ingredients.map((ingredient) => {
-                  return (
-                    <IngredientTag key={order._id + ingredient._id}>
-                      {ingredient.title}
-                    </IngredientTag>
-                  );
-                })}
-              </TagGroup>
-            </OutOfStockContainer>
-          </ConfigProvider>
-        )}
-        {order.status==="CANCELLED"&&order.cancel?.addons.length!=0&& (
+        {order.status === "CANCELLED" &&
+          order.cancel?.ingredients.length != 0 && (
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorSplit: token["red-3"],
+                },
+              }}
+            >
+              <OutOfStockContainer>
+                <IngredientReasonDivider>วัตถุดิบหลัก</IngredientReasonDivider>
+                <TagGroup>
+                  {order.cancel?.ingredients.map((ingredient) => {
+                    return (
+                      <IngredientTag key={order._id + ingredient._id}>
+                        {ingredient.title}
+                      </IngredientTag>
+                    );
+                  })}
+                </TagGroup>
+              </OutOfStockContainer>
+            </ConfigProvider>
+          )}
+        {order.status === "CANCELLED" && order.cancel?.addons.length != 0 && (
           <ConfigProvider
             theme={{
               token: {
