@@ -64,7 +64,7 @@ const EditPassword = () => {
   useEffect(() => {
     const openNotification = (
       placement: NotificationPlacement,
-      header: string,
+      header: React.ReactNode,
       description?: string,
       icon?: React.ReactNode,
       onClose?: () => void,
@@ -82,7 +82,7 @@ const EditPassword = () => {
     if (isSuccess) {
       openNotification(
         "top",
-        "แก้ไขรหัสผ่านสำเร็จ",
+        <H5>แก้ไขรหัสผ่านสำเร็จ</H5>,
         "กดปิดเพื่อกลับไปหน้าโพรไฟล์",
         <CheckCircle size={24} color="#A0D911" weight="fill" />,
         () => void router.push("/account"),
@@ -91,7 +91,7 @@ const EditPassword = () => {
     if (isError) {
       openNotification(
         "top",
-        "แก้ไขรหัสผ่านไม่สำเร็จ",
+        <H5>แก้ไขรหัสผ่านสำเร็จ</H5>,
         "",
         <XCircle size={24} color="#F5222D" weight="fill" />,
       );

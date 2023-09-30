@@ -57,7 +57,7 @@ const EditUsername = () => {
   useEffect(() => {
     const openNotification = (
       placement: NotificationPlacement,
-      header: string,
+      header: React.ReactNode,
       description?: string,
       icon?: React.ReactNode,
       onClose?: () => void,
@@ -75,7 +75,7 @@ const EditUsername = () => {
     if (isSuccess) {
       openNotification(
         "top",
-        "แก้ไขชื่อผู้ใช้สำเร็จ",
+        <H5>แก้ไขชื่อผู้ใช้สำเร็จ</H5>,
         "กดปิดเพื่อกลับไปหน้าโพรไฟล์",
         <CheckCircle size={24} color="#A0D911" weight="fill" />,
         () => void router.push("/account"),
@@ -84,7 +84,7 @@ const EditUsername = () => {
     if (isError) {
       openNotification(
         "top",
-        "แก้ไขชื่อผู้ใช้ไม่สำเร็จ",
+        <H5>แก้ไขชื่อผู้ใช้ไม่สำเร็จ</H5>,
         "",
         <XCircle size={24} color="#F5222D" weight="fill" />,
       );
