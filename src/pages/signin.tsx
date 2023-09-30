@@ -43,7 +43,7 @@ const SignIn = () => {
         },
       ]);
     }
-  }, [isError, form]);
+  }, [isError, form, error]);
   useEffect(() => {
     if (isSuccess) {
       void router.push("/");
