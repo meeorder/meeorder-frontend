@@ -1,7 +1,7 @@
 import AppLayout from "@/modules/AppLayout";
 import EditPasswordContainer from "@/modules/admin/account/EditPassword";
 import EditUsernameContainer from "@/modules/admin/account/EditUsername";
-import { H1, H3, H4 } from "@/modules/common/components/Typography";
+import { H1, H3, H4, H5 } from "@/modules/common/components/Typography";
 import { useUser } from "@/modules/common/hooks/useUserStore";
 import styled from "@emotion/styled";
 import { Collapse, type CollapseProps } from "antd";
@@ -15,7 +15,7 @@ const AccountManagemant = () => {
   const EditAccount: CollapseProps["items"] = [
     {
       key: "1",
-      label: "ชื่อผู้ใช้งาน",
+      label: <H5 bold>ชื่อผู้ใช้งาน</H5>,
       children: (
         <EditUsernameContainer
           activeKeys={activeKeys}
@@ -26,7 +26,7 @@ const AccountManagemant = () => {
     },
     {
       key: "2",
-      label: "รหัสผ่าน",
+      label: <H5 bold>รหัสผ่าน</H5>,
       children: (
         <EditPasswordContainer
           activeKeys={activeKeys}
