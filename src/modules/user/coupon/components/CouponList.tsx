@@ -16,7 +16,9 @@ const CouponList: React.FC<CouponListProps> = ({
   onClickCouponButton,
 }) => {
   const { data: session } = useSession();
-  const { data: coupons } = useAllUsableCouponsInSession();
+  const { data: coupons } = useAllUsableCouponsInSession({
+    ignoreSession: session ? false : true,
+  });
 
   const inUsedArray =
     coupons?.filter((coupon) => coupon._id === session?.coupon?._id) ?? [];
