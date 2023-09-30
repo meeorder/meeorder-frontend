@@ -21,7 +21,7 @@ const OrderManagement = () => {
     value: category.title,
   }));
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCancleModalOpen, setIsCancleModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [modalData, setModalData] = useState<GetAllOrdersResponse[number]>();
   const [filterCategory, setFliterCategory] = useState<string[]>([]);
   const [filterStatus, setFilterStatus] = useState<string[]>([
@@ -92,13 +92,12 @@ const OrderManagement = () => {
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         modalData={modalData}
-        isCancleModalOpen={isCancleModalOpen}
-        setIsCancleModalOpen={setIsCancleModalOpen}
+        setIsCancelModalOpen={setIsCancelModalOpen}
       />
-      <CancelOrderModal 
+      <CancelOrderModal
         setIsModalOpen={setIsModalOpen}
-        isCancleModalOpen={isCancleModalOpen}
-        setIsCancleModalOpen={setIsCancleModalOpen}
+        isCancelModalOpen={isCancelModalOpen}
+        setIsCancelModalOpen={setIsCancelModalOpen}
         modalData={modalData}
       />
     </AppLayout>

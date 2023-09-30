@@ -1,28 +1,27 @@
-import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import { orderStatusTranslation } from "@/pages/admin/order-management";
-import { Button, Divider, Modal, theme } from "antd";
+import { Button, ConfigProvider, Divider, Modal, Tag, theme } from "antd";
 import React from "react";
 
-import useUpadateOrderStatusToDone from "@/modules/admin/order/hook/useUpdateOrderStatusToDone";
-import useUpadateOrderStatusToPreparing from "@/modules/admin/order/hook/useUpdateOrderStatusToPreparing";
-import useUpadateOrderStatusToReadyToServe from "@/modules/admin/order/hook/useUpdateOrderStatusToReadyToServe";
+import useUpdateOrderStatusToDone from "@/modules/admin/order/hook/useUpdateOrderStatusToDone";
+import useUpdateOrderStatusToInQueue from "@/modules/admin/order/hook/useUpdateOrderStatusToInQueue";
+import useUpdateOrderStatusToPreparing from "@/modules/admin/order/hook/useUpdateOrderStatusToPreparing";
+import useUpdateOrderStatusToReadyToServe from "@/modules/admin/order/hook/useUpdateOrderStatusToReadyToServe";
 import { H3, H4 } from "@/modules/common/components/Typography";
+import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import styled from "@emotion/styled";
 import { ArrowLineLeft, ArrowLineRight, Trash } from "@phosphor-icons/react";
 
 type OrderModalProps = {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
-  isCancleModalOpen: boolean;
-  setIsCancleModalOpen: (value: boolean) => void;
+  setIsCancelModalOpen: (value: boolean) => void;
   modalData?: GetAllOrdersResponse[number];
 };
 
 const OrderModal: React.FC<OrderModalProps> = ({
   isModalOpen,
   setIsModalOpen,
-  isCancleModalOpen,
-  setIsCancleModalOpen,
+  setIsCancelModalOpen,
   modalData,
 }) => {
   const { token } = theme.useToken();
@@ -34,10 +33,12 @@ const OrderModal: React.FC<OrderModalProps> = ({
     CANCELLED: token["red-6"],
   };
   const { mutate: updateOrderStatusToPreparing } =
-    useUpadateOrderStatusToPreparing();
+    useUpdateOrderStatusToPreparing();
   const { mutate: updateOrderStatusToReadyToServe } =
-    useUpadateOrderStatusToReadyToServe();
-  const { mutate: updateOrderStatusToDone } = useUpadateOrderStatusToDone();
+    useUpdateOrderStatusToReadyToServe();
+  const { mutate: updateOrderStatusToDone } = useUpdateOrderStatusToDone();
+  const { mutate: updateOrderStatusToInQueue } =
+    useUpdateOrderStatusToInQueue();
   const handleUpdateOrderStatusToReadyToServe = (id: string) => {
     updateOrderStatusToReadyToServe({ id: id });
     setIsModalOpen(false);
@@ -50,9 +51,13 @@ const OrderModal: React.FC<OrderModalProps> = ({
     updateOrderStatusToDone({ id: id });
     setIsModalOpen(false);
   };
+  const handleUpdateOrderStatusToInqueue = (id: string) => () => {
+    updateOrderStatusToInQueue({ id: id });
+    setIsModalOpen(false);
+  };
   const hadleCancelOrder = () => {
     setIsModalOpen(false);
-    setIsCancleModalOpen(true);
+    setIsCancelModalOpen(true);
   };
   return (
     <StyledModal
@@ -75,15 +80,21 @@ const OrderModal: React.FC<OrderModalProps> = ({
           <ModalIconGroup>
             {(modalData?.status === "CANCELLED" ||
               modalData?.status === "PREPARING") && (
-              <ModalIcon>
-                <StyledArrowLineLeft size={44} color={token["orange-6"]}/>
+              <ModalIcon
+                onClick={handleUpdateOrderStatusToInqueue(modalData._id)}
+              >
+                <StyledArrowLineLeft size={44} color={token["orange-6"]} />
                 <TextIcon color={token["orange-6"]}>อยู่ในคิว</TextIcon>
               </ModalIcon>
             )}
             {(modalData?.status === "CANCELLED" ||
               modalData?.status === "READY_TO_SERVE") && (
-              <ModalIcon onClick={() => handleUpdateOrderStatusToPreparing(modalData._id)}>
-                <StyledArrowLineLeft size={44} color={token["geekblue-6"]}/>
+              <ModalIcon
+                onClick={() =>
+                  handleUpdateOrderStatusToPreparing(modalData._id)
+                }
+              >
+                <StyledArrowLineLeft size={44} color={token["geekblue-6"]} />
                 <TextIcon color={token["geekblue-6"]}>
                   กำลังเตรียมอาหาร
                 </TextIcon>
@@ -91,14 +102,20 @@ const OrderModal: React.FC<OrderModalProps> = ({
             )}
             {(modalData?.status === "CANCELLED" ||
               modalData?.status === "DONE") && (
-              <ModalIcon onClick={() => handleUpdateOrderStatusToReadyToServe(modalData._id)}>
-                <StyledArrowLineLeft size={44} color={token["blue-6"]}/>
+              <ModalIcon
+                onClick={() =>
+                  handleUpdateOrderStatusToReadyToServe(modalData._id)
+                }
+              >
+                <StyledArrowLineLeft size={44} color={token["blue-6"]} />
                 <TextIcon color={token["blue-6"]}>พร้อมเสิร์ฟ</TextIcon>
               </ModalIcon>
             )}
             {modalData?.status === "CANCELLED" && (
-              <ModalIcon onClick={() => handleUpdateOrderStatusToDone(modalData._id)}>
-                <StyledArrowLineLeft size={44} color={token["green-6"]}/>
+              <ModalIcon
+                onClick={() => handleUpdateOrderStatusToDone(modalData._id)}
+              >
+                <StyledArrowLineLeft size={44} color={token["green-6"]} />
                 <TextIcon color={token["green-6"]}>เสร็จสิ้น</TextIcon>
               </ModalIcon>
             )}
@@ -129,6 +146,50 @@ const OrderModal: React.FC<OrderModalProps> = ({
             {modalData?.additional_info && (
               <H4>Note: {modalData?.additional_info}</H4>
             )}
+            {modalData?.status==="CANCELLED"&&modalData.cancel?.ingredients.length!=0 && (
+          <ConfigProvider
+            theme={{
+              token: {
+                colorSplit: token["red-3"],
+              },
+            }}
+          >
+            <OutOfStockContainer>
+              <IngredientReasonDivider orientation="left">วัตถุดิบหลัก</IngredientReasonDivider>
+              <TagGroup>
+                {modalData.cancel?.ingredients.map((ingredient) => {
+                  return (
+                    <IngredientTag key={modalData._id + ingredient._id}>
+                      {ingredient.title}
+                    </IngredientTag>
+                  );
+                })}
+              </TagGroup>
+            </OutOfStockContainer>
+          </ConfigProvider>
+        )}
+        {modalData?.status==="CANCELLED"&&modalData.cancel?.addons.length!=0&& (
+          <ConfigProvider
+            theme={{
+              token: {
+                colorSplit: token["orange-3"],
+              },
+            }}
+          >
+            <OutOfStockContainer>
+              <AddOnsReasonDivider orientation="left">ท็อปปิ้ง</AddOnsReasonDivider>
+              <TagGroup>
+                {modalData.cancel?.addons.map((addon) => {
+                  return (
+                    <AddOnsTag key={modalData._id + addon._id}>
+                      {addon.title}
+                    </AddOnsTag>
+                  );
+                })}
+              </TagGroup>
+            </OutOfStockContainer>
+          </ConfigProvider>
+        )}
           </OrderInfo>
           {modalData?.status !== "CANCELLED" &&
             modalData?.status !== "DONE" && (
@@ -151,7 +212,11 @@ const OrderModal: React.FC<OrderModalProps> = ({
           {modalData?.status !== "DONE" && <StyledDivider type="vertical" />}
           <ModalIconGroup>
             {modalData?.status === "IN_QUEUE" && (
-              <ModalIcon onClick={() => handleUpdateOrderStatusToPreparing(modalData._id)}>
+              <ModalIcon
+                onClick={() =>
+                  handleUpdateOrderStatusToPreparing(modalData._id)
+                }
+              >
                 <StyledArrowLineRight size={44} color={token["geekblue-6"]} />
                 <TextIcon color={token["geekblue-6"]}>
                   กำลังเตรียมอาหาร
@@ -159,13 +224,19 @@ const OrderModal: React.FC<OrderModalProps> = ({
               </ModalIcon>
             )}
             {modalData?.status === "PREPARING" && (
-              <ModalIcon onClick={() => handleUpdateOrderStatusToReadyToServe(modalData._id)}>
+              <ModalIcon
+                onClick={() =>
+                  handleUpdateOrderStatusToReadyToServe(modalData._id)
+                }
+              >
                 <StyledArrowLineRight size={44} color={token["blue-6"]} />
-                <TextIcon color={token["blue-6"]} >พร้อมเสิร์ฟ</TextIcon>
+                <TextIcon color={token["blue-6"]}>พร้อมเสิร์ฟ</TextIcon>
               </ModalIcon>
             )}
             {modalData?.status === "READY_TO_SERVE" && (
-              <ModalIcon onClick={() => handleUpdateOrderStatusToDone(modalData._id)}>
+              <ModalIcon
+                onClick={() => handleUpdateOrderStatusToDone(modalData._id)}
+              >
                 <StyledArrowLineRight size={44} color={token["green-6"]} />
                 <TextIcon color={token["green-6"]}>เสร็จสิ้น</TextIcon>
               </ModalIcon>
@@ -274,6 +345,54 @@ const StyledArrowLineLeft = styled(ArrowLineLeft)`
   margin: 8px;
 `;
 
+const OutOfStockContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 4px;
+`;
+const AddOnsTag = styled(Tag)`
+  margin: 0;
+  border: 0;
+  padding: 1px 8px;
+  border-radius: 2px;
+  background-color: ${(props) => props.theme.antd["orange-1"]};
+  color: ${(props) => props.theme.antd["orange-6"]};
+  width: fit-content;
+`;
+const IngredientTag = styled(Tag)`
+  margin: 0;
+  border: 0;
+  padding: 1px 8px;
+  border-radius: 2px;
+  background-color: ${(props) => props.theme.antd["red-1"]};
+  color: ${(props) => props.theme.antd["red-6"]};
+  width: fit-content;
+`;
+
+const IngredientReasonDivider = styled(Divider)`
+  margin: 0;
+  padding: 0;
+  border: none;
+  height: 0;
+  margin-bottom: 8px;
+  color: ${(props) => props.theme.antd["red-6"]} !important;
+`;
+const AddOnsReasonDivider = styled(Divider)`
+  margin: 0;
+  padding: 0;
+  border: none;
+  height: 0;
+  margin-bottom: 8px;
+  color: ${(props) => props.theme.antd["orange-6"]} !important;
+`;
+
+const TagGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+`;
 const StyledArrowLineRight = styled(ArrowLineRight)`
   margin: 8px;
 `;

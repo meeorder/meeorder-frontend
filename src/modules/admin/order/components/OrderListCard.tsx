@@ -1,11 +1,11 @@
-import useUpadateOrderStatusToDone from "@/modules/admin/order/hook/useUpdateOrderStatusToDone";
-import useUpadateOrderStatusToPreparing from "@/modules/admin/order/hook/useUpdateOrderStatusToPreparing";
-import useUpadateOrderStatusToReadyToServe from "@/modules/admin/order/hook/useUpdateOrderStatusToReadyToServe";
+import useUpdateOrderStatusToDone from "@/modules/admin/order/hook/useUpdateOrderStatusToDone";
+import useUpdateOrderStatusToPreparing from "@/modules/admin/order/hook/useUpdateOrderStatusToPreparing";
+import useUpdateOrderStatusToReadyToServe from "@/modules/admin/order/hook/useUpdateOrderStatusToReadyToServe";
 import { H5, Text } from "@/modules/common/components/Typography";
 import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import styled from "@emotion/styled";
 import { ArrowLineRight, CheckCircle, Trash } from "@phosphor-icons/react";
-import { Divider, theme } from "antd";
+import { ConfigProvider, Divider, Tag, theme } from "antd";
 import React from "react";
 type OrderListCardProps = {
   order: GetAllOrdersResponse[number];
@@ -21,10 +21,10 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
   setModalData,
 }) => {
   const { mutate: updateOrderStatusToPreparing } =
-    useUpadateOrderStatusToPreparing();
+    useUpdateOrderStatusToPreparing();
   const { mutate: updateOrderStatusToReadyToServe } =
-    useUpadateOrderStatusToReadyToServe();
-  const { mutate: updateOrderStatusToDone } = useUpadateOrderStatusToDone();
+    useUpdateOrderStatusToReadyToServe();
+  const { mutate: updateOrderStatusToDone } = useUpdateOrderStatusToDone();
   const handelOnclick = (id: string, status: string) => {
     if (status === "PREPARING") updateOrderStatusToReadyToServe({ id: id });
     if (status === "IN_QUEUE") updateOrderStatusToPreparing({ id: id });
@@ -42,7 +42,7 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
         {<H5>{order.menu.title}</H5>}
         {
           <StyledTable color={token.colorPrimary ?? "blue"}>
-            {order.session?.table?.title || "noTable"}
+            {order?.session?.table?.title || "noTable"}
           </StyledTable>
         }
         <ul style={{ margin: "0" }}>
@@ -54,6 +54,50 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
           <StyledAddInfo ellipsis={true}>
             Note: {order.additional_info}
           </StyledAddInfo>
+        )}
+        {order.status==="CANCELLED"&&order.cancel?.ingredients.length!=0 && (
+          <ConfigProvider
+            theme={{
+              token: {
+                colorSplit: token["red-3"],
+              },
+            }}
+          >
+            <OutOfStockContainer>
+              <IngredientReasonDivider>วัตถุดิบหลัก</IngredientReasonDivider>
+              <TagGroup>
+                {order.cancel?.ingredients.map((ingredient) => {
+                  return (
+                    <IngredientTag key={order._id + ingredient._id}>
+                      {ingredient.title}
+                    </IngredientTag>
+                  );
+                })}
+              </TagGroup>
+            </OutOfStockContainer>
+          </ConfigProvider>
+        )}
+        {order.status==="CANCELLED"&&order.cancel?.addons.length!=0&& (
+          <ConfigProvider
+            theme={{
+              token: {
+                colorSplit: token["orange-3"],
+              },
+            }}
+          >
+            <OutOfStockContainer>
+              <AddOnsReasonDivider>ท็อปปิ้ง</AddOnsReasonDivider>
+              <TagGroup>
+                {order.cancel?.addons.map((addon) => {
+                  return (
+                    <AddOnsTag key={order._id + addon._id}>
+                      {addon.title}
+                    </AddOnsTag>
+                  );
+                })}
+              </TagGroup>
+            </OutOfStockContainer>
+          </ConfigProvider>
         )}
       </TextContainer>
       <StyledDivider type="vertical" />
@@ -89,8 +133,57 @@ const CardContainer = styled.div<{ color: string }>`
 `;
 const TextContainer = styled.div`
   height: 100%;
-  width: 70%;
+  width: calc(100% - 60px);
 `;
+const OutOfStockContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 4px;
+`;
+const AddOnsTag = styled(Tag)`
+  margin: 0;
+  border: 0;
+  padding: 1px 8px;
+  border-radius: 2px;
+  background-color: ${(props) => props.theme.antd["orange-1"]};
+  color: ${(props) => props.theme.antd["orange-6"]};
+  width: fit-content;
+`;
+const IngredientTag = styled(Tag)`
+  margin: 0;
+  border: 0;
+  padding: 1px 8px;
+  border-radius: 2px;
+  background-color: ${(props) => props.theme.antd["red-1"]};
+  color: ${(props) => props.theme.antd["red-6"]};
+  width: fit-content;
+`;
+
+const IngredientReasonDivider = styled(Divider)`
+  margin: 0;
+  padding: 0;
+  border: none;
+  height: 0;
+  margin-bottom: 8px;
+  color: ${(props) => props.theme.antd["red-6"]} !important;
+`;
+const AddOnsReasonDivider = styled(Divider)`
+  margin: 0;
+  padding: 0;
+  border: none;
+  height: 0;
+  margin-bottom: 8px;
+  color: ${(props) => props.theme.antd["orange-6"]} !important;
+`;
+
+const TagGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+`;
+
 const StyledTrash = styled(Trash)`
   position: absolute;
   right: 8px;

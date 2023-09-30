@@ -62,3 +62,34 @@ export const setOrderStatusToDoneById = async (
     `/orders/${params.id}/done`,
   );
 };
+//================>>>> Set order status to in queue by id <<<<===============//
+export type SetOrderStatusToInQueueByIdPathParam =
+  paths["/orders/{id}/in_queue"]["patch"]["parameters"]["path"];
+export type SetOrderStatusToInQueueByIdResponse =
+  paths["/orders/{id}/in_queue"]["patch"]["responses"]["204"];
+
+export const setOrderStatusToInQueueById = async (
+  params: SetOrderStatusToInQueueByIdPathParam,
+): Promise<void> => {
+  await axiosInstance.patch<SetOrderStatusToInQueueByIdResponse>(
+    `/orders/${params.id}/in_queue`,
+  );
+};
+
+//================>>>> Set order status to cancel by id <<<<===============//
+export type SetOrderStatusToCancelByIdPathParam =
+  paths["/orders/{id}/cancel"]["patch"]["parameters"]["path"];
+export type SetOrderStatusToCancelByIdBodyParam =
+  paths["/orders/{id}/cancel"]["patch"]["requestBody"]["content"]["application/json"];
+export type SetOrderStatusToCancelByIdResponse =
+  paths["/orders/{id}/cancel"]["patch"]["responses"]["204"];
+
+export const setOrderStatusToCancelById = async (
+  params: SetOrderStatusToCancelByIdPathParam &
+    SetOrderStatusToCancelByIdBodyParam,
+): Promise<void> => {
+  await axiosInstance.patch<SetOrderStatusToCancelByIdResponse>(
+    `/orders/${params.id}/cancel`,
+    params,
+  );
+};

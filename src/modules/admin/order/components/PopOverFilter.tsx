@@ -91,7 +91,7 @@ const PopOverFilter: React.FC<PopOverFilterProps> = ({
       setFilterStatus(changeFilterStatusSliderTranslation);
     }
   };
-  const onCancle = () => {
+  const onCancel = () => {
     setClicked(false);
     setChangeFilterCategory(filterCategory);
     setChangeFilterStatusSlider([0, 3]);
@@ -187,7 +187,7 @@ const PopOverFilter: React.FC<PopOverFilterProps> = ({
             <Button danger onClick={onReset}>
               ล้างการเลือกทั้งหมด
             </Button>
-            <Button onClick={onCancle}>ยกเลิก</Button>
+            <Button onClick={onCancel}>ยกเลิก</Button>
             <Button type="primary" onClick={onSave}>
               ตกลง
             </Button>
