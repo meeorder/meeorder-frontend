@@ -3,29 +3,19 @@ import { useUpdateUser } from "@/modules/user/account/hooks/useUpdateUser";
 import styled from "@emotion/styled";
 import { Button, Form, Input } from "antd";
 import { type AxiosError } from "axios";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 type FieldType = {
   username: string;
   password: string;
 };
 
-type Props = {
-  activeKeys: string[];
-  setActiveKeys: (activeKeys: string[]) => void;
-};
-
-const EditUsernameContainer: React.FC<Props> = ({
-  activeKeys,
-  setActiveKeys,
-}) => {
+const EditUsernameContainer = () => {
   const [form] = Form.useForm<FieldType>();
   const { mutate: editUsername, isSuccess, isError, error } = useUpdateUser();
 
   const handleCancelForm = () => {
     form.resetFields();
-    const newActiveKeys = activeKeys.filter((key) => key !== "1");
-    setActiveKeys(newActiveKeys);
   };
 
   const handleEditUsername = (values: FieldType) => {

@@ -12,23 +12,13 @@ type FieldType = {
   confirmPassword: string;
 };
 
-type Props = {
-  activeKeys: string[];
-  setActiveKeys: (activeKeys: string[]) => void;
-};
-
-const EditPasswordContainer: React.FC<Props> = ({
-  activeKeys,
-  setActiveKeys,
-}) => {
+const EditPasswordContainer = () => {
   const [form] = Form.useForm<FieldType>();
   const { data: user } = useUser();
   const { mutate: editUsername, isSuccess, isError, error } = useUpdateUser();
 
   const handleCancelForm = () => {
     form.resetFields();
-    const newActiveKeys = activeKeys.filter((key) => key !== "2");
-    setActiveKeys(newActiveKeys);
   };
 
   const handleEditPassword = (values: FieldType) => {
