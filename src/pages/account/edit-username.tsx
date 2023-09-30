@@ -7,6 +7,7 @@ import { Button, Form, Input, notification } from "antd";
 import { type NotificationPlacement } from "antd/es/notification/interface";
 import { type AxiosError } from "axios";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 type FieldType = {
@@ -18,21 +19,7 @@ const EditUsername = () => {
   const [form] = Form.useForm<FieldType>();
   const { mutate: editUsername, isSuccess, isError, error } = useUpdateUser();
   const [api, contextHolder] = notification.useNotification();
-
-  const openNotification = (
-    placement: NotificationPlacement,
-    header: string,
-    description?: string,
-    icon?: React.ReactNode,
-  ) => {
-    api.destroy();
-    api.info({
-      message: header,
-      description: description ?? "",
-      placement,
-      icon: icon,
-    });
-  };
+  const router = useRouter();
 
   const handleEditUsername = (values: FieldType) => {
     const { username, password } = values;
@@ -68,12 +55,30 @@ const EditUsername = () => {
   }, [isError, form, error, isSuccess]);
 
   useEffect(() => {
+    const openNotification = (
+      placement: NotificationPlacement,
+      header: string,
+      description?: string,
+      icon?: React.ReactNode,
+      onClose?: () => void,
+    ) => {
+      api.destroy();
+      api.info({
+        message: header,
+        description: description ?? "",
+        placement,
+        icon: icon,
+        onClose: onClose,
+      });
+    };
+
     if (isSuccess) {
       openNotification(
         "top",
         "สำเร็จ",
         "แก้ไขชื่อผู้ใช้สำเร็จ",
         <CheckCircle size={24} color="#A0D911" weight="fill" />,
+        () => void router.push("/account"),
       );
     }
     if (isError) {
@@ -84,7 +89,7 @@ const EditUsername = () => {
         <XCircle size={24} color="#F5222D" weight="fill" />,
       );
     }
-  }, [isSuccess, isError]);
+  }, [isSuccess, isError, api, router]);
 
   return (
     <>
