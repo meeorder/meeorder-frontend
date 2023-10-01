@@ -86,7 +86,16 @@ export interface paths {
     post: operations["OrdersController_createOrder"];
   };
   "/orders/{id}": {
+    /**
+     * Delete order
+     * @description Delete order
+     */
+    delete: operations["OrdersController_deleteOrder"];
     patch: operations["OrdersController_updateOrder"];
+  };
+  "/orders/{id}/in_queue": {
+    /** Change order status to in_queue */
+    patch: operations["OrdersController_inQueue"];
   };
   "/orders/{id}/preparing": {
     /** Change order status to preparing */
@@ -274,7 +283,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-09-28T16:57:12.590Z
+       * @default 2023-09-30T06:48:01.581Z
        */
       created_at: string;
       /** @description Addon status */
@@ -294,7 +303,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-09-28T16:57:12.590Z
+       * @default 2023-09-30T06:48:01.581Z
        */
       created_at: string;
       /** @description Addon status */
@@ -519,6 +528,11 @@ export interface components {
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
       additional_info: string;
+      /**
+       * Format: date-time
+       * @description Order deletion date
+       */
+      deleted_at: string | null;
       cancel: components["schemas"]["OrderCancelResponseDto"] | null;
     };
     UpdateOrderDto: {
@@ -552,6 +566,11 @@ export interface components {
       addons: (string | components["schemas"]["AddonSchema"])[];
       /** @description Additional info */
       additional_info: string;
+      /**
+       * Format: date-time
+       * @description Order deletion date
+       */
+      deleted_at: string | null;
       cancel: components["schemas"]["OrderCancelSchema"] | null;
     };
     CancelOrderDto: {
@@ -586,7 +605,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-28T16:57:12.598Z
+       * @default 2023-09-30T06:48:01.589Z
        */
       created_at: string;
       /**
@@ -1308,6 +1327,21 @@ export interface operations {
       201: never;
     };
   };
+  /**
+   * Delete order
+   * @description Delete order
+   */
+  OrdersController_deleteOrder: {
+    parameters: {
+      path: {
+        /** @description Order ID (ObjectId) */
+        id: string;
+      };
+    };
+    responses: {
+      204: never;
+    };
+  };
   OrdersController_updateOrder: {
     parameters: {
       path: {
@@ -1326,6 +1360,19 @@ export interface operations {
           "application/json": components["schemas"]["OrdersSchema"];
         };
       };
+    };
+  };
+  /** Change order status to in_queue */
+  OrdersController_inQueue: {
+    parameters: {
+      path: {
+        /** @description Order ID (ObjectId) */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Set order status to in_queue */
+      204: never;
     };
   };
   /** Change order status to preparing */

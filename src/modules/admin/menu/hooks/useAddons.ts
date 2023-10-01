@@ -1,4 +1,6 @@
 import {
+  activateAllAddons,
+  changeAddonStatusById,
   createAddon,
   deleteAddonById,
   getAllAddons,
@@ -58,6 +60,26 @@ export const useCreateAddon = () => {
 export const useEditAddon = () => {
   return useMutation({
     mutationFn: updateAddonById,
+    onSuccess: () => {
+      void queryClient.invalidateQueries(["useAllAddons"]);
+      void queryClient.invalidateQueries(["menu"]);
+    },
+  });
+};
+
+export const useChangeAddonStatus = () => {
+  return useMutation({
+    mutationFn: changeAddonStatusById,
+    onSuccess: () => {
+      void queryClient.invalidateQueries(["useAllAddons"]);
+      void queryClient.invalidateQueries(["menu"]);
+    },
+  });
+};
+
+export const useActivateAllAddons = () => {
+  return useMutation({
+    mutationFn: activateAllAddons,
     onSuccess: () => {
       void queryClient.invalidateQueries(["useAllAddons"]);
       void queryClient.invalidateQueries(["menu"]);
