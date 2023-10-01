@@ -58,7 +58,7 @@ const Register = () => {
         },
       ]);
     }
-  }, [isError, form]);
+  }, [isError, form, error]);
   return (
     <Container>
       <FormContainer>

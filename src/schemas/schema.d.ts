@@ -287,7 +287,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-09-30T13:37:05.297Z
+       * @default 2023-09-30T06:48:01.581Z
        */
       created_at: string;
       /** @description Addon status */
@@ -307,7 +307,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-09-30T13:37:05.297Z
+       * @default 2023-09-30T06:48:01.581Z
        */
       created_at: string;
       /** @description Addon status */
@@ -523,6 +523,11 @@ export interface components {
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
       additional_info: string;
+      /**
+       * Format: date-time
+       * @description Order deletion date
+       */
+      deleted_at: string | null;
       cancel: components["schemas"]["OrderCancelResponseDto"] | null;
       /** @description Session (table populated) */
       session: components["schemas"]["SessionWithTableDto"];
@@ -598,7 +603,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-30T13:37:05.339Z
+       * @default 2023-09-30T06:48:01.589Z
        */
       created_at: string;
       /**
@@ -1390,9 +1395,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   OrdersController_updateOrder: {
@@ -1425,9 +1428,7 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to in_queue */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Change order status to preparing */
