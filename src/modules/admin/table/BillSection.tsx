@@ -4,7 +4,7 @@ import { H2, H3, Text } from "@/modules/common/components/Typography";
 import { type GetOrdersBySessionIdResponse } from "@/modules/services/sessions";
 import styled from "@emotion/styled";
 import { PencilSimpleLine, Printer } from "@phosphor-icons/react";
-import { Button, ConfigProvider, Divider, Empty, QRCode, theme } from "antd";
+import { Button, ConfigProvider, Divider, Empty, theme } from "antd";
 import React from "react";
 
 const RenderOrder: React.FC<{
@@ -32,8 +32,8 @@ const RenderOrder: React.FC<{
 };
 
 const BillSection = () => {
-  const { tableId, mode } = useSelectedTableStore();
-  const { data: bill } = useGetOrdersByTableId(tableId);
+  const { tableId, mode, setMode } = useSelectedTableStore();
+  const { data: bill, sessionId } = useGetOrdersByTableId(tableId);
   const orders = bill?.orders.filter((order) => order.status !== "CANCELLED");
   const unfinishedOrders = orders?.filter((order) => order.status !== "DONE");
   const finishedOrders = orders?.filter((order) => order.status === "DONE");
@@ -64,10 +64,22 @@ const BillSection = () => {
       </BillContainer>
     );
   }
+  /* --------------------------- In edit order mode --------------------------- */
+  if (mode === "editOrder") {
+    return (
+      <BillContainer>
+        <iframe
+          style={{ height: "100%", width: "100%" }}
+          src={`/?session-id=${sessionId ?? "no-session"}`}
+          title="W3Schools Free Online Web Tutorials"
+        />
+      </BillContainer>
+    );
+  }
   return (
     <BillContainer>
       <HeadSection>
-        <QRCode size={83} value="-" color="white" />
+        {/* <QRCode size={83} value="-" color="white" /> */}
         <div style={{ flex: 1, justifySelf: "center", textAlign: "center" }}>
           <H2>TName</H2>
           <Text>status</Text>
@@ -108,7 +120,12 @@ const BillSection = () => {
           <Button block size="large" icon={<Printer />}>
             ปริ๊นใบเสร็จ
           </Button>
-          <Button block size="large" icon={<PencilSimpleLine />}>
+          <Button
+            onClick={() => setMode("editOrder")}
+            block
+            size="large"
+            icon={<PencilSimpleLine />}
+          >
             แก้ไขออเดอร์
           </Button>
         </div>

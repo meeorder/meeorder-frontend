@@ -12,11 +12,15 @@ const useGetSessionByTableId = (tableId: string) =>
 
 const useGetOrdersByTableId = (tableId: string) => {
   const { data } = useGetSessionByTableId(tableId);
-  return useQuery({
-    queryKey: ["useOrdersByTableId", data?._id],
-    queryFn: () => getOrdersBySessionId({ id: data?._id ?? "" }),
-    refetchInterval: 5000,
-  });
+  // TODO Change to get by table id
+  return {
+    ...useQuery({
+      queryKey: ["useOrdersByTableId", data?._id],
+      queryFn: () => getOrdersBySessionId({ id: data?._id ?? "" }),
+      refetchInterval: 5000,
+    }),
+    sessionId: data?._id,
+  };
 };
 
 export { useGetOrdersByTableId };

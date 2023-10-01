@@ -11,16 +11,19 @@ import { Button } from "antd";
 
 const TableSection = () => {
   const { data: tables } = useAllTable();
-  const { mode, toggleMode } = useSelectedTableStore();
+  const { mode, setMode } = useSelectedTableStore();
   const { isClientLoaded } = useClient();
+  console.log(mode);
   return (
     <TableContainer>
       <HeadContainer>
         <H2>โต๊ะภายในร้าน</H2>
-        <Button type="primary" onClick={() => toggleMode()}>
-          {isClientLoaded ?? mode === "edit"
-            ? "ปิดโหมดแก้ไข"
-            : "แก้ไขโต๊ะภายในร้าน"}
+        <Button
+          type="primary"
+          onClick={() => setMode(mode === "edit" ? "view" : "edit")}
+        >
+          {isClientLoaded &&
+            (mode === "edit" ? "ปิดโหมดแก้ไข" : "แก้ไขโต๊ะภายในร้าน")}
         </Button>
       </HeadContainer>
       <TableCardContainer>
