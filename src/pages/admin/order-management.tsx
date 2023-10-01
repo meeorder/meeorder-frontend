@@ -55,10 +55,8 @@ const OrderManagement = () => {
                 if (filterStatus.length === 0) return true;
                 return filterStatus.includes(status);
               },
-              // todo: filter order status by selected status
             )
             .map((status) => {
-              // allOrder.filter((order) => order.status === status)
               return {
                 status,
                 orders:

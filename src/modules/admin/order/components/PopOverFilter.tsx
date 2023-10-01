@@ -63,7 +63,6 @@ const PopOverFilter: React.FC<PopOverFilterProps> = ({
         .map((status) => reverseStatusMarksTranslation[status] as number),
     ),
   ]);
-  console.log("changeFilterStatusSlider", changeFilterStatusSlider);
   const [changeFilterStatusCheckbox, setChangeFilterStatusCheckbox] =
     useState<boolean>(filterStatus.includes("CANCELLED"));
 
@@ -129,7 +128,6 @@ const PopOverFilter: React.FC<PopOverFilterProps> = ({
           .map((status) => reverseStatusMarksTranslation[status] as number),
       ),
     ]);
-    console.log("changefilterslider", changeFilterStatusSlider);
   };
   const onChangeCategory = (value: string[]) => {
     setChangeFilterCategory(value);
