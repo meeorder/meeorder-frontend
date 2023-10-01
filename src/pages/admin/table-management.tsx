@@ -1,9 +1,12 @@
 import AppLayout from "@/modules/AppLayout";
 import BillSection from "@/modules/admin/table/BillSection";
 import TableSection from "@/modules/admin/table/TableSection";
+import { useClient } from "@/modules/common/hooks/useClient";
 import { ConfigProvider, Divider } from "antd";
 
 const TableManagement = () => {
+  const { isClientLoaded } = useClient();
+  if (!isClientLoaded) return null;
   return (
     <>
       <ConfigProvider
