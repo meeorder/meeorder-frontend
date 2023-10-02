@@ -52,7 +52,6 @@ const EditUsernameContainer: React.FC<Props> = ({
     editUsername({
       newUsername: username,
       oldPassword: password,
-      newPassword: password,
     });
   };
 

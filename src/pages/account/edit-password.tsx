@@ -1,5 +1,4 @@
 import { H4, H5, Text } from "@/modules/common/components/Typography";
-import { useUser } from "@/modules/common/hooks/useUserStore";
 import BackButton from "@/modules/user/account/components/BackButton";
 import { useUpdateUser } from "@/modules/user/account/hooks/useUpdateUser";
 import styled from "@emotion/styled";
@@ -20,14 +19,12 @@ type FieldType = {
 const EditPassword = () => {
   const [form] = Form.useForm<FieldType>();
   const router = useRouter();
-  const { data: user } = useUser();
   const { mutate: editUsername, isSuccess, isError, error } = useUpdateUser();
   const [api, contextHolder] = notification.useNotification();
 
   const handleEditPassword = (values: FieldType) => {
     const { oldPassword, newPassword } = values;
     editUsername({
-      newUsername: user?.username || "",
       oldPassword: oldPassword,
       newPassword: newPassword,
     });

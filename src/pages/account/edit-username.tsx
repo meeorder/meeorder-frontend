@@ -26,7 +26,6 @@ const EditUsername = () => {
     editUsername({
       newUsername: username,
       oldPassword: password,
-      newPassword: password,
     });
   };
 

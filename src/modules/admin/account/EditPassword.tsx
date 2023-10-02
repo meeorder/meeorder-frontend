@@ -1,5 +1,4 @@
 import { H3, H5, Text } from "@/modules/common/components/Typography";
-import { useUser } from "@/modules/common/hooks/useUserStore";
 import { useUpdateUser } from "@/modules/user/account/hooks/useUpdateUser";
 import styled from "@emotion/styled";
 import { CheckCircle, XCircle } from "@phosphor-icons/react";
@@ -34,7 +33,6 @@ const EditPasswordContainer: React.FC<Props> = ({
 }) => {
   const [form] = Form.useForm<FieldType>();
   const router = useRouter();
-  const { data: user } = useUser();
   const {
     mutate: editUsername,
     isSuccess,
@@ -53,7 +51,6 @@ const EditPasswordContainer: React.FC<Props> = ({
   const handleEditPassword = (values: FieldType) => {
     const { oldPassword, newPassword } = values;
     editUsername({
-      newUsername: user?.username || "",
       oldPassword: oldPassword,
       newPassword: newPassword,
     });
