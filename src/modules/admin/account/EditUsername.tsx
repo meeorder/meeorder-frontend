@@ -18,23 +18,36 @@ type Props = {
   setActiveKeys: (activeKeys: string[]) => void;
 };
 
+const UpdateActiveKeys = (
+  activeKeys: string[],
+  setActiveKeys: (activeKeys: string[]) => void,
+) => {
+  const newActiveKeys = activeKeys.filter((key) => key !== key);
+  setActiveKeys(newActiveKeys);
+};
+
 const EditUsernameContainer: React.FC<Props> = ({
   activeKeys,
   setActiveKeys,
 }) => {
   const [form] = Form.useForm<FieldType>();
-  const { mutate: editUsername, isSuccess, isError, error } = useUpdateUser();
+  const {
+    mutate: editUsername,
+    isSuccess,
+    isError,
+    error,
+  } = useUpdateUser({
+    OnSuccess: () => UpdateActiveKeys(activeKeys, setActiveKeys),
+  });
   const [api, contextHolder] = notification.useNotification();
   const router = useRouter();
 
   const handleCancelForm = () => {
     form.resetFields();
-    const newActiveKeys = activeKeys.filter((key) => key !== "1");
-    setActiveKeys(newActiveKeys);
+    UpdateActiveKeys(activeKeys, setActiveKeys);
   };
 
   const handleEditUsername = (values: FieldType) => {
-    console.log(values);
     const { username, password } = values;
     editUsername({
       newUsername: username,
@@ -70,10 +83,8 @@ const EditUsernameContainer: React.FC<Props> = ({
     }
     if (isSuccess) {
       form.resetFields();
-      const newActiveKeys = activeKeys.filter((key) => key !== "1");
-      setActiveKeys(newActiveKeys);
     }
-  }, [isError, form, error, isSuccess, setActiveKeys]);
+  }, [isError, form, error, isSuccess]);
 
   useEffect(() => {
     const openNotification = (
