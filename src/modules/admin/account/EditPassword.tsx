@@ -137,7 +137,7 @@ const EditPasswordContainer: React.FC<Props> = ({
               name="oldPassword"
               rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
             >
-              <Input.Password placeholder="รหัสผ่านปัจจุบัน" />
+              <Input.Password />
             </Form.Item>
           </div>
           <div>
@@ -146,7 +146,7 @@ const EditPasswordContainer: React.FC<Props> = ({
               name="newPassword"
               rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
             >
-              <Input.Password placeholder="รหัสผ่านใหม่" />
+              <Input.Password />
             </Form.Item>
           </div>
           <div>
@@ -172,7 +172,7 @@ const EditPasswordContainer: React.FC<Props> = ({
                 }),
               ]}
             >
-              <Input.Password placeholder="ยืนยันรหัสผ่านใหม่" />
+              <Input.Password />
             </Form.Item>
           </div>
           <ButtonContainer>

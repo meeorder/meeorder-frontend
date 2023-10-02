@@ -128,7 +128,6 @@ const EditUsername = () => {
                       marginBottom: "8px",
                       width: "100%",
                     }}
-                    placeholder="example"
                   ></Input>
                 </Form.Item>
                 <H5
@@ -147,7 +146,6 @@ const EditUsername = () => {
                       marginBottom: "8px",
                       width: "100%",
                     }}
-                    placeholder="example"
                   ></Input.Password>
                 </Form.Item>
               </FieldContainer>

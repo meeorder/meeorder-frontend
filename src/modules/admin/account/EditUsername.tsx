@@ -138,7 +138,7 @@ const EditUsernameContainer: React.FC<Props> = ({
               name="username"
               rules={[{ required: true, message: "กรุณากรอกชื่อผู้ใช้" }]}
             >
-              <Input placeholder="ชื่อผู้ใช้" />
+              <Input />
             </Form.Item>
           </div>
           <div>
@@ -147,7 +147,7 @@ const EditUsernameContainer: React.FC<Props> = ({
               name="password"
               rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
             >
-              <Input.Password placeholder="รหัสผ่านปัจจุบัน" />
+              <Input.Password />
             </Form.Item>
           </div>
           <ButtonContainer>
