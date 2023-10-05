@@ -8,6 +8,7 @@ import AddMinusButton from "@/modules/user/food/components/AddMinusButton";
 import Content from "@/modules/user/food/components/Content";
 import SaveButton from "@/modules/user/food/components/SaveButton";
 import useMenu from "@/modules/user/menu/hooks/useMenu";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { Button } from "antd";
@@ -17,6 +18,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const FoodDetail = () => {
+  const { data: session } = useSession();
+
   const router = useRouter();
   const { foodId } = router.query;
   const { data: menu } = useMenu({ id: foodId as string });
@@ -71,7 +74,7 @@ const FoodDetail = () => {
   };
 
   const handleBack = () => {
-    void router.push("/");
+    void router.back();
   };
 
   const handleAddOrUpdateToBasket = () => {
@@ -119,19 +122,21 @@ const FoodDetail = () => {
           newBasketOrder={newBasketOrder}
           setNewBasketOrder={setNewBasketOrder}
         />
-        <AddToCardButtonNav>
-          <AddMinusButton
-            count={newBasketOrder?.quantity ?? 1}
-            setCount={setCount}
-            isNewOrder={isNewOrder}
-          />
-          <SaveButton
-            count={newBasketOrder?.quantity ?? 1}
-            isNewOrder={isNewOrder}
-            price={calculateBasketOrderPrice(newBasketOrder)}
-            onClick={() => handleAddOrUpdateToBasket()}
-          />
-        </AddToCardButtonNav>
+        {session && (
+          <AddToCardButtonNav>
+            <AddMinusButton
+              count={newBasketOrder?.quantity ?? 1}
+              setCount={setCount}
+              isNewOrder={isNewOrder}
+            />
+            <SaveButton
+              count={newBasketOrder?.quantity ?? 1}
+              isNewOrder={isNewOrder}
+              price={calculateBasketOrderPrice(newBasketOrder)}
+              onClick={() => handleAddOrUpdateToBasket()}
+            />
+          </AddToCardButtonNav>
+        )}
       </LayoutContainer>
     </>
   );
