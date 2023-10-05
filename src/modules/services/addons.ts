@@ -30,7 +30,7 @@ export const getAllAddons = async (
   const { data } = await axiosInstance.get<GetAllAddonsResponse>("/addons", {
     params,
   });
-  return data;
+  return data?.reverse();
 };
 
 //================>>>> Get an addon by id <<<<=====================================//
