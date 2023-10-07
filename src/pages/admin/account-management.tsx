@@ -26,12 +26,7 @@ const AccountManagemant = () => {
           ชื่อผู้ใช้งาน
         </H5>
       ),
-      children: (
-        <EditUsernameContainer
-          activeKeys={activeKeys}
-          setActiveKeys={setActiveKeys}
-        />
-      ),
+      children: <EditUsernameContainer setActiveKeys={setActiveKeys} />,
       extra: user?.username ?? "ชื่อผู้ใช้งาน",
     },
     {
@@ -41,12 +36,7 @@ const AccountManagemant = () => {
           รหัสผ่าน
         </H5>
       ),
-      children: (
-        <EditPasswordContainer
-          activeKeys={activeKeys}
-          setActiveKeys={setActiveKeys}
-        />
-      ),
+      children: <EditPasswordContainer setActiveKeys={setActiveKeys} />,
       extra: "********",
     },
   ];

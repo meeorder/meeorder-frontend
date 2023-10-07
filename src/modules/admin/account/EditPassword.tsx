@@ -15,7 +15,6 @@ type FieldType = {
 };
 
 type Props = {
-  activeKeys: string[];
   setActiveKeys: (activeKeys: string[]) => void;
 };
 
