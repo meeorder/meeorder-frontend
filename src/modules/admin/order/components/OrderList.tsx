@@ -96,7 +96,7 @@ const StyledCard = styled(Card, transientOptions)<{
   display: flex;
   flex-direction: column;
   height: calc(100vh - 144px);
-  border: 1px solid;
+  border: 3px solid;
   border-color: ${(props) => props.$borderColor};
   .ant-card-body {
     flex: 1;
