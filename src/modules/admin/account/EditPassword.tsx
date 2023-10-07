@@ -19,10 +19,7 @@ type Props = {
   setActiveKeys: (activeKeys: string[]) => void;
 };
 
-const EditPasswordContainer: React.FC<Props> = ({
-  activeKeys,
-  setActiveKeys,
-}) => {
+const EditPasswordContainer: React.FC<Props> = ({ setActiveKeys }) => {
   const [form] = Form.useForm<FieldType>();
   const router = useRouter();
   const {

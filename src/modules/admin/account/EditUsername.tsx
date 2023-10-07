@@ -18,10 +18,7 @@ type Props = {
   setActiveKeys: (activeKeys: string[]) => void;
 };
 
-const EditUsernameContainer: React.FC<Props> = ({
-  activeKeys,
-  setActiveKeys,
-}) => {
+const EditUsernameContainer: React.FC<Props> = ({ setActiveKeys }) => {
   const [form] = Form.useForm<FieldType>();
   const {
     mutate: editUsername,
