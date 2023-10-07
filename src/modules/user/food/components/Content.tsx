@@ -2,6 +2,7 @@ import { H4, H5, Text } from "@/modules/common/components/Typography";
 import { type BasketOrder } from "@/modules/user/basket/hooks/useBasketStore";
 import AddonsCard from "@/modules/user/food/components/AddonsCard";
 import { type Menu } from "@/modules/user/menu/types";
+import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import { Input } from "antd";
 import { type ChangeEvent, type Dispatch, type SetStateAction } from "react";
@@ -17,6 +18,8 @@ const Content: React.FC<ContentProps> = ({
   newBasketOrder,
   setNewBasketOrder,
 }) => {
+  const { data: session } = useSession();
+
   const handleToggleAddon = (addon: Menu["addons"][number]) => {
     if (!setNewBasketOrder) {
       return;
@@ -84,19 +87,21 @@ const Content: React.FC<ContentProps> = ({
             />
           ))}
       </AddonContainer>
-      <AdditionalRequest>
-        <H5 style={{ marginLeft: "8px" }}>คำขอเพิ่มเติม</H5>
-        <Input.TextArea
-          style={{
-            borderRadius: "12px",
-            height: "55px",
-          }}
-          autoSize={{ minRows: 4, maxRows: 6 }}
-          placeholder="เช่น ไม่ใส่พริก"
-          value={newBasketOrder?.menu?.additionalRequest}
-          onChange={handleAddAdditionRequest}
-        />
-      </AdditionalRequest>
+      {session && (
+        <AdditionalRequest>
+          <H5 style={{ marginLeft: "8px" }}>คำขอเพิ่มเติม</H5>
+          <Input.TextArea
+            style={{
+              borderRadius: "12px",
+              height: "55px",
+            }}
+            autoSize={{ minRows: 4, maxRows: 6 }}
+            placeholder="เช่น ไม่ใส่พริก"
+            value={newBasketOrder?.menu?.additionalRequest}
+            onChange={handleAddAdditionRequest}
+          />
+        </AdditionalRequest>
+      )}
     </ContentContainer>
   );
 };

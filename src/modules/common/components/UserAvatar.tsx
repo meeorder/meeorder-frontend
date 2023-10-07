@@ -5,9 +5,11 @@ import { Avatar, theme } from "antd";
 
 type UserAvatarProps = {
   user?: User | null;
+  size?: number;
+  fontSize?: number;
 };
 
-const UserAvatar: React.FC<UserAvatarProps> = ({ user }) => {
+const UserAvatar: React.FC<UserAvatarProps> = ({ user, size, fontSize }) => {
   const {
     token: { colorPrimary, colorPrimaryBg },
   } = theme.useToken();
@@ -45,18 +47,28 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ user }) => {
 
     return (
       <Avatar
-        size={44}
+        size={size ?? 44}
         style={{
           backgroundColor: userColor,
         }}
       >
-        {user.username?.[0]?.toUpperCase() || ""}
+        {fontSize === undefined ? (
+          user.username?.[0]?.toUpperCase() || ""
+        ) : (
+          <div
+            style={{
+              fontSize: `${fontSize}px`,
+            }}
+          >
+            {user.username?.[0]?.toUpperCase() || ""}
+          </div>
+        )}
       </Avatar>
     );
   } else {
     return (
       <Avatar
-        size={44}
+        size={size ?? 44}
         icon={<ReactUser color={colorPrimary} weight="duotone" />}
         style={{ backgroundColor: colorPrimaryBg }}
       />

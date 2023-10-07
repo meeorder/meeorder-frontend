@@ -14,9 +14,7 @@ const CouponHeader = () => {
 
   const router = useRouter();
   const onClickBackButton = () => {
-    void router.push({
-      pathname: "/orders",
-    });
+    void router.back();
   };
 
   const { data: session } = useSession();
@@ -32,11 +30,13 @@ const CouponHeader = () => {
           size="large"
           icon={<ArrowLeft size={16} />}
         />
-        <StyledTableTag color={colorPrimary}>
-          <H5 style={{ color: "inherit" }}>
-            โต๊ะ {isClientLoaded && session?.table.title}
-          </H5>
-        </StyledTableTag>
+        {session && (
+          <StyledTableTag color={colorPrimary}>
+            <H5 style={{ color: "inherit" }}>
+              โต๊ะ {isClientLoaded && session?.table.title}
+            </H5>
+          </StyledTableTag>
+        )}
       </CouponSubHeader>
       <CouponPoint />
     </CouponHeaderContainer>

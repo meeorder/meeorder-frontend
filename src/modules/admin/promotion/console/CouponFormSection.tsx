@@ -115,7 +115,6 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
             </H4>
           </div>
         }
-        bordered={false}
         extra={
           <ButtonGroup>
             <Popconfirm
@@ -376,9 +375,11 @@ const GetMenuByCategoryData = (allMenu: GetAllMenusResponse) =>
 
 const CouponFormCard = styled(Card)`
   flex: 2;
+  border: none;
   .ant-card-head {
     padding: 0;
     margin: 0;
+    border-bottom: none;
   }
   .ant-card-body {
     padding: 0;

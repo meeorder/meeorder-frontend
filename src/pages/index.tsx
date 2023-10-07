@@ -1,5 +1,4 @@
 import AppLayout from "@/modules/AppLayout";
-import useCategories from "@/modules/common/hooks/useCategory";
 import { useSetSessionUser } from "@/modules/common/hooks/useSetSessionUser";
 import { pages } from "@/modules/pageConfig";
 import Category from "@/modules/user/menu/components/Category";
@@ -13,7 +12,6 @@ import { useEffect } from "react";
 
 const Home = () => {
   const allMenu = useAllMenu();
-  const categories = useCategories();
   const { mutate: setSessionUser } = useSetSessionUser();
   const setSessionId = useSessionIdStore((state) => state.setSessionId);
 
@@ -41,7 +39,11 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppLayout layoutType="user" currentPageId={pages.home.id}>
-        <CategoryNav categories={categories?.data ?? []} />
+        <CategoryNav
+          categories={
+            allMenu?.data?.map((categoryData) => categoryData?.category) ?? []
+          }
+        />
         <MenuContainer>
           {allMenu?.data
             ?.sort(

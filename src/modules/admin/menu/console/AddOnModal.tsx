@@ -10,7 +10,7 @@ import { CenterContentButton } from "@/modules/common/components/CenterContentBu
 import { H4, Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Plus } from "@phosphor-icons/react";
-import { Button, Input, Modal, Table } from "antd";
+import { Button, Modal, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
 import { type Key } from "antd/es/table/interface";
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
@@ -143,14 +143,15 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
         setIsModalOpen(false);
       }}
     >
-      <Input.Search
+      {/* <Input.Search
         style={{
           marginTop: "4px",
           marginBottom: "12px",
         }}
         placeholder="ค้นหา"
         allowClear
-      />
+      /> */}
+      {/* TODO : Add search feature */}
       <Table
         rowKey={(record) => record._id}
         rowSelection={row_selection}

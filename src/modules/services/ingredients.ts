@@ -25,7 +25,7 @@ export const getAllIngredients =
   async (): Promise<GetAllIngredientsResponse> => {
     const { data } =
       await axiosInstance.get<GetAllIngredientsResponse>("/ingredients");
-    return data;
+    return data?.reverse();
   };
 
 //================>>>> Get an ingredient by id <<<<================================//

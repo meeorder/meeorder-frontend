@@ -7,7 +7,7 @@ export const useAllUsableCouponsInSession = () => {
 
   return useQuery({
     queryKey: ["getAllUsableCouponsInSession", sessionId],
-    queryFn: () => getAllUsableCouponsInSession({ id: sessionId || "" }),
+    queryFn: () => getAllUsableCouponsInSession({ id: sessionId ?? "" }),
     retry: false,
     enabled: !!sessionId,
   });
