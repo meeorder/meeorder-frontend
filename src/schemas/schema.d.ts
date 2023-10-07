@@ -190,8 +190,11 @@ export interface paths {
   "/tables": {
     /** Get all tables */
     get: operations["TablesController_getTables"];
+    put: operations["TablesController_updateTable"];
     /** Create a table */
     post: operations["TablesController_createTable"];
+    /** Soft delete table */
+    delete: operations["TablesController_deleteTable"];
   };
   "/auth/login": {
     /** Login */
@@ -287,7 +290,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-09-30T06:48:01.581Z
+       * @default 2023-10-07T04:26:31.671Z
        */
       created_at: string;
       /** @description Addon status */
@@ -307,7 +310,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-09-30T06:48:01.581Z
+       * @default 2023-10-07T04:26:31.671Z
        */
       created_at: string;
       /** @description Addon status */
@@ -523,11 +526,6 @@ export interface components {
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
       additional_info: string;
-      /**
-       * Format: date-time
-       * @description Order deletion date
-       */
-      deleted_at: string | null;
       cancel: components["schemas"]["OrderCancelResponseDto"] | null;
       /** @description Session (table populated) */
       session: components["schemas"]["SessionWithTableDto"];
@@ -603,7 +601,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-30T06:48:01.589Z
+       * @default 2023-10-07T04:26:31.773Z
        */
       created_at: string;
       /**
@@ -880,6 +878,13 @@ export interface components {
       /** @description Table number */
       title: string;
     };
+    ErrorDto: {
+      msg: string;
+      props?: Record<string, never>;
+    };
+    TableUpdateRequestDto: {
+      title: string;
+    };
     LoginDto: {
       username: string;
       password: string;
@@ -928,11 +933,11 @@ export interface components {
     };
     UpdateInfoDto: {
       /** @description New Username */
-      newUsername: string;
+      newUsername?: string;
       /** @description Old Password */
       oldPassword: string;
       /** @description New Password */
-      newPassword: string;
+      newPassword?: string;
     };
     GetUserAmountDto: {
       /** @description Total registered users */
@@ -957,8 +962,6 @@ export interface components {
   headers: never;
   pathItems: never;
 }
-
-export type $defs = Record<string, never>;
 
 export type external = Record<string, never>;
 
@@ -1015,9 +1018,7 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a category by id */
@@ -1029,13 +1030,9 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Category not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Replace a category by id */
@@ -1059,9 +1056,7 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** order the categories' rank */
@@ -1073,9 +1068,7 @@ export interface operations {
     };
     responses: {
       /** @description Change category rank */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get all addons */
@@ -1124,9 +1117,7 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Replace a addon by id */
@@ -1150,9 +1141,7 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a addon by id */
@@ -1164,13 +1153,9 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Addon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Change addon status to available */
@@ -1182,9 +1167,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Change addon status to unavailable */
@@ -1196,18 +1179,14 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Make all addons available */
   AddonsController_activateAllAddon: {
     responses: {
       /** @description All addons is now available */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get all menus */
@@ -1254,13 +1233,9 @@ export interface operations {
     };
     responses: {
       /** @description The menus have been successfully deleted. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get a menu by id */
@@ -1277,9 +1252,7 @@ export interface operations {
         };
       };
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Replace a menu by id */
@@ -1296,13 +1269,9 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully updated. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a menu by id */
@@ -1314,13 +1283,9 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully deleted. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Publish a menu by id */
@@ -1332,13 +1297,9 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully published. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Unpublish a menu by id */
@@ -1350,13 +1311,9 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully unpublished. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Get all orders */
@@ -1378,9 +1335,7 @@ export interface operations {
     };
     responses: {
       /** @description Create order */
-      201: {
-        content: never;
-      };
+      201: never;
     };
   };
   /**
@@ -1441,9 +1396,7 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to preparing */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Change order status to ready to serve */
@@ -1456,9 +1409,7 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to ready to serve */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Change order status to done */
@@ -1471,9 +1422,7 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to done */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /**
@@ -1492,12 +1441,8 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
-      404: {
-        content: never;
-      };
+      204: never;
+      404: never;
     };
   };
   /** Get all sessions */
@@ -1530,9 +1475,7 @@ export interface operations {
         };
       };
       /** @description Session already exists */
-      409: {
-        content: never;
-      };
+      409: never;
     };
   };
   /** Get a session by id */
@@ -1551,9 +1494,7 @@ export interface operations {
         };
       };
       /** @description Session not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a session by id */
@@ -1566,13 +1507,9 @@ export interface operations {
     };
     responses: {
       /** @description Session deleted */
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Session not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Get a session by table id */
@@ -1591,9 +1528,7 @@ export interface operations {
         };
       };
       /** @description No session found in the table */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Finish a session */
@@ -1612,9 +1547,7 @@ export interface operations {
         };
       };
       /** @description Session not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Get orders by session */
@@ -1646,9 +1579,7 @@ export interface operations {
     };
     responses: {
       /** @description Updated session user */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get all redeemable coupon */
@@ -1683,13 +1614,9 @@ export interface operations {
     };
     responses: {
       /** @description Coupon is attached to session */
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Resource conflict (coupon quota has been reached) */
-      409: {
-        content: never;
-      };
+      409: never;
     };
   };
   /** Get all ingredients */
@@ -1717,9 +1644,7 @@ export interface operations {
         };
       };
       /** @description Ingredient already exists */
-      409: {
-        content: never;
-      };
+      409: never;
     };
   };
   /** Get a ingredient by id */
@@ -1736,9 +1661,7 @@ export interface operations {
         };
       };
       /** @description Ingredient not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a ingredient by id */
@@ -1750,13 +1673,9 @@ export interface operations {
     };
     responses: {
       /** @description Ingredient deleted */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description Ingredient not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Update a ingredient by id */
@@ -1779,22 +1698,16 @@ export interface operations {
         };
       };
       /** @description Ingredient not found */
-      404: {
-        content: never;
-      };
+      404: never;
       /** @description Ingredient already exists */
-      409: {
-        content: never;
-      };
+      409: never;
     };
   };
   /** Make all ingredient available */
   IngredientsController_activateAllIngredient: {
     responses: {
       /** @description All ingredient is now available */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get all coupons */
@@ -1837,9 +1750,7 @@ export interface operations {
         };
       };
       /** @description Coupon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a coupon by id */
@@ -1851,13 +1762,9 @@ export interface operations {
     };
     responses: {
       /** @description Coupon deleted */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description Coupon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Update a coupon by id */
@@ -1880,9 +1787,7 @@ export interface operations {
         };
       };
       /** @description Coupon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Get all tables */
@@ -1892,6 +1797,26 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["TablesSchema"][];
+        };
+      };
+    };
+  };
+  TablesController_updateTable: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TableUpdateRequestDto"];
+      };
+    };
+    responses: {
+      /** @description updated table */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TablesSchema"];
+        };
+      };
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDto"];
         };
       };
     };
@@ -1908,6 +1833,17 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["TablesSchema"];
+        };
+      };
+    };
+  };
+  /** Soft delete table */
+  TablesController_deleteTable: {
+    responses: {
+      204: never;
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDto"];
         };
       };
     };
@@ -1930,9 +1866,7 @@ export interface operations {
   /** Logout */
   AuthController_signOut: {
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Customer's registration */
@@ -1986,9 +1920,7 @@ export interface operations {
     };
     responses: {
       /** @description Create user */
-      201: {
-        content: never;
-      };
+      201: never;
     };
   };
   /** Delete user */
@@ -2000,9 +1932,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Update User info */
@@ -2013,9 +1943,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Reset user password */
@@ -2027,9 +1955,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Update user role */
@@ -2046,9 +1972,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get total registered users */
