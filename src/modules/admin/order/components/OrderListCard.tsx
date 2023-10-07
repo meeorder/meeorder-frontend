@@ -3,6 +3,7 @@ import useUpdateOrderStatusToDone from "@/modules/admin/order/hook/useUpdateOrde
 import useUpdateOrderStatusToPreparing from "@/modules/admin/order/hook/useUpdateOrderStatusToPreparing";
 import useUpdateOrderStatusToReadyToServe from "@/modules/admin/order/hook/useUpdateOrderStatusToReadyToServe";
 import { H5, Text } from "@/modules/common/components/Typography";
+import { transientOptions } from "@/modules/common/transientOptions";
 import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import styled from "@emotion/styled";
 import { ArrowLineRight, CheckCircle, Trash } from "@phosphor-icons/react";
@@ -39,12 +40,12 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
   };
   const { token } = theme.useToken();
   return (
-    <CardContainer key={order._id} color={color}>
+    <CardContainer key={order._id} $color={color}>
       <ModalSectionDiv onClick={() => onClickCard(order)} />
       <TextContainer>
         {<H5>{order.menu.title}</H5>}
         {
-          <StyledTable color={token.colorPrimary ?? "blue"}>
+          <StyledTable $color={token.colorPrimary ?? "blue"}>
             {order?.session?.table?.title || "noTable"}
           </StyledTable>
         }
@@ -125,11 +126,11 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
   );
 };
 
-const CardContainer = styled.div<{ color: string }>`
+const CardContainer = styled("div", transientOptions)<{ $color: string }>`
   display: flex;
   align-items: center;
   position: relative;
-  border-bottom: 1px solid ${(props) => props.color};
+  border-bottom: 1px solid ${(props) => props.$color};
   padding: 24px;
   width: 100%;
   padding-right: 8px;
@@ -214,8 +215,8 @@ const StyledAddInfo = styled(Text)`
   overflow: hidden;
 `;
 
-const StyledTable = styled(Text)<{ color: string }>`
-  color: ${(props) => props.color};
+const StyledTable = styled(Text, transientOptions)<{ $color: string }>`
+  color: ${(props) => props.$color};
   font-weight: bold;
   position: absolute;
   top: 24px;

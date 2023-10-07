@@ -1,5 +1,6 @@
 import OrderListCard from "@/modules/admin/order/components/OrderListCard";
 import { H4 } from "@/modules/common/components/Typography";
+import { transientOptions } from "@/modules/common/transientOptions";
 import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import {
   orderStatusTranslation,
@@ -54,20 +55,20 @@ const OrderList: React.FC<OrderListCardProps> = ({
   return (
     <StyledCard
       title={
-        <CardTitle textColor={textColor[status]}>
+        <CardTitle $textColor={textColor[status]}>
           {orderStatusTranslation[status]}
         </CardTitle>
       }
       extra={
         <StyledBadge
           count={orders?.length}
-          badgeColor={badgeColor[status]}
+          $badgeColor={badgeColor[status]}
           color={badgeColor[status]}
           showZero
         />
       }
-      borderColor={borderColor[status]}
-      headerColor={headerColor[status]}
+      $borderColor={borderColor[status]}
+      $headerColor={headerColor[status]}
     >
       {orders.map((order) => {
         return (
@@ -86,32 +87,35 @@ const OrderList: React.FC<OrderListCardProps> = ({
 
 export default OrderList;
 
-const StyledCard = styled(Card)<{ borderColor: string; headerColor: string }>`
+const StyledCard = styled(Card, transientOptions)<{
+  $borderColor: string;
+  $headerColor: string;
+}>`
   min-width: 160px !important;
   flex: 1;
   display: flex;
   flex-direction: column;
   height: calc(100vh - 144px);
   border: 1px solid;
-  border-color: ${(props) => props.borderColor};
+  border-color: ${(props) => props.$borderColor};
   .ant-card-body {
     flex: 1;
     overflow-y: auto;
     padding: 0;
   }
   .ant-card-head {
-    background-color: ${(props) => props.headerColor};
+    background-color: ${(props) => props.$headerColor};
     border-bottom: 1px solid;
-    border-color: ${(props) => props.borderColor};
+    border-color: ${(props) => props.$borderColor};
   }
 `;
-const StyledBadge = styled(Badge)<{ badgeColor: string }>`
+const StyledBadge = styled(Badge, transientOptions)<{ $badgeColor: string }>`
   .ant-badge-count {
-    box-shadow: 0 0 0 1px ${(props) => props.badgeColor};
+    box-shadow: 0 0 0 1px ${(props) => props.$badgeColor};
   }
 `;
-const CardTitle = styled(H4)<{ textColor: string }>`
-  color: ${(props) => props.textColor} !important;
+const CardTitle = styled(H4, transientOptions)<{ $textColor: string }>`
+  color: ${(props) => props.$textColor} !important;
   width: 100%;
   text-overflow: ellipsis !important;
   overflow: hidden !important;
