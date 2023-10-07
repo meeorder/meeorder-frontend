@@ -2,13 +2,21 @@ import AppLayout from "@/modules/AppLayout";
 import EditPasswordContainer from "@/modules/admin/account/EditPassword";
 import EditUsernameContainer from "@/modules/admin/account/EditUsername";
 import { H1, H3, H4, H5 } from "@/modules/common/components/Typography";
+import { useLogout } from "@/modules/common/hooks/useAuth";
 import { useUser } from "@/modules/common/hooks/useUserStore";
 import styled from "@emotion/styled";
-import { Collapse, type CollapseProps } from "antd";
+import { Button, Collapse, type CollapseProps } from "antd";
+import { useRouter } from "next/router";
 import React from "react";
 
 const AccountManagemant = () => {
   const { data: user } = useUser();
+  const router = useRouter();
+  const { mutate: logout } = useLogout({
+    onSuccess: () => {
+      void router.push("/signin");
+    },
+  });
   const [activeKeys, setActiveKeys] = React.useState<string[]>([]);
   const EditAccount: CollapseProps["items"] = [
     {
@@ -63,6 +71,17 @@ const AccountManagemant = () => {
               expandIconPosition="end"
             />
           </EditContainer>
+          <Button
+            type="text"
+            danger
+            style={{
+              width: "fit-content",
+              alignSelf: "center",
+            }}
+            onClick={() => logout()}
+          >
+            <u>ออกจากระบบ</u>
+          </Button>
         </SecondContainer>
       </MainContainer>
     </AppLayout>
