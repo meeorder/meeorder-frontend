@@ -42,6 +42,7 @@ const UserTopNav = () => {
         // TODO: If already signed in, go to profile page?
         onClick={() => {
           if (isClientLoaded && !user) void router.push("/signin");
+          else void router.push("/account");
         }}
       >
         <UserAvatar user={user} />

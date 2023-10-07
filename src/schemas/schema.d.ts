@@ -231,6 +231,10 @@ export interface paths {
     /** Get total registered users */
     get: operations["DashboardController_getDashboard"];
   };
+  "/dashboard/incomes_report": {
+    /** Get net income & discount in range date */
+    get: operations["DashboardController_getIncomeReport"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -283,7 +287,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-09-30T06:48:01.581Z
+       * @default 2023-10-02T06:37:23.546Z
        */
       created_at: string;
       /** @description Addon status */
@@ -303,7 +307,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-09-30T06:48:01.581Z
+       * @default 2023-10-02T06:37:23.546Z
        */
       created_at: string;
       /** @description Addon status */
@@ -430,6 +434,23 @@ export interface components {
       session: string;
       orders: components["schemas"]["Orders"][];
     };
+    IngredientSchema: {
+      /** @description Ingredient ID */
+      _id: string;
+      /** @description Ingredient title */
+      title: string;
+      /** @description Ingredient status */
+      available: boolean;
+      /** Format: date-time */
+      created_at: string;
+    };
+    OrderCancelResponseDto: {
+      reasons: string;
+      ingredients: components["schemas"]["IngredientSchema"][];
+      addons: components["schemas"]["AddonSchema"][];
+      /** Format: date-time */
+      cancelled_at: string;
+    };
     TablesSchema: {
       /** @description Table ID */
       _id: string;
@@ -463,7 +484,7 @@ export interface components {
        */
       deleted_at: string | null;
     };
-    PopulatedCategoryMenuDto: {
+    PopulatedCategoryIngredientMenuDto: {
       /** @description Menu ID */
       _id: string;
       /** @description Menu image */
@@ -479,7 +500,7 @@ export interface components {
       /** @description Menu addons */
       addons: string[];
       /** @description Menu ingredients */
-      ingredients: string[];
+      ingredients: components["schemas"]["IngredientSchema"][];
       /**
        * Format: date-time
        * @description Menu publication date
@@ -491,49 +512,21 @@ export interface components {
        */
       deleted_at: string | null;
     };
-    IngredientSchema: {
-      /** @description Ingredient ID */
-      _id: string;
-      /** @description Ingredient title */
-      title: string;
-      /** @description Ingredient status */
-      available: boolean;
-      /** Format: date-time */
-      created_at: string;
-    };
-    OrderCancelResponseDto: {
-      reasons: string;
-      ingredients: components["schemas"]["IngredientSchema"][];
-      addons: components["schemas"]["AddonSchema"][];
-      /** Format: date-time */
-      cancelled_at: string;
-    };
     OrderGetDto: {
+      /** @description Orders ID */
       _id: string;
-      /**
-       * Format: date-time
-       * @description Order creation date
-       */
+      /** Format: date-time */
       created_at: string;
-      /**
-       * @description Order status
-       * @enum {string}
-       */
+      /** @enum {string} */
       status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
-      /** @description Session (table populated) */
-      session: components["schemas"]["SessionSchema"] | string;
-      /** @description Menu of the order */
-      menu: components["schemas"]["MenuSchema"] | string;
       /** @description Array of MenuID */
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
       additional_info: string;
-      /**
-       * Format: date-time
-       * @description Order deletion date
-       */
-      deleted_at: string | null;
       cancel: components["schemas"]["OrderCancelResponseDto"] | null;
+      /** @description Session (table populated) */
+      session: components["schemas"]["SessionWithTableDto"];
+      menu: components["schemas"]["PopulatedCategoryIngredientMenuDto"];
     };
     UpdateOrderDto: {
       addons: string[];
@@ -559,7 +552,7 @@ export interface components {
        */
       status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
       /** @description Session of the order */
-      session: components["schemas"]["SessionSchema"] | string;
+      session: components["schemas"]["undefined"] | string;
       /** @description Menu of the order */
       menu: components["schemas"]["MenuSchema"] | string;
       /** @description Addons of the order */
@@ -605,7 +598,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-09-30T06:48:01.589Z
+       * @default 2023-10-02T06:37:23.607Z
        */
       created_at: string;
       /**
@@ -930,11 +923,11 @@ export interface components {
     };
     UpdateInfoDto: {
       /** @description New Username */
-      newUsername: string;
+      newUsername?: string;
       /** @description Old Password */
       oldPassword: string;
       /** @description New Password */
-      newPassword: string;
+      newPassword?: string;
     };
     GetUserAmountDto: {
       /** @description Total registered users */
@@ -944,6 +937,14 @@ export interface components {
       /** @description Total new registered users */
       new_user: number;
     };
+    GetNetIncomeDto: {
+      /** @description Total income */
+      totalIncome: number;
+      /** @description Total discount */
+      totalDiscount: number;
+      /** @description Total net income (income - discount) */
+      totalNetIncome: number;
+    };
   };
   responses: never;
   parameters: never;
@@ -951,6 +952,8 @@ export interface components {
   headers: never;
   pathItems: never;
 }
+
+export type $defs = Record<string, never>;
 
 export type external = Record<string, never>;
 
@@ -1007,7 +1010,9 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a category by id */
@@ -1019,9 +1024,13 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Category not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Replace a category by id */
@@ -1045,7 +1054,9 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** order the categories' rank */
@@ -1057,7 +1068,9 @@ export interface operations {
     };
     responses: {
       /** @description Change category rank */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all addons */
@@ -1106,7 +1119,9 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Replace a addon by id */
@@ -1130,7 +1145,9 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a addon by id */
@@ -1142,9 +1159,13 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Addon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Change addon status to available */
@@ -1156,7 +1177,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Change addon status to unavailable */
@@ -1168,14 +1191,18 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Make all addons available */
   AddonsController_activateAllAddon: {
     responses: {
       /** @description All addons is now available */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all menus */
@@ -1222,9 +1249,13 @@ export interface operations {
     };
     responses: {
       /** @description The menus have been successfully deleted. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get a menu by id */
@@ -1241,7 +1272,9 @@ export interface operations {
         };
       };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Replace a menu by id */
@@ -1258,9 +1291,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully updated. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a menu by id */
@@ -1272,9 +1309,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully deleted. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Publish a menu by id */
@@ -1286,9 +1327,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully published. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Unpublish a menu by id */
@@ -1300,9 +1345,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully unpublished. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Get all orders */
@@ -1324,7 +1373,9 @@ export interface operations {
     };
     responses: {
       /** @description Create order */
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   /**
@@ -1339,7 +1390,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   OrdersController_updateOrder: {
@@ -1372,7 +1425,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to in_queue */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Change order status to preparing */
@@ -1385,7 +1440,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to preparing */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Change order status to ready to serve */
@@ -1398,7 +1455,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to ready to serve */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Change order status to done */
@@ -1411,7 +1470,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to done */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /**
@@ -1430,8 +1491,12 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
-      404: never;
+      204: {
+        content: never;
+      };
+      404: {
+        content: never;
+      };
     };
   };
   /** Get all sessions */
@@ -1464,7 +1529,9 @@ export interface operations {
         };
       };
       /** @description Session already exists */
-      409: never;
+      409: {
+        content: never;
+      };
     };
   };
   /** Get a session by id */
@@ -1483,7 +1550,9 @@ export interface operations {
         };
       };
       /** @description Session not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a session by id */
@@ -1496,9 +1565,13 @@ export interface operations {
     };
     responses: {
       /** @description Session deleted */
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Session not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Get a session by table id */
@@ -1517,7 +1590,9 @@ export interface operations {
         };
       };
       /** @description No session found in the table */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Finish a session */
@@ -1536,7 +1611,9 @@ export interface operations {
         };
       };
       /** @description Session not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Get orders by session */
@@ -1568,7 +1645,9 @@ export interface operations {
     };
     responses: {
       /** @description Updated session user */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all redeemable coupon */
@@ -1603,9 +1682,13 @@ export interface operations {
     };
     responses: {
       /** @description Coupon is attached to session */
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Resource conflict (coupon quota has been reached) */
-      409: never;
+      409: {
+        content: never;
+      };
     };
   };
   /** Get all ingredients */
@@ -1633,7 +1716,9 @@ export interface operations {
         };
       };
       /** @description Ingredient already exists */
-      409: never;
+      409: {
+        content: never;
+      };
     };
   };
   /** Get a ingredient by id */
@@ -1650,7 +1735,9 @@ export interface operations {
         };
       };
       /** @description Ingredient not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a ingredient by id */
@@ -1662,9 +1749,13 @@ export interface operations {
     };
     responses: {
       /** @description Ingredient deleted */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description Ingredient not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Update a ingredient by id */
@@ -1687,16 +1778,22 @@ export interface operations {
         };
       };
       /** @description Ingredient not found */
-      404: never;
+      404: {
+        content: never;
+      };
       /** @description Ingredient already exists */
-      409: never;
+      409: {
+        content: never;
+      };
     };
   };
   /** Make all ingredient available */
   IngredientsController_activateAllIngredient: {
     responses: {
       /** @description All ingredient is now available */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all coupons */
@@ -1739,7 +1836,9 @@ export interface operations {
         };
       };
       /** @description Coupon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a coupon by id */
@@ -1751,9 +1850,13 @@ export interface operations {
     };
     responses: {
       /** @description Coupon deleted */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description Coupon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Update a coupon by id */
@@ -1776,7 +1879,9 @@ export interface operations {
         };
       };
       /** @description Coupon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Get all tables */
@@ -1824,7 +1929,9 @@ export interface operations {
   /** Logout */
   AuthController_signOut: {
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Customer's registration */
@@ -1878,7 +1985,9 @@ export interface operations {
     };
     responses: {
       /** @description Create user */
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   /** Delete user */
@@ -1890,7 +1999,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Update User info */
@@ -1901,7 +2012,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Reset user password */
@@ -1913,7 +2026,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Update user role */
@@ -1930,7 +2045,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get total registered users */
@@ -1945,6 +2062,25 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetUserAmountDto"];
+        };
+      };
+    };
+  };
+  /** Get net income & discount in range date */
+  DashboardController_getIncomeReport: {
+    parameters: {
+      query: {
+        /** @description Start Date (UnixTimeStamp) */
+        from: number;
+        /** @description End Date (UnixTimeStamp) */
+        end: number;
+      };
+    };
+    responses: {
+      /** @description Net income & Discount in range date */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetNetIncomeDto"];
         };
       };
     };

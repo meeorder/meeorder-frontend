@@ -108,6 +108,13 @@ export const pages = {
     layout: "admin",
     Icon: ClipboardText,
   },
+  accountManagement: {
+    id: "accountManagement",
+    label: "จัดการบัญชีส่วนตัว",
+    path: "/admin/account-management",
+    layout: "admin",
+    Icon: User,
+  },
 } as const satisfies Record<string, PageMetaData>;
 
 export type PagePath = (typeof pages)[keyof typeof pages]["path"];

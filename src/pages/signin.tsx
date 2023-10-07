@@ -24,6 +24,7 @@ const SignIn = () => {
   const {
     token: { colorPrimary, colorBorder },
   } = theme.useToken();
+
   useEffect(() => {
     if (isError) {
       form.setFields([
@@ -44,6 +45,7 @@ const SignIn = () => {
       ]);
     }
   }, [isError, form, error]);
+
   useEffect(() => {
     if (isSuccess) {
       void router.push("/");

@@ -29,7 +29,7 @@ const CouponCard: React.FC<CouponCardProps> = ({
     ? "นำคูปองออก"
     : `แลก ${commaFormat(coupon.required_point)} แต้ม`;
 
-  if (!coupon || !session) return null;
+  if (!coupon) return null;
 
   return (
     <StyledCard

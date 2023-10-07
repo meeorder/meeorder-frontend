@@ -1,3 +1,4 @@
+import useAllCoupon from "@/modules/admin/promotion/hook/useAllCoupon";
 import CouponCard from "@/modules/user/coupon/components/CouponCard";
 import { useAllUsableCouponsInSession } from "@/modules/user/coupon/hooks/useAllUsableCouponsInSession";
 import { type Coupon } from "@/modules/user/coupon/types";
@@ -16,7 +17,19 @@ const CouponList: React.FC<CouponListProps> = ({
   onClickCouponButton,
 }) => {
   const { data: session } = useSession();
-  const { data: coupons } = useAllUsableCouponsInSession();
+  const { data: allCoupon } = useAllCoupon();
+  const { data: couponsInSession } = useAllUsableCouponsInSession();
+
+  const couponNoSession: Coupon[] | undefined = allCoupon
+    ?.filter((coupon) => coupon.activated)
+    ?.map((coupon) => ({
+      ...coupon,
+      required_menus: coupon.required_menus.map((menu) => menu._id),
+      created_at: "",
+      redeemable: false,
+    }));
+
+  const coupons = session ? couponsInSession : couponNoSession;
 
   const inUsedArray =
     coupons?.filter((coupon) => coupon._id === session?.coupon?._id) ?? [];

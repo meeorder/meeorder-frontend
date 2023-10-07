@@ -32,6 +32,7 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     adminUserManagement,
     employeeStock,
     employeeOrderManagement,
+    accountManagement,
   } = pages;
 
   const router = useRouter();
@@ -44,6 +45,7 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     [adminSetting, adminUserManagement],
     employeeStock,
     employeeOrderManagement,
+    accountManagement,
   ];
 
   const items: MenuProps["items"] | MenuProps["items"][] = adminPages.map(
