@@ -181,7 +181,7 @@ const PopOverFilter: React.FC<PopOverFilterProps> = ({
             </StyledCheckbox>
           </StatusFilterDiv>
 
-          <BottonGroup>
+          <ButtonGroup>
             <Button danger onClick={onReset}>
               ล้างการเลือกทั้งหมด
             </Button>
@@ -189,7 +189,7 @@ const PopOverFilter: React.FC<PopOverFilterProps> = ({
             <Button type="primary" onClick={onSave}>
               ตกลง
             </Button>
-          </BottonGroup>
+          </ButtonGroup>
         </StyledContentContainer>
       }
     >
@@ -217,7 +217,7 @@ const StyledSelectSection = styled.div`
   margin-top: 12px;
 `;
 
-const BottonGroup = styled.div`
+const ButtonGroup = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 8px;
