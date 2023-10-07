@@ -28,11 +28,15 @@ const Orders = () => {
   const { mutate: updateCouponInSession } = useUpdateCouponInSession();
 
   const onClickCoupon = (coupon: Coupon) => {
+    if (!session) return;
+
     setCoupon(coupon);
     setDrawerOpen(true);
   };
 
   const onClickCouponButton = (coupon: Coupon) => {
+    if (!session) return;
+
     setCoupon(coupon);
     if (!user) {
       void router.push({

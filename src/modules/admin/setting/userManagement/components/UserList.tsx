@@ -20,6 +20,7 @@ import {
   Table,
   Tag,
   Typography,
+  theme,
   type InputRef,
 } from "antd";
 import { type ColumnType } from "antd/es/table";
@@ -56,6 +57,10 @@ type UserListProps = {
 };
 
 const UserList: React.FC<UserListProps> = ({ setIdUserToDelete }) => {
+  const {
+    token: { colorPrimary },
+  } = theme.useToken();
+
   const { data: allUsers } = useAllUser();
   const [dataSource, setDataSource] = useState<TableRow[]>([]);
 
@@ -185,13 +190,18 @@ const UserList: React.FC<UserListProps> = ({ setIdUserToDelete }) => {
           setTimeout(() => searchInput.current?.select(), 100);
         }
       },
-      render: (text) => (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? String(text) : ""}
-        />
+      render: (text: string, record: TableRow) => (
+        <UserNameContainer>
+          <Highlighter
+            highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+            searchWords={[searchText]}
+            autoEscape
+            textToHighlight={text ? String(text) : ""}
+          />
+          {user?._id === record._id && (
+            <UserNameTag color={colorPrimary}>บัญชีของคุณ</UserNameTag>
+          )}
+        </UserNameContainer>
       ),
     },
     {
@@ -261,9 +271,9 @@ const UserList: React.FC<UserListProps> = ({ setIdUserToDelete }) => {
       },
       sorter: (a: TableRow, b: TableRow) => b.role - a.role,
       render: (_: string, record: TableRow) => (
-        <StyledTag color={roleToTagColor[record.role]}>
+        <RoleTag color={roleToTagColor[record.role]}>
           {roleNumberToThaiName[record.role]}
-        </StyledTag>
+        </RoleTag>
       ),
     },
     {
@@ -434,6 +444,16 @@ const UserListContainer = styled.div`
   }
 `;
 
+const UserNameContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const UserNameTag = styled(Tag)`
+  border-radius: 100px;
+`;
+
 const RoleFilterContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -451,7 +471,7 @@ const RoleFilterButtonContainer = styled.div`
   padding: 8px 8px 8px 3px;
 `;
 
-const StyledTag = styled(Tag)`
+const RoleTag = styled(Tag)`
   padding: 0 8px;
 `;
 
