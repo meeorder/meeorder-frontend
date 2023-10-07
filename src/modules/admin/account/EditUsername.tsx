@@ -62,7 +62,7 @@ const EditUsernameContainer: React.FC<Props> = ({
           error as AxiosError<{
             message: string;
           }>
-        )?.response?.data?.message[0] || " ";
+        )?.response?.data?.message || " ";
 
       form.setFields([
         {
@@ -71,12 +71,7 @@ const EditUsernameContainer: React.FC<Props> = ({
         },
         {
           name: "password",
-          errors: [
-            axiosErrorMessage ===
-            "newUsername must be longer than or equal to 4 characters"
-              ? "ชื่อผู้ใช้ต้องมีความยาวมากกว่าหรือเท่ากับ 4 ตัวอักษร"
-              : axiosErrorMessage,
-          ],
+          errors: [axiosErrorMessage],
         },
       ]);
     }

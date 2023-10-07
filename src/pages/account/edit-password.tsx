@@ -88,7 +88,7 @@ const EditPassword = () => {
     if (isError) {
       openNotification(
         "top",
-        <H5>แก้ไขรหัสผ่านสำเร็จ</H5>,
+        <H5>แก้ไขรหัสผ่านไม่สำเร็จ</H5>,
         "",
         <XCircle size={24} color="#F5222D" weight="fill" />,
       );
