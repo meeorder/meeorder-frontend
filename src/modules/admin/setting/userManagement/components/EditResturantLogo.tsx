@@ -4,14 +4,14 @@ import { Button, Form, Input, notification } from "antd";
 import React from "react";
 
 type FieldType = {
-  resturantName: string;
+  resturantImageLink: string;
 };
 
 type Props = {
-  setActiveKeys: (activeKeys: string[]) => void;
+  setIsOpenChangeLogo: (isOpenLogo: boolean) => void;
 };
 
-const EditResturantname: React.FC<Props> = ({ setActiveKeys }) => {
+const EditResturantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
   const [form] = Form.useForm<FieldType>();
   //   const {
   //     mutate: editResturantName,
@@ -25,11 +25,11 @@ const EditResturantname: React.FC<Props> = ({ setActiveKeys }) => {
 
   const handleCancelForm = () => {
     form.resetFields();
-    setActiveKeys([""]);
+    setIsOpenChangeLogo(false);
   };
 
   const handleEditResturantName = (values: FieldType) => {
-    const { resturantName: name } = values;
+    const { resturantImageLink: name } = values;
     // editUsername({
     //   newUsername: username,
     //   oldPassword: password,
@@ -107,18 +107,18 @@ const EditResturantname: React.FC<Props> = ({ setActiveKeys }) => {
       <Container>
         <Form<FieldType> form={form} onFinish={handleEditResturantName}>
           <div>
-            <H5 style={{ textAlign: "center" }}>เปลี่ยนชื่อร้านอาหาร</H5>
+            <H5 style={{ textAlign: "center" }}>เปลี่ยนโลโก้ร้านอาหาร</H5>
             <div style={{ textAlign: "center", width: "100%" }}>
               <Text type="secondary">
-                ป้อนชื่อผู้ร้านอาหารใหม่และรหัสผ่านของคุณ
+                ป้อนลิงก์โลโก้ร้านอาหารและรหัสผ่านใหม่
               </Text>
             </div>
           </div>
           <div>
-            <Text>ชื่อร้านอาหาร</Text>
+            <Text>ลิงก์รูปภาพ</Text>
             <Form.Item<FieldType>
-              name="resturantName"
-              rules={[{ required: true, message: "กรุณากรอกชื่อร้านอาหาร" }]}
+              name="resturantImageLink"
+              rules={[{ required: true, message: "ลิงก์รูปภาพ" }]}
             >
               <Input />
             </Form.Item>
@@ -139,12 +139,17 @@ const EditResturantname: React.FC<Props> = ({ setActiveKeys }) => {
   );
 };
 
-export default EditResturantname;
+export default EditResturantLogo;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid ${(props) => props.theme.antd.colorBgLayout};
+  background: #fafafa;
+  padding: 12px;
 `;
 
 const ButtonContainer = styled.div`

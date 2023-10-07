@@ -1,4 +1,5 @@
 import AppLayout from "@/modules/AppLayout";
+import EditResturantLogo from "@/modules/admin/setting/userManagement/components/EditResturantLogo";
 import EditResturantname from "@/modules/admin/setting/userManagement/components/EditResturantname";
 import { H3, H4, H5, Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
@@ -8,6 +9,7 @@ import { useState } from "react";
 
 const AdminResturantAccountManagement = () => {
   const [activeKeys, setActiveKeys] = useState<string[]>([]);
+  const [isOpenChangeLogo, setIsOpenChangeLogo] = useState(false);
 
   const EditName: CollapseProps["items"] = [
     {
@@ -17,12 +19,7 @@ const AdminResturantAccountManagement = () => {
           ชื่อร้านอาหาร
         </H5>
       ),
-      children: (
-        <EditResturantname
-          activeKeys={activeKeys}
-          setActiveKeys={setActiveKeys}
-        />
-      ),
+      children: <EditResturantname setActiveKeys={setActiveKeys} />,
       //   extra: user?.username ?? "ชื่อผู้ใช้งาน",
       extra: "ชื่อร้านอาหาร",
     },
@@ -43,11 +40,25 @@ const AdminResturantAccountManagement = () => {
           >
             โลโก้ร้านอาหาร
           </H4>
-          <Logo>
-            <EditIcon>
-              <PencilSimpleLine size={24} color="white" />
-            </EditIcon>
-          </Logo>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              width: "100%",
+            }}
+          >
+            <Logo>
+              {!isOpenChangeLogo && (
+                <EditIcon onClick={() => setIsOpenChangeLogo(true)}>
+                  <PencilSimpleLine size={24} color="white" />
+                </EditIcon>
+              )}
+            </Logo>
+            {isOpenChangeLogo && (
+              <EditResturantLogo setIsOpenChangeLogo={setIsOpenChangeLogo} />
+            )}
+          </div>
         </EditLogoContainer>
         <EditRestaurantContainer>
           <H4
@@ -96,11 +107,11 @@ const Logo = styled.div`
   position: relative;
   width: 200px;
   height: 200px;
-
   border-radius: 200px;
   background:
     url(https://picsum.photos/200/306),
     lightgray 0px 0px / 100% 100% no-repeat;
+  background-size: contain;
 `;
 
 const EditIcon = styled.div`
@@ -110,8 +121,8 @@ const EditIcon = styled.div`
 
   padding: 8px;
   border-radius: 100px;
-  border: 1px solid var(--primary-6, #1890ff);
-  background: var(--primary-6, #1890ff);
+  border: 1px solid ${(props) => props.theme.antd.colorLink};
+  background: ${(props) => props.theme.antd.colorLink};
   box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.04);
 `;
 
