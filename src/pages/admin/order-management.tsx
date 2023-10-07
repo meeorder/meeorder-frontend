@@ -23,7 +23,7 @@ const OrderManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [modalData, setModalData] = useState<GetAllOrdersResponse[number]>();
-  const [filterCategory, setFliterCategory] = useState<string[]>([]);
+  const [filterCategory, setFilterCategory] = useState<string[]>([]);
   const [filterStatus, setFilterStatus] = useState<string[]>([
     "IN_QUEUE",
     "PREPARING",
@@ -43,19 +43,17 @@ const OrderManagement = () => {
           <PopOverFilter
             options={options}
             filterCategory={filterCategory}
-            setFilterCategory={setFliterCategory}
+            setFilterCategory={setFilterCategory}
             filterStatus={filterStatus}
             setFilterStatus={setFilterStatus}
           />
         </PageHeader>
         <OrderContainer>
           {allOrderStatus
-            .filter(
-              (status) => {
-                if (filterStatus.length === 0) return true;
-                return filterStatus.includes(status);
-              },
-            )
+            .filter((status) => {
+              if (filterStatus.length === 0) return true;
+              return filterStatus.includes(status);
+            })
             .map((status) => {
               return {
                 status,
