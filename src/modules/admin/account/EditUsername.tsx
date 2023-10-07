@@ -18,14 +18,6 @@ type Props = {
   setActiveKeys: (activeKeys: string[]) => void;
 };
 
-const UpdateActiveKeys = (
-  activeKeys: string[],
-  setActiveKeys: (activeKeys: string[]) => void,
-) => {
-  const newActiveKeys = activeKeys.filter((key) => key !== key);
-  setActiveKeys(newActiveKeys);
-};
-
 const EditUsernameContainer: React.FC<Props> = ({
   activeKeys,
   setActiveKeys,
@@ -37,14 +29,14 @@ const EditUsernameContainer: React.FC<Props> = ({
     isError,
     error,
   } = useUpdateUser({
-    OnSuccess: () => UpdateActiveKeys(activeKeys, setActiveKeys),
+    OnSuccess: () => setActiveKeys([""]),
   });
   const [api, contextHolder] = notification.useNotification();
   const router = useRouter();
 
   const handleCancelForm = () => {
     form.resetFields();
-    UpdateActiveKeys(activeKeys, setActiveKeys);
+    setActiveKeys([""]);
   };
 
   const handleEditUsername = (values: FieldType) => {
