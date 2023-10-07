@@ -18,9 +18,6 @@ const SimpleFoodCard: React.FC<SimpleFoodCardProps> = ({ menu }) => {
   const { data: session } = useSession();
 
   const handleChooseMenu = () => {
-    if (!session) {
-      return;
-    }
     void router.push({
       pathname: `/menu/${menu._id}`,
     });
