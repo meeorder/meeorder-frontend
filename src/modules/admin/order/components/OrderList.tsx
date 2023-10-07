@@ -76,7 +76,7 @@ const OrderList: React.FC<OrderListCardProps> = ({
             setIsModalOpen={setIsModalOpen}
             setModalData={setModalData}
             order={order}
-            key={order._id}
+            key={order._id + order.menu._id}
             color={borderColor[status] ?? "white"}
           />
         );
