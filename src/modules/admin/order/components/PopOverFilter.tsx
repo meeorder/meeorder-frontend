@@ -173,7 +173,7 @@ const PopOverFilter: React.FC<PopOverFilterProps> = ({
               }}
             />
             <StyledCheckbox
-              defaultChecked={changeFilterStatusCheckbox}
+              checked={changeFilterStatusCheckbox}
               onChange={(checked) => onChangeCheckbox(checked.target.checked)}
             >
               {" "}
