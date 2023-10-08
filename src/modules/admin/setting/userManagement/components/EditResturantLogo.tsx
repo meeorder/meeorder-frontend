@@ -145,11 +145,13 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: 200px;
   width: 100%;
   border-radius: 8px;
   border: 1px solid ${(props) => props.theme.antd.colorBgLayout};
   background: #fafafa;
   padding: 12px;
+  flex: 1;
 `;
 
 const ButtonContainer = styled.div`

@@ -2,9 +2,10 @@ import AppLayout from "@/modules/AppLayout";
 import EditResturantLogo from "@/modules/admin/setting/userManagement/components/EditResturantLogo";
 import EditResturantname from "@/modules/admin/setting/userManagement/components/EditResturantname";
 import { H3, H4, H5, Text } from "@/modules/common/components/Typography";
+import { transientOptions } from "@/modules/common/transientOptions";
 import styled from "@emotion/styled";
 import { PencilSimpleLine } from "@phosphor-icons/react";
-import { Collapse, type CollapseProps } from "antd";
+import { Button, Collapse, type CollapseProps } from "antd";
 import { useState } from "react";
 
 const AdminResturantAccountManagement = () => {
@@ -40,15 +41,12 @@ const AdminResturantAccountManagement = () => {
           >
             โลโก้ร้านอาหาร
           </H4>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              width: "100%",
-            }}
-          >
-            <Logo>
+          <LogoForm>
+            <Logo
+              onClick={() => setIsOpenChangeLogo(true)}
+              $isOpenChangeLogoForm={isOpenChangeLogo}
+              // $imgUrl="https://lh3.googleusercontent.com/a/ACg8ocJnejw-DT5AVNfvMAnisSYhJh3nZbRV8rPDItgpoOZKGw"
+            >
               {!isOpenChangeLogo && (
                 <EditIcon onClick={() => setIsOpenChangeLogo(true)}>
                   <PencilSimpleLine size={24} color="white" />
@@ -58,7 +56,7 @@ const AdminResturantAccountManagement = () => {
             {isOpenChangeLogo && (
               <EditResturantLogo setIsOpenChangeLogo={setIsOpenChangeLogo} />
             )}
-          </div>
+          </LogoForm>
         </EditLogoContainer>
         <EditRestaurantContainer>
           <H4
@@ -103,15 +101,39 @@ const EditLogoContainer = styled.div`
   height: 100%;
 `;
 
-const Logo = styled.div`
+type LogoProps = {
+  $isOpenChangeLogoForm: boolean;
+  $imgUrl?: string;
+};
+
+const Logo = styled(Button, transientOptions)<LogoProps>`
   position: relative;
   width: 200px;
   height: 200px;
   border-radius: 200px;
   background:
-    url(https://picsum.photos/200/306),
+    url(${(props) => props.$imgUrl ?? "https://picsum.photos/200/306"}),
     lightgray 0px 0px / 100% 100% no-repeat;
   background-size: contain;
+
+  &:hover {
+    &:before {
+      content: "CHANGE LOGO";
+      display: ${(props) => (props.$isOpenChangeLogoForm ? "none" : "grid")};
+      place-items: center;
+      text-align: center;
+      white-space: initial;
+      font-size: 32px;
+      color: ${(props) => props.theme.antd.colorBgBase};
+      border-radius: 200px;
+      width: 200px;
+      height: 200px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: ${(props) => props.theme.antd.colorBgMask};
+    }
+  }
 `;
 
 const EditIcon = styled.div`
@@ -124,6 +146,14 @@ const EditIcon = styled.div`
   border: 1px solid ${(props) => props.theme.antd.colorLink};
   background: ${(props) => props.theme.antd.colorLink};
   box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.04);
+`;
+
+const LogoForm = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 8px;
 `;
 
 const EditRestaurantContainer = styled.div``;
