@@ -6,8 +6,9 @@ import {
 } from "@/modules/admin/menu/hooks/useIngredients";
 
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
+import { Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
-import { Card, Switch, Table } from "antd";
+import { Button, Card, Switch, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
 
 const IngredientStock = () => {
@@ -21,6 +22,11 @@ const IngredientStock = () => {
       dataIndex: "title",
       key: "title",
       width: "70px",
+      render: (text: string) => (
+        <>
+          <Text editable>{text}</Text>
+        </>
+      ),
     },
     {
       title: "เมนูที่ใช้วัตถุดิบ",
@@ -46,20 +52,43 @@ const IngredientStock = () => {
         </>
       ),
     },
+    {
+      title: "ตัวดำเนินการ",
+      //dataIndex: "price",
+      width: "60px",
+      align: "end",
+      render: (text: string, rec) => (
+        <>
+          {/* <CenterContentButton type="link" style={{ display: "inline-flex" }}>
+            ลบ
+          </CenterContentButton> */}
+          <Button type="link">ลบ</Button>
+        </>
+      ),
+    },
   ];
 
   return (
     <StyledCard
       title={<div>จัดการวัตถุดิบ</div>}
       extra={
-        <CenterContentButton
-          type="primary"
-          onClick={function () {
-            activateAllIngredients();
-          }}
-        >
-          เติมวัตถุดิบทั้งหมด
-        </CenterContentButton>
+        <>
+          <CenterContentButton
+            type="default"
+            style={{ display: "inline-flex", marginRight: "10px" }}
+          >
+            + เพิ่มวัตถุดิบใหม่
+          </CenterContentButton>
+          <CenterContentButton
+            type="primary"
+            style={{ display: "inline-flex" }}
+            onClick={function () {
+              activateAllIngredients();
+            }}
+          >
+            เติมวัตถุดิบทั้งหมด
+          </CenterContentButton>
+        </>
       }
     >
       <Table

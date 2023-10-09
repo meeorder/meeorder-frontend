@@ -5,8 +5,9 @@ import {
   type Addon,
 } from "@/modules/admin/menu/hooks/useAddons";
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
+import { Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
-import { Card, Switch, Table } from "antd";
+import { Button, Card, Switch, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
 
 const AddonStock = () => {
@@ -20,6 +21,11 @@ const AddonStock = () => {
       dataIndex: "title",
       key: "title",
       width: "70px",
+      render: (text: string) => (
+        <>
+          <Text editable>{text}</Text>
+        </>
+      ),
     },
     {
       title: "เมนูที่ใช้ท็อปปิ้ง",
@@ -45,20 +51,51 @@ const AddonStock = () => {
         </>
       ),
     },
+    {
+      title: "ตัวดำเนินการ",
+      //dataIndex: "price",
+      width: "20px",
+      render: (text: string, rec) => (
+        <>
+          {/* <CenterContentButton type="link" style={{ display: "inline-flex" }}>
+            ลบ
+          </CenterContentButton> */}
+          <Button
+            type="link"
+            onClick={() => {
+              const id = rec._id;
+              const status = !rec.available ? "activate" : "deactivate";
+              changeAddonStatus({ id, status });
+            }}
+          >
+            ลบ
+          </Button>
+        </>
+      ),
+    },
   ];
 
   return (
     <StyledCard
       title={<div>จัดการท็อปปิ้ง</div>}
       extra={
-        <CenterContentButton
-          type="primary"
-          onClick={function () {
-            activateAllAddons();
-          }}
-        >
-          เติมท็อปปิ้งทั้งหมด
-        </CenterContentButton>
+        <>
+          <CenterContentButton
+            type="default"
+            style={{ display: "inline-flex", marginRight: "10px" }}
+          >
+            + เพิ่มท็อปปิ้งใหม่
+          </CenterContentButton>
+          <CenterContentButton
+            type="primary"
+            style={{ display: "inline-flex" }}
+            onClick={function () {
+              activateAllAddons();
+            }}
+          >
+            เติมท็อปปิ้งทั้งหมด
+          </CenterContentButton>
+        </>
       }
     >
       <Table
