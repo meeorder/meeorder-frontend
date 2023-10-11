@@ -31,7 +31,6 @@ const IngredientStock = () => {
           <Text
             editable={{
               onChange: (new_title) => {
-                // editIngredient({ ...rec, title: new_title, id: rec._id });
                 const id = rec._id;
                 const title = new_title;
                 updateIngredient({ id, title });
@@ -74,9 +73,6 @@ const IngredientStock = () => {
       align: "end",
       render: (text: string, rec) => (
         <>
-          {/* <CenterContentButton type="link" style={{ display: "inline-flex" }}>
-            ลบ
-          </CenterContentButton> */}
           <Popconfirm
             title="ต้องการลบวัตถุดิบหรือไม่"
             onConfirm={() => {
