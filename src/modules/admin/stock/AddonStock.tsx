@@ -10,7 +10,7 @@ import {
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import { Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
-import { Button, Card, Switch, Table } from "antd";
+import { Button, Card, Popconfirm, Switch, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
 
 const AddonStock = () => {
@@ -26,7 +26,7 @@ const AddonStock = () => {
       title: "ชื่อท็อปปิ้ง",
       dataIndex: "title",
       key: "title",
-      width: "70px",
+      width: "10px",
       render: (text: string, rec) => (
         <>
           <Text
@@ -42,6 +42,12 @@ const AddonStock = () => {
       ),
     },
     {
+      title: "ราคาท็อปปิ้ง(บาท)",
+      dataIndex: "price",
+      width: "50px",
+      align: "end",
+    },
+    {
       title: "เมนูที่ใช้ท็อปปิ้ง",
       dataIndex: "menus_applied",
       width: "50px",
@@ -50,7 +56,7 @@ const AddonStock = () => {
     {
       title: "ท็อปปิ้งคงเหลือ",
       dataIndex: "available",
-      width: "50px",
+      width: "20px",
       align: "end",
       render: (text: string, rec) => (
         <>
@@ -68,23 +74,20 @@ const AddonStock = () => {
     {
       title: "ตัวดำเนินการ",
       //dataIndex: "price",
-      width: "20px",
+      width: "10px",
       render: (text: string, rec) => (
         <>
-          {/* <CenterContentButton type="link" style={{ display: "inline-flex" }}>
-            ลบ
-          </CenterContentButton> */}
-          <Button
-            type="link"
-            onClick={() => {
+          <Popconfirm
+            title="ต้องการลบท็อปปิ้งหรือไม่"
+            onConfirm={() => {
               const id = rec._id;
-              // const status = !rec.available ? "activate" : "deactivate";
-              // changeAddonStatus({ id, status });
               deleteAddon({ id });
             }}
+            okText="ตกลง"
+            cancelText="ยกเลิก"
           >
-            ลบ
-          </Button>
+            <Button type="link">ลบ</Button>
+          </Popconfirm>
         </>
       ),
     },

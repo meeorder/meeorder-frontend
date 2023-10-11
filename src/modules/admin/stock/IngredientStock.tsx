@@ -10,7 +10,7 @@ import {
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import { Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
-import { Button, Card, Switch, Table } from "antd";
+import { Button, Card, Popconfirm, Switch, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
 
 const IngredientStock = () => {
@@ -77,15 +77,17 @@ const IngredientStock = () => {
           {/* <CenterContentButton type="link" style={{ display: "inline-flex" }}>
             ลบ
           </CenterContentButton> */}
-          <Button
-            type="link"
-            onClick={() => {
+          <Popconfirm
+            title="ต้องการลบวัตถุดิบหรือไม่"
+            onConfirm={() => {
               const id = rec._id;
               deleteIngredient({ id });
             }}
+            okText="ตกลง"
+            cancelText="ยกเลิก"
           >
-            ลบ
-          </Button>
+            <Button type="link">ลบ</Button>
+          </Popconfirm>
         </>
       ),
     },
