@@ -104,6 +104,29 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
             </OutOfStockContainer>
           </ConfigProvider>
         )}
+         {order.status === "CANCELLED" &&
+          order.cancel?.reasons.length != 0 && (
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorSplit: token["red-3"],
+                },
+              }}
+            >
+              <OutOfStockContainer>
+                <IngredientReasonDivider>หมายเหตุ</IngredientReasonDivider>
+                <TagGroup>
+                  {order.cancel?.reasons.map((reason) => {
+                    return (
+                      <IngredientTag key={order._id}>
+                        {reason}
+                      </IngredientTag>
+                    );
+                  })}
+                </TagGroup>
+              </OutOfStockContainer>
+            </ConfigProvider>
+          )}
       </TextContainer>
       <StyledDivider type="vertical" />
       <IconClickSection

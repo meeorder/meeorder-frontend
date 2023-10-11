@@ -196,6 +196,29 @@ const OrderModal: React.FC<OrderModalProps> = ({
                   </OutOfStockContainer>
                 </ConfigProvider>
               )}
+            {modalData?.status === "CANCELLED" &&
+              modalData?.cancel?.reasons.length != 0 && (
+                <ConfigProvider
+                  theme={{
+                    token: {
+                      colorSplit: token["red-3"],
+                    },
+                  }}
+                >
+                  <OutOfStockContainer>
+                    <IngredientReasonDivider>หมายเหตุ</IngredientReasonDivider>
+                    <TagGroup>
+                      {modalData?.cancel?.reasons.map((reason) => {
+                        return (
+                          <IngredientTag key={modalData?._id}>
+                            {reason}
+                          </IngredientTag>
+                        );
+                      })}
+                    </TagGroup>
+                  </OutOfStockContainer>
+                </ConfigProvider>
+              )}
           </OrderInfo>
           {modalData?.status !== "CANCELLED" &&
             modalData?.status !== "DONE" && (
