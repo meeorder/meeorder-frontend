@@ -22,7 +22,7 @@ const useProtectedRoute = (args?: UseProtectedRouteArgs) => {
     }
 
     if ((isSuccess || isError) && !user) {
-      void router.push("/login");
+      void router.push("/signin");
     }
 
     if (user && user.role < roleToRoleNumber[minimumRole]) {
