@@ -1,5 +1,8 @@
 import { H2, H5 } from "@/modules/common/components/Typography";
 import { useLogin } from "@/modules/common/hooks/useAuth";
+import { useUser } from "@/modules/common/hooks/useUserStore";
+import { pages } from "@/modules/pageConfig";
+import { roleToRoleNumber } from "@/modules/services/users";
 import styled from "@emotion/styled";
 import { LockSimple, User } from "@phosphor-icons/react";
 import { Button, Form, Input, theme } from "antd";
@@ -18,6 +21,7 @@ const SignIn = () => {
   const [form] = Form.useForm<FieldType>();
   const router = useRouter();
   const { mutate: login, isLoading, isSuccess, isError, error } = useLogin();
+  const { data: user } = useUser();
   const handleSignIn = (values: FieldType) => {
     login(values);
   };
@@ -47,10 +51,17 @@ const SignIn = () => {
   }, [isError, form, error]);
 
   useEffect(() => {
-    if (isSuccess) {
-      void router.push("/");
+    if (user?.role === roleToRoleNumber["Customer"]) {
+      void router.push(pages.home.path);
+    } else if (user?.role === roleToRoleNumber["Employee"]) {
+      void router.push(pages.employeeOrderManagement.path);
+    } else if (user?.role === roleToRoleNumber["Cashier"]) {
+      // TODO: redirect to cashier page
+      void router.push(pages.employeeOrderManagement.path);
+    } else if (user?.role === roleToRoleNumber["Owner"]) {
+      void router.push(pages.adminDashboard.path);
     }
-  }, [isSuccess, router]);
+  }, [isSuccess, router, user]);
   return (
     <Container>
       <FormContainer>
