@@ -26,9 +26,20 @@ const IngredientStock = () => {
       dataIndex: "title",
       key: "title",
       width: "70px",
-      render: (text: string) => (
+      render: (text: string, rec) => (
         <>
-          <Text editable>{text}</Text>
+          <Text
+            editable={{
+              onChange: (new_title) => {
+                // editIngredient({ ...rec, title: new_title, id: rec._id });
+                const id = rec._id;
+                const title = new_title;
+                updateIngredient({ id, title });
+              },
+            }}
+          >
+            {text}
+          </Text>
         </>
       ),
     },
