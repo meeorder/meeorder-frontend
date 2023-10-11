@@ -1,5 +1,6 @@
 import AdminLayout from "@/modules/admin/layout/AdminLayout";
-import { type PageId } from "@/modules/pageConfig";
+import { pages, type PageId } from "@/modules/pageConfig";
+import useProtectedRoute from "@/modules/useProtectedRoute";
 import UserLayout from "@/modules/user/layout/UserLayout";
 import React from "react";
 
@@ -16,6 +17,13 @@ const AppLayout: React.FC<AppLayoutProps> = ({
   currentPageId,
   children,
 }) => {
+  useProtectedRoute({
+    minimumRole: pages[currentPageId].minimumRole,
+    redirectTo: "/404",
+  });
+
+  console.log("minimumRole", pages[currentPageId].minimumRole);
+
   switch (layoutType) {
     case "admin":
       return <AdminLayout mainNode={children} currentPageId={currentPageId} />;
