@@ -1,6 +1,8 @@
 import {
   useActivateAllIngredients,
   useAllIngredients,
+  useCreateIngredient,
+  useDeleteIngredient,
   useUpdateIngredient,
   type Ingredient,
 } from "@/modules/admin/menu/hooks/useIngredients";
@@ -15,6 +17,8 @@ const IngredientStock = () => {
   const { data: dataSource } = useAllIngredients();
   const { mutate: updateIngredient } = useUpdateIngredient();
   const { mutate: activateAllIngredients } = useActivateAllIngredients();
+  const { mutate: deleteIngredient } = useDeleteIngredient();
+  const { mutate: createIngredient } = useCreateIngredient();
 
   const stockIngredientColumns: ColumnsType<Ingredient> = [
     {
@@ -62,7 +66,15 @@ const IngredientStock = () => {
           {/* <CenterContentButton type="link" style={{ display: "inline-flex" }}>
             ลบ
           </CenterContentButton> */}
-          <Button type="link">ลบ</Button>
+          <Button
+            type="link"
+            onClick={() => {
+              const id = rec._id;
+              deleteIngredient({ id });
+            }}
+          >
+            ลบ
+          </Button>
         </>
       ),
     },
@@ -76,6 +88,9 @@ const IngredientStock = () => {
           <CenterContentButton
             type="default"
             style={{ display: "inline-flex", marginRight: "10px" }}
+            onClick={function () {
+              createIngredient({ title: "วัตถุดิบใหม่", available: true });
+            }}
           >
             + เพิ่มวัตถุดิบใหม่
           </CenterContentButton>

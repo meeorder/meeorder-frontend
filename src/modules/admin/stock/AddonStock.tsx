@@ -2,6 +2,9 @@ import {
   useActivateAllAddons,
   useAllAddons,
   useChangeAddonStatus,
+  useCreateAddon,
+  useDeleteAddon,
+  useEditAddon,
   type Addon,
 } from "@/modules/admin/menu/hooks/useAddons";
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
@@ -14,6 +17,9 @@ const AddonStock = () => {
   const { data: dataSource } = useAllAddons();
   const { mutate: changeAddonStatus } = useChangeAddonStatus();
   const { mutate: activateAllAddons } = useActivateAllAddons();
+  const { mutate: deleteAddon } = useDeleteAddon();
+  const { mutate: createAddon } = useCreateAddon();
+  const { mutate: editAddon } = useEditAddon();
 
   const stockAddonColumns: ColumnsType<Addon> = [
     {
@@ -21,9 +27,17 @@ const AddonStock = () => {
       dataIndex: "title",
       key: "title",
       width: "70px",
-      render: (text: string) => (
+      render: (text: string, rec) => (
         <>
-          <Text editable>{text}</Text>
+          <Text
+            editable={{
+              onChange: (new_title) => {
+                editAddon({ ...rec, title: new_title, id: rec._id });
+              },
+            }}
+          >
+            {text}
+          </Text>
         </>
       ),
     },
@@ -64,8 +78,9 @@ const AddonStock = () => {
             type="link"
             onClick={() => {
               const id = rec._id;
-              const status = !rec.available ? "activate" : "deactivate";
-              changeAddonStatus({ id, status });
+              // const status = !rec.available ? "activate" : "deactivate";
+              // changeAddonStatus({ id, status });
+              deleteAddon({ id });
             }}
           >
             ลบ
@@ -83,6 +98,10 @@ const AddonStock = () => {
           <CenterContentButton
             type="default"
             style={{ display: "inline-flex", marginRight: "10px" }}
+            onClick={function () {
+              // activateAllIngredients();
+              createAddon({ title: "New Addon", price: 0 });
+            }}
           >
             + เพิ่มท็อปปิ้งใหม่
           </CenterContentButton>
