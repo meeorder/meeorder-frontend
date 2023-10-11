@@ -7,7 +7,7 @@ import { transientOptions } from "@/modules/common/transientOptions";
 import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import styled from "@emotion/styled";
 import { ArrowLineRight, CheckCircle, Trash } from "@phosphor-icons/react";
-import { ConfigProvider, Divider, Tag, theme } from "antd";
+import { Button, ConfigProvider, Divider, Tag, theme } from "antd";
 import React from "react";
 type OrderListCardProps = {
   order: GetAllOrdersResponse[number];
@@ -22,18 +22,28 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
   setIsModalOpen,
   setModalData,
 }) => {
-  const { mutate: updateOrderStatusToPreparing } =
+  const { mutate: updateOrderStatusToPreparing, isIdle: isToPreparingIdle } =
     useUpdateOrderStatusToPreparing();
-  const { mutate: updateOrderStatusToReadyToServe } =
-    useUpdateOrderStatusToReadyToServe();
-  const { mutate: updateOrderStatusToDone } = useUpdateOrderStatusToDone();
-  const { mutate: deleteOrder } = useDeleteOrder();
+  const {
+    mutate: updateOrderStatusToReadyToServe,
+    isIdle: isToReadyToServeIdle,
+  } = useUpdateOrderStatusToReadyToServe();
+  const { mutate: updateOrderStatusToDone, isIdle: isToDoneIdle } =
+    useUpdateOrderStatusToDone();
+  const { mutate: deleteOrder, isIdle: isDeleteIdle } = useDeleteOrder();
   const handelOnclick = (id: string, status: string) => {
     if (status === "PREPARING") updateOrderStatusToReadyToServe({ id: id });
     if (status === "IN_QUEUE") updateOrderStatusToPreparing({ id: id });
     if (status === "READY_TO_SERVE") updateOrderStatusToDone({ id: id });
     if (status === "CANCELLED") deleteOrder({ id: id });
   };
+  const isLoading = !(
+    isToPreparingIdle &&
+    isToReadyToServeIdle &&
+    isToDoneIdle &&
+    isDeleteIdle
+  );
+
   const onClickCard = (order: GetAllOrdersResponse[number]) => {
     setIsModalOpen(true);
     setModalData(order);
@@ -110,18 +120,24 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
         onClick={() => {
           handelOnclick(order._id, order.status);
         }}
-      />
-      {(order.status === "PREPARING" ||
-        order.status === "IN_QUEUE" ||
-        order.status === "READY_TO_SERVE") && (
-        <StyledArrowLineRight size={44} color={token.colorPrimary} />
-      )}
-      {order.status === "CANCELLED" && (
-        <StyledTrash size={44} color={token["red-6"]} />
-      )}
-      {order.status === "DONE" && (
-        <StyledCheckCircle size={44} color={token["green-6"]} />
-      )}
+        loading={isLoading}
+      >
+        {!isLoading && (
+          <>
+            {(order.status === "PREPARING" ||
+              order.status === "IN_QUEUE" ||
+              order.status === "READY_TO_SERVE") && (
+              <StyledArrowLineRight size={44} color={token.colorPrimary} />
+            )}
+            {order.status === "CANCELLED" && (
+              <StyledTrash size={44} color={token["red-6"]} />
+            )}
+            {order.status === "DONE" && (
+              <StyledCheckCircle size={44} color={token["green-6"]} />
+            )}
+          </>
+        )}
+      </IconClickSection>
     </CardContainer>
   );
 };
@@ -231,11 +247,11 @@ const ModalSectionDiv = styled.div`
   z-index: 1;
 `;
 
-const IconClickSection = styled.div`
+const IconClickSection = styled(Button)`
   position: absolute;
   top: 0;
   right: 0;
-  width: 60px;
+  width: 60px !important;
   height: 100%;
   z-index: 1;
 `;
