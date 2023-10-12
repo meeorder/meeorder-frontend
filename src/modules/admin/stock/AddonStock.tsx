@@ -73,7 +73,6 @@ const AddonStock = () => {
     },
     {
       title: "ตัวดำเนินการ",
-      //dataIndex: "price",
       width: "10px",
       render: (text: string, rec) => (
         <>
@@ -102,7 +101,6 @@ const AddonStock = () => {
             type="default"
             style={{ display: "inline-flex", marginRight: "10px" }}
             onClick={function () {
-              // activateAllIngredients();
               createAddon({ title: "New Addon", price: 0 });
             }}
           >
