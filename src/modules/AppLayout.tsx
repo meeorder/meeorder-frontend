@@ -22,8 +22,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     redirectTo: "/404",
   });
 
-  console.log("minimumRole", pages[currentPageId].minimumRole);
-
   switch (layoutType) {
     case "admin":
       return <AdminLayout mainNode={children} currentPageId={currentPageId} />;

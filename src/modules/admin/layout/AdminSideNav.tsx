@@ -1,6 +1,8 @@
 import { useClient } from "@/modules/common/hooks/useClient";
+import { useUser } from "@/modules/common/hooks/useUserStore";
 import WireFrame from "@/modules/mock/components/WireFrame";
 import { pages, type PageId, type PageMetaData } from "@/modules/pageConfig";
+import { roleToRoleNumber } from "@/modules/services/users";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Button, Layout, Menu, type MenuProps } from "antd";
 import { useRouter } from "next/router";
@@ -10,15 +12,6 @@ type AdminSideNavProps = {
 };
 
 type MenuItem = Required<MenuProps>["items"][number];
-
-const getItem = (page: PageMetaData, children?: PageMetaData[]): MenuItem => {
-  return {
-    key: page.id,
-    icon: page.Icon && <page.Icon />,
-    label: page.label,
-    children: children?.map((page) => getItem(page)),
-  };
-};
 
 const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
   const {
@@ -43,13 +36,32 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     [adminAddEditPromotion, adminEditPoint, adminEditCoupon],
     adminSalesReport,
     [adminSetting, adminUserManagement],
-    employeeStock,
     employeeOrderManagement,
+    employeeStock,
     accountManagement,
   ];
 
-  const items: MenuProps["items"] | MenuProps["items"][] = adminPages.map(
-    (page) => {
+  const { data: user } = useUser();
+
+  const getItem = (
+    page: PageMetaData,
+    children?: PageMetaData[],
+  ): MenuItem | null => {
+    if (!page) return null;
+
+    if (roleToRoleNumber[page.minimumRole ?? "Customer"] <= (user?.role ?? 1)) {
+      return {
+        key: page.id,
+        icon: page.Icon && <page.Icon />,
+        label: page.label,
+        children: children?.map((page) => getItem(page)),
+      };
+    }
+    return null;
+  };
+
+  const items: MenuProps["items"] | MenuProps["items"][] = adminPages
+    .map((page) => {
       if (Array.isArray(page)) {
         return getItem(
           page[0] as PageMetaData,
@@ -57,8 +69,8 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
         );
       }
       return getItem(page);
-    },
-  );
+    })
+    .filter((item) => Boolean(item));
 
   const [collapsed, setCollapsed] = useState(false);
 

@@ -14,8 +14,6 @@ const useProtectedRoute = (args?: UseProtectedRouteArgs) => {
   const router = useRouter();
   const { data: user, isSuccess, isError } = useUser();
 
-  console.log("user", user);
-
   useEffect(() => {
     if (!minimumRole) {
       return;

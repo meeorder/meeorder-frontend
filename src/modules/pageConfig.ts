@@ -129,7 +129,7 @@ export const pages = {
     path: "/admin/account-management",
     layout: "admin",
     Icon: User,
-    minimumRole: "Owner",
+    minimumRole: "Employee",
   },
 } as const satisfies Record<string, PageMetaData>;
 
