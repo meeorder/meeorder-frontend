@@ -4,21 +4,21 @@ import { Button, Form, Input, notification } from "antd";
 import React from "react";
 
 type FieldType = {
-  resturantImageLink: string;
+  restaurantImageLink: string;
 };
 
 type Props = {
   setIsOpenChangeLogo: (isOpenLogo: boolean) => void;
 };
 
-const EditResturantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
+const EditRestaurantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
   const [form] = Form.useForm<FieldType>();
   //   const {
-  //     mutate: editResturantName,
+  //     mutate: editRestaurantName,
   //     isSuccess,
   //     isError,
   //     error,
-  //   } = useUpdateResturant({
+  //   } = useUpdateRestaurant({
   //     OnSuccess: () => UpdateActiveKeys(activeKeys, setActiveKeys),
   //   });
   const [api, contextHolder] = notification.useNotification();
@@ -28,14 +28,14 @@ const EditResturantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
     setIsOpenChangeLogo(false);
   };
 
-  const handleEditResturantName = (values: FieldType) => {
-    const { resturantImageLink: name } = values;
+  const handleEditRestaurantName = (values: FieldType) => {
+    const { restaurantImageLink: name } = values;
     // editUsername({
     //   newUsername: username,
     //   oldPassword: password,
     // });
 
-    // editResturantName({
+    // editRestaurantName({
     //   newName: name,
     // });
   };
@@ -105,7 +105,7 @@ const EditResturantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
     <>
       {contextHolder}
       <Container>
-        <Form<FieldType> form={form} onFinish={handleEditResturantName}>
+        <Form<FieldType> form={form} onFinish={handleEditRestaurantName}>
           <div>
             <H5 style={{ textAlign: "center" }}>เปลี่ยนโลโก้ร้านอาหาร</H5>
             <div style={{ textAlign: "center", width: "100%" }}>
@@ -117,7 +117,7 @@ const EditResturantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
           <div>
             <Text>ลิงก์รูปภาพ</Text>
             <Form.Item<FieldType>
-              name="resturantImageLink"
+              name="restaurantImageLink"
               rules={[{ required: true, message: "ลิงก์รูปภาพ" }]}
             >
               <Input />
@@ -139,7 +139,7 @@ const EditResturantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
   );
 };
 
-export default EditResturantLogo;
+export default EditRestaurantLogo;
 
 const Container = styled.div`
   display: flex;

@@ -88,10 +88,10 @@ export const pages = {
     layout: "admin",
     Icon: User,
   },
-  adminResturantAccountManagement: {
-    id: "adminResturantAccountManagement",
+  adminRestaurantAccountManagement: {
+    id: "adminRestaurantAccountManagement",
     label: "จัดการโลโก้และชื่อร้านอาหาร",
-    path: "/admin/setting/resturant-account-management",
+    path: "/admin/setting/restaurant-account-management",
     layout: "admin",
   },
   adminUserManagement: {

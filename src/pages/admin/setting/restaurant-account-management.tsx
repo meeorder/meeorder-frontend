@@ -1,6 +1,6 @@
 import AppLayout from "@/modules/AppLayout";
-import EditResturantLogo from "@/modules/admin/setting/userManagement/components/EditResturantLogo";
-import EditResturantname from "@/modules/admin/setting/userManagement/components/EditResturantname";
+import EditRestaurantLogo from "@/modules/admin/setting/userManagement/components/EditRestaurantLogo";
+import EditRestaurantname from "@/modules/admin/setting/userManagement/components/EditRestaurantname";
 import { H3, H4, H5, Text } from "@/modules/common/components/Typography";
 import { transientOptions } from "@/modules/common/transientOptions";
 import styled from "@emotion/styled";
@@ -8,7 +8,7 @@ import { PencilSimpleLine } from "@phosphor-icons/react";
 import { Button, Collapse, type CollapseProps } from "antd";
 import { useState } from "react";
 
-const AdminResturantAccountManagement = () => {
+const AdminRestaurantAccountManagement = () => {
   const [activeKeys, setActiveKeys] = useState<string[]>([]);
   const [isOpenChangeLogo, setIsOpenChangeLogo] = useState(false);
 
@@ -20,8 +20,7 @@ const AdminResturantAccountManagement = () => {
           ชื่อร้านอาหาร
         </H5>
       ),
-      children: <EditResturantname setActiveKeys={setActiveKeys} />,
-      //   extra: user?.username ?? "ชื่อผู้ใช้งาน",
+      children: <EditRestaurantname setActiveKeys={setActiveKeys} />,
       extra: "ชื่อร้านอาหาร",
     },
   ];
@@ -29,7 +28,7 @@ const AdminResturantAccountManagement = () => {
   return (
     <AppLayout
       layoutType="admin"
-      currentPageId="adminResturantAccountManagement"
+      currentPageId="adminRestaurantAccountManagement"
     >
       <MainContainer>
         <H3>จัดการโลโก้และร้านอาหาร</H3>
@@ -54,11 +53,11 @@ const AdminResturantAccountManagement = () => {
               )}
             </Logo>
             {isOpenChangeLogo && (
-              <EditResturantLogo setIsOpenChangeLogo={setIsOpenChangeLogo} />
+              <EditRestaurantLogo setIsOpenChangeLogo={setIsOpenChangeLogo} />
             )}
           </LogoForm>
         </EditLogoContainer>
-        <EditRestaurantContainer>
+        <EditRestauranttContainer>
           <H4
             style={{
               marginBottom: "16px",
@@ -77,13 +76,13 @@ const AdminResturantAccountManagement = () => {
             expandIcon={() => <Text style={{ color: "#1890FF" }}>แก้ไข</Text>}
             expandIconPosition="end"
           />
-        </EditRestaurantContainer>
+        </EditRestauranttContainer>
       </MainContainer>
     </AppLayout>
   );
 };
 
-export default AdminResturantAccountManagement;
+export default AdminRestaurantAccountManagement;
 
 const MainContainer = styled.div`
   display: flex;
@@ -156,4 +155,4 @@ const LogoForm = styled.div`
   gap: 8px;
 `;
 
-const EditRestaurantContainer = styled.div``;
+const EditRestauranttContainer = styled.div``;

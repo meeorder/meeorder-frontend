@@ -4,21 +4,21 @@ import { Button, Form, Input, notification } from "antd";
 import React from "react";
 
 type FieldType = {
-  resturantName: string;
+  restaurantName: string;
 };
 
 type Props = {
   setActiveKeys: (activeKeys: string[]) => void;
 };
 
-const EditResturantname: React.FC<Props> = ({ setActiveKeys }) => {
+const EditRestaurantname: React.FC<Props> = ({ setActiveKeys }) => {
   const [form] = Form.useForm<FieldType>();
   //   const {
-  //     mutate: editResturantName,
+  //     mutate: editRestaurantName,
   //     isSuccess,
   //     isError,
   //     error,
-  //   } = useUpdateResturant({
+  //   } = useUpdateRestaurant({
   //     OnSuccess: () => UpdateActiveKeys(activeKeys, setActiveKeys),
   //   });
   const [api, contextHolder] = notification.useNotification();
@@ -28,14 +28,14 @@ const EditResturantname: React.FC<Props> = ({ setActiveKeys }) => {
     setActiveKeys([""]);
   };
 
-  const handleEditResturantName = (values: FieldType) => {
-    const { resturantName: name } = values;
+  const handleEditRestaurantName = (values: FieldType) => {
+    const { restaurantName: name } = values;
     // editUsername({
     //   newUsername: username,
     //   oldPassword: password,
     // });
 
-    // editResturantName({
+    // editRestaurantName({
     //   newName: name,
     // });
   };
@@ -105,7 +105,7 @@ const EditResturantname: React.FC<Props> = ({ setActiveKeys }) => {
     <>
       {contextHolder}
       <Container>
-        <Form<FieldType> form={form} onFinish={handleEditResturantName}>
+        <Form<FieldType> form={form} onFinish={handleEditRestaurantName}>
           <div>
             <H5 style={{ textAlign: "center" }}>เปลี่ยนชื่อร้านอาหาร</H5>
             <div style={{ textAlign: "center", width: "100%" }}>
@@ -117,7 +117,7 @@ const EditResturantname: React.FC<Props> = ({ setActiveKeys }) => {
           <div>
             <Text>ชื่อร้านอาหาร</Text>
             <Form.Item<FieldType>
-              name="resturantName"
+              name="restaurantName"
               rules={[{ required: true, message: "กรุณากรอกชื่อร้านอาหาร" }]}
             >
               <Input />
@@ -139,7 +139,7 @@ const EditResturantname: React.FC<Props> = ({ setActiveKeys }) => {
   );
 };
 
-export default EditResturantname;
+export default EditRestaurantname;
 
 const Container = styled.div`
   display: flex;

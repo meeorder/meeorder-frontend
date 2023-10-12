@@ -3,7 +3,6 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
   "/health/ping": {
     get: operations["HealthController_getPing"];
@@ -188,10 +187,17 @@ export interface paths {
     patch: operations["CouponsController_update"];
   };
   "/tables": {
-    /** Get all tables */
+    /** Get all tables with information */
     get: operations["TablesController_getTables"];
+    put: operations["TablesController_updateTable"];
     /** Create a table */
     post: operations["TablesController_createTable"];
+    /** Soft delete table */
+    delete: operations["TablesController_deleteTable"];
+  };
+  "/tables/{id}": {
+    /** Get table by id */
+    get: operations["TablesController_getTableById"];
   };
   "/auth/login": {
     /** Login */
@@ -234,6 +240,12 @@ export interface paths {
   "/dashboard/incomes_report": {
     /** Get net income & discount in range date */
     get: operations["DashboardController_getIncomeReport"];
+  };
+  "/settings": {
+    /** Get Restaurantt Settings */
+    get: operations["SettingController_getSettings"];
+    /** Update Restaurantt Settings */
+    patch: operations["SettingController_updateSettings"];
   };
 }
 
@@ -287,7 +299,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-02T06:37:23.546Z
+       * @default 2023-10-12T14:20:29.017Z
        */
       created_at: string;
       /** @description Addon status */
@@ -307,7 +319,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-02T06:37:23.546Z
+       * @default 2023-10-12T14:20:29.017Z
        */
       created_at: string;
       /** @description Addon status */
@@ -518,7 +530,12 @@ export interface components {
       /** Format: date-time */
       created_at: string;
       /** @enum {string} */
-      status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
+      status:
+        | "IN_QUEUE"
+        | "PREPARING"
+        | "READY_TO_SERVE"
+        | "DONE"
+        | "CANCELLED";
       /** @description Array of MenuID */
       addons: components["schemas"]["AddonSchema"][];
       /** @description Additional info */
@@ -550,7 +567,12 @@ export interface components {
        * @description Order status
        * @enum {string}
        */
-      status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
+      status:
+        | "IN_QUEUE"
+        | "PREPARING"
+        | "READY_TO_SERVE"
+        | "DONE"
+        | "CANCELLED";
       /** @description Session of the order */
       session: components["schemas"]["undefined"] | string;
       /** @description Menu of the order */
@@ -598,7 +620,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-10-02T06:37:23.607Z
+       * @default 2023-10-12T14:20:29.164Z
        */
       created_at: string;
       /**
@@ -737,7 +759,12 @@ export interface components {
       /** Format: date-time */
       created_at: string;
       /** @enum {string} */
-      status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
+      status:
+        | "IN_QUEUE"
+        | "PREPARING"
+        | "READY_TO_SERVE"
+        | "DONE"
+        | "CANCELLED";
       /** @description Session ID */
       session: string;
       /** @description Menu Schema */
@@ -875,6 +902,70 @@ export interface components {
       /** @description Table number */
       title: string;
     };
+    TablesResponseDto: {
+      /** @description Table ID (ObjectID) */
+      _id: string;
+      /** @description Table number */
+      title: string;
+      /**
+       * @description Session ID (ObjectID)
+       * @default null
+       */
+      session: string;
+      /**
+       * Format: date-time
+       * @description Session creation date
+       * @default null
+       */
+      session_create_at: string;
+      /**
+       * @description All orders count
+       * @default 0
+       */
+      allOrdersCount: number;
+      /**
+       * @description unfinish orders count
+       * @default 0
+       */
+      unfinishOrdersCount: number;
+      /**
+       * @description total price
+       * @default 0
+       */
+      totalPrice: number;
+      /**
+       * Format: date-time
+       * @description Table creation date
+       */
+      created_at: string;
+    };
+    AllPopulatedSessionDto: {
+      _id: string;
+      /** Format: date-time */
+      created_at: string;
+      /** Format: date-time */
+      finished_at: string;
+      user: components["schemas"]["UserSchema"] | null;
+      coupon: components["schemas"]["CouponSchema"] | null;
+      table: string;
+      orders: components["schemas"]["OrdersSchema"][];
+    };
+    TableResponseDto: {
+      /** @description Table ID */
+      _id: string;
+      /** @description Table number */
+      title: string;
+      /** Format: date-time */
+      created_at: string;
+      session: components["schemas"]["AllPopulatedSessionDto"];
+    };
+    ErrorDto: {
+      msg: string;
+      props?: Record<string, never>;
+    };
+    TableUpdateRequestDto: {
+      title: string;
+    };
     LoginDto: {
       username: string;
       password: string;
@@ -897,8 +988,11 @@ export interface components {
       _id: string;
       /** @description Username */
       username: string;
-      /** @description Role of user */
-      role: string;
+      /**
+       * @description Role of user
+       * @enum {number}
+       */
+      role: 100 | 50 | 25 | 1;
       point: number;
     };
     CreateUserDto: {
@@ -945,6 +1039,20 @@ export interface components {
       /** @description Total net income (income - discount) */
       totalNetIncome: number;
     };
+    SettingSchema: {
+      /** @description Setting ID */
+      _id: string;
+      /** @description Restaurantt Name */
+      name: string | null;
+      /** @description Restaurantt Logo */
+      logo: string | null;
+    };
+    SettingDto: {
+      /** @description Restaurantt Name */
+      name?: string;
+      /** @description Restaurantt Logo */
+      logo?: string;
+    };
   };
   responses: never;
   parameters: never;
@@ -958,7 +1066,6 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
-
   HealthController_getPing: {
     responses: {
       /** @description Health status */
@@ -1645,7 +1752,7 @@ export interface operations {
     };
     responses: {
       /** @description Updated session user */
-      204: {
+      200: {
         content: never;
       };
     };
@@ -1884,13 +1991,33 @@ export interface operations {
       };
     };
   };
-  /** Get all tables */
+  /** Get all tables with information */
   TablesController_getTables: {
     responses: {
-      /** @description Get tables */
+      /** @description Get all tables with information */
       200: {
         content: {
-          "application/json": components["schemas"]["TablesSchema"][];
+          "application/json": components["schemas"]["TablesResponseDto"][];
+        };
+      };
+    };
+  };
+  TablesController_updateTable: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TableUpdateRequestDto"];
+      };
+    };
+    responses: {
+      /** @description updated table */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TablesSchema"];
+        };
+      };
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDto"];
         };
       };
     };
@@ -1907,6 +2034,34 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["TablesSchema"];
+        };
+      };
+    };
+  };
+  /** Soft delete table */
+  TablesController_deleteTable: {
+    responses: {
+      204: {
+        content: never;
+      };
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDto"];
+        };
+      };
+    };
+  };
+  /** Get table by id */
+  TablesController_getTableById: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["TableResponseDto"];
         };
       };
     };
@@ -2081,6 +2236,33 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetNetIncomeDto"];
+        };
+      };
+    };
+  };
+  /** Get Restaurantt Settings */
+  SettingController_getSettings: {
+    responses: {
+      /** @description Get Restaurantt Settings */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SettingSchema"];
+        };
+      };
+    };
+  };
+  /** Update Restaurantt Settings */
+  SettingController_updateSettings: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SettingDto"];
+      };
+    };
+    responses: {
+      /** @description Update Restaurantt Settings */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SettingSchema"];
         };
       };
     };
