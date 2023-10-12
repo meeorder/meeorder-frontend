@@ -9,16 +9,20 @@ import {
 
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import { Text } from "@/modules/common/components/Typography";
+import { useUser } from "@/modules/common/hooks/useUserStore";
+import { roleNumberToRole } from "@/modules/services/users";
 import styled from "@emotion/styled";
 import { Button, Card, Popconfirm, Switch, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
 
 const IngredientStock = () => {
   const { data: dataSource } = useAllIngredients();
+  const { data: user } = useUser();
   const { mutate: updateIngredient } = useUpdateIngredient();
   const { mutate: activateAllIngredients } = useActivateAllIngredients();
   const { mutate: deleteIngredient } = useDeleteIngredient();
   const { mutate: createIngredient } = useCreateIngredient();
+  const isOwner = roleNumberToRole[user?.role ?? 1] === "Owner";
 
   const stockIngredientColumns: ColumnsType<Ingredient> = [
     {
@@ -29,13 +33,15 @@ const IngredientStock = () => {
       render: (text: string, rec) => (
         <>
           <Text
-            editable={{
-              onChange: (new_title) => {
-                const id = rec._id;
-                const title = new_title;
-                updateIngredient({ id, title });
-              },
-            }}
+            editable={
+              isOwner && {
+                onChange: (new_title) => {
+                  const id = rec._id;
+                  const title = new_title;
+                  updateIngredient({ id, title });
+                },
+              }
+            }
           >
             {text}
           </Text>
@@ -66,7 +72,10 @@ const IngredientStock = () => {
         </>
       ),
     },
-    {
+  ];
+
+  if (isOwner) {
+    stockIngredientColumns.push({
       title: "ตัวดำเนินการ",
       //dataIndex: "price",
       width: "60px",
@@ -86,33 +95,35 @@ const IngredientStock = () => {
           </Popconfirm>
         </>
       ),
-    },
-  ];
+    });
+  }
 
   return (
     <StyledCard
       title={<div>จัดการวัตถุดิบ</div>}
       extra={
-        <>
-          <CenterContentButton
-            type="default"
-            style={{ display: "inline-flex", marginRight: "10px" }}
-            onClick={function () {
-              createIngredient({ title: "วัตถุดิบใหม่", available: true });
-            }}
-          >
-            + เพิ่มวัตถุดิบใหม่
-          </CenterContentButton>
-          <CenterContentButton
-            type="primary"
-            style={{ display: "inline-flex" }}
-            onClick={function () {
-              activateAllIngredients();
-            }}
-          >
-            เติมวัตถุดิบทั้งหมด
-          </CenterContentButton>
-        </>
+        isOwner && (
+          <>
+            <CenterContentButton
+              type="default"
+              style={{ display: "inline-flex", marginRight: "10px" }}
+              onClick={function () {
+                createIngredient({ title: "วัตถุดิบใหม่", available: true });
+              }}
+            >
+              + เพิ่มวัตถุดิบใหม่
+            </CenterContentButton>
+            <CenterContentButton
+              type="primary"
+              style={{ display: "inline-flex" }}
+              onClick={function () {
+                activateAllIngredients();
+              }}
+            >
+              เติมวัตถุดิบทั้งหมด
+            </CenterContentButton>
+          </>
+        )
       }
     >
       <Table
