@@ -1,11 +1,11 @@
 import { getAllSettings } from "@/modules/services/setting";
 import { useQuery } from "@tanstack/react-query";
 
-const useRestaurantGetSetting = () => {
+const useRestaurantSetting = () => {
   return useQuery({
-    queryKey: ["useRestaurantGetSetting"],
+    queryKey: ["useRestaurantSetting"],
     queryFn: () => getAllSettings(),
   });
 };
 
-export default useRestaurantGetSetting;
+export default useRestaurantSetting;

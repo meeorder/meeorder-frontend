@@ -7,14 +7,19 @@ type RestauranttSetting = {
   logo?: string;
 };
 
-const useRestaurantUpdateSetting = () => {
+type RestaurantUpdateParam = {
+  onSuccess?: () => void;
+};
+
+const useUpdateRestaurantSetting = (params: RestaurantUpdateParam) => {
   return useMutation({
     mutationKey: ["useDeleteUser"],
     mutationFn: (data: RestauranttSetting) => updateSetting(data),
     onSuccess: () => {
-      void queryClient.invalidateQueries(["useRestaurantGetSetting"]);
+      void queryClient.invalidateQueries(["useRestaurantSetting"]);
+      params.onSuccess && params.onSuccess();
     },
   });
 };
 
-export default useRestaurantUpdateSetting;
+export default useUpdateRestaurantSetting;

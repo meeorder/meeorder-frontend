@@ -15,7 +15,7 @@ export type UpdateSettingResponse =
 export const updateSetting = async (
   params: UpdateSettingBodyParam,
 ): Promise<UpdateSettingResponse> => {
-  const { data } = await axiosInstance.put<UpdateSettingResponse>(
+  const { data } = await axiosInstance.patch<UpdateSettingResponse>(
     "/settings",
     params,
   );

@@ -1,7 +1,11 @@
-import { H5, Text } from "@/modules/common/components/Typography";
+import useUpdateRestaurantSetting from "@/modules/admin/setting/userManagement/hooks/useUpdateResturantSetting";
+import { H3, H5, Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
+import { CheckCircle, XCircle } from "@phosphor-icons/react";
 import { Button, Form, Input, notification } from "antd";
-import React from "react";
+import { type NotificationPlacement } from "antd/es/notification/interface";
+import { type AxiosError } from "axios";
+import React, { useEffect } from "react";
 
 type FieldType = {
   restaurantName: string;
@@ -13,14 +17,14 @@ type Props = {
 
 const EditRestaurantname: React.FC<Props> = ({ setActiveKeys }) => {
   const [form] = Form.useForm<FieldType>();
-  //   const {
-  //     mutate: editRestaurantName,
-  //     isSuccess,
-  //     isError,
-  //     error,
-  //   } = useUpdateRestaurant({
-  //     OnSuccess: () => UpdateActiveKeys(activeKeys, setActiveKeys),
-  //   });
+  const {
+    mutate: editRestaurantName,
+    isSuccess,
+    isError,
+    error,
+  } = useUpdateRestaurantSetting({
+    onSuccess: () => setActiveKeys([""]),
+  });
   const [api, contextHolder] = notification.useNotification();
 
   const handleCancelForm = () => {
@@ -30,76 +34,71 @@ const EditRestaurantname: React.FC<Props> = ({ setActiveKeys }) => {
 
   const handleEditRestaurantName = (values: FieldType) => {
     const { restaurantName: name } = values;
-    // editUsername({
-    //   newUsername: username,
-    //   oldPassword: password,
-    // });
-
-    // editRestaurantName({
-    //   newName: name,
-    // });
+    editRestaurantName({
+      name: name,
+    });
   };
 
-  //   useEffect(() => {
-  //     if (isError) {
-  //       const axiosErrorMessage =
-  //         (
-  //           error as AxiosError<{
-  //             message: string;
-  //           }>
-  //         )?.response?.data?.message || " ";
+  useEffect(() => {
+    if (isError) {
+      const axiosErrorMessage =
+        (
+          error as AxiosError<{
+            message: string;
+          }>
+        )?.response?.data?.message || " ";
 
-  //       form.setFields([
-  //         {
-  //           name: "username",
-  //           errors: [""],
-  //         },
-  //         {
-  //           name: "password",
-  //           errors: [axiosErrorMessage],
-  //         },
-  //       ]);
-  //     }
-  //     if (isSuccess) {
-  //       form.resetFields();
-  //     }
-  //   }, [isError, form, error, isSuccess]);
+      form.setFields([
+        {
+          name: "username",
+          errors: [""],
+        },
+        {
+          name: "password",
+          errors: [axiosErrorMessage],
+        },
+      ]);
+    }
+    if (isSuccess) {
+      form.resetFields();
+    }
+  }, [isError, form, error, isSuccess]);
 
-  //   useEffect(() => {
-  //     const openNotification = (
-  //       placement: NotificationPlacement,
-  //       header: React.ReactNode,
-  //       desciption: React.ReactNode,
-  //       icon?: React.ReactNode,
-  //       onClose?: () => void,
-  //     ) => {
-  //       api.destroy();
-  //       api.info({
-  //         message: header,
-  //         placement,
-  //         description: desciption,
-  //         icon: icon,
-  //         onClose: onClose,
-  //       });
-  //     };
+  useEffect(() => {
+    const openNotification = (
+      placement: NotificationPlacement,
+      header: React.ReactNode,
+      desciption: React.ReactNode,
+      icon?: React.ReactNode,
+      onClose?: () => void,
+    ) => {
+      api.destroy();
+      api.info({
+        message: header,
+        placement,
+        description: desciption,
+        icon: icon,
+        onClose: onClose,
+      });
+    };
 
-  //     if (isSuccess) {
-  //       openNotification(
-  //         "topRight",
-  //         <H3 style={{ marginLeft: "4px" }}>สำเร็จ</H3>,
-  //         <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อผู้ใช้สำเร็จ</Text>,
-  //         <CheckCircle size={32} color="#A0D911" weight="fill" />,
-  //       );
-  //     }
-  //     if (isError) {
-  //       openNotification(
-  //         "topRight",
-  //         <H3 style={{ marginLeft: "4px" }}>ไม่สำเร็จ</H3>,
-  //         <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อผู้ใช้ไม่สำเร็จ</Text>,
-  //         <XCircle size={32} color="#F5222D" weight="fill" />,
-  //       );
-  //     }
-  //   }, [isSuccess, isError, api, router, setActiveKeys]);
+    if (isSuccess) {
+      openNotification(
+        "topRight",
+        <H3 style={{ marginLeft: "4px" }}>สำเร็จ</H3>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อร้านอาหารไม้สำเร็จ</Text>,
+        <CheckCircle size={32} color="#A0D911" weight="fill" />,
+      );
+    }
+    if (isError) {
+      openNotification(
+        "topRight",
+        <H3 style={{ marginLeft: "4px" }}>ไม่สำเร็จ</H3>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อร้านอาหารสำเร็จ</Text>,
+        <XCircle size={32} color="#F5222D" weight="fill" />,
+      );
+    }
+  }, [isSuccess, isError, api, setActiveKeys]);
 
   return (
     <>
