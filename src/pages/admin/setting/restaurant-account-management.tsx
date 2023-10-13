@@ -1,7 +1,7 @@
 import AppLayout from "@/modules/AppLayout";
-import EditRestaurantLogo from "@/modules/admin/setting/restaurantManagement/EditRestaurantLogo";
-import EditRestaurantName from "@/modules/admin/setting/restaurantManagement/EditRestaurantName";
-import useRestaurantSetting from "@/modules/admin/setting/userManagement/hooks/useResturantSetting";
+import EditRestaurantLogo from "@/modules/admin/setting/restaurantManagement/components/EditRestaurantLogo";
+import EditRestaurantName from "@/modules/admin/setting/restaurantManagement/components/EditRestaurantName";
+import useRestaurantSetting from "@/modules/admin/setting/restaurantManagement/hooks/useResturantSetting";
 import { H3, H4, H5, Text } from "@/modules/common/components/Typography";
 import { transientOptions } from "@/modules/common/transientOptions";
 import styled from "@emotion/styled";

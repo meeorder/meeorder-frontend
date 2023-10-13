@@ -1,4 +1,4 @@
-import useUpdateRestaurantSetting from "@/modules/admin/setting/userManagement/hooks/useUpdateResturantSetting";
+import useUpdateRestaurantSetting from "@/modules/admin/setting/restaurantManagement/hooks/useUpdateResturantSetting";
 import { H3, H5, Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { CheckCircle, XCircle } from "@phosphor-icons/react";
@@ -8,39 +8,34 @@ import { type AxiosError } from "axios";
 import React, { useEffect } from "react";
 
 type FieldType = {
-  restaurantImageLink: string;
+  restaurantName: string;
 };
 
 type Props = {
-  setIsOpenChangeLogo: (isOpenLogo: boolean) => void;
+  setActiveKeys: (activeKeys: string[]) => void;
 };
 
-const EditRestaurantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
+const EditRestaurantName: React.FC<Props> = ({ setActiveKeys }) => {
   const [form] = Form.useForm<FieldType>();
   const {
-    mutate: editRestaurantLogo,
+    mutate: editRestaurantName,
     isSuccess,
     isError,
     error,
   } = useUpdateRestaurantSetting({
-    onSuccess: () => {
-      setTimeout(() => {
-        setIsOpenChangeLogo(false);
-      }, 2000);
-    },
+    onSuccess: () => setActiveKeys([""]),
   });
   const [api, contextHolder] = notification.useNotification();
 
   const handleCancelForm = () => {
     form.resetFields();
-    setIsOpenChangeLogo(false);
+    setActiveKeys([""]);
   };
 
   const handleEditRestaurantName = (values: FieldType) => {
-    const { restaurantImageLink: imageLink } = values;
-
-    editRestaurantLogo({
-      logo: imageLink,
+    const { restaurantName: name } = values;
+    editRestaurantName({
+      name: name,
     });
   };
 
@@ -91,7 +86,7 @@ const EditRestaurantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
       openNotification(
         "topRight",
         <H3 style={{ marginLeft: "4px" }}>สำเร็จ</H3>,
-        <Text style={{ marginLeft: "4px" }}>แก้ไขโลโก้ร้านอาหารสำเร็จ</Text>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อร้านอาหารสำเร็จ</Text>,
         <CheckCircle size={32} color="#A0D911" weight="fill" />,
       );
     }
@@ -99,7 +94,7 @@ const EditRestaurantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
       openNotification(
         "topRight",
         <H3 style={{ marginLeft: "4px" }}>ไม่สำเร็จ</H3>,
-        <Text style={{ marginLeft: "4px" }}>แก้ไขโลโก้ร้านอาหารไม่สำเร็จ</Text>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อร้านอาหารไม่สำเร็จ</Text>,
         <XCircle size={32} color="#F5222D" weight="fill" />,
       );
     }
@@ -111,16 +106,18 @@ const EditRestaurantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
       <Container>
         <Form<FieldType> form={form} onFinish={handleEditRestaurantName}>
           <div>
-            <H5 style={{ textAlign: "center" }}>เปลี่ยนโลโก้ร้านอาหาร</H5>
+            <H5 style={{ textAlign: "center" }}>เปลี่ยนชื่อร้านอาหาร</H5>
             <div style={{ textAlign: "center", width: "100%" }}>
-              <Text type="secondary">ป้อนลิงก์โลโก้ร้านอาหาร</Text>
+              <Text type="secondary">
+                ป้อนชื่อผู้ร้านอาหารใหม่และรหัสผ่านของคุณ
+              </Text>
             </div>
           </div>
           <div>
-            <Text>ลิงก์รูปภาพ</Text>
+            <Text>ชื่อร้านอาหาร</Text>
             <Form.Item<FieldType>
-              name="restaurantImageLink"
-              rules={[{ required: true, message: "ลิงก์รูปภาพ" }]}
+              name="restaurantName"
+              rules={[{ required: true, message: "กรุณากรอกชื่อร้านอาหาร" }]}
             >
               <Input />
             </Form.Item>
@@ -141,19 +138,12 @@ const EditRestaurantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
   );
 };
 
-export default EditRestaurantLogo;
+export default EditRestaurantName;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  height: 200px;
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid ${(props) => props.theme.antd.colorBgLayout};
-  background: #fafafa;
-  padding: 12px;
-  flex: 1;
 `;
 
 const ButtonContainer = styled.div`
