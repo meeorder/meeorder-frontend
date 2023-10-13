@@ -1,6 +1,7 @@
 import AppLayout from "@/modules/AppLayout";
-import EditRestaurantLogo from "@/modules/admin/setting/userManagement/components/EditRestaurantLogo";
-import EditRestaurantname from "@/modules/admin/setting/userManagement/components/EditRestaurantname";
+import EditRestaurantLogo from "@/modules/admin/setting/restaurantManagement/EditRestaurantLogo";
+import EditRestaurantName from "@/modules/admin/setting/restaurantManagement/EditRestaurantName";
+import useRestaurantSetting from "@/modules/admin/setting/userManagement/hooks/useResturantSetting";
 import { H3, H4, H5, Text } from "@/modules/common/components/Typography";
 import { transientOptions } from "@/modules/common/transientOptions";
 import styled from "@emotion/styled";
@@ -12,6 +13,10 @@ const AdminRestaurantAccountManagement = () => {
   const [activeKeys, setActiveKeys] = useState<string[]>([]);
   const [isOpenChangeLogo, setIsOpenChangeLogo] = useState(false);
 
+  const { data } = useRestaurantSetting();
+  const restaurantName = data?.name ?? "ชื่อร้านอาหาร";
+  const restaurantLogo = data?.logo ?? "https://picsum.photos/200/306";
+
   const EditName: CollapseProps["items"] = [
     {
       key: "1",
@@ -20,8 +25,8 @@ const AdminRestaurantAccountManagement = () => {
           ชื่อร้านอาหาร
         </H5>
       ),
-      children: <EditRestaurantname setActiveKeys={setActiveKeys} />,
-      extra: "ชื่อร้านอาหาร",
+      children: <EditRestaurantName setActiveKeys={setActiveKeys} />,
+      extra: `${restaurantName}`,
     },
   ];
 
@@ -44,7 +49,7 @@ const AdminRestaurantAccountManagement = () => {
             <Logo
               onClick={() => setIsOpenChangeLogo(true)}
               $isOpenChangeLogoForm={isOpenChangeLogo}
-              // $imgUrl="https://lh3.googleusercontent.com/a/ACg8ocJnejw-DT5AVNfvMAnisSYhJh3nZbRV8rPDItgpoOZKGw"
+              $imgUrl={restaurantLogo}
             >
               {!isOpenChangeLogo && (
                 <EditIcon onClick={() => setIsOpenChangeLogo(true)}>

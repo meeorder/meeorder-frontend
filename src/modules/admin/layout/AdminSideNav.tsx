@@ -91,7 +91,10 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
             (id) => id == currentPageId,
           )
             ? [adminAddEditPromotion.id]
-            : [adminUserManagement.id].some((id) => id == currentPageId)
+            : [
+                adminUserManagement.id,
+                adminRestaurantAccountManagement.id,
+              ].some((id) => id == currentPageId)
             ? [adminSetting.id]
             : []
         }
