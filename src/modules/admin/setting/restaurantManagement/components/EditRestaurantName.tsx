@@ -12,10 +12,14 @@ type FieldType = {
 };
 
 type Props = {
+  restaurantName: string;
   setActiveKeys: (activeKeys: string[]) => void;
 };
 
-const EditRestaurantName: React.FC<Props> = ({ setActiveKeys }) => {
+const EditRestaurantName: React.FC<Props> = ({
+  restaurantName,
+  setActiveKeys,
+}) => {
   const [form] = Form.useForm<FieldType>();
   const {
     mutate: editRestaurantName,
@@ -50,11 +54,7 @@ const EditRestaurantName: React.FC<Props> = ({ setActiveKeys }) => {
 
       form.setFields([
         {
-          name: "username",
-          errors: [""],
-        },
-        {
-          name: "password",
+          name: "restaurantName",
           errors: [axiosErrorMessage],
         },
       ]);
@@ -116,6 +116,7 @@ const EditRestaurantName: React.FC<Props> = ({ setActiveKeys }) => {
             <Form.Item<FieldType>
               name="restaurantName"
               rules={[{ required: true, message: "กรุณากรอกชื่อร้านอาหาร" }]}
+              initialValue={restaurantName}
             >
               <Input />
             </Form.Item>

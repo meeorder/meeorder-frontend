@@ -6,12 +6,13 @@ import { H3, H4, H5, Text } from "@/modules/common/components/Typography";
 import { transientOptions } from "@/modules/common/transientOptions";
 import styled from "@emotion/styled";
 import { PencilSimpleLine } from "@phosphor-icons/react";
-import { Button, Collapse, type CollapseProps } from "antd";
+import { Button, Collapse, notification, type CollapseProps } from "antd";
 import { useState } from "react";
 
 const AdminRestaurantAccountManagement = () => {
   const [activeKeys, setActiveKeys] = useState<string[]>([]);
   const [isOpenChangeLogo, setIsOpenChangeLogo] = useState(false);
+  const [api, contextHolder] = notification.useNotification();
 
   const { data } = useRestaurantSetting();
   const restaurantName = data?.name ?? "ชื่อร้านอาหาร";
@@ -25,7 +26,12 @@ const AdminRestaurantAccountManagement = () => {
           ชื่อร้านอาหาร
         </H5>
       ),
-      children: <EditRestaurantName setActiveKeys={setActiveKeys} />,
+      children: (
+        <EditRestaurantName
+          setActiveKeys={setActiveKeys}
+          restaurantName={restaurantName}
+        />
+      ),
       extra: `${restaurantName}`,
     },
   ];
@@ -35,6 +41,7 @@ const AdminRestaurantAccountManagement = () => {
       layoutType="admin"
       currentPageId="adminRestaurantAccountManagement"
     >
+      {contextHolder}
       <MainContainer>
         <H3>จัดการโลโก้และร้านอาหาร</H3>
         <EditLogoContainer>
@@ -58,7 +65,11 @@ const AdminRestaurantAccountManagement = () => {
               )}
             </Logo>
             {isOpenChangeLogo && (
-              <EditRestaurantLogo setIsOpenChangeLogo={setIsOpenChangeLogo} />
+              <EditRestaurantLogo
+                setIsOpenChangeLogo={setIsOpenChangeLogo}
+                restaurantLogo={restaurantLogo}
+                api={api}
+              />
             )}
           </LogoForm>
         </EditLogoContainer>

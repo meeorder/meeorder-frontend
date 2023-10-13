@@ -2,8 +2,11 @@ import useUpdateRestaurantSetting from "@/modules/admin/setting/restaurantManage
 import { H3, H5, Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { CheckCircle, XCircle } from "@phosphor-icons/react";
-import { Button, Form, Input, notification } from "antd";
-import { type NotificationPlacement } from "antd/es/notification/interface";
+import { Button, Form, Input } from "antd";
+import {
+  type NotificationInstance,
+  type NotificationPlacement,
+} from "antd/es/notification/interface";
 import { type AxiosError } from "axios";
 import React, { useEffect } from "react";
 
@@ -12,10 +15,16 @@ type FieldType = {
 };
 
 type Props = {
+  restaurantLogo: string;
   setIsOpenChangeLogo: (isOpenLogo: boolean) => void;
+  api: NotificationInstance;
 };
 
-const EditRestaurantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
+const EditRestaurantLogo: React.FC<Props> = ({
+  setIsOpenChangeLogo,
+  restaurantLogo,
+  api,
+}) => {
   const [form] = Form.useForm<FieldType>();
   const {
     mutate: editRestaurantLogo,
@@ -23,13 +32,8 @@ const EditRestaurantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
     isError,
     error,
   } = useUpdateRestaurantSetting({
-    onSuccess: () => {
-      setTimeout(() => {
-        setIsOpenChangeLogo(false);
-      }, 2000);
-    },
+    onSuccess: () => setIsOpenChangeLogo(false),
   });
-  const [api, contextHolder] = notification.useNotification();
 
   const handleCancelForm = () => {
     form.resetFields();
@@ -55,11 +59,7 @@ const EditRestaurantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
 
       form.setFields([
         {
-          name: "username",
-          errors: [""],
-        },
-        {
-          name: "password",
+          name: "restaurantImageLink",
           errors: [axiosErrorMessage],
         },
       ]);
@@ -107,9 +107,12 @@ const EditRestaurantLogo: React.FC<Props> = ({ setIsOpenChangeLogo }) => {
 
   return (
     <>
-      {contextHolder}
       <Container>
-        <Form<FieldType> form={form} onFinish={handleEditRestaurantName}>
+        <Form<FieldType>
+          form={form}
+          onFinish={handleEditRestaurantName}
+          initialValues={{ restaurantImageLink: restaurantLogo }}
+        >
           <div>
             <H5 style={{ textAlign: "center" }}>เปลี่ยนโลโก้ร้านอาหาร</H5>
             <div style={{ textAlign: "center", width: "100%" }}>
