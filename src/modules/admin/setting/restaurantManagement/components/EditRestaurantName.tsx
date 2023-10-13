@@ -108,9 +108,7 @@ const EditRestaurantName: React.FC<Props> = ({ setActiveKeys }) => {
           <div>
             <H5 style={{ textAlign: "center" }}>เปลี่ยนชื่อร้านอาหาร</H5>
             <div style={{ textAlign: "center", width: "100%" }}>
-              <Text type="secondary">
-                ป้อนชื่อผู้ร้านอาหารใหม่และรหัสผ่านของคุณ
-              </Text>
+              <Text type="secondary">ป้อนชื่อร้านอาหารใหม่</Text>
             </div>
           </div>
           <div>
