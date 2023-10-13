@@ -9,7 +9,7 @@ import { Button, Collapse, type CollapseProps } from "antd";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-const AccountManagemant = () => {
+const AccountManagement = () => {
   const { data: user } = useUser();
   const router = useRouter();
   const { mutate: logout } = useLogout({
@@ -42,7 +42,7 @@ const AccountManagemant = () => {
   ];
 
   return (
-    <AppLayout layoutType="admin" currentPageId="adminSetting">
+    <AppLayout layoutType="admin" currentPageId="accountManagement">
       <MainContainer>
         <SecondContainer>
           <EditContainer>
@@ -78,7 +78,7 @@ const AccountManagemant = () => {
   );
 };
 
-export default AccountManagemant;
+export default AccountManagement;
 
 const MainContainer = styled.div`
   display: flex;
