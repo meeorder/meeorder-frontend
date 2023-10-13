@@ -13,7 +13,7 @@ type RestaurantUpdateParam = {
 
 const useUpdateRestaurantSetting = (params: RestaurantUpdateParam) => {
   return useMutation({
-    mutationKey: ["useDeleteUser"],
+    mutationKey: ["useUpdateRestaurantSetting"],
     mutationFn: (data: RestauranttSetting) => updateSetting(data),
     onSuccess: () => {
       void queryClient.invalidateQueries(["useRestaurantSetting"]);
