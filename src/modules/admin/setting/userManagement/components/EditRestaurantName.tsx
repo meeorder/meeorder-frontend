@@ -15,7 +15,7 @@ type Props = {
   setActiveKeys: (activeKeys: string[]) => void;
 };
 
-const EditRestaurantname: React.FC<Props> = ({ setActiveKeys }) => {
+const EditRestaurantName: React.FC<Props> = ({ setActiveKeys }) => {
   const [form] = Form.useForm<FieldType>();
   const {
     mutate: editRestaurantName,
@@ -86,7 +86,7 @@ const EditRestaurantname: React.FC<Props> = ({ setActiveKeys }) => {
       openNotification(
         "topRight",
         <H3 style={{ marginLeft: "4px" }}>สำเร็จ</H3>,
-        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อร้านอาหารไม้สำเร็จ</Text>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อร้านอาหารสำเร็จ</Text>,
         <CheckCircle size={32} color="#A0D911" weight="fill" />,
       );
     }
@@ -94,11 +94,11 @@ const EditRestaurantname: React.FC<Props> = ({ setActiveKeys }) => {
       openNotification(
         "topRight",
         <H3 style={{ marginLeft: "4px" }}>ไม่สำเร็จ</H3>,
-        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อร้านอาหารสำเร็จ</Text>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อร้านอาหารไม่สำเร็จ</Text>,
         <XCircle size={32} color="#F5222D" weight="fill" />,
       );
     }
-  }, [isSuccess, isError, api, setActiveKeys]);
+  }, [isSuccess, isError, api]);
 
   return (
     <>
@@ -138,7 +138,7 @@ const EditRestaurantname: React.FC<Props> = ({ setActiveKeys }) => {
   );
 };
 
-export default EditRestaurantname;
+export default EditRestaurantName;
 
 const Container = styled.div`
   display: flex;
