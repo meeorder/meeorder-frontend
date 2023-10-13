@@ -187,30 +187,11 @@ export interface paths {
     /** Update a coupon by id */
     patch: operations["CouponsController_update"];
   };
-  "/tables": {
-    /** Get all tables */
-    get: operations["TablesController_getTables"];
-    put: operations["TablesController_updateTable"];
-    /** Create a table */
-    post: operations["TablesController_createTable"];
-    /** Soft delete table */
-    delete: operations["TablesController_deleteTable"];
-  };
-  "/auth/login": {
-    /** Login */
-    post: operations["AuthController_signIn"];
-  };
-  "/auth/logout": {
-    /** Logout */
-    post: operations["AuthController_signOut"];
-  };
-  "/auth/register": {
-    /** Customer's registration */
-    post: operations["AuthController_register"];
-  };
-  "/auth/me": {
-    /** Get current user */
-    get: operations["AuthController_getMe"];
+  "/settings": {
+    /** Get Restaurant Settings */
+    get: operations["SettingController_getSettings"];
+    /** Update Restaurant Settings */
+    patch: operations["SettingController_updateSettings"];
   };
   "/users": {
     /** Get users */
@@ -230,9 +211,38 @@ export interface paths {
     /** Update user role */
     patch: operations["UsersController_updateUserRole"];
   };
-  "/dashboard/customer_report/{date}": {
-    /** Get total registered users */
-    get: operations["DashboardController_getDashboard"];
+  "/tables": {
+    /** Get all tables with information */
+    get: operations["TablesController_getTables"];
+    put: operations["TablesController_updateTable"];
+    /** Create a table */
+    post: operations["TablesController_createTable"];
+    /** Soft delete table */
+    delete: operations["TablesController_deleteTable"];
+  };
+  "/tables/{id}": {
+    /** Get table by id */
+    get: operations["TablesController_getTableById"];
+  };
+  "/auth/login": {
+    /** Login */
+    post: operations["AuthController_signIn"];
+  };
+  "/auth/logout": {
+    /** Logout */
+    post: operations["AuthController_signOut"];
+  };
+  "/auth/register": {
+    /** Customer's registration */
+    post: operations["AuthController_register"];
+  };
+  "/auth/me": {
+    /** Get current user */
+    get: operations["AuthController_getMe"];
+  };
+  "/dashboard/receipt_report": {
+    /** Get total receipt amount */
+    get: operations["DashboardController_getReceiptReport"];
   };
   "/dashboard/incomes_report": {
     /** Get net income & discount in range date */
@@ -290,7 +300,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-07T04:26:31.671Z
+       * @default 2023-10-13T08:02:50.576Z
        */
       created_at: string;
       /** @description Addon status */
@@ -310,7 +320,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-07T04:26:31.671Z
+       * @default 2023-10-13T08:02:50.576Z
        */
       created_at: string;
       /** @description Addon status */
@@ -557,9 +567,8 @@ export interface components {
       /** @description Session of the order */
       session: components["schemas"]["undefined"] | string;
       /** @description Menu of the order */
-      menu: components["schemas"]["MenuSchema"] | string;
-      /** @description Addons of the order */
-      addons: (string | components["schemas"]["AddonSchema"])[];
+      menu: string;
+      addons: string[];
       /** @description Additional info */
       additional_info: string;
       /**
@@ -601,7 +610,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-10-07T04:26:31.773Z
+       * @default 2023-10-13T08:02:50.680Z
        */
       created_at: string;
       /**
@@ -705,6 +714,7 @@ export interface components {
       total_price: number;
       discount_price: number;
       net_price: number;
+      received_point: number;
       /** Format: date-time */
       created_at: string;
     };
@@ -874,9 +884,129 @@ export interface components {
       /** @description Coupon Required Point */
       required_point?: number;
     };
+    SettingSchema: {
+      /** @description Setting ID */
+      _id: string;
+      /** @description Restaurant Name */
+      name: string | null;
+      /** @description Restaurant Logo */
+      logo: string | null;
+      /** @default 0 */
+      point_ratio: number;
+    };
+    SettingDto: {
+      /** @description Restaurant Name */
+      name?: string;
+      /** @description Restaurant Logo */
+      logo?: string;
+      /**
+       * @description Point Ratio (in baht)
+       * @example 200
+       */
+      point_ratio?: number;
+    };
+    CreateUserDto: {
+      /** @description Username */
+      username: string;
+      /** @description Password */
+      password: string;
+      /**
+       * @description select role from enum UserRole example: Owner, Chef, Cashier, Employee, Customer
+       * @example Owner
+       * @enum {string}
+       */
+      role: "Owner" | "Cashier" | "Employee" | "Customer";
+    };
+    UpdateRoleDto: {
+      /**
+       * @description select role from enum UserRole example: Owner, Cashier, Employee, Customer
+       * @example Owner
+       * @enum {string}
+       */
+      role: "Owner" | "Cashier" | "Employee" | "Customer";
+    };
+    UpdateInfoDto: {
+      /** @description New Username */
+      newUsername?: string;
+      /** @description Old Password */
+      oldPassword: string;
+      /** @description New Password */
+      newPassword?: string;
+    };
     TablesDto: {
       /** @description Table number */
       title: string;
+    };
+    TablesResponseDto: {
+      /** @description Table ID (ObjectID) */
+      _id: string;
+      /** @description Table number */
+      title: string;
+      /**
+       * @description Session ID (ObjectID)
+       * @default null
+       */
+      session: string;
+      /**
+       * Format: date-time
+       * @description Session creation date
+       * @default null
+       */
+      session_create_at: string;
+      /**
+       * @description All orders count
+       * @default 0
+       */
+      allOrdersCount: number;
+      /**
+       * @description unfinish orders count
+       * @default 0
+       */
+      unfinishOrdersCount: number;
+      /**
+       * @description total price
+       * @default 0
+       */
+      totalPrice: number;
+      /**
+       * Format: date-time
+       * @description Table creation date
+       */
+      created_at: string;
+    };
+    AllPopulatedOrderDto: {
+      _id: string;
+      /** Format: date-time */
+      created_at: string;
+      /** @enum {string} */
+      status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
+      session: string;
+      menu: components["schemas"]["MenuSchema"];
+      addons: components["schemas"]["AddonSchema"][];
+      additional_info: string;
+      /** Format: date-time */
+      deleted_at: string;
+      cancel: components["schemas"]["OrderCancelSchema"];
+    };
+    AllPopulatedSessionDto: {
+      _id: string;
+      /** Format: date-time */
+      created_at: string;
+      /** Format: date-time */
+      finished_at: string;
+      user: components["schemas"]["UserSchema"] | null;
+      coupon: components["schemas"]["CouponSchema"] | null;
+      table: string;
+      orders: components["schemas"]["AllPopulatedOrderDto"][];
+    };
+    TableResponseDto: {
+      /** @description Table ID */
+      _id: string;
+      /** @description Table number */
+      title: string;
+      /** Format: date-time */
+      created_at: string;
+      session: components["schemas"]["AllPopulatedSessionDto"];
     };
     ErrorDto: {
       msg: string;
@@ -907,45 +1037,20 @@ export interface components {
       _id: string;
       /** @description Username */
       username: string;
-      /** @description Role of user */
-      role: string;
+      /**
+       * @description Role of user
+       * @enum {number}
+       */
+      role: 100 | 50 | 25 | 1;
       point: number;
     };
-    CreateUserDto: {
-      /** @description Username */
-      username: string;
-      /** @description Password */
-      password: string;
-      /**
-       * @description select role from enum UserRole example: Owner, Chef, Cashier, Employee, Customer
-       * @example Owner
-       * @enum {string}
-       */
-      role: "Owner" | "Cashier" | "Employee" | "Customer";
-    };
-    UpdateRoleDto: {
-      /**
-       * @description select role from enum UserRole example: Owner, Cashier, Employee, Customer
-       * @example Owner
-       * @enum {string}
-       */
-      role: "Owner" | "Cashier" | "Employee" | "Customer";
-    };
-    UpdateInfoDto: {
-      /** @description New Username */
-      newUsername?: string;
-      /** @description Old Password */
-      oldPassword: string;
-      /** @description New Password */
-      newPassword?: string;
-    };
-    GetUserAmountDto: {
-      /** @description Total registered users */
-      total_user: number;
-      /** @description Total old registered users */
-      old_user: number;
-      /** @description Total new registered users */
-      new_user: number;
+    GetReceiptAmountDto: {
+      /** @description Total receipt */
+      all_receipt: number;
+      /** @description Total receipt with registered users */
+      receipt_user: number;
+      /** @description Total receipt without registered users */
+      receipt_no_user: number;
     };
     GetNetIncomeDto: {
       /** @description Total income */
@@ -1579,7 +1684,7 @@ export interface operations {
     };
     responses: {
       /** @description Updated session user */
-      204: never;
+      200: never;
     };
   };
   /** Get all redeemable coupon */
@@ -1790,106 +1895,29 @@ export interface operations {
       404: never;
     };
   };
-  /** Get all tables */
-  TablesController_getTables: {
+  /** Get Restaurant Settings */
+  SettingController_getSettings: {
     responses: {
-      /** @description Get tables */
+      /** @description Get Restaurant Settings */
       200: {
         content: {
-          "application/json": components["schemas"]["TablesSchema"][];
+          "application/json": components["schemas"]["SettingSchema"];
         };
       };
     };
   };
-  TablesController_updateTable: {
+  /** Update Restaurant Settings */
+  SettingController_updateSettings: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["TableUpdateRequestDto"];
+        "application/json": components["schemas"]["SettingDto"];
       };
     };
     responses: {
-      /** @description updated table */
+      /** @description Update Restaurant Settings */
       200: {
         content: {
-          "application/json": components["schemas"]["TablesSchema"];
-        };
-      };
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorDto"];
-        };
-      };
-    };
-  };
-  /** Create a table */
-  TablesController_createTable: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["TablesDto"];
-      };
-    };
-    responses: {
-      /** @description Create table */
-      201: {
-        content: {
-          "application/json": components["schemas"]["TablesSchema"];
-        };
-      };
-    };
-  };
-  /** Soft delete table */
-  TablesController_deleteTable: {
-    responses: {
-      204: never;
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorDto"];
-        };
-      };
-    };
-  };
-  /** Login */
-  AuthController_signIn: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["LoginDto"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["LoginResponseDto"];
-        };
-      };
-    };
-  };
-  /** Logout */
-  AuthController_signOut: {
-    responses: {
-      204: never;
-    };
-  };
-  /** Customer's registration */
-  AuthController_register: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["RegisterDto"];
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["RegisterDto"];
-        };
-      };
-    };
-  };
-  /** Get current user */
-  AuthController_getMe: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["UserResponseDto"];
+          "application/json": components["schemas"]["SettingSchema"];
         };
       };
     };
@@ -1975,18 +2003,138 @@ export interface operations {
       204: never;
     };
   };
-  /** Get total registered users */
-  DashboardController_getDashboard: {
+  /** Get all tables with information */
+  TablesController_getTables: {
+    responses: {
+      /** @description Get all tables with information */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TablesResponseDto"][];
+        };
+      };
+    };
+  };
+  TablesController_updateTable: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TableUpdateRequestDto"];
+      };
+    };
+    responses: {
+      /** @description updated table */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TablesSchema"];
+        };
+      };
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDto"];
+        };
+      };
+    };
+  };
+  /** Create a table */
+  TablesController_createTable: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TablesDto"];
+      };
+    };
+    responses: {
+      /** @description Create table */
+      201: {
+        content: {
+          "application/json": components["schemas"]["TablesSchema"];
+        };
+      };
+    };
+  };
+  /** Soft delete table */
+  TablesController_deleteTable: {
+    responses: {
+      204: never;
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorDto"];
+        };
+      };
+    };
+  };
+  /** Get table by id */
+  TablesController_getTableById: {
     parameters: {
       path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["TableResponseDto"];
+        };
+      };
+    };
+  };
+  /** Login */
+  AuthController_signIn: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LoginDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["LoginResponseDto"];
+        };
+      };
+    };
+  };
+  /** Logout */
+  AuthController_signOut: {
+    responses: {
+      204: never;
+    };
+  };
+  /** Customer's registration */
+  AuthController_register: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RegisterDto"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["RegisterDto"];
+        };
+      };
+    };
+  };
+  /** Get current user */
+  AuthController_getMe: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserResponseDto"];
+        };
+      };
+    };
+  };
+  /** Get total receipt amount */
+  DashboardController_getReceiptReport: {
+    parameters: {
+      query: {
+        /** @description Date (UnixTimeStamp in seconds) */
         date: number;
       };
     };
     responses: {
-      /** @description Total registered users */
+      /** @description Total receipt amount */
       200: {
         content: {
-          "application/json": components["schemas"]["GetUserAmountDto"];
+          "application/json": components["schemas"]["GetReceiptAmountDto"];
         };
       };
     };
@@ -1995,9 +2143,9 @@ export interface operations {
   DashboardController_getIncomeReport: {
     parameters: {
       query: {
-        /** @description Start Date (UnixTimeStamp) */
+        /** @description Start Date (UnixTimeStamp in seconds) */
         from: number;
-        /** @description End Date (UnixTimeStamp) */
+        /** @description End Date (UnixTimeStamp in seconds) */
         end: number;
       };
     };
