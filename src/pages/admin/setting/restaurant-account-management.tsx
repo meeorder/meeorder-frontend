@@ -134,6 +134,7 @@ const Logo = styled(Button, transientOptions)<LogoProps>`
   position: relative;
   width: 200px;
   height: 200px;
+  border-radius: 4px;
 
   &:hover {
     &:before {
@@ -146,6 +147,7 @@ const Logo = styled(Button, transientOptions)<LogoProps>`
       color: ${(props) => props.theme.antd.colorBgBase};
       width: 200px;
       height: 200px;
+      border-radius: 4px;
       position: absolute;
       top: 0;
       left: 0;

@@ -178,4 +178,5 @@ const LogoContainer = styled.div`
 const Logo = styled.div<LogoProps>`
   flex: 1;
   height: 100%;
+  border-radius: 4px;
 `;
