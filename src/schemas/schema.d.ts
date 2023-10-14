@@ -187,6 +187,30 @@ export interface paths {
     /** Update a coupon by id */
     patch: operations["CouponsController_update"];
   };
+  "/settings": {
+    /** Get Restaurant Settings */
+    get: operations["SettingController_getSettings"];
+    /** Update Restaurant Settings */
+    patch: operations["SettingController_updateSettings"];
+  };
+  "/users": {
+    /** Get users */
+    get: operations["UsersController_getUsers"];
+    /** Create user (for Owner) */
+    post: operations["UsersController_createUser"];
+    /** Delete user */
+    delete: operations["UsersController_deleteUser"];
+    /** Update User info */
+    patch: operations["UsersController_updateUserInfo"];
+  };
+  "/users/reset/password": {
+    /** Reset user password */
+    post: operations["UsersController_updateUser"];
+  };
+  "/users/{id}/role": {
+    /** Update user role */
+    patch: operations["UsersController_updateUserRole"];
+  };
   "/tables": {
     /** Get all tables with information */
     get: operations["TablesController_getTables"];
@@ -216,37 +240,21 @@ export interface paths {
     /** Get current user */
     get: operations["AuthController_getMe"];
   };
-  "/users": {
-    /** Get users */
-    get: operations["UsersController_getUsers"];
-    /** Create user (for Owner) */
-    post: operations["UsersController_createUser"];
-    /** Delete user */
-    delete: operations["UsersController_deleteUser"];
-    /** Update User info */
-    patch: operations["UsersController_updateUserInfo"];
-  };
-  "/users/reset/password": {
-    /** Reset user password */
-    post: operations["UsersController_updateUser"];
-  };
-  "/users/{id}/role": {
-    /** Update user role */
-    patch: operations["UsersController_updateUserRole"];
-  };
-  "/dashboard/customer_report/{date}": {
-    /** Get total registered users */
-    get: operations["DashboardController_getDashboard"];
+  "/dashboard/receipt_report": {
+    /** Get total receipt amount */
+    get: operations["DashboardController_getReceiptReport"];
   };
   "/dashboard/incomes_report": {
     /** Get net income & discount in range date */
     get: operations["DashboardController_getIncomeReport"];
   };
-  "/settings": {
-    /** Get Restaurant Settings */
-    get: operations["SettingController_getSettings"];
-    /** Update Restaurant Settings */
-    patch: operations["SettingController_updateSettings"];
+  "/dashboard/coupon_report/today": {
+    /** Get total coupon usage today */
+    get: operations["DashboardController_getCouponReportToday"];
+  };
+  "/dashboard/coupon_report": {
+    /** Get total coupon usage */
+    get: operations["DashboardController_geCouponReportTotal"];
   };
 }
 
@@ -300,7 +308,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-12T14:20:29.017Z
+       * @default 2023-10-14T06:21:11.508Z
        */
       created_at: string;
       /** @description Addon status */
@@ -320,7 +328,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-12T14:20:29.017Z
+       * @default 2023-10-14T06:21:11.508Z
        */
       created_at: string;
       /** @description Addon status */
@@ -458,7 +466,7 @@ export interface components {
       created_at: string;
     };
     OrderCancelResponseDto: {
-      reasons: string;
+      reasons: string[];
       ingredients: components["schemas"]["IngredientSchema"][];
       addons: components["schemas"]["AddonSchema"][];
       /** Format: date-time */
@@ -546,7 +554,7 @@ export interface components {
       additional_info: string;
     };
     OrderCancelSchema: {
-      reasons: string;
+      reasons: string[];
       ingredients: string[];
       addons: string[];
       /** Format: date-time */
@@ -567,9 +575,8 @@ export interface components {
       /** @description Session of the order */
       session: components["schemas"]["undefined"] | string;
       /** @description Menu of the order */
-      menu: components["schemas"]["MenuSchema"] | string;
-      /** @description Addons of the order */
-      addons: (string | components["schemas"]["AddonSchema"])[];
+      menu: string;
+      addons: string[];
       /** @description Additional info */
       additional_info: string;
       /**
@@ -611,7 +618,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-10-12T14:20:29.164Z
+       * @default 2023-10-14T06:21:11.636Z
        */
       created_at: string;
       /**
@@ -715,6 +722,7 @@ export interface components {
       total_price: number;
       discount_price: number;
       net_price: number;
+      received_point: number;
       /** Format: date-time */
       created_at: string;
     };
@@ -884,6 +892,55 @@ export interface components {
       /** @description Coupon Required Point */
       required_point?: number;
     };
+    SettingSchema: {
+      /** @description Setting ID */
+      _id: string;
+      /** @description Restaurant Name */
+      name: string | null;
+      /** @description Restaurant Logo */
+      logo: string | null;
+      /** @default 0 */
+      point_ratio: number;
+    };
+    SettingDto: {
+      /** @description Restaurant Name */
+      name?: string;
+      /** @description Restaurant Logo */
+      logo?: string;
+      /**
+       * @description Point Ratio (in baht)
+       * @example 200
+       */
+      point_ratio?: number;
+    };
+    CreateUserDto: {
+      /** @description Username */
+      username: string;
+      /** @description Password */
+      password: string;
+      /**
+       * @description select role from enum UserRole example: Owner, Chef, Cashier, Employee, Customer
+       * @example Owner
+       * @enum {string}
+       */
+      role: "Owner" | "Cashier" | "Employee" | "Customer";
+    };
+    UpdateRoleDto: {
+      /**
+       * @description select role from enum UserRole example: Owner, Cashier, Employee, Customer
+       * @example Owner
+       * @enum {string}
+       */
+      role: "Owner" | "Cashier" | "Employee" | "Customer";
+    };
+    UpdateInfoDto: {
+      /** @description New Username */
+      newUsername?: string;
+      /** @description Old Password */
+      oldPassword: string;
+      /** @description New Password */
+      newPassword?: string;
+    };
     TablesDto: {
       /** @description Table number */
       title: string;
@@ -925,6 +982,20 @@ export interface components {
        */
       created_at: string;
     };
+    AllPopulatedOrderDto: {
+      _id: string;
+      /** Format: date-time */
+      created_at: string;
+      /** @enum {string} */
+      status: "IN_QUEUE" | "PREPARING" | "READY_TO_SERVE" | "DONE" | "CANCELLED";
+      session: string;
+      menu: components["schemas"]["MenuSchema"];
+      addons: components["schemas"]["AddonSchema"][];
+      additional_info: string;
+      /** Format: date-time */
+      deleted_at: string;
+      cancel: components["schemas"]["OrderCancelSchema"];
+    };
     AllPopulatedSessionDto: {
       _id: string;
       /** Format: date-time */
@@ -934,7 +1005,7 @@ export interface components {
       user: components["schemas"]["UserSchema"] | null;
       coupon: components["schemas"]["CouponSchema"] | null;
       table: string;
-      orders: components["schemas"]["OrdersSchema"][];
+      orders: components["schemas"]["AllPopulatedOrderDto"][];
     };
     TableResponseDto: {
       /** @description Table ID */
@@ -981,41 +1052,13 @@ export interface components {
       role: 100 | 50 | 25 | 1;
       point: number;
     };
-    CreateUserDto: {
-      /** @description Username */
-      username: string;
-      /** @description Password */
-      password: string;
-      /**
-       * @description select role from enum UserRole example: Owner, Chef, Cashier, Employee, Customer
-       * @example Owner
-       * @enum {string}
-       */
-      role: "Owner" | "Cashier" | "Employee" | "Customer";
-    };
-    UpdateRoleDto: {
-      /**
-       * @description select role from enum UserRole example: Owner, Cashier, Employee, Customer
-       * @example Owner
-       * @enum {string}
-       */
-      role: "Owner" | "Cashier" | "Employee" | "Customer";
-    };
-    UpdateInfoDto: {
-      /** @description New Username */
-      newUsername?: string;
-      /** @description Old Password */
-      oldPassword: string;
-      /** @description New Password */
-      newPassword?: string;
-    };
-    GetUserAmountDto: {
-      /** @description Total registered users */
-      total_user: number;
-      /** @description Total old registered users */
-      old_user: number;
-      /** @description Total new registered users */
-      new_user: number;
+    GetReceiptAmountDto: {
+      /** @description Total receipt */
+      all_receipt: number;
+      /** @description Total receipt with registered users */
+      receipt_user: number;
+      /** @description Total receipt without registered users */
+      receipt_no_user: number;
     };
     GetNetIncomeDto: {
       /** @description Total income */
@@ -1025,19 +1068,15 @@ export interface components {
       /** @description Total net income (income - discount) */
       totalNetIncome: number;
     };
-    SettingSchema: {
-      /** @description Setting ID */
-      _id: string;
-      /** @description Restaurant Name */
-      name: string | null;
-      /** @description Restaurant Logo */
-      logo: string | null;
+    GetCouponReportTodayDto: {
+      /** @description Total used coupon today */
+      couponUsageToday: number;
     };
-    SettingDto: {
-      /** @description Restaurant Name */
-      name?: string;
-      /** @description Restaurant Logo */
-      logo?: string;
+    GetCouponReportTotalDto: {
+      /** @description Total coupon */
+      couponQuota: number;
+      /** @description Total used coupon */
+      couponUsageTotal: number;
     };
   };
   responses: never;
@@ -1046,6 +1085,8 @@ export interface components {
   headers: never;
   pathItems: never;
 }
+
+export type $defs = Record<string, never>;
 
 export type external = Record<string, never>;
 
@@ -1102,7 +1143,9 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a category by id */
@@ -1114,9 +1157,13 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Category not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Replace a category by id */
@@ -1140,7 +1187,9 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** order the categories' rank */
@@ -1152,7 +1201,9 @@ export interface operations {
     };
     responses: {
       /** @description Change category rank */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all addons */
@@ -1201,7 +1252,9 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Replace a addon by id */
@@ -1225,7 +1278,9 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a addon by id */
@@ -1237,9 +1292,13 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Addon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Change addon status to available */
@@ -1251,7 +1310,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Change addon status to unavailable */
@@ -1263,14 +1324,18 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Make all addons available */
   AddonsController_activateAllAddon: {
     responses: {
       /** @description All addons is now available */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all menus */
@@ -1317,9 +1382,13 @@ export interface operations {
     };
     responses: {
       /** @description The menus have been successfully deleted. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get a menu by id */
@@ -1336,7 +1405,9 @@ export interface operations {
         };
       };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Replace a menu by id */
@@ -1353,9 +1424,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully updated. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a menu by id */
@@ -1367,9 +1442,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully deleted. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Publish a menu by id */
@@ -1381,9 +1460,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully published. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Unpublish a menu by id */
@@ -1395,9 +1478,13 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully unpublished. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description No menu found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Get all orders */
@@ -1419,7 +1506,9 @@ export interface operations {
     };
     responses: {
       /** @description Create order */
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   /**
@@ -1434,7 +1523,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   OrdersController_updateOrder: {
@@ -1467,7 +1558,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to in_queue */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Change order status to preparing */
@@ -1480,7 +1573,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to preparing */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Change order status to ready to serve */
@@ -1493,7 +1588,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to ready to serve */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Change order status to done */
@@ -1506,7 +1603,9 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to done */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /**
@@ -1525,8 +1624,12 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
-      404: never;
+      204: {
+        content: never;
+      };
+      404: {
+        content: never;
+      };
     };
   };
   /** Get all sessions */
@@ -1559,7 +1662,9 @@ export interface operations {
         };
       };
       /** @description Session already exists */
-      409: never;
+      409: {
+        content: never;
+      };
     };
   };
   /** Get a session by id */
@@ -1578,7 +1683,9 @@ export interface operations {
         };
       };
       /** @description Session not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a session by id */
@@ -1591,9 +1698,13 @@ export interface operations {
     };
     responses: {
       /** @description Session deleted */
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Session not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Get a session by table id */
@@ -1612,7 +1723,9 @@ export interface operations {
         };
       };
       /** @description No session found in the table */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Finish a session */
@@ -1631,7 +1744,9 @@ export interface operations {
         };
       };
       /** @description Session not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Get orders by session */
@@ -1663,7 +1778,9 @@ export interface operations {
     };
     responses: {
       /** @description Updated session user */
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   /** Get all redeemable coupon */
@@ -1698,9 +1815,13 @@ export interface operations {
     };
     responses: {
       /** @description Coupon is attached to session */
-      204: never;
+      204: {
+        content: never;
+      };
       /** @description Resource conflict (coupon quota has been reached) */
-      409: never;
+      409: {
+        content: never;
+      };
     };
   };
   /** Get all ingredients */
@@ -1728,7 +1849,9 @@ export interface operations {
         };
       };
       /** @description Ingredient already exists */
-      409: never;
+      409: {
+        content: never;
+      };
     };
   };
   /** Get a ingredient by id */
@@ -1745,7 +1868,9 @@ export interface operations {
         };
       };
       /** @description Ingredient not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a ingredient by id */
@@ -1757,9 +1882,13 @@ export interface operations {
     };
     responses: {
       /** @description Ingredient deleted */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description Ingredient not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Update a ingredient by id */
@@ -1782,16 +1911,22 @@ export interface operations {
         };
       };
       /** @description Ingredient not found */
-      404: never;
+      404: {
+        content: never;
+      };
       /** @description Ingredient already exists */
-      409: never;
+      409: {
+        content: never;
+      };
     };
   };
   /** Make all ingredient available */
   IngredientsController_activateAllIngredient: {
     responses: {
       /** @description All ingredient is now available */
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all coupons */
@@ -1834,7 +1969,9 @@ export interface operations {
         };
       };
       /** @description Coupon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Delete a coupon by id */
@@ -1846,9 +1983,13 @@ export interface operations {
     };
     responses: {
       /** @description Coupon deleted */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description Coupon not found */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   /** Update a coupon by id */
@@ -1871,7 +2012,127 @@ export interface operations {
         };
       };
       /** @description Coupon not found */
-      404: never;
+      404: {
+        content: never;
+      };
+    };
+  };
+  /** Get Restaurant Settings */
+  SettingController_getSettings: {
+    responses: {
+      /** @description Get Restaurant Settings */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SettingSchema"];
+        };
+      };
+    };
+  };
+  /** Update Restaurant Settings */
+  SettingController_updateSettings: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SettingDto"];
+      };
+    };
+    responses: {
+      /** @description Update Restaurant Settings */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SettingSchema"];
+        };
+      };
+    };
+  };
+  /** Get users */
+  UsersController_getUsers: {
+    parameters: {
+      query?: {
+        /** @description User role */
+        role?: string;
+      };
+    };
+    responses: {
+      /** @description Get users by roles */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserSchema"][];
+        };
+      };
+    };
+  };
+  /** Create user (for Owner) */
+  UsersController_createUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateUserDto"];
+      };
+    };
+    responses: {
+      /** @description Create user */
+      201: {
+        content: never;
+      };
+    };
+  };
+  /** Delete user */
+  UsersController_deleteUser: {
+    parameters: {
+      query: {
+        /** @description User id (ObjectId) */
+        id: string;
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
+    };
+  };
+  /** Update User info */
+  UsersController_updateUserInfo: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateInfoDto"];
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
+    };
+  };
+  /** Reset user password */
+  UsersController_updateUser: {
+    parameters: {
+      query: {
+        /** @description User id (ObjectId) */
+        id: string;
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
+    };
+  };
+  /** Update user role */
+  UsersController_updateUserRole: {
+    parameters: {
+      path: {
+        /** @description User id (ObjectId) */
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateRoleDto"];
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
     };
   };
   /** Get all tables with information */
@@ -1924,7 +2185,9 @@ export interface operations {
   /** Soft delete table */
   TablesController_deleteTable: {
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
       404: {
         content: {
           "application/json": components["schemas"]["ErrorDto"];
@@ -1965,7 +2228,9 @@ export interface operations {
   /** Logout */
   AuthController_signOut: {
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   /** Customer's registration */
@@ -1993,99 +2258,19 @@ export interface operations {
       };
     };
   };
-  /** Get users */
-  UsersController_getUsers: {
-    parameters: {
-      query?: {
-        /** @description User role */
-        role?: string;
-      };
-    };
-    responses: {
-      /** @description Get users by roles */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UserSchema"][];
-        };
-      };
-    };
-  };
-  /** Create user (for Owner) */
-  UsersController_createUser: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateUserDto"];
-      };
-    };
-    responses: {
-      /** @description Create user */
-      201: never;
-    };
-  };
-  /** Delete user */
-  UsersController_deleteUser: {
+  /** Get total receipt amount */
+  DashboardController_getReceiptReport: {
     parameters: {
       query: {
-        /** @description User id (ObjectId) */
-        id: string;
-      };
-    };
-    responses: {
-      204: never;
-    };
-  };
-  /** Update User info */
-  UsersController_updateUserInfo: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateInfoDto"];
-      };
-    };
-    responses: {
-      204: never;
-    };
-  };
-  /** Reset user password */
-  UsersController_updateUser: {
-    parameters: {
-      query: {
-        /** @description User id (ObjectId) */
-        id: string;
-      };
-    };
-    responses: {
-      204: never;
-    };
-  };
-  /** Update user role */
-  UsersController_updateUserRole: {
-    parameters: {
-      path: {
-        /** @description User id (ObjectId) */
-        id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateRoleDto"];
-      };
-    };
-    responses: {
-      204: never;
-    };
-  };
-  /** Get total registered users */
-  DashboardController_getDashboard: {
-    parameters: {
-      path: {
+        /** @description Date (UnixTimeStamp in seconds) */
         date: number;
       };
     };
     responses: {
-      /** @description Total registered users */
+      /** @description Total receipt amount */
       200: {
         content: {
-          "application/json": components["schemas"]["GetUserAmountDto"];
+          "application/json": components["schemas"]["GetReceiptAmountDto"];
         };
       };
     };
@@ -2094,9 +2279,9 @@ export interface operations {
   DashboardController_getIncomeReport: {
     parameters: {
       query: {
-        /** @description Start Date (UnixTimeStamp) */
+        /** @description Start Date (UnixTimeStamp in seconds) */
         from: number;
-        /** @description End Date (UnixTimeStamp) */
+        /** @description End Date (UnixTimeStamp in seconds) */
         end: number;
       };
     };
@@ -2109,29 +2294,24 @@ export interface operations {
       };
     };
   };
-  /** Get Restaurant Settings */
-  SettingController_getSettings: {
+  /** Get total coupon usage today */
+  DashboardController_getCouponReportToday: {
     responses: {
-      /** @description Get Restaurant Settings */
+      /** @description Total Coupon usage today */
       200: {
         content: {
-          "application/json": components["schemas"]["SettingSchema"];
+          "application/json": components["schemas"]["GetCouponReportTodayDto"];
         };
       };
     };
   };
-  /** Update Restaurant Settings */
-  SettingController_updateSettings: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SettingDto"];
-      };
-    };
+  /** Get total coupon usage */
+  DashboardController_geCouponReportTotal: {
     responses: {
-      /** @description Update Restaurant Settings */
+      /** @description Total Coupon usage */
       200: {
         content: {
-          "application/json": components["schemas"]["SettingSchema"];
+          "application/json": components["schemas"]["GetCouponReportTotalDto"];
         };
       };
     };
