@@ -51,6 +51,25 @@ const AddonStock = () => {
       dataIndex: "price",
       width: "50px",
       align: "end",
+      render: (text: string, rec) => (
+        <>
+          <Text
+            editable={
+              isOwner && {
+                onChange: (new_price) => {
+                  editAddon({
+                    ...rec,
+                    price: Number.parseFloat(new_price),
+                    id: rec._id,
+                  });
+                },
+              }
+            }
+          >
+            {text}
+          </Text>
+        </>
+      ),
     },
     {
       title: "เมนูที่ใช้ท็อปปิ้ง",
