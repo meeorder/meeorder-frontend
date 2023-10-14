@@ -169,15 +169,16 @@ export default AdminSideNav;
 const LogoContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
   align-items: center;
   width: 100%;
-  height: 100px;
-  padding: 8px;
+  height: 64px;
+  padding: 24px;
+  gap: 12px;
 `;
 
 const Logo = styled.div<LogoProps>`
-  flex: 1;
-  height: 100%;
+  height: 32px;
+  width: 32px;
   border-radius: 4px;
+  flex-shrink: 0;
 `;
