@@ -276,6 +276,7 @@ const IconClickSection = styled(Button, transientOptions)<{ $color: string }>`
   border-radius: 0;
   border-bottom: 0;
   border-top: 0;
+  border-left: 0;
   border-color: ${(props) => props.$color} !important;
   z-index: 1;
 `;
