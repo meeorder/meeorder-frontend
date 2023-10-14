@@ -32,7 +32,11 @@ const EditRestaurantLogo: React.FC<Props> = ({
     isError,
     error,
   } = useUpdateRestaurantSetting({
-    onSuccess: () => setIsOpenChangeLogo(false),
+    onSuccess: () => {
+      setTimeout(() => {
+        setIsOpenChangeLogo(false);
+      }, 100);
+    },
   });
 
   const handleCancelForm = () => {
