@@ -83,7 +83,7 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
                 <TagGroup>
                   {order.cancel?.ingredients.map((ingredient) => {
                     return (
-                      <IngredientTag key={order._id + ingredient._id}>
+                      <IngredientTag key={ingredient._id}>
                         {ingredient.title}
                       </IngredientTag>
                     );
@@ -105,7 +105,7 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
               <TagGroup>
                 {order.cancel?.addons.map((addon) => {
                   return (
-                    <AddOnsTag key={order._id + addon._id}>
+                    <AddOnsTag key={addon._id}>
                       {addon.title}
                     </AddOnsTag>
                   );
@@ -128,7 +128,7 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
                 <TagGroup>
                   {order.cancel?.reasons.map((reason) => {
                     return (
-                      <IngredientTag key={order._id}>
+                      <IngredientTag key={reason}>
                         {reason}
                       </IngredientTag>
                     );

@@ -20,7 +20,6 @@ export const useFilterCategory = create<FilterCategory>()(
     }),
     {
       name: "filterCategory",
-      skipHydration: true,
     },
   ),
 );

@@ -10,6 +10,7 @@ import useAllOrders, {
 import { useFilterCategory } from "@/modules/admin/order/hook/useFilterCategory";
 import { useFilterStatus } from "@/modules/admin/order/hook/useFilterStatus";
 import { H1 } from "@/modules/common/components/Typography";
+import { useClient } from "@/modules/common/hooks/useClient";
 import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
 import styled from "@emotion/styled";
@@ -25,14 +26,14 @@ const OrderManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [modalData, setModalData] = useState<GetAllOrdersResponse[number]>();
+  const {isClientLoaded} = useClient();
   const [filterStatus] = useFilterStatus((state) => [state.filterStatus]);
-  console.log("filterStatus", filterStatus);
   const [filterCategory] = useFilterCategory((state) => [state.filterCategory]);
-  console.log("filterCategory", filterCategory);
   const [allOrderSource, setAllOrderSource] = useState<AllOrdersData>();
   useEffect(() => {
     setAllOrderSource(allOrder ?? []);
   }, [allOrder]);
+  if (!isClientLoaded) return null;
   return (
     <AppLayout layoutType="admin" currentPageId="employeeOrderManagement">
       <Container>

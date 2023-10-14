@@ -13,6 +13,7 @@ import {
   Tag,
   theme,
   type MenuProps,
+  ConfigProvider,
 } from "antd";
 import React, { useState } from "react";
 
@@ -156,13 +157,22 @@ const CancelOrderModal: React.FC<CancelOrderModalProps> = ({
           <StyledDivider type="vertical" />
         </LeftContainer>
         <CancelReasonContainer>
+          <ConfigProvider
+          theme={{
+            token:{
+              colorPrimary: token["red-6"],
+            },
+          }}
+          >
           <StyledMenu
             style={{ minWidth: 0, flex: "auto" }}
             onClick={handelChangeCancelReasonMode}
             selectedKeys={[cancelReasonMode]}
             mode="horizontal"
             items={items}
+
           />
+          </ConfigProvider>
           {cancelReasonMode === "outOfStock" && (
             <MainReasoncontainer>
               {modalData?.menu.ingredients.length != 0 && (
@@ -275,16 +285,11 @@ const ModalTitle = styled.div`
 `;
 
 const StyledMenu = styled(Menu)`
-  .ant-menu-item-selected {
-    color: ${(props) => props.theme.antd["red-6"]} !important;
-  }
-  .ant-menu-item-selected::after {
-    border-bottom-color: ${(props) => props.theme.antd["red-6"]} !important;
-  }
+    justify-content: center;
   .ant-menu-item {
     align-self: stretch;
     text-align: center;
-    width: 50%;
+    width: 49%;
   }
 `;
 

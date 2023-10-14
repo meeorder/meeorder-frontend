@@ -34,7 +34,6 @@ export const useFilterStatus = create<FilterStatus>()(
     }),
     {
       name: "filterStatus",
-      skipHydration: true,
     },
   ),
 );

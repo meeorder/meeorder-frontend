@@ -162,7 +162,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
                     <TagGroup>
                       {modalData.cancel?.ingredients.map((ingredient) => {
                         return (
-                          <IngredientTag key={modalData._id + ingredient._id}>
+                          <IngredientTag key={ingredient._id}>
                             {ingredient.title}
                           </IngredientTag>
                         );
@@ -187,7 +187,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
                     <TagGroup>
                       {modalData.cancel?.addons.map((addon) => {
                         return (
-                          <AddOnsTag key={modalData._id + addon._id}>
+                          <AddOnsTag key={addon._id}>
                             {addon.title}
                           </AddOnsTag>
                         );
@@ -210,7 +210,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
                     <TagGroup>
                       {modalData?.cancel?.reasons?.map((reason) => {
                         return (
-                          <IngredientTag key={modalData?._id}>
+                          <IngredientTag key={reason}>
                             {reason}
                           </IngredientTag>
                         );
