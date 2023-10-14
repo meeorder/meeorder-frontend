@@ -9,6 +9,8 @@ import {
 } from "@/modules/admin/menu/hooks/useAddons";
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import { Text } from "@/modules/common/components/Typography";
+import { useUser } from "@/modules/common/hooks/useUserStore";
+import { roleNumberToRole } from "@/modules/services/users";
 import styled from "@emotion/styled";
 import { Button, Card, Popconfirm, Switch, Table } from "antd";
 import { type ColumnsType } from "antd/es/table";
@@ -20,7 +22,8 @@ const AddonStock = () => {
   const { mutate: deleteAddon } = useDeleteAddon();
   const { mutate: createAddon } = useCreateAddon();
   const { mutate: editAddon } = useEditAddon();
-
+  const { data: user } = useUser();
+  const isOwner = roleNumberToRole[user?.role ?? 1] === "Owner";
   const stockAddonColumns: ColumnsType<Addon> = [
     {
       title: "ชื่อท็อปปิ้ง",
@@ -30,11 +33,13 @@ const AddonStock = () => {
       render: (text: string, rec) => (
         <>
           <Text
-            editable={{
-              onChange: (new_title) => {
-                editAddon({ ...rec, title: new_title, id: rec._id });
-              },
-            }}
+            editable={
+              isOwner && {
+                onChange: (new_title) => {
+                  editAddon({ ...rec, title: new_title, id: rec._id });
+                },
+              }
+            }
           >
             {text}
           </Text>
@@ -71,51 +76,55 @@ const AddonStock = () => {
         </>
       ),
     },
-    {
-      title: "ตัวดำเนินการ",
-      width: "10px",
-      render: (text: string, rec) => (
-        <>
-          <Popconfirm
-            title="ต้องการลบท็อปปิ้งหรือไม่"
-            onConfirm={() => {
-              const id = rec._id;
-              deleteAddon({ id });
-            }}
-            okText="ตกลง"
-            cancelText="ยกเลิก"
-          >
-            <Button type="link">ลบ</Button>
-          </Popconfirm>
-        </>
-      ),
-    },
+    isOwner
+      ? {
+          title: "ตัวดำเนินการ",
+          width: "10px",
+          render: (text: string, rec) => (
+            <>
+              <Popconfirm
+                title="ต้องการลบท็อปปิ้งหรือไม่"
+                onConfirm={() => {
+                  const id = rec._id;
+                  deleteAddon({ id });
+                }}
+                okText="ตกลง"
+                cancelText="ยกเลิก"
+              >
+                <Button type="link">ลบ</Button>
+              </Popconfirm>
+            </>
+          ),
+        }
+      : { width: "0px" },
   ];
 
   return (
     <StyledCard
       title={<div>จัดการท็อปปิ้ง</div>}
       extra={
-        <>
-          <CenterContentButton
-            type="default"
-            style={{ display: "inline-flex", marginRight: "10px" }}
-            onClick={function () {
-              createAddon({ title: "New Addon", price: 0 });
-            }}
-          >
-            + เพิ่มท็อปปิ้งใหม่
-          </CenterContentButton>
-          <CenterContentButton
-            type="primary"
-            style={{ display: "inline-flex" }}
-            onClick={function () {
-              activateAllAddons();
-            }}
-          >
-            เติมท็อปปิ้งทั้งหมด
-          </CenterContentButton>
-        </>
+        isOwner && (
+          <>
+            <CenterContentButton
+              type="default"
+              style={{ display: "inline-flex", marginRight: "10px" }}
+              onClick={function () {
+                createAddon({ title: "New Addon", price: 0 });
+              }}
+            >
+              + เพิ่มท็อปปิ้งใหม่
+            </CenterContentButton>
+            <CenterContentButton
+              type="primary"
+              style={{ display: "inline-flex" }}
+              onClick={function () {
+                activateAllAddons();
+              }}
+            >
+              เติมท็อปปิ้งทั้งหมด
+            </CenterContentButton>
+          </>
+        )
       }
     >
       <Table
