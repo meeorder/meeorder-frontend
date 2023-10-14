@@ -156,8 +156,14 @@ const EditIcon = styled.div`
   top: 150px;
   left: 150px;
 
-  padding: 8px;
-  border-radius: 100px;
+  height: 40px;
+  width: 40px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 300px;
   border: 1px solid ${(props) => props.theme.antd.colorLink};
   background: ${(props) => props.theme.antd.colorLink};
   box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.04);
