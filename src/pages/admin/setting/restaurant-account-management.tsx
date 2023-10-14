@@ -54,9 +54,18 @@ const AdminRestaurantAccountManagement = () => {
           </H4>
           <LogoForm>
             <Logo
+              ghost
               onClick={() => setIsOpenChangeLogo(true)}
               $isOpenChangeLogoForm={isOpenChangeLogo}
               $imgUrl={restaurantLogo}
+              style={{
+                backgroundImage: `url(${
+                  restaurantLogo ?? "https://picsum.photos/200/306"
+                })`,
+                backgroundSize: "contain",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
             >
               {!isOpenChangeLogo && (
                 <EditIcon onClick={() => setIsOpenChangeLogo(true)}>
@@ -125,22 +134,16 @@ const Logo = styled(Button, transientOptions)<LogoProps>`
   position: relative;
   width: 200px;
   height: 200px;
-  border-radius: 200px;
-  background:
-    url(${(props) => props.$imgUrl ?? "https://picsum.photos/200/306"}),
-    lightgray 0px 0px / 100% 100% no-repeat;
-  background-size: contain;
 
   &:hover {
     &:before {
-      content: "CHANGE LOGO";
+      content: "แก้ไข โลโก้";
       display: ${(props) => (props.$isOpenChangeLogoForm ? "none" : "grid")};
       place-items: center;
       text-align: center;
       white-space: initial;
-      font-size: 32px;
+      font-size: 48px;
       color: ${(props) => props.theme.antd.colorBgBase};
-      border-radius: 200px;
       width: 200px;
       height: 200px;
       position: absolute;
@@ -153,8 +156,8 @@ const Logo = styled(Button, transientOptions)<LogoProps>`
 
 const EditIcon = styled.div`
   position: absolute;
-  top: 150px;
-  left: 150px;
+  top: 170px;
+  left: 170px;
 
   height: 40px;
   width: 40px;
