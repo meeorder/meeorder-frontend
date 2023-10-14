@@ -39,7 +39,6 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     [adminSetting, adminRestaurantAccountManagement, adminUserManagement],
     employeeStock,
     employeeOrderManagement,
-    employeeStock,
     accountManagement,
   ];
 
