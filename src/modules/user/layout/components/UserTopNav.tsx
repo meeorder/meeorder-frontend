@@ -1,3 +1,4 @@
+import useRestaurantSetting from "@/modules/admin/setting/restaurantManagement/hooks/useResturantSetting";
 import { Text } from "@/modules/common/components/Typography";
 import UserAvatar from "@/modules/common/components/UserAvatar";
 import { useClient } from "@/modules/common/hooks/useClient";
@@ -13,17 +14,18 @@ const UserTopNav = () => {
   const { isClientLoaded } = useClient();
   const { data: session } = useSession();
   const { data: user } = useUser();
+  const { data: restaurant } = useRestaurantSetting();
 
   return (
     <>
       <Image
         style={{
-          width: "200px",
-          height: "100px",
+          width: "48px",
+          height: "48px",
         }}
-        src="/image/logo.png"
-        width={200}
-        height={100}
+        src={restaurant?.logo ?? ""}
+        width={1000}
+        height={1000}
         alt="logo"
       />
       <Text
@@ -32,6 +34,9 @@ const UserTopNav = () => {
           fontSize: "10px",
           fontFamily: "monospace",
           width: "3rem",
+          position: "absolute",
+          top: "10px",
+          right: "75px",
         }}
       >
         {isClientLoaded && session?._id}
