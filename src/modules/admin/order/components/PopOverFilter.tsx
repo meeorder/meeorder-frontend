@@ -1,3 +1,5 @@
+import { useFilterCategory } from "@/modules/admin/order/hook/useFilterCategory";
+import { useFilterStatus } from "@/modules/admin/order/hook/useFilterStatus";
 import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
 import styled from "@emotion/styled";
 import { Funnel } from "@phosphor-icons/react";
@@ -15,26 +17,16 @@ import React, { useState } from "react";
 
 type PopOverFilterProps = {
   options: SelectProps["options"];
-  filterCategory: string[];
-  setFilterCategory: (value: string[]) => void;
-  filterStatus: string[];
-  setFilterStatus: (value: string[]) => void;
 };
 
-const PopOverFilter: React.FC<PopOverFilterProps> = ({
-  options,
-  filterCategory,
-  setFilterCategory,
-  filterStatus,
-  setFilterStatus,
-}) => {
+const PopOverFilter: React.FC<PopOverFilterProps> = ({ options }) => {
   const statusMarks: SliderMarks = {
     0: "อยู่ในคิว",
     1: "กำลังเตรียมอาหาร",
     2: "พร้อมเสิร์ฟ",
     3: "เสร็จสิ้น",
   };
-  const statusMarksTranslation: { [key: string]: string } = {
+  const statusMarksTranslation: { [key: number]: string } = {
     0: "IN_QUEUE",
     1: "PREPARING",
     2: "READY_TO_SERVE",
@@ -46,6 +38,14 @@ const PopOverFilter: React.FC<PopOverFilterProps> = ({
     READY_TO_SERVE: 2,
     DONE: 3,
   };
+  const [setToFilterCategory, filterCategory] = useFilterCategory((state) => [
+    state.setToFilterCategory,
+    state.filterCategory,
+  ]);
+  const [setToFilterStatus, filterStatus] = useFilterStatus((state) => [
+    state.setToFilterStatus,
+    state.filterStatus,
+  ]);
   const [clicked, setClicked] = useState(false);
   const [changeFilterCategory, setChangeFilterCategory] =
     useState<string[]>(filterCategory);
@@ -74,7 +74,7 @@ const PopOverFilter: React.FC<PopOverFilterProps> = ({
   };
   const onSave = () => {
     setClicked(false);
-    setFilterCategory(changeFilterCategory);
+    setToFilterCategory(changeFilterCategory);
     const changeFilterStatusSliderTranslation: string[] = [];
     for (const [key, value] of Object.entries(statusMarksTranslation)) {
       if (
@@ -85,9 +85,9 @@ const PopOverFilter: React.FC<PopOverFilterProps> = ({
       }
     }
     if (changeFilterStatusCheckbox) {
-      setFilterStatus([...changeFilterStatusSliderTranslation, "CANCELLED"]);
+      setToFilterStatus([...changeFilterStatusSliderTranslation, "CANCELLED"]);
     } else {
-      setFilterStatus(changeFilterStatusSliderTranslation);
+      setToFilterStatus(changeFilterStatusSliderTranslation);
     }
   };
   const onCancel = () => {
@@ -98,19 +98,8 @@ const PopOverFilter: React.FC<PopOverFilterProps> = ({
   };
   const onReset = () => {
     setChangeFilterCategory([]);
-    setChangeFilterStatusSlider([
-      Math.min(
-        ...filterStatus
-          .filter((status) => status !== "CANCELLED")
-          .map((status) => reverseStatusMarksTranslation[status] as number),
-      ),
-      Math.max(
-        ...filterStatus
-          .filter((status) => status !== "CANCELLED")
-          .map((status) => reverseStatusMarksTranslation[status] as number),
-      ),
-    ]);
-    setChangeFilterStatusCheckbox(false);
+    setChangeFilterStatusSlider([0, 100]);
+    setChangeFilterStatusCheckbox(true);
   };
   const handleClickChange = (open: boolean) => {
     setClicked(open);

@@ -60,8 +60,8 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
           </StyledTable>
         }
         <ul style={{ margin: "0" }}>
-          {order.addons.map((addon) => {
-            return <li key={addon._id}>{addon.title}</li>;
+          {order.addons.map((addon,index) => {
+            return <li key={addon._id+index.toString()}>{addon.title}</li>;
           })}
         </ul>
         {order.additional_info && (

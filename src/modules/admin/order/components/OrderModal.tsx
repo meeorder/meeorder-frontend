@@ -134,9 +134,9 @@ const OrderModal: React.FC<OrderModalProps> = ({
             </HeaderOrderContainer>
             {modalData?.addons && (
               <ul style={{ margin: "0" }}>
-                {modalData?.addons.map((addon) => {
+                {modalData?.addons.map((addon,index) => {
                   return (
-                    <li key={addon._id}>
+                    <li key={addon._id+index.toString()}>
                       <H4>{addon.title}</H4>
                     </li>
                   );
@@ -208,7 +208,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
                   <OutOfStockContainer>
                     <IngredientReasonDivider>หมายเหตุ</IngredientReasonDivider>
                     <TagGroup>
-                      {modalData?.cancel?.reasons.map((reason) => {
+                      {modalData?.cancel?.reasons?.map((reason) => {
                         return (
                           <IngredientTag key={modalData?._id}>
                             {reason}

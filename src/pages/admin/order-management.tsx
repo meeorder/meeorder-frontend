@@ -7,6 +7,8 @@ import PopOverFilter from "@/modules/admin/order/components/PopOverFilter";
 import useAllOrders, {
   type AllOrdersData,
 } from "@/modules/admin/order/hook/useAllOrders";
+import { useFilterCategory } from "@/modules/admin/order/hook/useFilterCategory";
+import { useFilterStatus } from "@/modules/admin/order/hook/useFilterStatus";
 import { H1 } from "@/modules/common/components/Typography";
 import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
@@ -23,14 +25,10 @@ const OrderManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [modalData, setModalData] = useState<GetAllOrdersResponse[number]>();
-  const [filterCategory, setFilterCategory] = useState<string[]>([]);
-  const [filterStatus, setFilterStatus] = useState<string[]>([
-    "IN_QUEUE",
-    "PREPARING",
-    "READY_TO_SERVE",
-    "DONE",
-    "CANCELLED",
-  ]);
+  const [filterStatus] = useFilterStatus((state) => [state.filterStatus]);
+  console.log("filterStatus", filterStatus);
+  const [filterCategory] = useFilterCategory((state) => [state.filterCategory]);
+  console.log("filterCategory", filterCategory);
   const [allOrderSource, setAllOrderSource] = useState<AllOrdersData>();
   useEffect(() => {
     setAllOrderSource(allOrder ?? []);
@@ -42,10 +40,6 @@ const OrderManagement = () => {
           <H1>ออเดอร์ภายในร้าน</H1>
           <PopOverFilter
             options={options}
-            filterCategory={filterCategory}
-            setFilterCategory={setFilterCategory}
-            filterStatus={filterStatus}
-            setFilterStatus={setFilterStatus}
           />
         </PageHeader>
         <OrderContainer>
