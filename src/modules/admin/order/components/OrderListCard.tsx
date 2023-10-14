@@ -22,6 +22,7 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
   setIsModalOpen,
   setModalData,
 }) => {
+  const { token } = theme.useToken();
   const { mutate: updateOrderStatusToPreparing, isIdle: isToPreparingIdle } =
     useUpdateOrderStatusToPreparing();
   const {
@@ -48,7 +49,6 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
     setIsModalOpen(true);
     setModalData(order);
   };
-  const { token } = theme.useToken();
   return (
     <CardContainer key={order._id} $color={color}>
       <ModalSectionDiv onClick={() => onClickCard(order)} />
@@ -60,12 +60,12 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
           </StyledTable>
         }
         <ul style={{ margin: "0" }}>
-          {order.addons.map((addon,index) => {
-            return <li key={addon._id+index.toString()}>{addon.title}</li>;
+          {order.addons.map((addon, index) => {
+            return <li key={addon._id + index.toString()}>{addon.title}</li>;
           })}
         </ul>
         {order.additional_info && (
-          <StyledAddInfo ellipsis={true}>
+          <StyledAddInfo>
             Note: {order.additional_info}
           </StyledAddInfo>
         )}
@@ -104,45 +104,37 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
               <AddOnsReasonDivider>ท็อปปิ้ง</AddOnsReasonDivider>
               <TagGroup>
                 {order.cancel?.addons.map((addon) => {
-                  return (
-                    <AddOnsTag key={addon._id}>
-                      {addon.title}
-                    </AddOnsTag>
-                  );
+                  return <AddOnsTag key={addon._id}>{addon.title}</AddOnsTag>;
                 })}
               </TagGroup>
             </OutOfStockContainer>
           </ConfigProvider>
         )}
-         {order.status === "CANCELLED" &&
-          order.cancel?.reasons.length != 0 && (
-            <ConfigProvider
-              theme={{
-                token: {
-                  colorSplit: token["red-3"],
-                },
-              }}
-            >
-              <OutOfStockContainer>
-                <IngredientReasonDivider>หมายเหตุ</IngredientReasonDivider>
-                <TagGroup>
-                  {order.cancel?.reasons.map((reason) => {
-                    return (
-                      <IngredientTag key={reason}>
-                        {reason}
-                      </IngredientTag>
-                    );
-                  })}
-                </TagGroup>
-              </OutOfStockContainer>
-            </ConfigProvider>
-          )}
+        {order.status === "CANCELLED" && order.cancel?.reasons.length != 0 && (
+          <ConfigProvider
+            theme={{
+              token: {
+                colorSplit: token["red-3"],
+              },
+            }}
+          >
+            <OutOfStockContainer>
+              <IngredientReasonDivider>หมายเหตุ</IngredientReasonDivider>
+              <TagGroup>
+                {order.cancel?.reasons.map((reason) => {
+                  return <IngredientTag key={reason}>{reason}</IngredientTag>;
+                })}
+              </TagGroup>
+            </OutOfStockContainer>
+          </ConfigProvider>
+        )}
       </TextContainer>
       <StyledDivider type="vertical" />
       <IconClickSection
         onClick={() => {
           handelOnclick(order._id, order.status);
         }}
+        $color={color}
         loading={isLoading}
       >
         {!isLoading && (
@@ -169,6 +161,7 @@ const CardContainer = styled("div", transientOptions)<{ $color: string }>`
   display: flex;
   align-items: center;
   position: relative;
+  border-top: 1px solid ${(props) => props.$color};
   border-bottom: 1px solid ${(props) => props.$color};
   padding: 24px;
   width: 100%;
@@ -252,6 +245,10 @@ const StyledDivider = styled(Divider)`
 const StyledAddInfo = styled(Text)`
   width: 160px;
   overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 const StyledTable = styled(Text, transientOptions)<{ $color: string }>`
@@ -270,12 +267,16 @@ const ModalSectionDiv = styled.div`
   z-index: 1;
 `;
 
-const IconClickSection = styled(Button)`
+const IconClickSection = styled(Button, transientOptions)<{ $color: string }>`
   position: absolute;
   top: 0;
   right: 0;
   width: 60px !important;
   height: 100%;
+  border-radius: 0;
+  border-bottom: 0;
+  border-top: 0;
+  border-color: ${(props) => props.$color} !important;
   z-index: 1;
 `;
 export default OrderListCard;
