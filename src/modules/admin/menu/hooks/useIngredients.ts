@@ -11,7 +11,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 export type Ingredient = GetAllIngredientsResponse[number];
 
-
 export const useCreateIngredient = () => {
   return useMutation({
     mutationFn: createIngredient,
