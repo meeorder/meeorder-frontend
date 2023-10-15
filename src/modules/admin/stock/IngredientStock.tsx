@@ -108,7 +108,12 @@ const IngredientStock = () => {
               type="default"
               style={{ display: "inline-flex", marginRight: "10px" }}
               onClick={function () {
-                createIngredient({ title: "วัตถุดิบใหม่", available: true });
+                createIngredient({
+                  title:
+                    "วัตถุดิบใหม่" +
+                    (((dataSource?.length || 0) + 1)?.toString() || ""),
+                  available: true,
+                });
               }}
             >
               + เพิ่มวัตถุดิบใหม่

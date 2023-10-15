@@ -128,7 +128,12 @@ const AddonStock = () => {
               type="default"
               style={{ display: "inline-flex", marginRight: "10px" }}
               onClick={function () {
-                createAddon({ title: "New Addon", price: 0 });
+                createAddon({
+                  title:
+                    "ท็อปปิ้งใหม่ " +
+                    (((dataSource?.length || 0) + 1)?.toString() || ""),
+                  price: 0,
+                });
               }}
             >
               + เพิ่มท็อปปิ้งใหม่
