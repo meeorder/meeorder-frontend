@@ -112,7 +112,7 @@ export const getOrdersBySessionId = async (
 export type UpdateSessionUserByIdPathParam =
   paths["/sessions/{id}/user"]["patch"]["parameters"]["path"];
 export type UpdateSessionUserByIdResponse =
-  paths["/sessions/{id}/user"]["patch"]["responses"]["204"]["content"]["application/json"];
+  paths["/sessions/{id}/user"]["patch"]["responses"]["200"]["content"]["application/json"];
 
 export const updateSessionUserById = async (
   params: UpdateSessionUserByIdPathParam,

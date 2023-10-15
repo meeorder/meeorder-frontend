@@ -248,6 +248,22 @@ export interface paths {
     /** Get net income & discount in range date */
     get: operations["DashboardController_getIncomeReport"];
   };
+  "/dashboard/net_income/chart_data/daily": {
+    /** Get all daily net income */
+    get: operations["DashboardController_getDailyNetIncome"];
+  };
+  "/dashboard/net_income/chart_data/monthly": {
+    /** Get all monthly net income */
+    get: operations["DashboardController_getMonthlyNetIncome"];
+  };
+  "/dashboard/net_income/chart_data/yearly": {
+    /** Get all yearly net income */
+    get: operations["DashboardController_getYearlyNetIncome"];
+  };
+  "/dashboard/net_income/chart_group": {
+    /** Get report net income grouped by hour, day of week, month, quarter */
+    get: operations["DashboardController_getAllGroupedNetIncome"];
+  };
   "/dashboard/coupon_report/today": {
     /** Get total coupon usage today */
     get: operations["DashboardController_getCouponReportToday"];
@@ -308,7 +324,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-14T06:21:11.508Z
+       * @default 2023-10-14T14:24:46.951Z
        */
       created_at: string;
       /** @description Addon status */
@@ -328,7 +344,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-14T06:21:11.508Z
+       * @default 2023-10-14T14:24:46.951Z
        */
       created_at: string;
       /** @description Addon status */
@@ -618,7 +634,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-10-14T06:21:11.636Z
+       * @default 2023-10-14T14:24:47.067Z
        */
       created_at: string;
       /**
@@ -1067,6 +1083,277 @@ export interface components {
       totalDiscount: number;
       /** @description Total net income (income - discount) */
       totalNetIncome: number;
+    };
+    ChartDataDailyDto: {
+      /** @description Date (Unix timestamp) */
+      date: number;
+      /** @description Daily net income */
+      netIncome: number;
+    };
+    ChartDataMonthlyDto: {
+      /** @description Month (Unix timestamp) */
+      month: number;
+      /** @description Monthly net income */
+      netIncome: number;
+    };
+    ChartDataYearlyDto: {
+      /** @description Year (Unix timestamp) */
+      year: number;
+      /** @description Yearly net income */
+      netIncome: number;
+    };
+    HourlySubDto: {
+      /**
+       * @description 00:00 O'clock
+       * @default 0
+       */
+      0: number;
+      /**
+       * @description 01:00 O'clock
+       * @default 0
+       */
+      1: number;
+      /**
+       * @description 02:00 O'clock
+       * @default 0
+       */
+      2: number;
+      /**
+       * @description 03:00 O'clock
+       * @default 0
+       */
+      3: number;
+      /**
+       * @description 04:00 O'clock
+       * @default 0
+       */
+      4: number;
+      /**
+       * @description 05:00 O'clock
+       * @default 0
+       */
+      5: number;
+      /**
+       * @description 06:00 O'clock
+       * @default 0
+       */
+      6: number;
+      /**
+       * @description 07:00 O'clock
+       * @default 0
+       */
+      7: number;
+      /**
+       * @description 08:00 O'clock
+       * @default 0
+       */
+      8: number;
+      /**
+       * @description 09:00 O'clock
+       * @default 0
+       */
+      9: number;
+      /**
+       * @description 10:00 O'clock
+       * @default 0
+       */
+      10: number;
+      /**
+       * @description 11:00 O'clock
+       * @default 0
+       */
+      11: number;
+      /**
+       * @description 12:00 O'clock
+       * @default 0
+       */
+      12: number;
+      /**
+       * @description 13:00 O'clock
+       * @default 0
+       */
+      13: number;
+      /**
+       * @description 14:00 O'clock
+       * @default 0
+       */
+      14: number;
+      /**
+       * @description 15:00 O'clock
+       * @default 0
+       */
+      15: number;
+      /**
+       * @description 16:00 O'clock
+       * @default 0
+       */
+      16: number;
+      /**
+       * @description 17:00 O'clock
+       * @default 0
+       */
+      17: number;
+      /**
+       * @description 18:00 O'clock
+       * @default 0
+       */
+      18: number;
+      /**
+       * @description 19:00 O'clock
+       * @default 0
+       */
+      19: number;
+      /**
+       * @description 20:00 O'clock
+       * @default 0
+       */
+      20: number;
+      /**
+       * @description 21:00 O'clock
+       * @default 0
+       */
+      21: number;
+      /**
+       * @description 22:00 O'clock
+       * @default 0
+       */
+      22: number;
+      /**
+       * @description 23:00 O'clock
+       * @default 0
+       */
+      23: number;
+    };
+    DaysOfWeekSubDto: {
+      /**
+       * @description Sunday
+       * @default 0
+       */
+      Sun: number;
+      /**
+       * @description Monday
+       * @default 0
+       */
+      Mon: number;
+      /**
+       * @description Tuesday
+       * @default 0
+       */
+      Tue: number;
+      /**
+       * @description Wednesday
+       * @default 0
+       */
+      Wed: number;
+      /**
+       * @description Thursday
+       * @default 0
+       */
+      Thu: number;
+      /**
+       * @description Friday
+       * @default 0
+       */
+      Fri: number;
+      /**
+       * @description Saturday
+       * @default 0
+       */
+      Sat: number;
+    };
+    MonthlySubDto: {
+      /**
+       * @description January
+       * @default 0
+       */
+      Jan: number;
+      /**
+       * @description February
+       * @default 0
+       */
+      Feb: number;
+      /**
+       * @description March
+       * @default 0
+       */
+      Mar: number;
+      /**
+       * @description April
+       * @default 0
+       */
+      Apr: number;
+      /**
+       * @description May
+       * @default 0
+       */
+      May: number;
+      /**
+       * @description June
+       * @default 0
+       */
+      Jun: number;
+      /**
+       * @description July
+       * @default 0
+       */
+      Jul: number;
+      /**
+       * @description August
+       * @default 0
+       */
+      Aug: number;
+      /**
+       * @description September
+       * @default 0
+       */
+      Sep: number;
+      /**
+       * @description October
+       * @default 0
+       */
+      Oct: number;
+      /**
+       * @description November
+       * @default 0
+       */
+      Nov: number;
+      /**
+       * @description December
+       * @default 0
+       */
+      Dec: number;
+    };
+    QuarterlySubDto: {
+      /**
+       * @description First Quarter
+       * @default 0
+       */
+      Q1: number;
+      /**
+       * @description Second Quarter
+       * @default 0
+       */
+      Q2: number;
+      /**
+       * @description Third Quarter
+       * @default 0
+       */
+      Q3: number;
+      /**
+       * @description Fourth Quarter
+       * @default 0
+       */
+      Q4: number;
+    };
+    ChartGroupResponseDto: {
+      /** @description Report net income grouped by hour */
+      hourly: components["schemas"]["HourlySubDto"];
+      /** @description Report net income grouped by day of week */
+      daysOfWeek: components["schemas"]["DaysOfWeekSubDto"];
+      /** @description Report net income grouped by month */
+      monthly: components["schemas"]["MonthlySubDto"];
+      /** @description Report net income grouped by quarter */
+      quarterly: components["schemas"]["QuarterlySubDto"];
     };
     GetCouponReportTodayDto: {
       /** @description Total used coupon today */
@@ -1702,9 +1989,7 @@ export interface operations {
     };
     responses: {
       /** @description Updated session user */
-      200: {
-        content: never;
-      };
+      200: never;
     };
   };
   /** Get all redeemable coupon */
@@ -2073,9 +2358,7 @@ export interface operations {
   /** Soft delete table */
   TablesController_deleteTable: {
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
       404: {
         content: {
           "application/json": components["schemas"]["ErrorDto"];
@@ -2116,9 +2399,7 @@ export interface operations {
   /** Logout */
   AuthController_signOut: {
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Customer's registration */
@@ -2178,6 +2459,58 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetNetIncomeDto"];
+        };
+      };
+    };
+  };
+  /** Get all daily net income */
+  DashboardController_getDailyNetIncome: {
+    responses: {
+      /** @description All daily net income */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ChartDataDailyDto"];
+        };
+      };
+    };
+  };
+  /** Get all monthly net income */
+  DashboardController_getMonthlyNetIncome: {
+    responses: {
+      /** @description All monthly net income */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ChartDataMonthlyDto"];
+        };
+      };
+    };
+  };
+  /** Get all yearly net income */
+  DashboardController_getYearlyNetIncome: {
+    responses: {
+      /** @description All yearly net income */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ChartDataYearlyDto"];
+        };
+      };
+    };
+  };
+  /** Get report net income grouped by hour, day of week, month, quarter */
+  DashboardController_getAllGroupedNetIncome: {
+    parameters: {
+      query: {
+        /** @description Start Date (UnixTimeStamp in seconds) */
+        startTime: number;
+        /** @description End Date (UnixTimeStamp in seconds) */
+        endTime: number;
+      };
+    };
+    responses: {
+      /** @description Report net income grouped by hour, day of week, month, quarter */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ChartGroupResponseDto"];
         };
       };
     };
