@@ -9,7 +9,7 @@ type FilterStatus = {
 
 export const useFilterStatus = create<FilterStatus>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       filterStatus: [
         "IN_QUEUE",
         "PREPARING",

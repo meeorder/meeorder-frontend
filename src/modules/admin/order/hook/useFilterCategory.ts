@@ -9,7 +9,7 @@ type FilterCategory = {
 
 export const useFilterCategory = create<FilterCategory>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       filterCategory: [],
       setToFilterCategory: (category: string[]) => {
         set({ filterCategory: [...category] });
