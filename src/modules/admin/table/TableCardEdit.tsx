@@ -13,8 +13,7 @@ import { Card, ConfigProvider, theme } from "antd";
 type TableCardProps = { table: GetAllTablesResponse[number] };
 
 const TableCardEdit = ({ table }: TableCardProps) => {
-  const { setTableId, setTableName, tableId, clearTableId } =
-    useSelectedTableStore();
+  const { setTableId, tableId, clearTableId } = useSelectedTableStore();
   const { mutate: deleteTable } = useDeleteTable();
   const { mutate: changeTableName } = useChangeTableName();
   const {
@@ -37,7 +36,6 @@ const TableCardEdit = ({ table }: TableCardProps) => {
             clearTableId();
           } else {
             setTableId(table._id);
-            setTableName(table.title);
           }
         }}
         bodyStyle={{

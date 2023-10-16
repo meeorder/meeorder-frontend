@@ -10,8 +10,7 @@ import { Card, ConfigProvider, theme } from "antd";
 type TableCardProps = { table: GetAllTablesResponse[number] };
 
 const TableCard = ({ table }: TableCardProps) => {
-  const { setTableId, setTableName, tableId, clearTableId } =
-    useSelectedTableStore();
+  const { setTableId, tableId, clearTableId } = useSelectedTableStore();
   const { mutate } = useCreateNewSession();
   const metadata = GenMetadataFromTable(table);
   const color = useColor({ statusId: metadata.statusId });
@@ -37,7 +36,6 @@ const TableCard = ({ table }: TableCardProps) => {
             clearTableId();
           } else {
             setTableId(table._id);
-            setTableName(table.title);
           }
         }}
         style={

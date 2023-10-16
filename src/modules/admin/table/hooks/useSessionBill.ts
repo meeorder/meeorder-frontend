@@ -8,7 +8,6 @@ import { queryClient } from "@/pages/_app";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 const useGetOrdersByTableId = (tableId: string) => {
-  // TODO Change to get by table id
   return {
     ...useQuery({
       queryKey: ["useOrdersByTableId", tableId],

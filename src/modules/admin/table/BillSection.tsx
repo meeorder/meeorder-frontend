@@ -53,10 +53,9 @@ const RenderOrder: React.FC<{
 };
 
 const BillSection = () => {
-  const { tableId, mode, setMode, clearTableId } = useSelectedTableStore();
+  const { tableId, mode } = useSelectedTableStore();
   const { data: tables } = useAllTable();
   const { data: bill } = useGetOrdersByTableId(tableId);
-  // BUG not revalidate when finish session
   const { mutate: finishSession } = useFinishSession(tableId);
   const metadata = GenMetadataFromTable(
     tables?.find((table) => table._id === tableId) ?? undefined,

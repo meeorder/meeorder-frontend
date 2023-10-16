@@ -5,25 +5,19 @@ type ModeType = "edit" | "view";
 
 interface SelectedTableStore {
   tableId: string;
-  tableName: string;
   mode: ModeType;
   setTableId: (tableId: string) => void;
-  setTableName: (tableName: string) => void;
   clearTableId: () => void;
   setMode: (mode: ModeType) => void;
 }
 
 export const useSelectedTableStore = create<SelectedTableStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       tableId: "",
-      tableName: "",
       mode: "view",
       setTableId: (tableId: string) => {
         set({ tableId: tableId });
-      },
-      setTableName: (tableName: string) => {
-        set({ tableName: tableName });
       },
       clearTableId: () => set({ tableId: "" }),
       setMode: (mode) =>
