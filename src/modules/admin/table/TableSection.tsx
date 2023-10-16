@@ -13,7 +13,6 @@ const TableSection = () => {
   const { data: tables } = useAllTable();
   const { mode, setMode } = useSelectedTableStore();
   const { isClientLoaded } = useClient();
-  console.log(mode);
   return (
     <TableContainer>
       <HeadContainer>
