@@ -4,6 +4,7 @@ import {
   useCreateTable,
   useDeleteTable,
 } from "@/modules/admin/table/hooks/useTables";
+import { GenMetadataFromTable } from "@/modules/admin/table/utils";
 import { H4 } from "@/modules/common/components/Typography";
 import { type GetAllTablesResponse } from "@/modules/services/tables";
 import styled from "@emotion/styled";
@@ -16,6 +17,7 @@ const TableCardEdit = ({ table }: TableCardProps) => {
   const { setTableId, tableId, clearTableId } = useSelectedTableStore();
   const { mutate: deleteTable } = useDeleteTable();
   const { mutate: changeTableName } = useChangeTableName();
+  const metadata = GenMetadataFromTable(table);
   const {
     token: { colorPrimary, blue3, colorError },
   } = theme.useToken();
@@ -46,7 +48,6 @@ const TableCardEdit = ({ table }: TableCardProps) => {
           <H4
             editable={{
               onChange: (value) => {
-                console.log(value, table._id);
                 changeTableName({ id: table._id, title: value });
               },
               triggerType: isSelect ? ["icon", "text"] : [],
@@ -59,7 +60,7 @@ const TableCardEdit = ({ table }: TableCardProps) => {
           </H4>
         }
       >
-        {isSelect ? (
+        {isSelect && metadata.statusId < 2 ? (
           <Trash
             size={48}
             onClick={() => {
