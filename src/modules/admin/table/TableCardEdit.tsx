@@ -1,5 +1,9 @@
 import { useSelectedTableStore } from "@/modules/admin/table/hooks/useSelectedTableStore";
-import { useCreateTable } from "@/modules/admin/table/hooks/useTables";
+import {
+  useChangeTableName,
+  useCreateTable,
+  useDeleteTable,
+} from "@/modules/admin/table/hooks/useTables";
 import { H4 } from "@/modules/common/components/Typography";
 import { type GetAllTablesResponse } from "@/modules/services/tables";
 import styled from "@emotion/styled";
@@ -9,7 +13,10 @@ import { Card, ConfigProvider, theme } from "antd";
 type TableCardProps = { table: GetAllTablesResponse[number] };
 
 const TableCardEdit = ({ table }: TableCardProps) => {
-  const { setTableId, tableId, clearTableId } = useSelectedTableStore();
+  const { setTableId, setTableName, tableId, clearTableId } =
+    useSelectedTableStore();
+  const { mutate: deleteTable } = useDeleteTable();
+  const { mutate: changeTableName } = useChangeTableName();
   const {
     token: { colorPrimary, blue3, colorError },
   } = theme.useToken();
@@ -30,6 +37,7 @@ const TableCardEdit = ({ table }: TableCardProps) => {
             clearTableId();
           } else {
             setTableId(table._id);
+            setTableName(table.title);
           }
         }}
         bodyStyle={{
@@ -38,16 +46,13 @@ const TableCardEdit = ({ table }: TableCardProps) => {
         style={isSelect ? { border: `2px solid ${colorPrimary}` } : {}}
         title={
           <H4
-            editable={
-              isSelect
-                ? {
-                    // TODO: API Chaneg table Name
-                    onChange: (value) => {
-                      console.log("change table name", value, table._id);
-                    },
-                  }
-                : undefined
-            }
+            editable={{
+              onChange: (value) => {
+                console.log(value, table._id);
+                changeTableName({ id: table._id, title: value });
+              },
+              triggerType: isSelect ? ["icon", "text"] : [],
+            }}
             style={{
               color: colorPrimary,
             }}
@@ -60,8 +65,7 @@ const TableCardEdit = ({ table }: TableCardProps) => {
           <Trash
             size={48}
             onClick={() => {
-              // TODO: API Delete Table
-              console.log("delete table", table._id);
+              deleteTable(table._id);
             }}
             color={colorError}
           />
