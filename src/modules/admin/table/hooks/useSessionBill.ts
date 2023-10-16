@@ -1,26 +1,42 @@
+import { useSelectedTableStore } from "@/modules/admin/table/hooks/useSelectedTableStore";
 import {
-  getOrdersBySessionId,
-  getSessionByTableId,
+  createSession,
+  setSessionFinishById,
 } from "@/modules/services/sessions";
-import { useQuery } from "@tanstack/react-query";
-
-const useGetSessionByTableId = (tableId: string) =>
-  useQuery({
-    queryKey: ["useSessionByTableId", tableId],
-    queryFn: () => getSessionByTableId({ id: tableId }),
-  });
+import { getTableById } from "@/modules/services/tables";
+import { queryClient } from "@/pages/_app";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const useGetOrdersByTableId = (tableId: string) => {
-  const { data } = useGetSessionByTableId(tableId);
   // TODO Change to get by table id
   return {
     ...useQuery({
-      queryKey: ["useOrdersByTableId", data?._id],
-      queryFn: () => getOrdersBySessionId({ id: data?._id ?? "" }),
-      refetchInterval: 5000,
+      queryKey: ["useOrdersByTableId", tableId],
+      queryFn: () => getTableById({ id: tableId }),
+      refetchInterval: 10000,
     }),
-    sessionId: data?._id,
   };
 };
+const useFinishSession = (tableId: string) => {
+  return useMutation({
+    mutationFn: (sessionId: string) => setSessionFinishById({ id: sessionId }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries(["useAllTable"]);
+      void queryClient.invalidateQueries(["useOrdersByTableId", tableId]);
+    },
+  });
+};
 
-export { useGetOrdersByTableId };
+const useCreateNewSession = () => {
+  const { setTableId } = useSelectedTableStore();
+  return useMutation({
+    mutationFn: (tableId: string) => createSession({ table: tableId }),
+    onSuccess: (res) => {
+      void queryClient.invalidateQueries(["useOrdersByTableId", res.table]);
+      void queryClient.invalidateQueries(["useAllTable"]);
+      setTableId(res.table);
+    },
+  });
+};
+
+export { useCreateNewSession, useFinishSession, useGetOrdersByTableId };
