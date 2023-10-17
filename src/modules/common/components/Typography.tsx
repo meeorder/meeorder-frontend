@@ -57,6 +57,16 @@ export const H5 = (props: HeaderProps) => <Header level={5} {...props} />;
 
 export type TextProps = AntTextProps & RefAttributes<HTMLElement>;
 
-export const Text = ({ children, ...restProps }: TextProps) => {
-  return <AntTypography.Text {...restProps}>{children}</AntTypography.Text>;
+export const Text = ({ children, style, ...restProps }: TextProps) => {
+  return (
+    <AntTypography.Text
+      {...restProps}
+      style={{
+        color: style?.color,
+        ...style,
+      }}
+    >
+      {children}
+    </AntTypography.Text>
+  );
 };
