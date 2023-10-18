@@ -30,6 +30,7 @@ const Income = () => {
         display: "flex",
         flexDirection: "column",
         gap: "24px",
+        marginTop: "-24px",
       }}
     >
       <div style={{ display: "flex", gap: "4px", alignItems: "baseline" }}>
