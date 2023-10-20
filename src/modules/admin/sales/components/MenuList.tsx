@@ -29,6 +29,9 @@ const MenuList: React.FC<MenuListProps> = ({ saleReportData }) => {
         return b.total_amount - a.total_amount;
       return b.menu_category.localeCompare(a.menu_category);
     });
+    saleReportData?.forEach((data) => {
+      if (data.menu_category === null) data.menu_category = "Others";
+    });
     setDataSource(saleReportData ?? []);
   }, [saleReportData]);
 
@@ -149,14 +152,14 @@ const MenuList: React.FC<MenuListProps> = ({ saleReportData }) => {
             {categorys?.map((category) => (
               <Checkbox
                 style={{ padding: "5px 12px" }}
-                key={category._id}
-                checked={selectedKeys.includes(category._id)}
+                key={category.title}
+                checked={selectedKeys.includes(category.title)}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    setSelectedKeys([...selectedKeys, category._id]);
+                    setSelectedKeys([...selectedKeys, category.title]);
                   } else {
                     setSelectedKeys(
-                      selectedKeys.filter((_id) => _id !== category._id),
+                      selectedKeys.filter((title) => title !== category.title),
                     );
                   }
                 }}
@@ -199,7 +202,7 @@ const MenuList: React.FC<MenuListProps> = ({ saleReportData }) => {
       sorter: (a: TableRow, b: TableRow) =>
         b.menu_category.localeCompare(a.menu_category),
       render: (_: string, record: TableRow) => (
-        <Text>{record.menu_category ?? "Others"}</Text>
+        <Text>{record.menu_category}</Text>
       ),
     },
     {
