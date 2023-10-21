@@ -50,6 +50,7 @@ const TableContainer = styled.div`
   flex-direction: column;
   height: 100%;
   gap: 24px;
+  flex: 1;
 `;
 const HeadContainer = styled.div`
   padding-right: 24px;

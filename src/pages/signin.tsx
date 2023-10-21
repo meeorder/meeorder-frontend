@@ -56,8 +56,7 @@ const SignIn = () => {
     } else if (user?.role === roleToRoleNumber["Employee"]) {
       void router.push(pages.employeeOrderManagement.path);
     } else if (user?.role === roleToRoleNumber["Cashier"]) {
-      // TODO: redirect to cashier page
-      void router.push(pages.employeeOrderManagement.path);
+      void router.push(pages.cashierTableManagement.path);
     } else if (user?.role === roleToRoleNumber["Owner"]) {
       void router.push(pages.adminDashboard.path);
     }

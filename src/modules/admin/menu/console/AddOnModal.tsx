@@ -80,15 +80,6 @@ const AddOnModal: React.FC<AddOnModalProps> = ({
         setIsModalOpen(false);
       }}
     >
-      {/* <Input.Search
-        style={{
-          marginTop: "4px",
-          marginBottom: "12px",
-        }}
-        placeholder="ค้นหา"
-        allowClear
-      /> */}
-      {/* TODO : Add search feature */}
       <Table
         rowKey={(record) => record._id}
         rowSelection={row_selection}

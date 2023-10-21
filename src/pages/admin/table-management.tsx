@@ -18,7 +18,7 @@ const TableManagement = () => {
           },
         }}
       >
-        <AppLayout layoutType="admin" currentPageId="employeeStock">
+        <AppLayout layoutType="admin" currentPageId="cashierTableManagement">
           <div style={{ height: "100%", display: "flex" }}>
             <TableSection />
             <Divider type="vertical" style={{ height: "100%" }} />

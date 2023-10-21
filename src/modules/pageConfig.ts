@@ -2,6 +2,7 @@ import { type LayoutType } from "@/modules/AppLayout";
 import { type Role } from "@/modules/services/users";
 import {
   Basket,
+  Chair,
   CheckCircle,
   ClipboardText,
   Fish,
@@ -113,6 +114,14 @@ export const pages = {
     path: "/admin/setting/user-management",
     layout: "admin",
     minimumRole: "Owner",
+  },
+  cashierTableManagement: {
+    id: "cashierTableManagement",
+    label: "จัดการโต๊ะ",
+    path: "/admin/table-management",
+    layout: "admin",
+    Icon: Chair,
+    minimumRole: "Cashier",
   },
   employeeStock: {
     id: "employeeStock",
