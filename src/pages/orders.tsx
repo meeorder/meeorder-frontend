@@ -1,7 +1,9 @@
 import AppLayout from "@/modules/AppLayout";
 import { H4, H5 } from "@/modules/common/components/Typography";
 import { useClient } from "@/modules/common/hooks/useClient";
+import { useUser } from "@/modules/common/hooks/useUserStore";
 import { pages } from "@/modules/pageConfig";
+import { roleToRoleNumber } from "@/modules/services/users";
 import OrderCoupon from "@/modules/user/coupon/components/OrderCoupon";
 import OrderList from "@/modules/user/order/components/OrderList";
 import OrderSummaryPrice from "@/modules/user/order/components/OrderSummaryPrice";
@@ -14,7 +16,7 @@ const Orders = () => {
   const { data: session } = useSession();
   const { data: ordersData } = useOrder(session?._id ?? "");
   const { isClientLoaded } = useClient();
-
+  const { data: user } = useUser();
   return (
     <>
       <Head>
@@ -37,7 +39,9 @@ const Orders = () => {
               ) ?? []
             }
           />
-          <OrderCoupon />
+          {user?.role && user?.role <= roleToRoleNumber["Customer"] && (
+            <OrderCoupon />
+          )}
           <OrderSummaryPrice
             priceData={{
               total_price: ordersData?.total_price ?? 0,
