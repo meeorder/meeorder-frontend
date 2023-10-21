@@ -28,6 +28,7 @@ const AdminRestaurantAccountManagement = () => {
       ),
       children: (
         <EditRestaurantName
+          key={activeKeys.toString() + "restaurantName"}
           setActiveKeys={setActiveKeys}
           restaurantName={restaurantName}
         />
@@ -52,7 +53,7 @@ const AdminRestaurantAccountManagement = () => {
           >
             โลโก้ร้านอาหาร
           </H4>
-          <LogoForm>
+          <LogoForm key={activeKeys.toString() + "restaurantLogo"}>
             <Logo
               ghost
               onClick={() => setIsOpenChangeLogo(true)}
@@ -82,7 +83,7 @@ const AdminRestaurantAccountManagement = () => {
             )}
           </LogoForm>
         </EditLogoContainer>
-        <EditRestauranttContainer>
+        <EditRestaurantContainer>
           <H4
             style={{
               marginBottom: "16px",
@@ -101,7 +102,7 @@ const AdminRestaurantAccountManagement = () => {
             expandIcon={() => <Text style={{ color: "#1890FF" }}>แก้ไข</Text>}
             expandIconPosition="end"
           />
-        </EditRestauranttContainer>
+        </EditRestaurantContainer>
       </MainContainer>
     </AppLayout>
   );
@@ -182,4 +183,4 @@ const LogoForm = styled.div`
   gap: 8px;
 `;
 
-const EditRestauranttContainer = styled.div``;
+const EditRestaurantContainer = styled.div``;

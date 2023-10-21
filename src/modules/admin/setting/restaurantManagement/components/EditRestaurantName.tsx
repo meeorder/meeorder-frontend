@@ -68,7 +68,7 @@ const EditRestaurantName: React.FC<Props> = ({
     const openNotification = (
       placement: NotificationPlacement,
       header: React.ReactNode,
-      desciption: React.ReactNode,
+      description: React.ReactNode,
       icon?: React.ReactNode,
       onClose?: () => void,
     ) => {
@@ -76,7 +76,7 @@ const EditRestaurantName: React.FC<Props> = ({
       api.info({
         message: header,
         placement,
-        description: desciption,
+        description,
         icon: icon,
         onClose: onClose,
       });
