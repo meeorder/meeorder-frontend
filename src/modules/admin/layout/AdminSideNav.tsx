@@ -1,4 +1,4 @@
-import useRestaurantSetting from "@/modules/admin/setting/restaurantManagement/hooks/useResturantSetting";
+import useRestaurantSetting from "@/modules/admin/setting/restaurantManagement/hooks/useRestaurantSetting";
 import { H5 } from "@/modules/common/components/Typography";
 import { useClient } from "@/modules/common/hooks/useClient";
 import { useUser } from "@/modules/common/hooks/useUserStore";
