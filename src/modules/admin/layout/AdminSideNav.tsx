@@ -15,10 +15,6 @@ type AdminSideNavProps = {
 
 type MenuItem = Required<MenuProps>["items"][number];
 
-type LogoProps = {
-  $imgUrl?: string;
-};
-
 const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
   const {
     adminDashboard,
@@ -111,7 +107,18 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
             backgroundRepeat: "no-repeat",
           }}
         />
-        <H5>{restaurant?.name ?? "ชื่อร้านอาหาร"}</H5>
+        {!collapsed && (
+          <H5
+            style={{
+              width: collapsed ? 0 : "50%",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              transition: "width 0.5s",
+            }}
+          >
+            {restaurant?.name ?? "ชื่อร้านอาหาร"}
+          </H5>
+        )}
       </LogoContainer>
       <Menu
         theme="light"
@@ -170,13 +177,13 @@ const LogoContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   width: 100%;
   height: 64px;
-  padding: 24px;
   gap: 12px;
 `;
 
-const Logo = styled.div<LogoProps>`
+const Logo = styled.div`
   height: 32px;
   width: 32px;
   border-radius: 4px;
