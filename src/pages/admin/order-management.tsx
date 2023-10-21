@@ -1,56 +1,96 @@
 import AppLayout from "@/modules/AppLayout";
-import OrderList from "@/modules/admin/order/OrderList";
-import { CenterContentButton } from "@/modules/common/components/CenterContentButton";
+import useAllCategory from "@/modules/admin/menu/hooks/useCategory";
+import CancelOrderModal from "@/modules/admin/order/components/CancelOrderModal";
+import OrderList from "@/modules/admin/order/components/OrderList";
+import OrderModal from "@/modules/admin/order/components/OrderModal";
+import PopOverFilter from "@/modules/admin/order/components/PopOverFilter";
+import useAllOrders, {
+  type AllOrdersData,
+} from "@/modules/admin/order/hook/useAllOrders";
+import { useFilterCategory } from "@/modules/admin/order/hook/useFilterCategory";
+import { useFilterStatus } from "@/modules/admin/order/hook/useFilterStatus";
 import { H1 } from "@/modules/common/components/Typography";
+import { useClient } from "@/modules/common/hooks/useClient";
+import { type GetAllOrdersResponse } from "@/modules/services/orders";
 import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
 import styled from "@emotion/styled";
-import { Funnel } from "@phosphor-icons/react";
-import { Popover } from "antd";
-
+import { type SelectProps } from "antd";
+import { useEffect, useState } from "react";
 const OrderManagement = () => {
+  const { data: allOrder } = useAllOrders();
+  const { data: allCategory } = useAllCategory();
+  const options: SelectProps["options"] = allCategory?.map((category) => ({
+    label: category.title,
+    value: category.title,
+  }));
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [modalData, setModalData] = useState<GetAllOrdersResponse[number]>();
+  const {isClientLoaded} = useClient();
+  const [filterStatus] = useFilterStatus((state) => [state.filterStatus]);
+  const [filterCategory] = useFilterCategory((state) => [state.filterCategory]);
+  const [allOrderSource, setAllOrderSource] = useState<AllOrdersData>();
+  useEffect(() => {
+    setAllOrderSource(allOrder ?? []);
+  }, [allOrder]);
+  if (!isClientLoaded) return null;
   return (
     <AppLayout layoutType="admin" currentPageId="employeeOrderManagement">
       <Container>
         <PageHeader>
           <H1>ออเดอร์ภายในร้าน</H1>
-          <Popover
-            trigger="click"
-            placement="bottomRight"
-            title="ตัวเลือกแสดงข้อมูล"
-            content={
-              <>
-                <p>Content</p>
-                <p>Content</p>
-              </>
-            }
-          >
-            <CenterContentButton
-              type="primary"
-              shape="round"
-              icon={<Funnel size={16} />}
-            >
-              ตัวเลือกแสดงข้อมูล
-            </CenterContentButton>
-          </Popover>
+          <PopOverFilter
+            options={options}
+          />
         </PageHeader>
         <OrderContainer>
           {allOrderStatus
-            .filter(
-              (status) => status,
-              // todo: filter order status by selected status
-            )
+            .filter((status) => {
+              if (filterStatus.length === 0) return true;
+              return filterStatus.includes(status);
+            })
             .map((status) => {
-              // allOrder.filter((order) => order.status === status)
               return {
                 status,
-                orders: [],
+                orders:
+                  allOrderSource?.filter((order) => order.status === status) ??
+                  [],
+              };
+            })
+            .map(({ status, orders }) => {
+              return {
+                status,
+                orders: orders.filter((order) => {
+                  if (filterCategory.length === 0) return true;
+                  return filterCategory.includes(
+                    order.menu.category?.title ?? "Not Found",
+                  );
+                }),
               };
             })
             .map(({ status, orders }) => (
-              <OrderList key={status} status={status} orders={orders} />
+              <OrderList
+                key={status}
+                status={status}
+                orders={orders}
+                setIsModalOpen={setIsModalOpen}
+                setModalData={setModalData}
+              />
             ))}
         </OrderContainer>
       </Container>
+      <OrderModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        modalData={modalData}
+        setIsCancelModalOpen={setIsCancelModalOpen}
+      />
+      <CancelOrderModal
+        setIsModalOpen={setIsModalOpen}
+        isCancelModalOpen={isCancelModalOpen}
+        setIsCancelModalOpen={setIsCancelModalOpen}
+        modalData={modalData}
+      />
     </AppLayout>
   );
 };

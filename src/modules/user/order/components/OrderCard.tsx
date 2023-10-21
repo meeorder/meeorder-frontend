@@ -1,10 +1,13 @@
+import useUpdateOrderStatusToCancel from "@/modules/admin/order/hook/useUpdateOrderStatusToCancel";
 import TextPrice from "@/modules/common/components/TextPrice";
 import { H5, Text } from "@/modules/common/components/Typography";
+import { useUser } from "@/modules/common/hooks/useUserStore";
 import { checkImageSrc } from "@/modules/common/utils";
+import { roleToRoleNumber } from "@/modules/services/users";
 import { type OrdersWithPriceData } from "@/modules/user/order/hooks/useOrder";
 import { calculateOrderPrice } from "@/modules/user/order/utils";
 import styled from "@emotion/styled";
-import { Card, Tag, type TagProps } from "antd";
+import { Button, Card, Popconfirm, Tag, type TagProps } from "antd";
 import Image from "next/image";
 
 type Order = OrdersWithPriceData["orders"][number];
@@ -15,6 +18,8 @@ type OrderCardProps = {
 
 const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
   const colorTag = mapStatusToColor[order?.status];
+  const { mutate } = useUpdateOrderStatusToCancel();
+  const { data: user } = useUser();
   return (
     <StyledCard>
       <FlexBetweenRow>
@@ -48,6 +53,26 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
           {order?.additional_info && (
             <Text type="secondary">เพิ่มเติม: {order?.additional_info}</Text>
           )}
+          {user?.role &&
+            user?.role >= roleToRoleNumber["Cashier"] &&
+            order.status !== "CANCELLED" && (
+              <>
+                <Popconfirm
+                  title="ยกเลิกออเดอร์"
+                  description="ยกเลิกออเดอร์นี้หรือไม่"
+                  onConfirm={() => {
+                    mutate({ id: order?._id, reasons: ["ยกเลิกโดยแคชเชียร์"] });
+                  }}
+                  okText="ตกลง"
+                  cancelText="ไม่"
+                  okType="danger"
+                >
+                  <Button type="primary" danger>
+                    ยกเลิกออเดอร์นี้
+                  </Button>
+                </Popconfirm>
+              </>
+            )}
         </FlexBetweenCol>
         <StyledImage
           width={900}
