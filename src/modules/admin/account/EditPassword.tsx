@@ -15,22 +15,10 @@ type FieldType = {
 };
 
 type Props = {
-  activeKeys: string[];
   setActiveKeys: (activeKeys: string[]) => void;
 };
 
-const UpdateActiveKeys = (
-  activeKeys: string[],
-  setActiveKeys: (activeKeys: string[]) => void,
-) => {
-  const newActiveKeys = activeKeys.filter((key) => key !== key);
-  setActiveKeys(newActiveKeys);
-};
-
-const EditPasswordContainer: React.FC<Props> = ({
-  activeKeys,
-  setActiveKeys,
-}) => {
+const EditPasswordContainer: React.FC<Props> = ({ setActiveKeys }) => {
   const [form] = Form.useForm<FieldType>();
   const router = useRouter();
   const {
@@ -39,13 +27,13 @@ const EditPasswordContainer: React.FC<Props> = ({
     isError,
     error,
   } = useUpdateUser({
-    OnSuccess: () => UpdateActiveKeys(activeKeys, setActiveKeys),
+    OnSuccess: () => setActiveKeys([""]),
   });
   const [api, contextHolder] = notification.useNotification();
 
   const handleCancelForm = () => {
     form.resetFields();
-    UpdateActiveKeys(activeKeys, setActiveKeys);
+    setActiveKeys([""]);
   };
 
   const handleEditPassword = (values: FieldType) => {

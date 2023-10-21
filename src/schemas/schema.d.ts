@@ -214,15 +214,15 @@ export interface paths {
   "/tables": {
     /** Get all tables with information */
     get: operations["TablesController_getTables"];
-    put: operations["TablesController_updateTable"];
     /** Create a table */
     post: operations["TablesController_createTable"];
-    /** Soft delete table */
-    delete: operations["TablesController_deleteTable"];
   };
   "/tables/{id}": {
     /** Get table by id */
     get: operations["TablesController_getTableById"];
+    put: operations["TablesController_updateTable"];
+    /** Soft delete table */
+    delete: operations["TablesController_deleteTable"];
   };
   "/auth/login": {
     /** Login */
@@ -241,11 +241,11 @@ export interface paths {
     get: operations["AuthController_getMe"];
   };
   "/dashboard/receipt_report": {
-    /** Get total receipt amount */
+    /** Get total receipt amount Today */
     get: operations["DashboardController_getReceiptReport"];
   };
   "/dashboard/incomes_report": {
-    /** Get net income & discount in range date */
+    /** Get net income & discount Today */
     get: operations["DashboardController_getIncomeReport"];
   };
   "/dashboard/net_income/chart_data/daily": {
@@ -264,13 +264,21 @@ export interface paths {
     /** Get report net income grouped by hour, day of week, month, quarter */
     get: operations["DashboardController_getAllGroupedNetIncome"];
   };
-  "/dashboard/coupon_report/today": {
-    /** Get total coupon usage today */
+  "/dashboard/coupon_report": {
+    /** Get total coupon usage Today */
     get: operations["DashboardController_getCouponReportToday"];
   };
-  "/dashboard/coupon_report": {
+  "/dashboard/coupon_report/all": {
     /** Get total coupon usage */
     get: operations["DashboardController_geCouponReportTotal"];
+  };
+  "/dashboard/income_per_receipt": {
+    /** Get income per receipt Today */
+    get: operations["DashboardController_getIncomePerReceipt"];
+  };
+  "/dashboard/sales_report": {
+    /** Get all sales report from start date to end date */
+    get: operations["DashboardController_getSaleReports"];
   };
 }
 
@@ -324,7 +332,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-15T19:33:52.611Z
+       * @default 2023-10-19T09:02:21.727Z
        */
       created_at: string;
       /** @description Addon status */
@@ -344,7 +352,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-15T19:33:52.611Z
+       * @default 2023-10-19T09:02:21.727Z
        */
       created_at: string;
       /** @description Addon status */
@@ -635,7 +643,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-10-15T19:33:52.754Z
+       * @default 2023-10-19T09:02:21.875Z
        */
       created_at: string;
       /**
@@ -722,10 +730,21 @@ export interface components {
        */
       deleted_at: string | null;
     };
+    ReceiptCategoryMenuSchema: {
+      _id: string;
+      title: string;
+    };
+    ReceiptAddonMenuSchema: {
+      _id: string;
+      title: string;
+      price: number;
+    };
     ReceiptMenuSchema: {
       _id: string;
       title: string;
       price: number;
+      categories: components["schemas"]["ReceiptCategoryMenuSchema"];
+      addons: components["schemas"]["ReceiptAddonMenuSchema"][];
     };
     ReceiptCouponSchema: {
       _id: string;
@@ -1366,6 +1385,26 @@ export interface components {
       /** @description Total used coupon */
       couponUsageTotal: number;
     };
+    GetIncomePerReceiptDto: {
+      /** @description average income per receipt */
+      income_per_receipt: number;
+      /** @description receipt amount today */
+      receipt_amount: number;
+      /** @description net income today */
+      net_income: number;
+    };
+    SaleReportDto: {
+      /** @description Menu ID */
+      menu_id: string;
+      /** @description Menu title */
+      menu_title: string;
+      /** @description Menu category */
+      menu_category: string;
+      /** @description Menu sold amount */
+      total_amount: number;
+      /** @description Menu total price */
+      total_price: number;
+    };
   };
   responses: never;
   parameters: never;
@@ -1373,8 +1412,6 @@ export interface components {
   headers: never;
   pathItems: never;
 }
-
-export type $defs = Record<string, never>;
 
 export type external = Record<string, never>;
 
@@ -1431,9 +1468,7 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a category by id */
@@ -1445,13 +1480,9 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Category not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Replace a category by id */
@@ -1475,9 +1506,7 @@ export interface operations {
         };
       };
       /** @description Category not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** order the categories' rank */
@@ -1489,9 +1518,7 @@ export interface operations {
     };
     responses: {
       /** @description Change category rank */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get all addons */
@@ -1540,9 +1567,7 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Replace a addon by id */
@@ -1566,9 +1591,7 @@ export interface operations {
         };
       };
       /** @description Addon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a addon by id */
@@ -1580,13 +1603,9 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Addon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Change addon status to available */
@@ -1598,9 +1617,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Change addon status to unavailable */
@@ -1612,18 +1629,14 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Make all addons available */
   AddonsController_activateAllAddon: {
     responses: {
       /** @description All addons is now available */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get all menus */
@@ -1670,13 +1683,9 @@ export interface operations {
     };
     responses: {
       /** @description The menus have been successfully deleted. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get a menu by id */
@@ -1693,9 +1702,7 @@ export interface operations {
         };
       };
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Replace a menu by id */
@@ -1712,13 +1719,9 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully updated. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a menu by id */
@@ -1730,13 +1733,9 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully deleted. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Publish a menu by id */
@@ -1748,13 +1747,9 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully published. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Unpublish a menu by id */
@@ -1766,13 +1761,9 @@ export interface operations {
     };
     responses: {
       /** @description The menu has been successfully unpublished. */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description No menu found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Get all orders */
@@ -1794,9 +1785,7 @@ export interface operations {
     };
     responses: {
       /** @description Create order */
-      201: {
-        content: never;
-      };
+      201: never;
     };
   };
   /**
@@ -1811,9 +1800,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   OrdersController_updateOrder: {
@@ -1846,9 +1833,7 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to in_queue */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Change order status to preparing */
@@ -1861,9 +1846,7 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to preparing */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Change order status to ready to serve */
@@ -1876,9 +1859,7 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to ready to serve */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Change order status to done */
@@ -1891,9 +1872,7 @@ export interface operations {
     };
     responses: {
       /** @description Set order status to done */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /**
@@ -1912,12 +1891,8 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
-      404: {
-        content: never;
-      };
+      204: never;
+      404: never;
     };
   };
   /** Get all sessions */
@@ -1950,9 +1925,7 @@ export interface operations {
         };
       };
       /** @description Session already exists */
-      409: {
-        content: never;
-      };
+      409: never;
     };
   };
   /** Get a session by id */
@@ -1971,9 +1944,7 @@ export interface operations {
         };
       };
       /** @description Session not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a session by id */
@@ -1986,13 +1957,9 @@ export interface operations {
     };
     responses: {
       /** @description Session deleted */
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Session not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Get a session by table id */
@@ -2011,9 +1978,7 @@ export interface operations {
         };
       };
       /** @description No session found in the table */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Finish a session */
@@ -2032,9 +1997,7 @@ export interface operations {
         };
       };
       /** @description Session not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Get orders by session */
@@ -2066,9 +2029,7 @@ export interface operations {
     };
     responses: {
       /** @description Updated session user */
-      200: {
-        content: never;
-      };
+      200: never;
     };
   };
   /** Get all redeemable coupon */
@@ -2103,13 +2064,9 @@ export interface operations {
     };
     responses: {
       /** @description Coupon is attached to session */
-      204: {
-        content: never;
-      };
+      204: never;
       /** @description Resource conflict (coupon quota has been reached) */
-      409: {
-        content: never;
-      };
+      409: never;
     };
   };
   /** Get all ingredients */
@@ -2137,9 +2094,7 @@ export interface operations {
         };
       };
       /** @description Ingredient already exists */
-      409: {
-        content: never;
-      };
+      409: never;
     };
   };
   /** Get a ingredient by id */
@@ -2156,9 +2111,7 @@ export interface operations {
         };
       };
       /** @description Ingredient not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a ingredient by id */
@@ -2170,13 +2123,9 @@ export interface operations {
     };
     responses: {
       /** @description Ingredient deleted */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description Ingredient not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Update a ingredient by id */
@@ -2199,22 +2148,16 @@ export interface operations {
         };
       };
       /** @description Ingredient not found */
-      404: {
-        content: never;
-      };
+      404: never;
       /** @description Ingredient already exists */
-      409: {
-        content: never;
-      };
+      409: never;
     };
   };
   /** Make all ingredient available */
   IngredientsController_activateAllIngredient: {
     responses: {
       /** @description All ingredient is now available */
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get all coupons */
@@ -2257,9 +2200,7 @@ export interface operations {
         };
       };
       /** @description Coupon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Delete a coupon by id */
@@ -2271,13 +2212,9 @@ export interface operations {
     };
     responses: {
       /** @description Coupon deleted */
-      200: {
-        content: never;
-      };
+      200: never;
       /** @description Coupon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Update a coupon by id */
@@ -2300,9 +2237,7 @@ export interface operations {
         };
       };
       /** @description Coupon not found */
-      404: {
-        content: never;
-      };
+      404: never;
     };
   };
   /** Get Restaurant Settings */
@@ -2358,9 +2293,7 @@ export interface operations {
     };
     responses: {
       /** @description Create user */
-      201: {
-        content: never;
-      };
+      201: never;
     };
   };
   /** Delete user */
@@ -2372,9 +2305,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Update User info */
@@ -2385,9 +2316,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Reset user password */
@@ -2399,9 +2328,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Update user role */
@@ -2418,9 +2345,7 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Get all tables with information */
@@ -2430,6 +2355,37 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["TablesResponseDto"][];
+        };
+      };
+    };
+  };
+  /** Create a table */
+  TablesController_createTable: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TablesDto"];
+      };
+    };
+    responses: {
+      /** @description Create table */
+      201: {
+        content: {
+          "application/json": components["schemas"]["TablesSchema"];
+        };
+      };
+    };
+  };
+  /** Get table by id */
+  TablesController_getTableById: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["TableResponseDto"];
         };
       };
     };
@@ -2459,22 +2415,6 @@ export interface operations {
       };
     };
   };
-  /** Create a table */
-  TablesController_createTable: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["TablesDto"];
-      };
-    };
-    responses: {
-      /** @description Create table */
-      201: {
-        content: {
-          "application/json": components["schemas"]["TablesSchema"];
-        };
-      };
-    };
-  };
   /** Soft delete table */
   TablesController_deleteTable: {
     parameters: {
@@ -2483,27 +2423,10 @@ export interface operations {
       };
     };
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
       404: {
         content: {
           "application/json": components["schemas"]["ErrorDto"];
-        };
-      };
-    };
-  };
-  /** Get table by id */
-  TablesController_getTableById: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["TableResponseDto"];
         };
       };
     };
@@ -2526,9 +2449,7 @@ export interface operations {
   /** Logout */
   AuthController_signOut: {
     responses: {
-      204: {
-        content: never;
-      };
+      204: never;
     };
   };
   /** Customer's registration */
@@ -2556,16 +2477,16 @@ export interface operations {
       };
     };
   };
-  /** Get total receipt amount */
+  /** Get total receipt amount Today */
   DashboardController_getReceiptReport: {
     parameters: {
       query: {
-        /** @description Date (UnixTimeStamp in seconds) */
+        /** @description Start Date (UnixTimeStamp in seconds) */
         date: number;
       };
     };
     responses: {
-      /** @description Total receipt amount */
+      /** @description Total receipt amount Today */
       200: {
         content: {
           "application/json": components["schemas"]["GetReceiptAmountDto"];
@@ -2573,18 +2494,16 @@ export interface operations {
       };
     };
   };
-  /** Get net income & discount in range date */
+  /** Get net income & discount Today */
   DashboardController_getIncomeReport: {
     parameters: {
       query: {
         /** @description Start Date (UnixTimeStamp in seconds) */
-        from: number;
-        /** @description End Date (UnixTimeStamp in seconds) */
-        end: number;
+        date: number;
       };
     };
     responses: {
-      /** @description Net income & Discount in range date */
+      /** @description Net income & Discount Today */
       200: {
         content: {
           "application/json": components["schemas"]["GetNetIncomeDto"];
@@ -2644,10 +2563,16 @@ export interface operations {
       };
     };
   };
-  /** Get total coupon usage today */
+  /** Get total coupon usage Today */
   DashboardController_getCouponReportToday: {
+    parameters: {
+      query: {
+        /** @description Start Date (UnixTimeStamp in seconds) */
+        date: number;
+      };
+    };
     responses: {
-      /** @description Total Coupon usage today */
+      /** @description Total Coupon usage Today */
       200: {
         content: {
           "application/json": components["schemas"]["GetCouponReportTodayDto"];
@@ -2662,6 +2587,42 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetCouponReportTotalDto"];
+        };
+      };
+    };
+  };
+  /** Get income per receipt Today */
+  DashboardController_getIncomePerReceipt: {
+    parameters: {
+      query: {
+        /** @description Start Date (UnixTimeStamp in seconds) */
+        date: number;
+      };
+    };
+    responses: {
+      /** @description Total Coupon usage Today */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetIncomePerReceiptDto"];
+        };
+      };
+    };
+  };
+  /** Get all sales report from start date to end date */
+  DashboardController_getSaleReports: {
+    parameters: {
+      query: {
+        /** @description Start Date (UnixTimeStamp in seconds) */
+        startTime: number;
+        /** @description End Date (UnixTimeStamp in seconds) */
+        endTime: number;
+      };
+    };
+    responses: {
+      /** @description Sales report from start date to end date */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SaleReportDto"][];
         };
       };
     };

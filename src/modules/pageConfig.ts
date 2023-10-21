@@ -100,6 +100,13 @@ export const pages = {
     Icon: User,
     minimumRole: "Owner",
   },
+  adminRestaurantAccountManagement: {
+    id: "adminRestaurantAccountManagement",
+    label: "จัดการโลโก้และชื่อร้านอาหาร",
+    path: "/admin/setting/restaurant-account-management",
+    layout: "admin",
+    minimumRole: "Owner",
+  },
   adminUserManagement: {
     id: "adminUserManagement",
     label: "จัดการบัญชีทั้งหมด",

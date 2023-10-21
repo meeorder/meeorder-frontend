@@ -7,7 +7,7 @@ import { useUser } from "@/modules/common/hooks/useUserStore";
 import styled from "@emotion/styled";
 import { Button, Collapse, type CollapseProps } from "antd";
 import { useRouter } from "next/router";
-import React from "react";
+import { useState } from "react";
 
 const AccountManagement = () => {
   const { data: user } = useUser();
@@ -17,7 +17,7 @@ const AccountManagement = () => {
       void router.push("/signin");
     },
   });
-  const [activeKeys, setActiveKeys] = React.useState<string[]>([]);
+  const [activeKeys, setActiveKeys] = useState<string[]>([]);
   const EditAccount: CollapseProps["items"] = [
     {
       key: "1",
@@ -26,12 +26,7 @@ const AccountManagement = () => {
           ชื่อผู้ใช้งาน
         </H5>
       ),
-      children: (
-        <EditUsernameContainer
-          activeKeys={activeKeys}
-          setActiveKeys={setActiveKeys}
-        />
-      ),
+      children: <EditUsernameContainer setActiveKeys={setActiveKeys} />,
       extra: user?.username ?? "ชื่อผู้ใช้งาน",
     },
     {
@@ -41,12 +36,7 @@ const AccountManagement = () => {
           รหัสผ่าน
         </H5>
       ),
-      children: (
-        <EditPasswordContainer
-          activeKeys={activeKeys}
-          setActiveKeys={setActiveKeys}
-        />
-      ),
+      children: <EditPasswordContainer setActiveKeys={setActiveKeys} />,
       extra: "********",
     },
   ];

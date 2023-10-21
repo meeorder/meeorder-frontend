@@ -1,9 +1,11 @@
+import useRestaurantSetting from "@/modules/admin/setting/restaurantManagement/hooks/useResturantSetting";
+import { H5 } from "@/modules/common/components/Typography";
 import { useClient } from "@/modules/common/hooks/useClient";
 import { useUser } from "@/modules/common/hooks/useUserStore";
-import WireFrame from "@/modules/mock/components/WireFrame";
 import { pages, type PageId, type PageMetaData } from "@/modules/pageConfig";
 import { roleToRoleNumber } from "@/modules/services/users";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import styled from "@emotion/styled";
 import { Button, Layout, Menu, type MenuProps } from "antd";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -12,6 +14,10 @@ type AdminSideNavProps = {
 };
 
 type MenuItem = Required<MenuProps>["items"][number];
+
+type LogoProps = {
+  $imgUrl?: string;
+};
 
 const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
   const {
@@ -22,6 +28,7 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     adminEditCoupon,
     adminSalesReport,
     adminSetting,
+    adminRestaurantAccountManagement,
     adminUserManagement,
     employeeStock,
     employeeOrderManagement,
@@ -35,13 +42,14 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     adminAddEditMenu,
     [adminAddEditPromotion, adminEditPoint, adminEditCoupon],
     adminSalesReport,
-    [adminSetting, adminUserManagement],
-    employeeOrderManagement,
+    [adminSetting, adminRestaurantAccountManagement, adminUserManagement],
     employeeStock,
+    employeeOrderManagement,
     accountManagement,
   ];
 
   const { data: user } = useUser();
+  const { data: restaurant } = useRestaurantSetting();
 
   const getItem = (
     page: PageMetaData,
@@ -92,7 +100,19 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
         borderRadius: "0px 12px 12px 0px",
       }}
     >
-      <WireFrame contentNode="Logo" cardColor="blue" height={"100px"} />
+      <LogoContainer>
+        <Logo
+          style={{
+            backgroundImage: `url(${
+              restaurant?.logo ?? "https://picsum.photos/200/306"
+            })`,
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
+        <H5>{restaurant?.name ?? "ชื่อร้านอาหาร"}</H5>
+      </LogoContainer>
       <Menu
         theme="light"
         mode="inline"
@@ -102,7 +122,10 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
             (id) => id == currentPageId,
           )
             ? [adminAddEditPromotion.id]
-            : [adminUserManagement.id].some((id) => id == currentPageId)
+            : [
+                adminUserManagement.id,
+                adminRestaurantAccountManagement.id,
+              ].some((id) => id == currentPageId)
             ? [adminSetting.id]
             : []
         }
@@ -142,3 +165,20 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
 };
 
 export default AdminSideNav;
+
+const LogoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 64px;
+  padding: 24px;
+  gap: 12px;
+`;
+
+const Logo = styled.div<LogoProps>`
+  height: 32px;
+  width: 32px;
+  border-radius: 4px;
+  flex-shrink: 0;
+`;
