@@ -1,59 +1,53 @@
+import {
+  useDailyIncome,
+  useMonthlyIncome,
+  useYearlyIncome,
+} from "@/modules/admin/dashboard/All/hooks";
 import { H2 } from "@/modules/common/components/Typography";
 import { Column } from "@ant-design/plots";
-import {
-  Card,
-  ConfigProvider,
-  DatePicker,
-  Segmented,
-  type TimeRangePickerProps,
-} from "antd";
-import locale from "antd/locale/th_TH";
-import dayjs from "dayjs";
+import { Card, Segmented } from "antd";
 import "dayjs/locale/th";
-import React from "react";
+import { useState } from "react";
 
-const { RangePicker } = DatePicker;
+const AllTimeIncome = () => {
+  const [option, setOption] = useState<"วัน" | "เดือน" | "ปี">("วัน");
 
-type AllTimeIncomeProps = {
-  startDate: dayjs.Dayjs;
-  setStartDate: (date: dayjs.Dayjs) => void;
-  endDate: dayjs.Dayjs;
-  setEndDate: (date: dayjs.Dayjs) => void;
-  option: "วัน" | "เดือน" | "ปี";
-  setOption: (option: "วัน" | "เดือน" | "ปี") => void;
-};
+  const { data: dailyIncome } = useDailyIncome();
+  const { data: monthlyIncome } = useMonthlyIncome();
+  const { data: yearlyIncome } = useYearlyIncome();
 
-const AllTimeIncome: React.FC<AllTimeIncomeProps> = ({
-  startDate,
-  setStartDate,
-  endDate,
-  setEndDate,
-  option,
-  setOption,
-}) => {
-  const dataDay = [...Array(100).keys()].map((i) => ({
-    วันที่: `2021-08-${i + 1}`,
-    รายรับ: (Math.random() - 0.5) * 1000 + 1000,
-  }));
-  const dataMonth = [...Array(24).keys()].map((i) => ({
-    วันที่: `${2021 + Math.floor(i / 12)}-${(i % 12) + 1}`,
-    รายรับ: (Math.random() - 0.5) * 30000 + 30000,
-  }));
+  const formatDailyIncome = dailyIncome
+    ?.sort((a, b) => (a.date > b.date ? 1 : -1))
+    ?.map((income) => ({
+      ...income,
+      date: new Date(income.date).toLocaleDateString("th-TH", {
+        year: "2-digit",
+        month: "short",
+        day: "numeric",
+      }),
+      รายได้สุทธิ: income.netIncome,
+    }));
 
-  const dataYear = [...Array(5).keys()].map((i) => ({
-    วันที่: `${2021 + i}`,
-    รายรับ: (Math.random() - 0.5) * 1000000 + 1000000,
-  }));
+  const formatMonthlyIncome = monthlyIncome
+    ?.sort((a, b) => (a.month > b.month ? 1 : -1))
+    ?.map((income) => ({
+      ...income,
+      month: new Date(income.month).toLocaleDateString("th-TH", {
+        year: "numeric",
+        month: "long",
+      }),
+      รายได้สุทธิ: income.netIncome,
+    }));
 
-  const rangePresets: TimeRangePickerProps["presets"] = [
-    { label: "Last 7 Days", value: [dayjs().add(-7, "d"), dayjs()] },
-    { label: "Last 14 Days", value: [dayjs().add(-14, "d"), dayjs()] },
-    { label: "Last 30 Days", value: [dayjs().add(-30, "d"), dayjs()] },
-    { label: "Last 90 Days", value: [dayjs().add(-90, "d"), dayjs()] },
-    { label: "Last year", value: [dayjs().add(-1, "y"), dayjs()] },
-    { label: "Last 2 years", value: [dayjs().add(-2, "y"), dayjs()] },
-    { label: "Last 5 years", value: [dayjs().add(-5, "y"), dayjs()] },
-  ];
+  const formatYearlyIncome = yearlyIncome
+    ?.sort((a, b) => (a.year > b.year ? 1 : -1))
+    ?.map((income) => ({
+      ...income,
+      year: new Date(income.year).toLocaleDateString("th-TH", {
+        year: "numeric",
+      }),
+      รายได้สุทธิ: income.netIncome,
+    }));
 
   return (
     <Card
@@ -73,21 +67,7 @@ const AllTimeIncome: React.FC<AllTimeIncomeProps> = ({
         }}
       >
         <H2>รายรับทั้งหมด</H2>
-        <ConfigProvider locale={locale}>
-          <RangePicker
-            presets={rangePresets}
-            allowClear={false}
-            picker={
-              option === "วัน" ? "date" : option === "เดือน" ? "month" : "year"
-            }
-            onChange={(value) => {
-              if (value) {
-                setStartDate(value[0] || dayjs());
-                setEndDate(value[1] || dayjs());
-              }
-            }}
-          />
-        </ConfigProvider>
+
         <Segmented
           options={["วัน", "เดือน", "ปี"]}
           value={option}
@@ -96,10 +76,20 @@ const AllTimeIncome: React.FC<AllTimeIncomeProps> = ({
       </div>
       <Column
         data={
-          option === "วัน" ? dataDay : option === "เดือน" ? dataMonth : dataYear
+          option === "วัน"
+            ? formatDailyIncome || []
+            : option === "เดือน"
+            ? formatMonthlyIncome || []
+            : formatYearlyIncome || []
         }
-        xField="วันที่"
-        yField="รายรับ"
+        xField={
+          option === "วัน" ? "date" : option === "เดือน" ? "month" : "year"
+        }
+        yField="รายได้สุทธิ"
+        slider={{
+          start: 0,
+          end: 1,
+        }}
       />
     </Card>
   );

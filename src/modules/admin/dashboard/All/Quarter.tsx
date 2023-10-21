@@ -1,11 +1,16 @@
 import { H3 } from "@/modules/common/components/Typography";
+import { type GetReportNetIncomeGroupedResponse } from "@/modules/services/dashboard";
 import { Column } from "@ant-design/plots";
 import { Card } from "antd";
 
-const Quarter = () => {
-  const data = ["ไตรมาส 1", "ไตรมาส 2", "ไตรมาส 3", "ไตรมาส 4"].map((i) => ({
-    ไตรมาส: i,
-    รายรับ: Math.round((Math.random() - 0.5) * 100000) + 100000,
+type QuarterProps = {
+  data?: GetReportNetIncomeGroupedResponse["quarterly"];
+};
+
+const Quarter = ({ data }: QuarterProps) => {
+  const formatData = Object.entries(data || {}).map(([quarter, netIncome]) => ({
+    ไตรมาส: quarter,
+    รายรับ: netIncome,
   }));
   return (
     <Card
@@ -18,7 +23,7 @@ const Quarter = () => {
       }}
     >
       <H3>รายรับแต่ละไตรมาส</H3>
-      <Column data={data} xField="ไตรมาส" yField="รายรับ" />
+      <Column data={formatData} xField="ไตรมาส" yField="รายรับ" />
     </Card>
   );
 };

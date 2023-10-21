@@ -1,11 +1,13 @@
 import CardData from "@/modules/admin/dashboard/Daily/CardData";
 import CardTitle from "@/modules/admin/dashboard/Daily/CardTitle";
+import { useNetIncomeAndDiscountToday } from "@/modules/admin/dashboard/Daily/hooks";
 import { H2, Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { CurrencyDollarSimple } from "@phosphor-icons/react";
 import { Card } from "antd";
 
 const Income = () => {
+  const { data } = useNetIncomeAndDiscountToday();
   return (
     <Card
       bodyStyle={{
@@ -23,11 +25,14 @@ const Income = () => {
             paddingRight: "32px",
           }}
         >
-          13,543 <Text>บาท</Text>
+          {data?.totalNetIncome} <Text>บาท</Text>
         </H2>
-        <CardData title="ยอดขาย" value="15,228 บาท" />
-        <CardData title="ส่วนลด" value="-1,685 บาท" />
-        <CardData title="ยอดสุทธิ" value="13,543 บาท" />
+        <CardData title="ยอดขาย" value={`${data?.totalIncome ?? ""} บาท`} />
+        <CardData title="ส่วนลด" value={`${data?.totalDiscount ?? ""} บาท`} />
+        <CardData
+          title="ยอดสุทธิ"
+          value={`${data?.totalNetIncome ?? ""} บาท`}
+        />
       </Body>
     </Card>
   );

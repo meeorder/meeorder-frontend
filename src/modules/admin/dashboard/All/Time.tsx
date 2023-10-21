@@ -1,11 +1,16 @@
 import { H3 } from "@/modules/common/components/Typography";
+import { type GetReportNetIncomeGroupedResponse } from "@/modules/services/dashboard";
 import { Column } from "@ant-design/plots";
 import { Card } from "antd";
 
-const Time = () => {
-  const data = [...Array(24).keys()].map((i) => ({
-    เวลา: `${i}:00`,
-    รายรับ: Math.round((Math.random() - 0.5) * 1000) + 1000,
+type TimeProps = {
+  data?: GetReportNetIncomeGroupedResponse["hourly"];
+};
+
+const Time: React.FC<TimeProps> = ({ data }) => {
+  const formatData = Object.entries(data || {}).map(([hour, netIncome]) => ({
+    เวลา: `${hour}`,
+    รายรับ: netIncome,
   }));
   return (
     <Card
@@ -18,7 +23,7 @@ const Time = () => {
       }}
     >
       <H3>รายรับแต่ละช่วงเวลา</H3>
-      <Column data={data} xField="เวลา" yField="รายรับ" />
+      <Column data={formatData} xField="เวลา" yField="รายรับ" />
     </Card>
   );
 };

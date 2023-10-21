@@ -1,7 +1,8 @@
 import CardTitle from "@/modules/admin/dashboard/Daily/CardTitle";
+import { useSalesToday } from "@/modules/admin/dashboard/Daily/hooks";
 import { Pie } from "@ant-design/plots";
 import { AlignBottom } from "@phosphor-icons/react";
-import { Card, Segmented } from "antd";
+import { Card, Empty, Segmented } from "antd";
 import { useEffect, useState } from "react";
 
 const MenuRank = () => {
@@ -9,33 +10,18 @@ const MenuRank = () => {
     "จำนวนที่ขายได้",
   );
 
-  const data = [
-    {
-      title: "ผัดไทย",
-      count: 27,
-      income: 270,
-    },
-    {
-      title: "กะเพรา",
-      count: 23,
-      income: 2300 / 2,
-    },
-    {
-      title: "สุกี้",
-      count: 16,
-      income: 1800 / 3,
-    },
-    {
-      title: "ข้าวไข่เจียว",
-      count: 15,
-      income: 1500 / 4,
-    },
-    {
-      title: "ข้าวต้ม",
-      count: 10,
-      income: 1000,
-    },
-  ];
+  const { data } = useSalesToday();
+
+  const processedData =
+    data
+      ?.sort((a, b) => {
+        if (option === "จำนวนที่ขายได้") {
+          return b.total_amount - a.total_amount;
+        } else {
+          return b.total_price - a.total_price;
+        }
+      })
+      ?.slice(0, 5) || [];
 
   const [key, setKey] = useState(0);
 
@@ -73,22 +59,35 @@ const MenuRank = () => {
           onChange={(value) => setOption(value as "จำนวนที่ขายได้" | "ยอดขาย")}
         />
       </div>
-
-      <Pie
-        key={key}
-        appendPadding={10}
-        data={data}
-        label={{
-          type: "outer",
-        }}
-        interactions={[
-          {
-            type: "element-active",
-          },
-        ]}
-        angleField={option === "จำนวนที่ขายได้" ? "count" : "income"}
-        colorField="title"
-      />
+      {processedData.length === 0 ? (
+        <Empty
+          description="มีข้อมูลไม่เพียงพอ"
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+      ) : (
+        <Pie
+          key={key}
+          appendPadding={10}
+          data={processedData}
+          label={{
+            type: "outer",
+          }}
+          interactions={[
+            {
+              type: "element-active",
+            },
+          ]}
+          angleField={
+            option === "จำนวนที่ขายได้" ? "total_amount" : "total_price"
+          }
+          colorField="title"
+        />
+      )}
     </Card>
   );
 };

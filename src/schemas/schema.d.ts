@@ -214,15 +214,15 @@ export interface paths {
   "/tables": {
     /** Get all tables with information */
     get: operations["TablesController_getTables"];
-    put: operations["TablesController_updateTable"];
     /** Create a table */
     post: operations["TablesController_createTable"];
-    /** Soft delete table */
-    delete: operations["TablesController_deleteTable"];
   };
   "/tables/{id}": {
     /** Get table by id */
     get: operations["TablesController_getTableById"];
+    put: operations["TablesController_updateTable"];
+    /** Soft delete table */
+    delete: operations["TablesController_deleteTable"];
   };
   "/auth/login": {
     /** Login */
@@ -241,11 +241,11 @@ export interface paths {
     get: operations["AuthController_getMe"];
   };
   "/dashboard/receipt_report": {
-    /** Get total receipt amount */
+    /** Get total receipt amount Today */
     get: operations["DashboardController_getReceiptReport"];
   };
   "/dashboard/incomes_report": {
-    /** Get net income & discount in range date */
+    /** Get net income & discount Today */
     get: operations["DashboardController_getIncomeReport"];
   };
   "/dashboard/net_income/chart_data/daily": {
@@ -264,13 +264,21 @@ export interface paths {
     /** Get report net income grouped by hour, day of week, month, quarter */
     get: operations["DashboardController_getAllGroupedNetIncome"];
   };
-  "/dashboard/coupon_report/today": {
-    /** Get total coupon usage today */
+  "/dashboard/coupon_report": {
+    /** Get total coupon usage Today */
     get: operations["DashboardController_getCouponReportToday"];
   };
-  "/dashboard/coupon_report": {
+  "/dashboard/coupon_report/all": {
     /** Get total coupon usage */
     get: operations["DashboardController_geCouponReportTotal"];
+  };
+  "/dashboard/income_per_receipt": {
+    /** Get income per receipt Today */
+    get: operations["DashboardController_getIncomePerReceipt"];
+  };
+  "/dashboard/sales_report": {
+    /** Get all sales report from start date to end date */
+    get: operations["DashboardController_getSaleReports"];
   };
 }
 
@@ -324,7 +332,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-14T14:24:46.951Z
+       * @default 2023-10-19T09:02:21.727Z
        */
       created_at: string;
       /** @description Addon status */
@@ -344,7 +352,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-14T14:24:46.951Z
+       * @default 2023-10-19T09:02:21.727Z
        */
       created_at: string;
       /** @description Addon status */
@@ -380,6 +388,7 @@ export interface components {
        * @description Menu Deleted Date
        */
       deleted_at: string | null;
+      can_order: boolean;
     };
     GetAllMenuResponseDto: {
       /** @description Menu's Category */
@@ -634,7 +643,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-10-14T14:24:47.067Z
+       * @default 2023-10-19T09:02:21.875Z
        */
       created_at: string;
       /**
@@ -721,10 +730,21 @@ export interface components {
        */
       deleted_at: string | null;
     };
+    ReceiptCategoryMenuSchema: {
+      _id: string;
+      title: string;
+    };
+    ReceiptAddonMenuSchema: {
+      _id: string;
+      title: string;
+      price: number;
+    };
     ReceiptMenuSchema: {
       _id: string;
       title: string;
       price: number;
+      categories: components["schemas"]["ReceiptCategoryMenuSchema"];
+      addons: components["schemas"]["ReceiptAddonMenuSchema"][];
     };
     ReceiptCouponSchema: {
       _id: string;
@@ -1364,6 +1384,26 @@ export interface components {
       couponQuota: number;
       /** @description Total used coupon */
       couponUsageTotal: number;
+    };
+    GetIncomePerReceiptDto: {
+      /** @description average income per receipt */
+      income_per_receipt: number;
+      /** @description receipt amount today */
+      receipt_amount: number;
+      /** @description net income today */
+      net_income: number;
+    };
+    SaleReportDto: {
+      /** @description Menu ID */
+      menu_id: string;
+      /** @description Menu title */
+      menu_title: string;
+      /** @description Menu category */
+      menu_category: string;
+      /** @description Menu sold amount */
+      total_amount: number;
+      /** @description Menu total price */
+      total_price: number;
     };
   };
   responses: never;
@@ -2319,7 +2359,43 @@ export interface operations {
       };
     };
   };
+  /** Create a table */
+  TablesController_createTable: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TablesDto"];
+      };
+    };
+    responses: {
+      /** @description Create table */
+      201: {
+        content: {
+          "application/json": components["schemas"]["TablesSchema"];
+        };
+      };
+    };
+  };
+  /** Get table by id */
+  TablesController_getTableById: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["TableResponseDto"];
+        };
+      };
+    };
+  };
   TablesController_updateTable: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["TableUpdateRequestDto"];
@@ -2339,44 +2415,18 @@ export interface operations {
       };
     };
   };
-  /** Create a table */
-  TablesController_createTable: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["TablesDto"];
-      };
-    };
-    responses: {
-      /** @description Create table */
-      201: {
-        content: {
-          "application/json": components["schemas"]["TablesSchema"];
-        };
-      };
-    };
-  };
   /** Soft delete table */
   TablesController_deleteTable: {
-    responses: {
-      204: never;
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorDto"];
-        };
-      };
-    };
-  };
-  /** Get table by id */
-  TablesController_getTableById: {
     parameters: {
       path: {
         id: string;
       };
     };
     responses: {
-      200: {
+      204: never;
+      404: {
         content: {
-          "application/json": components["schemas"]["TableResponseDto"];
+          "application/json": components["schemas"]["ErrorDto"];
         };
       };
     };
@@ -2427,16 +2477,16 @@ export interface operations {
       };
     };
   };
-  /** Get total receipt amount */
+  /** Get total receipt amount Today */
   DashboardController_getReceiptReport: {
     parameters: {
       query: {
-        /** @description Date (UnixTimeStamp in seconds) */
+        /** @description Start Date (UnixTimeStamp in seconds) */
         date: number;
       };
     };
     responses: {
-      /** @description Total receipt amount */
+      /** @description Total receipt amount Today */
       200: {
         content: {
           "application/json": components["schemas"]["GetReceiptAmountDto"];
@@ -2444,18 +2494,16 @@ export interface operations {
       };
     };
   };
-  /** Get net income & discount in range date */
+  /** Get net income & discount Today */
   DashboardController_getIncomeReport: {
     parameters: {
       query: {
         /** @description Start Date (UnixTimeStamp in seconds) */
-        from: number;
-        /** @description End Date (UnixTimeStamp in seconds) */
-        end: number;
+        date: number;
       };
     };
     responses: {
-      /** @description Net income & Discount in range date */
+      /** @description Net income & Discount Today */
       200: {
         content: {
           "application/json": components["schemas"]["GetNetIncomeDto"];
@@ -2515,10 +2563,16 @@ export interface operations {
       };
     };
   };
-  /** Get total coupon usage today */
+  /** Get total coupon usage Today */
   DashboardController_getCouponReportToday: {
+    parameters: {
+      query: {
+        /** @description Start Date (UnixTimeStamp in seconds) */
+        date: number;
+      };
+    };
     responses: {
-      /** @description Total Coupon usage today */
+      /** @description Total Coupon usage Today */
       200: {
         content: {
           "application/json": components["schemas"]["GetCouponReportTodayDto"];
@@ -2533,6 +2587,42 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetCouponReportTotalDto"];
+        };
+      };
+    };
+  };
+  /** Get income per receipt Today */
+  DashboardController_getIncomePerReceipt: {
+    parameters: {
+      query: {
+        /** @description Start Date (UnixTimeStamp in seconds) */
+        date: number;
+      };
+    };
+    responses: {
+      /** @description Total Coupon usage Today */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetIncomePerReceiptDto"];
+        };
+      };
+    };
+  };
+  /** Get all sales report from start date to end date */
+  DashboardController_getSaleReports: {
+    parameters: {
+      query: {
+        /** @description Start Date (UnixTimeStamp in seconds) */
+        startTime: number;
+        /** @description End Date (UnixTimeStamp in seconds) */
+        endTime: number;
+      };
+    };
+    responses: {
+      /** @description Sales report from start date to end date */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SaleReportDto"][];
         };
       };
     };

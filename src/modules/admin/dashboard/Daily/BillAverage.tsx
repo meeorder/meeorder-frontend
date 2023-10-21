@@ -1,11 +1,13 @@
 import CardData from "@/modules/admin/dashboard/Daily/CardData";
 import CardTitle from "@/modules/admin/dashboard/Daily/CardTitle";
+import { useIncomePerReceiptToday } from "@/modules/admin/dashboard/Daily/hooks";
 import { H2, Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Money } from "@phosphor-icons/react";
 import { Card } from "antd";
 
 const BillAverage = () => {
+  const { data } = useIncomePerReceiptToday();
   return (
     <Card
       bodyStyle={{
@@ -23,10 +25,13 @@ const BillAverage = () => {
             paddingRight: "32px",
           }}
         >
-          257.9 <Text>บาท/บิล</Text>
+          {data?.income_per_receipt.toFixed(2)} <Text>บาท/บิล</Text>
         </H2>
-        <CardData title="จำนวนบิล" value="3,543 บิล" />
-        <CardData title="รายรับสุทธิ" value="13,543 บาท" />
+        <CardData
+          title="จำนวนบิล"
+          value={`${data?.receipt_amount ?? ""} บาท`}
+        />
+        <CardData title="รายรับสุทธิ" value={`${data?.net_income ?? ""} บาท`} />
       </Body>
     </Card>
   );

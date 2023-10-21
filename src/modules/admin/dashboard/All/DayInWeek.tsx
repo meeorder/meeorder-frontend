@@ -1,12 +1,34 @@
 import { H3 } from "@/modules/common/components/Typography";
+import { type GetReportNetIncomeGroupedResponse } from "@/modules/services/dashboard";
 import { Column } from "@ant-design/plots";
 import { Card } from "antd";
+import React from "react";
 
-const DayInWeek = () => {
-  const data = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"].map((i) => ({
-    วัน: i,
-    รายรับ: Math.round((Math.random() - 0.5) * 10000) + 10000,
+type DayInWeekProps = {
+  data?: GetReportNetIncomeGroupedResponse["daysOfWeek"];
+};
+
+const dayEngToThai: Record<
+  keyof GetReportNetIncomeGroupedResponse["daysOfWeek"],
+  string
+> = {
+  Sun: "อา.",
+  Mon: "จ.",
+  Tue: "อ.",
+  Wed: "พ.",
+  Thu: "พฤ.",
+  Fri: "ศ.",
+  Sat: "ส.",
+};
+
+const DayInWeek: React.FC<DayInWeekProps> = ({ data }) => {
+  const formatData = Object.entries(data || {}).map(([day, netIncome]) => ({
+    วัน: dayEngToThai[
+      day as keyof GetReportNetIncomeGroupedResponse["daysOfWeek"]
+    ],
+    รายรับ: netIncome,
   }));
+
   return (
     <Card
       bodyStyle={{
@@ -18,7 +40,7 @@ const DayInWeek = () => {
       }}
     >
       <H3>รายรับในสัปดาห์</H3>
-      <Column data={data} xField="วัน" yField="รายรับ" />
+      <Column data={formatData} xField="วัน" yField="รายรับ" />
     </Card>
   );
 };

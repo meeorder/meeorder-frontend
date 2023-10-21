@@ -1,11 +1,13 @@
 import CardData from "@/modules/admin/dashboard/Daily/CardData";
 import CardTitle from "@/modules/admin/dashboard/Daily/CardTitle";
+import { useTotalReceiptAmountToday } from "@/modules/admin/dashboard/Daily/hooks";
 import { H2, Text } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { CallBell } from "@phosphor-icons/react";
 import { Card } from "antd";
 
 const Bill = () => {
+  const { data } = useTotalReceiptAmountToday();
   return (
     <Card
       bodyStyle={{
@@ -23,10 +25,16 @@ const Bill = () => {
             paddingRight: "32px",
           }}
         >
-          3,543 <Text>บิล</Text>
+          {data?.all_receipt ?? 0} <Text>บิล</Text>
         </H2>
-        <CardData title="เป็นสมาชิก" value="1,000 บิล" />
-        <CardData title="ไม่เป็นสมาชิก" value="2,543 บิล" />
+        <CardData
+          title="เป็นสมาชิก"
+          value={`${data?.receipt_user ?? ""} บิล`}
+        />
+        <CardData
+          title="ไม่เป็นสมาชิก"
+          value={`${data?.receipt_no_user ?? ""} บิล`}
+        />
       </Body>
     </Card>
   );
