@@ -20,7 +20,7 @@ const MenuList: React.FC<MenuListProps> = ({ saleReportData }) => {
   const [searchText, setSearchText] = useState("");
   const searchInput = useRef<InputRef>(null);
 
-  const { data: categorys } = useAllCategory();
+  const { data: categories } = useAllCategory();
 
   useEffect(() => {
     console.log(saleReportData);
@@ -30,7 +30,7 @@ const MenuList: React.FC<MenuListProps> = ({ saleReportData }) => {
       return b.menu_category.localeCompare(a.menu_category);
     });
     saleReportData?.forEach((data) => {
-      if (data.menu_category === null) data.menu_category = "Others";
+      if (data.menu_category === null) data.menu_category = "อื่นๆ";
     });
     setDataSource(saleReportData ?? []);
   }, [saleReportData]);
@@ -125,7 +125,7 @@ const MenuList: React.FC<MenuListProps> = ({ saleReportData }) => {
           setTimeout(() => searchInput.current?.select(), 100);
         }
       },
-      render: (text: string, record: TableRow) => (
+      render: (text: string) => (
         <MenuNameContainer>
           <Highlighter
             highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
@@ -149,7 +149,7 @@ const MenuList: React.FC<MenuListProps> = ({ saleReportData }) => {
       }) => (
         <CategoryFilterContainer onKeyDown={(e) => e.stopPropagation()}>
           <CategoryFilterCheckBoxContainer>
-            {categorys?.map((category) => (
+            {categories?.map((category) => (
               <Checkbox
                 style={{ padding: "5px 12px" }}
                 key={category.title}
