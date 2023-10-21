@@ -58,15 +58,16 @@ const AddOnFormSection: React.FC = () => {
         }
       >
         <Table
+          style={{ width: "99%" }}
           columns={columns}
           dataSource={
             allAddons?.filter(
               (addon) => selectedAddonIds?.find((id) => addon._id === id),
             ) ?? []
           }
-          scroll={{ y: "20vh", x: "max-content" }}
+          size="small"
+          scroll={{ y: "13.5vh", x: "max-content" }}
           pagination={false}
-          style={{ width: "99%" }}
           rowKey={(record) => record._id}
         />
       </AddOnFormCard>

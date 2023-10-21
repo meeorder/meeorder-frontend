@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 
 const useUpdateOrderStatusToCancel = () => {
   return useMutation({
-    mutationKey: ["useUpadateOrderStatusToCancel"],
+    mutationKey: ["useUpdateOrderStatusToCancel"],
     mutationFn: setOrderStatusToCancelById,
     onSuccess: () => {
       void queryClient.invalidateQueries(["useAllOrders"]);
