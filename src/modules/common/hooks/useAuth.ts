@@ -14,7 +14,7 @@ export const useLogin = () => {
       login({ username, password }),
     onSuccess: (data) => {
       void queryClient.invalidateQueries(["getCurrentUser"]);
-      localStorage.setItem("jwt-meeorder", data?.access_token); // TODO: use cookie instead
+      localStorage.setItem("jwt-meeorder", data?.access_token);
     },
   });
 };
@@ -41,7 +41,7 @@ export const useLogout = (params: UseLogoutParams = {}) => {
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      localStorage.removeItem("jwt-meeorder"); // TODO: use cookie instead
+      localStorage.removeItem("jwt-meeorder");
       void queryClient.clear();
       params.onSuccess?.();
     },

@@ -332,7 +332,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-19T09:02:21.727Z
+       * @default 2023-10-21T15:03:22.295Z
        */
       created_at: string;
       /** @description Addon status */
@@ -352,7 +352,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-19T09:02:21.727Z
+       * @default 2023-10-21T15:03:22.295Z
        */
       created_at: string;
       /** @description Addon status */
@@ -643,7 +643,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-10-19T09:02:21.875Z
+       * @default 2023-10-21T15:03:22.411Z
        */
       created_at: string;
       /**

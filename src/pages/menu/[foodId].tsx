@@ -54,7 +54,10 @@ const FoodDetail = () => {
       addons: [],
     };
     setNewBasketOrder({
-      menu: basketOrder?.menu ?? newMenu,
+      menu: basketOrder?.menu ?? {
+        ...newMenu,
+        can_order: true,
+      },
       quantity: basketOrder?.quantity ?? 1,
       basketOrderId:
         basketOrder?.basketOrderId ?? randomBytes(16).toString("hex"),
@@ -118,7 +121,7 @@ const FoodDetail = () => {
           />
         </ImageContainer>
         <Content
-          menu={menu}
+          menu={{ ...menu, can_order: true }}
           newBasketOrder={newBasketOrder}
           setNewBasketOrder={setNewBasketOrder}
         />

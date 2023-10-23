@@ -2,6 +2,7 @@ import { type LayoutType } from "@/modules/AppLayout";
 import { type Role } from "@/modules/services/users";
 import {
   Basket,
+  Chair,
   CheckCircle,
   ClipboardText,
   Fish,
@@ -100,12 +101,27 @@ export const pages = {
     Icon: User,
     minimumRole: "Owner",
   },
+  adminRestaurantAccountManagement: {
+    id: "adminRestaurantAccountManagement",
+    label: "จัดการโลโก้และชื่อร้านอาหาร",
+    path: "/admin/setting/restaurant-account-management",
+    layout: "admin",
+    minimumRole: "Owner",
+  },
   adminUserManagement: {
     id: "adminUserManagement",
     label: "จัดการบัญชีทั้งหมด",
     path: "/admin/setting/user-management",
     layout: "admin",
     minimumRole: "Owner",
+  },
+  cashierTableManagement: {
+    id: "cashierTableManagement",
+    label: "จัดการโต๊ะ",
+    path: "/admin/table-management",
+    layout: "admin",
+    Icon: Chair,
+    minimumRole: "Cashier",
   },
   employeeStock: {
     id: "employeeStock",

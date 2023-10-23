@@ -7,7 +7,7 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use((request) => {
   // const jwtToken = Cookies.get("jwt-meeorder") || "";
-  const jwtToken = localStorage.getItem("jwt-meeorder") || ""; // TODO: use cookie instead
+  const jwtToken = localStorage.getItem("jwt-meeorder") || "";
   request.headers["authorization"] = `Bearer ${jwtToken}`;
   return request;
 });

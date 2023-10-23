@@ -1,45 +1,54 @@
+import useUpdateRestaurantSetting from "@/modules/admin/setting/restaurantManagement/hooks/useUpdateResturantSetting";
 import { H3, H5, Text } from "@/modules/common/components/Typography";
-import { useUpdateUser } from "@/modules/user/account/hooks/useUpdateUser";
 import styled from "@emotion/styled";
 import { CheckCircle, XCircle } from "@phosphor-icons/react";
-import { Button, Form, Input, notification } from "antd";
-import { type NotificationPlacement } from "antd/es/notification/interface";
+import { Button, Form, Input } from "antd";
+import {
+  type NotificationInstance,
+  type NotificationPlacement,
+} from "antd/es/notification/interface";
 import { type AxiosError } from "axios";
-import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
 type FieldType = {
-  username: string;
-  password: string;
+  restaurantImageLink: string;
 };
 
 type Props = {
-  setActiveKeys: (activeKeys: string[]) => void;
+  restaurantLogo: string;
+  setIsOpenChangeLogo: (isOpenLogo: boolean) => void;
+  api: NotificationInstance;
 };
 
-const EditUsernameContainer: React.FC<Props> = ({ setActiveKeys }) => {
+const EditRestaurantLogo: React.FC<Props> = ({
+  setIsOpenChangeLogo,
+  restaurantLogo,
+  api,
+}) => {
   const [form] = Form.useForm<FieldType>();
   const {
-    mutate: editUsername,
+    mutate: editRestaurantLogo,
     isSuccess,
     isError,
     error,
-  } = useUpdateUser({
-    OnSuccess: () => setActiveKeys([""]),
+  } = useUpdateRestaurantSetting({
+    onSuccess: () => {
+      setTimeout(() => {
+        setIsOpenChangeLogo(false);
+      }, 100);
+    },
   });
-  const [api, contextHolder] = notification.useNotification();
-  const router = useRouter();
 
   const handleCancelForm = () => {
     form.resetFields();
-    setActiveKeys([""]);
+    setIsOpenChangeLogo(false);
   };
 
-  const handleEditUsername = (values: FieldType) => {
-    const { username, password } = values;
-    editUsername({
-      newUsername: username,
-      oldPassword: password,
+  const handleEditRestaurantName = (values: FieldType) => {
+    const { restaurantImageLink: imageLink } = values;
+
+    editRestaurantLogo({
+      logo: imageLink,
     });
   };
 
@@ -54,11 +63,7 @@ const EditUsernameContainer: React.FC<Props> = ({ setActiveKeys }) => {
 
       form.setFields([
         {
-          name: "username",
-          errors: [""],
-        },
-        {
-          name: "password",
+          name: "restaurantImageLink",
           errors: [axiosErrorMessage],
         },
       ]);
@@ -72,7 +77,7 @@ const EditUsernameContainer: React.FC<Props> = ({ setActiveKeys }) => {
     const openNotification = (
       placement: NotificationPlacement,
       header: React.ReactNode,
-      desciption: React.ReactNode,
+      description: React.ReactNode,
       icon?: React.ReactNode,
       onClose?: () => void,
     ) => {
@@ -80,7 +85,7 @@ const EditUsernameContainer: React.FC<Props> = ({ setActiveKeys }) => {
       api.info({
         message: header,
         placement,
-        description: desciption,
+        description,
         icon: icon,
         onClose: onClose,
       });
@@ -90,7 +95,7 @@ const EditUsernameContainer: React.FC<Props> = ({ setActiveKeys }) => {
       openNotification(
         "topRight",
         <H3 style={{ marginLeft: "4px" }}>สำเร็จ</H3>,
-        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อผู้ใช้สำเร็จ</Text>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขโลโก้ร้านอาหารสำเร็จ</Text>,
         <CheckCircle size={32} color="#A0D911" weight="fill" />,
       );
     }
@@ -98,39 +103,33 @@ const EditUsernameContainer: React.FC<Props> = ({ setActiveKeys }) => {
       openNotification(
         "topRight",
         <H3 style={{ marginLeft: "4px" }}>ไม่สำเร็จ</H3>,
-        <Text style={{ marginLeft: "4px" }}>แก้ไขชื่อผู้ใช้ไม่สำเร็จ</Text>,
+        <Text style={{ marginLeft: "4px" }}>แก้ไขโลโก้ร้านอาหารไม่สำเร็จ</Text>,
         <XCircle size={32} color="#F5222D" weight="fill" />,
       );
     }
-  }, [isSuccess, isError, api, router, setActiveKeys]);
+  }, [isSuccess, isError, api]);
 
   return (
     <>
-      {contextHolder}
       <Container>
-        <Form<FieldType> form={form} onFinish={handleEditUsername}>
+        <Form<FieldType>
+          form={form}
+          onFinish={handleEditRestaurantName}
+          initialValues={{ restaurantImageLink: restaurantLogo }}
+        >
           <div>
-            <H5 style={{ textAlign: "center" }}>เปลี่ยนชื่อผู้ใช้</H5>
+            <H5 style={{ textAlign: "center" }}>เปลี่ยนโลโก้ร้านอาหาร</H5>
             <div style={{ textAlign: "center", width: "100%" }}>
-              <Text type="secondary">ป้อนชื่อผู้ใช้ใหม่และรหัสผ่านของคุณ</Text>
+              <Text type="secondary">ป้อนลิงก์โลโก้ร้านอาหาร</Text>
             </div>
           </div>
           <div>
-            <Text>ชื่อผู้ใช้</Text>
+            <Text>ลิงก์รูปภาพ</Text>
             <Form.Item<FieldType>
-              name="username"
-              rules={[{ required: true, message: "กรุณากรอกชื่อผู้ใช้" }]}
+              name="restaurantImageLink"
+              rules={[{ required: true, message: "ลิงก์รูปภาพ" }]}
             >
               <Input />
-            </Form.Item>
-          </div>
-          <div>
-            <Text>รหัสผ่านปัจจุบัน</Text>
-            <Form.Item<FieldType>
-              name="password"
-              rules={[{ required: true, message: "กรุณากรอกรหัสผ่าน" }]}
-            >
-              <Input.Password />
             </Form.Item>
           </div>
           <ButtonContainer>
@@ -149,12 +148,19 @@ const EditUsernameContainer: React.FC<Props> = ({ setActiveKeys }) => {
   );
 };
 
-export default EditUsernameContainer;
+export default EditRestaurantLogo;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: 200px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid ${(props) => props.theme.antd.colorBgLayout};
+  background: #fafafa;
+  padding: 12px;
+  flex: 1;
 `;
 
 const ButtonContainer = styled.div`
