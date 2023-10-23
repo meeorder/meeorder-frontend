@@ -31,6 +31,18 @@ const Home = () => {
     setSessionUser();
   }, [setSessionUser]);
 
+  const filterMenus = allMenu?.data
+    ?.sort((a, b) => (a?.category?.rank ?? 0) - (b?.category?.rank ?? 0))
+    ?.map((item) => {
+      return {
+        ...item,
+        menus: item?.menus?.filter(
+          (menu) => menu?.can_order === true && !!menu,
+        ),
+      };
+    })
+    ?.filter((item) => item?.menus?.length > 0);
+
   return (
     <>
       <Head>
@@ -41,23 +53,21 @@ const Home = () => {
       <AppLayout layoutType="user" currentPageId={pages.home.id}>
         <CategoryNav
           categories={
-            allMenu?.data?.map((categoryData) => categoryData?.category) ?? []
+            filterMenus?.map((item) => {
+              return item?.category;
+            }) ?? []
           }
         />
         <MenuContainer>
-          {allMenu?.data
-            ?.sort(
-              (a, b) => (a?.category?.rank ?? 0) - (b?.category?.rank ?? 0),
-            )
-            ?.map((item) => {
-              return (
-                <Category
-                  key={item?.category?._id}
-                  category={item?.category}
-                  menus={item?.menus?.filter((menu) => !!menu)}
-                />
-              );
-            })}
+          {filterMenus?.map((item) => {
+            return (
+              <Category
+                key={item?.category?._id}
+                category={item?.category}
+                menus={item?.menus}
+              />
+            );
+          })}
         </MenuContainer>
       </AppLayout>
     </>

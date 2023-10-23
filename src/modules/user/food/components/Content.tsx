@@ -74,6 +74,7 @@ const Content: React.FC<ContentProps> = ({
       <AddonContainer>
         {menu?.addons
           ?.sort((a, b) => (a?.price ?? 0) - (b?.price ?? 0))
+          ?.filter((addon) => addon?.available === true)
           ?.map((addon) => (
             <AddonsCard
               key={addon._id}
