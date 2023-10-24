@@ -46,8 +46,11 @@ const Bill = () => {
         data={processedData ?? []}
         xField="วันที่"
         yField="จำนวนบิล"
-        width={100}
         key={key}
+        width={100}
+        style={{
+          height: "30vh",
+        }}
       />
     </Card>
   );

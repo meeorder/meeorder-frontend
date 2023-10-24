@@ -49,6 +49,9 @@ const Income = () => {
         yField="รายรับ"
         width={100}
         key={key}
+        style={{
+          height: "30vh",
+        }}
       />
     </Card>
   );

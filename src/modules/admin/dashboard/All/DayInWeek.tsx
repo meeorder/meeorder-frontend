@@ -35,12 +35,21 @@ const DayInWeek: React.FC<DayInWeekProps> = ({ data }) => {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        gap: "24px",
-        marginTop: "-24px",
       }}
     >
-      <H3>รายรับในสัปดาห์</H3>
-      <Column data={formatData} xField="วัน" yField="รายรับ" />
+      <H3
+        style={{
+          marginBottom: "24px",
+        }}
+      >
+        รายรับในสัปดาห์
+      </H3>
+      <Column
+        data={formatData}
+        xField="วัน"
+        yField="รายรับ"
+        style={{ height: "30vh" }}
+      />
     </Card>
   );
 };

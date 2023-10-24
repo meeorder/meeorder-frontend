@@ -11,12 +11,12 @@ import dayjs from "dayjs";
 import { useState } from "react";
 const { RangePicker } = DatePicker;
 const rangePresets: TimeRangePickerProps["presets"] = [
-  { label: "Last 7 Days", value: [dayjs().add(-7, "d"), dayjs()] },
-  { label: "Last 14 Days", value: [dayjs().add(-14, "d"), dayjs()] },
-  { label: "Last 30 Days", value: [dayjs().add(-30, "d"), dayjs()] },
-  { label: "Last 90 Days", value: [dayjs().add(-90, "d"), dayjs()] },
-  { label: "Last year", value: [dayjs().add(-1, "y"), dayjs()] },
-  { label: "Last 2 years", value: [dayjs().add(-2, "y"), dayjs()] },
+  { label: "7 วันที่ผ่านมา", value: [dayjs().add(-7, "d"), dayjs()] },
+  { label: "14 วันที่ผ่านมา", value: [dayjs().add(-14, "d"), dayjs()] },
+  { label: "1 เดือนที่ผ่านมา", value: [dayjs().add(-1, "m"), dayjs()] },
+  { label: "3 เดือนที่ผ่านมา", value: [dayjs().add(-2, "m"), dayjs()] },
+  { label: "1 ปีที่ผ่านมา", value: [dayjs().add(-1, "y"), dayjs()] },
+  { label: "2 ปีที่ผ่านมา", value: [dayjs().add(-2, "y"), dayjs()] },
   { label: "Last 5 years", value: [dayjs().add(-5, "y"), dayjs()] },
 ];
 
@@ -34,6 +34,7 @@ export const All = () => {
       <H2>
         เปรียบเทียบรายได้ในช่วง{" "}
         <RangePicker
+          size="large"
           presets={rangePresets}
           allowClear={false}
           value={[startDate, endDate]}

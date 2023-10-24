@@ -18,12 +18,21 @@ const Quarter = ({ data }: QuarterProps) => {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        gap: "24px",
-        marginTop: "-24px",
       }}
     >
-      <H3>รายรับแต่ละไตรมาส</H3>
-      <Column data={formatData} xField="ไตรมาส" yField="รายรับ" />
+      <H3
+        style={{
+          marginBottom: "24px",
+        }}
+      >
+        รายรับแต่ละไตรมาส
+      </H3>
+      <Column
+        data={formatData}
+        xField="ไตรมาส"
+        yField="รายรับ"
+        style={{ height: "30vh" }}
+      />
     </Card>
   );
 };

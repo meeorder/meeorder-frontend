@@ -18,12 +18,21 @@ const Time: React.FC<TimeProps> = ({ data }) => {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        gap: "24px",
-        marginTop: "-24px",
       }}
     >
-      <H3>รายรับแต่ละช่วงเวลา</H3>
-      <Column data={formatData} xField="เวลา" yField="รายรับ" />
+      <H3
+        style={{
+          marginBottom: "24px",
+        }}
+      >
+        รายรับแต่ละช่วงเวลา
+      </H3>
+      <Column
+        data={formatData}
+        xField="เวลา"
+        yField="รายรับ"
+        style={{ height: "30vh" }}
+      />
     </Card>
   );
 };

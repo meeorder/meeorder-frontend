@@ -39,12 +39,21 @@ const MonthInYear = ({ data }: MonthInYearProps) => {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        gap: "24px",
-        marginTop: "-24px",
       }}
     >
-      <H3>รายรับแต่ละเดือน</H3>
-      <Column data={formatData} xField="เดือน" yField="รายรับ" />
+      <H3
+        style={{
+          marginBottom: "24px",
+        }}
+      >
+        รายรับแต่ละเดือน
+      </H3>
+      <Column
+        data={formatData}
+        xField="เดือน"
+        yField="รายรับ"
+        style={{ height: "30vh" }}
+      />
     </Card>
   );
 };

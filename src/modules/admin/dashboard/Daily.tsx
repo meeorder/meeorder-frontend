@@ -25,6 +25,7 @@ const Container = styled.div`
   grid-gap: 24px;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr;
+
   > :last-child {
     grid-column: 3 / 4;
     grid-row: 1 / 3;
