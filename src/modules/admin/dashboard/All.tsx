@@ -4,7 +4,7 @@ import MonthInYear from "@/modules/admin/dashboard/All/MonthInYear";
 import Quarter from "@/modules/admin/dashboard/All/Quarter";
 import Time from "@/modules/admin/dashboard/All/Time";
 import { useReportNetIncomeGrouped } from "@/modules/admin/dashboard/All/hooks";
-import { H1, H4 } from "@/modules/common/components/Typography";
+import { H2 } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { DatePicker, type TimeRangePickerProps } from "antd";
 import dayjs from "dayjs";
@@ -30,9 +30,9 @@ export const All = () => {
   console.log(netIncomeGrouped);
   return (
     <>
-      <H1>ดูข้อมูลรายได้ในช่วงต่างๆ</H1>
+      <H2>ดูข้อมูลรายได้ในช่วงต่างๆ</H2>
       <AllTimeIncome />
-      <H4>
+      <H2>
         เปรียบเทียบรายได้ในช่วง{" "}
         <RangePicker
           presets={rangePresets}
@@ -45,7 +45,7 @@ export const All = () => {
             }
           }}
         />
-      </H4>
+      </H2>
       <SummaryContainer>
         <Time data={netIncomeGrouped?.hourly} />
         <DayInWeek data={netIncomeGrouped?.daysOfWeek} />
