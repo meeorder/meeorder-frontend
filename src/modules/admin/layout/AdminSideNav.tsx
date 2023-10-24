@@ -20,7 +20,6 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     adminDashboard,
     adminAddEditMenu,
     adminAddEditPromotion,
-    adminEditPoint,
     adminEditCoupon,
     adminSalesReport,
     adminSetting,
@@ -30,25 +29,45 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     employeeStock,
     employeeOrderManagement,
     accountManagement,
+    adminTitleMenuAndCoupon,
+    adminTitleInShopOrder,
+    adminTitleShopManagement,
   } = pages;
 
   const router = useRouter();
 
-  const adminPages = [
-    adminDashboard,
-    adminAddEditMenu,
-    [adminAddEditPromotion, adminEditPoint, adminEditCoupon],
-    adminSalesReport,
-    [adminSetting, adminRestaurantAccountManagement, adminUserManagement],
-    cashierTableManagement,
-    employeeStock,
-    employeeOrderManagement,
-    accountManagement,
-  ];
-
   const { data: user } = useUser();
   const { data: restaurant } = useRestaurantSetting();
+  const adminPages = [
+    [adminDashboard, adminDashboard, adminSalesReport],
+    [adminTitleMenuAndCoupon, adminAddEditMenu, employeeStock, adminEditCoupon],
+    [adminTitleInShopOrder, cashierTableManagement, employeeOrderManagement],
+    [
+      adminTitleShopManagement,
+      adminRestaurantAccountManagement,
+      adminUserManagement,
+    ],
+    accountManagement,
+  ] satisfies (PageMetaData | PageMetaData[])[];
 
+  const employeePages = [
+    [adminDashboard, adminDashboard, adminSalesReport],
+    [adminTitleMenuAndCoupon, adminAddEditMenu, adminEditCoupon],
+    [
+      adminTitleInShopOrder,
+      cashierTableManagement,
+      employeeOrderManagement,
+      employeeStock,
+    ],
+    [
+      adminTitleShopManagement,
+      adminRestaurantAccountManagement,
+      adminUserManagement,
+    ],
+    accountManagement,
+  ] satisfies (PageMetaData | PageMetaData[])[];
+  const navPages =
+    (user?.role || 0) >= roleToRoleNumber.Owner ? adminPages : employeePages;
   const getItem = (
     page: PageMetaData,
     children?: PageMetaData[],
@@ -66,13 +85,10 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
     return null;
   };
 
-  const items: MenuProps["items"] | MenuProps["items"][] = adminPages
+  const items: MenuProps["items"] | MenuProps["items"][] = navPages
     .map((page) => {
       if (Array.isArray(page)) {
-        return getItem(
-          page[0] as PageMetaData,
-          page.slice(1) as PageMetaData[],
-        );
+        return getItem(page[0] as PageMetaData, page.slice(1));
       }
       return getItem(page);
     })
@@ -123,20 +139,19 @@ const AdminSideNav: React.FC<AdminSideNavProps> = ({ currentPageId }) => {
         )}
       </LogoContainer>
       <Menu
+        style={{ height: "calc(100% - 64px - 64px)", overflowY: "auto" }}
         theme="light"
         mode="inline"
         defaultSelectedKeys={[currentPageId]}
         defaultOpenKeys={
-          [adminEditPoint.id, adminEditCoupon.id].some(
-            (id) => id == currentPageId,
-          )
-            ? [adminAddEditPromotion.id]
-            : [
-                adminUserManagement.id,
-                adminRestaurantAccountManagement.id,
-              ].some((id) => id == currentPageId)
-            ? [adminSetting.id]
-            : []
+          navPages
+            .filter(
+              (page) =>
+                Array.isArray(page) &&
+                page.some((page) => page.id == currentPageId),
+            )
+            .map((page) => (Array.isArray(page) ? page?.[0]?.id : ""))
+            .filter((id) => !!id) as string[]
         }
         onClick={({ key }) => {
           const page = pages[key as PageId];

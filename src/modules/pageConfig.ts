@@ -1,15 +1,20 @@
 import { type LayoutType } from "@/modules/AppLayout";
 import { type Role } from "@/modules/services/users";
 import {
+  AddressBook,
   Basket,
   Chair,
   CheckCircle,
   ClipboardText,
   Fish,
   Gauge,
+  Gear,
   House,
   ListBullets,
+  Notebook,
   PencilSimpleLine,
+  Storefront,
+  Ticket,
   User,
 } from "@phosphor-icons/react";
 
@@ -55,6 +60,14 @@ export const pages = {
     Icon: Gauge,
     minimumRole: "Owner",
   },
+  adminTitleMenuAndCoupon: {
+    id: "adminTitleMenuAndCoupon",
+    label: "เมนูและคูปอง",
+    path: "/admin/menu",
+    layout: "admin",
+    Icon: Notebook,
+    minimumRole: "Owner",
+  },
   adminAddEditMenu: {
     id: "adminAddEditMenu",
     label: "จัดการเมนูอาหาร",
@@ -82,6 +95,7 @@ export const pages = {
     id: "adminEditCoupon",
     label: "จัดการคูปอง",
     path: "/admin/promotion/edit-coupon",
+    Icon: Ticket,
     layout: "admin",
     minimumRole: "Owner",
   },
@@ -103,10 +117,11 @@ export const pages = {
   },
   adminRestaurantAccountManagement: {
     id: "adminRestaurantAccountManagement",
-    label: "จัดการโลโก้และชื่อร้านอาหาร",
+    label: "ตั้งค่าร้านอาหาร",
     path: "/admin/setting/restaurant-account-management",
     layout: "admin",
     minimumRole: "Owner",
+    Icon: Storefront,
   },
   adminUserManagement: {
     id: "adminUserManagement",
@@ -114,6 +129,15 @@ export const pages = {
     path: "/admin/setting/user-management",
     layout: "admin",
     minimumRole: "Owner",
+    Icon: AddressBook,
+  },
+  adminTitleInShopOrder: {
+    id: "adminTitleInShopOrder",
+    label: "ออเดอร์ภายในร้าน",
+    path: "/admin/order-management",
+    layout: "admin",
+    minimumRole: "Employee",
+    Icon: Storefront,
   },
   cashierTableManagement: {
     id: "cashierTableManagement",
@@ -146,6 +170,14 @@ export const pages = {
     layout: "admin",
     Icon: User,
     minimumRole: "Employee",
+  },
+  adminTitleShopManagement: {
+    id: "adminTitleShopManagement",
+    label: "จัดการบัญชีและร้านอาหาร",
+    path: "/admin/account-management",
+    layout: "admin",
+    Icon: Gear,
+    minimumRole: "Owner",
   },
 } as const satisfies Record<string, PageMetaData>;
 
