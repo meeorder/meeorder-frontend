@@ -1,15 +1,15 @@
 import {
-  getSalesReport,
-  type GetSalesReportQueryParams,
-  type GetSalesReportResponse,
+  getAllSalesReport,
+  type GetAllSalesReportQueryParams,
+  type GetAllSalesReportResponse,
 } from "@/modules/services/dashboard";
 import { useQuery } from "@tanstack/react-query";
 
-export type salesReport = GetSalesReportResponse;
+export type salesReport = GetAllSalesReportResponse;
 
-export const useSalesReport = (params: GetSalesReportQueryParams) => {
+export const useSalesReport = (params: GetAllSalesReportQueryParams) => {
   return useQuery({
     queryKey: ["salesReport", params],
-    queryFn: () => getSalesReport(params),
+    queryFn: () => getAllSalesReport(params),
   });
 };

@@ -42,11 +42,11 @@ export const getTableById = async (params: GetTableByIdParams) => {
 
 //================>>>> Update a table by id <<<<=========================================//
 export type UpdateTableByIdResponse =
-  paths["/tables"]["put"]["responses"]["200"]["content"]["application/json"];
+  paths["/tables/{id}"]["put"]["responses"]["200"]["content"]["application/json"];
 
 export type UpdateTableByIdParams =
-  paths["/tables"]["put"]["requestBody"]["content"]["application/json"] &
-    paths["/tables"]["put"]["parameters"]["path"];
+  paths["/tables/{id}"]["put"]["requestBody"]["content"]["application/json"] &
+    paths["/tables/{id}"]["put"]["parameters"]["path"];
 
 export const updateTableById = async (params: UpdateTableByIdParams) => {
   const { data } = await axiosInstance.put<UpdateTableByIdResponse>(
@@ -58,10 +58,10 @@ export const updateTableById = async (params: UpdateTableByIdParams) => {
 
 //================>>>> Delete a table <<<<=========================================//
 export type DeleteTableByIdResponse =
-  paths["/tables"]["delete"]["responses"]["204"]["content"]["application/json"];
+  paths["/tables/{id}"]["delete"]["responses"]["204"]["content"]["application/json"];
 
 export type DeleteTableByIdParams =
-  paths["/tables"]["delete"]["parameters"]["path"];
+  paths["/tables/{id}"]["delete"]["parameters"]["path"];
 
 export const deleteTableById = async (params: DeleteTableByIdParams) => {
   const { data } = await axiosInstance.delete<DeleteTableByIdResponse>(

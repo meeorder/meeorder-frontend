@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/charts": "^1.4.2",
     "@dnd-kit/core": "^6.0.8",
     "@dnd-kit/modifiers": "^6.0.1",
     "@dnd-kit/sortable": "^7.0.2",
@@ -45,6 +46,14 @@
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^3.0.0",
     "typescript": "^5.0.4"
+  },
+  "resolutions": {
+    "@antv/g-base": "0.5.11",
+    "@antv/path-util": "2.0.15"
+  },
+  "overrides": {
+    "@antv/g-base": "0.5.11",
+    "@antv/path-util": "2.0.15"
   },
   "ct3aMetadata": {
     "initVersion": "7.15.0"

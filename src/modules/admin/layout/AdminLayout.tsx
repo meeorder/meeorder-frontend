@@ -24,7 +24,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
       <Layout>
         <Layout.Content
           style={{
-            margin: "24px 24px",
+            margin: "24px",
+            marginRight: "0px",
+            paddingRight: "24px",
             overflow: "auto",
           }}
         >
