@@ -6,6 +6,7 @@ import { SettingOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import {
   Button,
+  ConfigProvider,
   Divider,
   Input,
   Menu,
@@ -13,7 +14,6 @@ import {
   Tag,
   theme,
   type MenuProps,
-  ConfigProvider,
 } from "antd";
 import React, { useState } from "react";
 
@@ -87,13 +87,12 @@ const CancelOrderModal: React.FC<CancelOrderModalProps> = ({
     setCancelReasonDetail(nextSelectedTags);
   };
   const handleChangeAddOnsDetail = (tag: string, checked: boolean) => {
-    console.log(tag, checked);
     const nextSelectedTags = checked
       ? [...AddOnsDetail, tag]
       : AddOnsDetail.filter((t) => t !== tag);
     setAddOnsDetail(nextSelectedTags);
   };
-  const handleChangeInrgedient = (tag: string, checked: boolean) => {
+  const handleChangeIngredient = (tag: string, checked: boolean) => {
     const nextSelectedTags = checked
       ? [...IngredientDetail, tag]
       : IngredientDetail.filter((t) => t !== tag);
@@ -103,14 +102,16 @@ const CancelOrderModal: React.FC<CancelOrderModalProps> = ({
     setOptionalDetail(value);
   };
   const handleCancelOrder = (id: string) => {
-    updateOrderStatusToCancel({
-      id: id,
-      ingredients: IngredientDetail,
-      addons: AddOnsDetail,
-      reasons: OptionalDetail
-        ? [...cancelReasonDetail, OptionalDetail]
-        : cancelReasonDetail,
-    }||{});
+    updateOrderStatusToCancel(
+      {
+        id: id,
+        ingredients: IngredientDetail,
+        addons: AddOnsDetail,
+        reasons: OptionalDetail
+          ? [...cancelReasonDetail, OptionalDetail]
+          : cancelReasonDetail,
+      } || {},
+    );
     setIsCancelModalOpen(false);
     setCancelReasonDetail([]);
     setIngredientDetail([]);
@@ -158,23 +159,22 @@ const CancelOrderModal: React.FC<CancelOrderModalProps> = ({
         </LeftContainer>
         <CancelReasonContainer>
           <ConfigProvider
-          theme={{
-            token:{
-              colorPrimary: token["red-6"],
-            },
-          }}
+            theme={{
+              token: {
+                colorPrimary: token["red-6"],
+              },
+            }}
           >
-          <StyledMenu
-            style={{ minWidth: 0, flex: "auto" }}
-            onClick={handelChangeCancelReasonMode}
-            selectedKeys={[cancelReasonMode]}
-            mode="horizontal"
-            items={items}
-
-          />
+            <StyledMenu
+              style={{ minWidth: 0, flex: "auto" }}
+              onClick={handelChangeCancelReasonMode}
+              selectedKeys={[cancelReasonMode]}
+              mode="horizontal"
+              items={items}
+            />
           </ConfigProvider>
           {cancelReasonMode === "outOfStock" && (
-            <MainReasoncontainer>
+            <MainReasonContainer>
               {modalData?.menu.ingredients.length != 0 && (
                 <IngredientReasonContainer>
                   <H5>วัตถุดิบหลักหมด:</H5>
@@ -184,7 +184,7 @@ const CancelOrderModal: React.FC<CancelOrderModalProps> = ({
                         key={ingredient._id}
                         checked={IngredientDetail.includes(ingredient._id)}
                         onChange={(checked) =>
-                          handleChangeInrgedient(ingredient._id, checked)
+                          handleChangeIngredient(ingredient._id, checked)
                         }
                       >
                         {<H5>{ingredient.title}</H5>}
@@ -211,7 +211,7 @@ const CancelOrderModal: React.FC<CancelOrderModalProps> = ({
                   </OutOfStockCheckableGroup>
                 </IngredientReasonContainer>
               )}
-            </MainReasoncontainer>
+            </MainReasonContainer>
           )}
           {cancelReasonMode === "other" && (
             <OtherReasonContainer>
@@ -285,7 +285,7 @@ const ModalTitle = styled.div`
 `;
 
 const StyledMenu = styled(Menu)`
-    justify-content: center;
+  justify-content: center;
   .ant-menu-item {
     align-self: stretch;
     text-align: center;
@@ -331,7 +331,7 @@ const ButtonContainer = styled.div`
   gap: 12px;
   bottom: 0;
 `;
-const MainReasoncontainer = styled.div`
+const MainReasonContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;

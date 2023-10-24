@@ -1,12 +1,18 @@
+import { useReceiptReport30Days } from "@/modules/admin/dashboard/Monthly/hooks";
 import { H2, Text } from "@/modules/common/components/Typography";
 import { Line } from "@ant-design/plots";
 import { Card } from "antd";
 import { useEffect, useState } from "react";
 
 const Bill = () => {
-  const data = [...Array(30).keys()].map((i) => ({
-    วันที่: `2021-08-${i + 1}`,
-    จำนวนบิล: Math.round((Math.random() - 0.5) * 50) + 100,
+  const { data } = useReceiptReport30Days();
+  const processedData = data?.map((d) => ({
+    วันที่: new Date(d.date).toLocaleDateString("th-TH", {
+      year: "2-digit",
+      month: "short",
+      day: "numeric",
+    }),
+    จำนวนบิล: d.total_receipt_count,
   }));
 
   const [key, setKey] = useState(0);
@@ -37,7 +43,7 @@ const Bill = () => {
         <Text type="secondary">( 30 วันย้อนหลัง )</Text>
       </div>
       <Line
-        data={data}
+        data={processedData ?? []}
         xField="วันที่"
         yField="จำนวนบิล"
         width={100}

@@ -23,7 +23,6 @@ const MenuList: React.FC<MenuListProps> = ({ saleReportData }) => {
   const { data: categories } = useAllCategory();
 
   useEffect(() => {
-    console.log(saleReportData);
     saleReportData?.sort((a, b) => {
       if (a.menu_category === b.menu_category)
         return b.total_amount - a.total_amount;

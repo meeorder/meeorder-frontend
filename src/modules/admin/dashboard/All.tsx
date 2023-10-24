@@ -27,7 +27,6 @@ export const All = () => {
     startDate.unix(),
     endDate.unix(),
   );
-  console.log(netIncomeGrouped);
   return (
     <>
       <H2>ดูข้อมูลรายได้ในช่วงต่างๆ</H2>

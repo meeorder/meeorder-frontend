@@ -280,6 +280,14 @@ export interface paths {
     /** Get all sales report from start date to end date */
     get: operations["DashboardController_getSaleReports"];
   };
+  "/dashboard/income_report_30days": {
+    /** Get income report for 30 days */
+    get: operations["DashboardController_getNetIncomeReport30Days"];
+  };
+  "/dashboard/receipt_report_30days": {
+    /** Get income report for 30 days */
+    get: operations["DashboardController_getReceiptIncomeReport30Days"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -332,7 +340,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-21T15:03:22.295Z
+       * @default 2023-10-24T13:07:38.216Z
        */
       created_at: string;
       /** @description Addon status */
@@ -352,7 +360,7 @@ export interface components {
       deleted_at: string | null;
       /**
        * Format: date-time
-       * @default 2023-10-21T15:03:22.295Z
+       * @default 2023-10-24T13:07:38.216Z
        */
       created_at: string;
       /** @description Addon status */
@@ -643,7 +651,7 @@ export interface components {
       /**
        * Format: date-time
        * @description User creation date
-       * @default 2023-10-21T15:03:22.411Z
+       * @default 2023-10-24T13:07:38.335Z
        */
       created_at: string;
       /**
@@ -1404,6 +1412,18 @@ export interface components {
       total_amount: number;
       /** @description Menu total price */
       total_price: number;
+    };
+    dailyIncomeDto: {
+      /** @description Date */
+      date: number;
+      /** @description Daily net income */
+      net_income: number;
+    };
+    DailyReceiptCountDto: {
+      /** @description Date */
+      date: number;
+      /** @description Total receipt count */
+      total_receipt_count: number;
     };
   };
   responses: never;
@@ -2623,6 +2643,44 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SaleReportDto"][];
+        };
+      };
+    };
+  };
+  /** Get income report for 30 days */
+  DashboardController_getNetIncomeReport30Days: {
+    parameters: {
+      query: {
+        /** @description Start Date (UnixTimeStamp in seconds) */
+        startTime: number;
+        /** @description End Date (UnixTimeStamp in seconds) */
+        endTime: number;
+      };
+    };
+    responses: {
+      /** @description Income report for 30 days */
+      200: {
+        content: {
+          "application/json": components["schemas"]["dailyIncomeDto"][];
+        };
+      };
+    };
+  };
+  /** Get income report for 30 days */
+  DashboardController_getReceiptIncomeReport30Days: {
+    parameters: {
+      query: {
+        /** @description Start Date (UnixTimeStamp in seconds) */
+        startTime: number;
+        /** @description End Date (UnixTimeStamp in seconds) */
+        endTime: number;
+      };
+    };
+    responses: {
+      /** @description Income report for 30 days */
+      200: {
+        content: {
+          "application/json": components["schemas"]["DailyReceiptCountDto"][];
         };
       };
     };

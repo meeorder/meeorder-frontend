@@ -133,3 +133,35 @@ export const getReportNetIncomeGrouped = async (
   );
   return data;
 };
+
+//================>>>> Get income report for 30 days <<<<====================================================//
+export type GetIncomeReportFor30DaysQueryParams =
+  paths["/dashboard/income_report_30days"]["get"]["parameters"]["query"];
+export type GetIncomeReportFor30DaysResponse =
+  paths["/dashboard/income_report_30days"]["get"]["responses"]["200"]["content"]["application/json"];
+
+export const getIncomeReportFor30Days = async (
+  params: GetIncomeReportFor30DaysQueryParams,
+): Promise<GetIncomeReportFor30DaysResponse> => {
+  const { data } = await axiosInstance.get<GetIncomeReportFor30DaysResponse>(
+    "/dashboard/income_report_30days",
+    { params },
+  );
+  return data;
+};
+
+//================>>>> Get receipt report for 30 days <<<<====================================================//
+export type GetReceiptReportFor30DaysQueryParams =
+  paths["/dashboard/receipt_report_30days"]["get"]["parameters"]["query"];
+export type GetReceiptReportFor30DaysResponse =
+  paths["/dashboard/receipt_report_30days"]["get"]["responses"]["200"]["content"]["application/json"];
+
+export const getReceiptReportFor30Days = async (
+  params: GetReceiptReportFor30DaysQueryParams,
+): Promise<GetReceiptReportFor30DaysResponse> => {
+  const { data } = await axiosInstance.get<GetReceiptReportFor30DaysResponse>(
+    "/dashboard/receipt_report_30days",
+    { params },
+  );
+  return data;
+};
