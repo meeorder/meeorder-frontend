@@ -1,6 +1,5 @@
 import { type Category } from "@/modules/user/menu/types";
 import styled from "@emotion/styled";
-import { MagnifyingGlass } from "@phosphor-icons/react";
 import { Anchor, Button, ConfigProvider } from "antd";
 
 type CategoryNavProps = {
@@ -10,11 +9,6 @@ type CategoryNavProps = {
 const CategoryNav: React.FC<CategoryNavProps> = ({ categories }) => {
   return (
     <CategoryNavContainer>
-      <StyledButton
-        shape="circle"
-        icon={<MagnifyingGlass width={14} height={14} />}
-      />
-
       <AnchorContainer>
         <ConfigProvider
           theme={{
