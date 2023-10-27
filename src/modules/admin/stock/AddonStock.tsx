@@ -122,8 +122,8 @@ const AddonStock = () => {
     <StyledCard
       title={<div>จัดการท็อปปิ้ง</div>}
       extra={
-        isOwner && (
-          <>
+        <>
+          {isOwner && (
             <CenterContentButton
               type="default"
               style={{ display: "inline-flex", marginRight: "10px" }}
@@ -138,17 +138,17 @@ const AddonStock = () => {
             >
               + เพิ่มท็อปปิ้งใหม่
             </CenterContentButton>
-            <CenterContentButton
-              type="primary"
-              style={{ display: "inline-flex" }}
-              onClick={function () {
-                activateAllAddons();
-              }}
-            >
-              เติมท็อปปิ้งทั้งหมด
-            </CenterContentButton>
-          </>
-        )
+          )}
+          <CenterContentButton
+            type="primary"
+            style={{ display: "inline-flex" }}
+            onClick={function () {
+              activateAllAddons();
+            }}
+          >
+            เติมท็อปปิ้งทั้งหมด
+          </CenterContentButton>
+        </>
       }
     >
       <Table

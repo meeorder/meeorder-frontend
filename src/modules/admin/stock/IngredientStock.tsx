@@ -102,8 +102,8 @@ const IngredientStock = () => {
     <StyledCard
       title={<div>จัดการวัตถุดิบ</div>}
       extra={
-        isOwner && (
-          <>
+        <>
+          {isOwner && (
             <CenterContentButton
               type="default"
               style={{ display: "inline-flex", marginRight: "10px" }}
@@ -118,17 +118,17 @@ const IngredientStock = () => {
             >
               + เพิ่มวัตถุดิบใหม่
             </CenterContentButton>
-            <CenterContentButton
-              type="primary"
-              style={{ display: "inline-flex" }}
-              onClick={function () {
-                activateAllIngredients();
-              }}
-            >
-              เติมวัตถุดิบทั้งหมด
-            </CenterContentButton>
-          </>
-        )
+          )}
+          <CenterContentButton
+            type="primary"
+            style={{ display: "inline-flex" }}
+            onClick={function () {
+              activateAllIngredients();
+            }}
+          >
+            เติมวัตถุดิบทั้งหมด
+          </CenterContentButton>
+        </>
       }
     >
       <Table
