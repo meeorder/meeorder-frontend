@@ -66,26 +66,17 @@ const SignIn = () => {
   return (
     <Container>
       <FormContainer>
-        <LogoContainer>
-          <Logo
-            style={{
-              backgroundImage: `url(${
-                restaurant?.logo ?? "https://picsum.photos/200/306"
-              })`,
-              backgroundSize: "contain",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
-          />
-          <H2
-            style={{
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {restaurant?.name ?? "ชื่อร้านอาหาร"}
-          </H2>
-        </LogoContainer>
+        <Logo
+          style={{
+            backgroundImage: `url(${
+              restaurant?.logo ?? "https://picsum.photos/200/306"
+            })`,
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            marginBottom: "24px",
+          }}
+        />
         <div
           style={{
             alignSelf: "flex-start",
@@ -167,19 +158,8 @@ const Container = styled.div`
     );
 `;
 
-const LogoContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 128px;
-  gap: 12px;
-`;
-
 const Logo = styled.div`
-  height: 48px;
-  width: 48px;
+  height: 128px;
+  width: 128px;
   border-radius: 4px;
-  flex-shrink: 0;
 `;
