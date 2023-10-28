@@ -1,3 +1,4 @@
+import useRestaurantSetting from "@/modules/admin/setting/restaurantManagement/hooks/useRestaurantSetting";
 import { H2, H5 } from "@/modules/common/components/Typography";
 import { useLogin } from "@/modules/common/hooks/useAuth";
 import { useUser } from "@/modules/common/hooks/useUserStore";
@@ -7,7 +8,6 @@ import styled from "@emotion/styled";
 import { LockSimple, User } from "@phosphor-icons/react";
 import { Button, Form, Input, theme } from "antd";
 import { type AxiosError } from "axios";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -22,6 +22,8 @@ const SignIn = () => {
   const router = useRouter();
   const { mutate: login, isLoading, isSuccess, isError, error } = useLogin();
   const { data: user } = useUser();
+  const { data: restaurant } = useRestaurantSetting();
+
   const handleSignIn = (values: FieldType) => {
     login(values);
   };
@@ -64,15 +66,26 @@ const SignIn = () => {
   return (
     <Container>
       <FormContainer>
-        <Image
-          style={{
-            marginBottom: "52px",
-          }}
-          src="/image/logo.png"
-          width={200}
-          height={100}
-          alt="logo"
-        />
+        <LogoContainer>
+          <Logo
+            style={{
+              backgroundImage: `url(${
+                restaurant?.logo ?? "https://picsum.photos/200/306"
+              })`,
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          />
+          <H2
+            style={{
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {restaurant?.name ?? "ชื่อร้านอาหาร"}
+          </H2>
+        </LogoContainer>
         <div
           style={{
             alignSelf: "flex-start",
@@ -152,4 +165,21 @@ const Container = styled.div`
       ${(props) => props.theme.antd.colorPrimaryBorder} -27.67%,
       #fff 18.01%
     );
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 128px;
+  gap: 12px;
+`;
+
+const Logo = styled.div`
+  height: 48px;
+  width: 48px;
+  border-radius: 4px;
+  flex-shrink: 0;
 `;
