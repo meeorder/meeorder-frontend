@@ -1,4 +1,6 @@
 import { type ThemeConfig } from "antd";
+import { Noto_Sans_Thai } from "next/font/google";
+const noto_font = Noto_Sans_Thai({ subsets: ["latin"] });
 
 const customTheme: ThemeConfig = {
   components: {
@@ -7,7 +9,9 @@ const customTheme: ThemeConfig = {
       titleMarginBottom: "0px",
     },
   },
-  token: {},
+  token: {
+    fontFamily: noto_font.style.fontFamily,
+  },
 };
 
 export default customTheme;

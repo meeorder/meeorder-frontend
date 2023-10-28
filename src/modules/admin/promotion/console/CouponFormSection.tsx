@@ -86,6 +86,10 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
         item ? item?._id?.toString() : "",
       ),
     });
+
+    setImageURL(
+      coupon?.image ?? "https://source.unsplash.com/random/?food&plate&11",
+    );
   }, [coupon, form]);
 
   return (

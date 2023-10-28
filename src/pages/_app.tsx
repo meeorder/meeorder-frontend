@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider, theme } from "antd";
 import locale from "antd/locale/th_TH";
 import { type AppType } from "next/dist/shared/lib/utils";
+import { Noto_Sans_Thai } from "next/font/google";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,6 +14,7 @@ export const queryClient = new QueryClient({
     },
   },
 });
+const noto_font = Noto_Sans_Thai({ subsets: ["latin"] });
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const { token } = theme.useToken();
@@ -24,7 +26,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         }}
       >
         <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
+          <main className={noto_font.className}>
+            <Component {...pageProps} />
+          </main>
         </QueryClientProvider>
       </ThemeProvider>
     </ConfigProvider>
