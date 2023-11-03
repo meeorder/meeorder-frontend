@@ -19,6 +19,7 @@ import {
   InputNumber,
   Modal,
   QRCode,
+  Typography,
   theme,
 } from "antd";
 import React, { useEffect, useState } from "react";
@@ -249,15 +250,34 @@ const BillSection = () => {
           setIsQRModalOpen(false);
         }}
         footer={
-          <Button
-            type="primary"
-            icon={<Printer />}
-            onClick={() => {
-              setIsQRModalOpen(false);
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "end",
+              gap: "24px",
+              alignItems: "center",
             }}
           >
-            ปริ๊นใบเสร็จ
-          </Button>
+            <Typography.Text
+              copyable={{
+                tooltips: ["กดเพื่อคัดลอก", "คัดลอกแล้ว!"],
+                text:
+                  window.location.origin +
+                  `?session-id=${table?.session ?? ""}`,
+              }}
+            >
+              url สำหรับสั่งอาหาร
+            </Typography.Text>
+            <CenterContentButton
+              type="primary"
+              icon={<Printer />}
+              onClick={() => {
+                setIsQRModalOpen(false);
+              }}
+            >
+              ปริ๊นใบสั่งอาหาร
+            </CenterContentButton>
+          </div>
         }
       >
         <QRCode
