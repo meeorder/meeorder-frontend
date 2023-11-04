@@ -2,6 +2,8 @@ import useRestaurantSetting from "@/modules/admin/setting/restaurantManagement/h
 import UserAvatar from "@/modules/common/components/UserAvatar";
 import { useClient } from "@/modules/common/hooks/useClient";
 import { useUser } from "@/modules/common/hooks/useUserStore";
+import { pages } from "@/modules/pageConfig";
+import { roleToRoleNumber } from "@/modules/services/users";
 import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
 import { Button, Tag } from "antd";
@@ -51,7 +53,11 @@ const UserTopNav = () => {
         shape="circle"
         onClick={() => {
           if (isClientLoaded && !user) void router.push("/signin");
-          else void router.push("/account");
+          else if ((user?.role || 0) <= roleToRoleNumber["Customer"]) {
+            void router.push("/account");
+          } else {
+            void router.push(pages.accountManagement.path);
+          }
         }}
       >
         <UserAvatar user={user} />

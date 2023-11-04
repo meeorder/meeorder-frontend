@@ -1,6 +1,6 @@
 import { type Category } from "@/modules/user/menu/types";
 import styled from "@emotion/styled";
-import { Anchor, Button, ConfigProvider } from "antd";
+import { Anchor, ConfigProvider } from "antd";
 
 type CategoryNavProps = {
   categories: Category[];
@@ -52,15 +52,6 @@ const CategoryNavContainer = styled.nav`
   align-items: center;
   justify-content: center;
   background-color: ${(props) => props.theme.antd.colorBgBase};
-`;
-
-const StyledButton = styled(Button)`
-  height: 32px;
-  width: 32px;
-  margin: 8px;
-  margin-right: 0;
-  border: none;
-  box-shadow: none;
 `;
 
 const AnchorContainer = styled.div`
