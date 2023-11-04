@@ -4,10 +4,6 @@ import { useSalesReport } from "@/modules/admin/sales/hooks/useSalesReport";
 import { H4 } from "@/modules/common/components/Typography";
 import styled from "@emotion/styled";
 import { Card, ConfigProvider, DatePicker } from "antd";
-import {
-  type DatePickerProps,
-  type RangePickerProps,
-} from "antd/es/date-picker";
 import { useState } from "react";
 
 import locale from "antd/locale/th_TH";
@@ -24,14 +20,6 @@ const AdminSalesReport = () => {
   const [endTime, setEndTime] = useState<number>(dayjs().endOf("day").unix());
   const { data: salesReport } = useSalesReport({ startTime, endTime });
 
-  const onChange = (
-    value: DatePickerProps["value"] | RangePickerProps["value"],
-    dateString: [string, string] | string,
-  ) => {
-    setStartTime(Math.round(new Date(dateString[0]).getTime() / 1000));
-    setEndTime(Math.round(new Date(dateString[1]).getTime() / 1000));
-  };
-
   return (
     <AppLayout layoutType="admin" currentPageId="adminSalesReport">
       <SalesReportContainer
@@ -40,10 +28,22 @@ const AdminSalesReport = () => {
             <H4>ยอดขายแต่ละเมนู</H4>
             <ConfigProvider locale={locale}>
               <RangePicker
-                onChange={onChange}
+                onChange={(range) => {
+                  setStartTime(
+                    Math.round(
+                      range?.[0]?.unix() ?? dayjs().startOf("day").unix(),
+                    ),
+                  );
+                  setEndTime(
+                    Math.round(
+                      range?.[1]?.endOf("day")?.unix() ??
+                        dayjs().endOf("day").unix(),
+                    ),
+                  );
+                }}
                 disabledDate={(current) => current && current > dayjs()}
                 defaultValue={[dayjs().startOf("day"), dayjs().endOf("day")]}
-              ></RangePicker>
+              />
             </ConfigProvider>
           </TitleContainer>
         }
