@@ -13,9 +13,7 @@ const getStartOfDay = () => {
       new Date().getFullYear(),
       new Date().getMonth(),
       new Date().getDate(),
-    ).valueOf() /
-      1000 -
-      25200,
+    ).valueOf() / 1000,
   );
   return startOfDay;
 };

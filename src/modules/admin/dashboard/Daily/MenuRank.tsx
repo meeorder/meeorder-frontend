@@ -21,6 +21,11 @@ const MenuRank = () => {
           return b.total_price - a.total_price;
         }
       })
+      ?.map((item) => ({
+        title: item.menu_title,
+        จำนวนที่ขายได้: item.total_amount,
+        ยอดขาย: item.total_price,
+      }))
       ?.slice(0, 5) || [];
 
   const [key, setKey] = useState(0);
@@ -36,6 +41,8 @@ const MenuRank = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  console.log(processedData);
 
   return (
     <Card
@@ -82,9 +89,7 @@ const MenuRank = () => {
               type: "element-active",
             },
           ]}
-          angleField={
-            option === "จำนวนที่ขายได้" ? "total_amount" : "total_price"
-          }
+          angleField={option}
           colorField="title"
         />
       )}
