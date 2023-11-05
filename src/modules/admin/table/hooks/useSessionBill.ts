@@ -12,7 +12,7 @@ const useGetOrdersByTableId = (tableId: string) => {
     ...useQuery({
       queryKey: ["useOrdersByTableId", tableId],
       queryFn: () => getTableById({ id: tableId }),
-      refetchInterval: 10000,
+      refetchInterval: 1000,
     }),
   };
 };

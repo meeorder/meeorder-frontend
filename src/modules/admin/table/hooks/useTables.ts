@@ -14,7 +14,7 @@ export const useAllTable = () => {
   return useQuery({
     queryKey: ["useAllTable"],
     queryFn: () => getAllTables(),
-    refetchInterval: 5000,
+    refetchInterval: 1000,
   });
 };
 
