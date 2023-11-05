@@ -45,7 +45,9 @@ const CouponFormSectionModal: React.FC<CouponFormSectionModalProps> = ({
   const { mutate: createCoupon } = useCreateCoupon();
   const { mutate: editCoupon } = useUpdateCoupon();
   const { data: coupon } = useCouponById(couponId);
-  const { data: allMenu } = useAllMenu();
+  const { data: allMenu } = useAllMenu({
+    status: "all",
+  });
 
   const menuByCategoryData = GetMenuByCategoryData(allMenu ?? []);
 
