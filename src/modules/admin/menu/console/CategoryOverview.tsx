@@ -28,6 +28,10 @@ export default CategoryOverview;
 const CategoryOverviewCard = styled(Card)`
   width: 100%;
   height: 100%;
+  .ant-table-body {
+    overflow-y: auto !important;
+    height: calc(100vh - 200px);
+  }
   .ant-card-head {
     min-height: 52px;
     border-bottom: 0;

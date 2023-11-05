@@ -172,6 +172,7 @@ const DotStatus = styled.span<{ activated: boolean }>`
 const ScrollAuto = styled.div`
   .ant-table-body {
     overflow-y: auto !important;
+    height: calc(90vh - 240px);
   }
 `;
 

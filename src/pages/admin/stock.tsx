@@ -20,4 +20,8 @@ const MainContainer = styled.div`
   display: flex;
   height: 100%;
   gap: 24px;
+  .ant-table-body {
+    overflow-y: auto !important;
+    height: calc(100vh - 240px);
+  }
 `;
