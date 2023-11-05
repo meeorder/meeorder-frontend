@@ -54,6 +54,8 @@ const Home = () => {
     })
     ?.filter((item) => item?.menus?.length > 0);
 
+  if (allMenu.isLoading) return null;
+
   return (
     <>
       <Head>
