@@ -152,6 +152,7 @@ const CouponLayoutContainer = styled.div`
 const CouponContainer = styled.div`
   text-align: center;
   min-height: calc(100dvh - 128px);
+  overflow: hidden;
   height: 100%;
   padding: 20px;
   padding-top: 180px;

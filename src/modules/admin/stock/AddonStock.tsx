@@ -155,7 +155,7 @@ const AddonStock = () => {
         pagination={false}
         dataSource={dataSource}
         columns={stockAddonColumns}
-        scroll={{ y: "70vh", x: "max-content" }}
+        scroll={{ y: "calc(100vh - 260px)", x: "max-content" }}
         rowKey={(rec) => rec._id}
       />
     </StyledCard>
