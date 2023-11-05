@@ -230,7 +230,7 @@ const MenuList: React.FC<MenuListProps> = ({ saleReportData }) => {
     <MenuListContainer>
       <Table
         pagination={false}
-        scroll={{ y: "76vh" }}
+        scroll={{ y: "calc(100vh - 200px)" }}
         rowKey={"_id"}
         columns={columns}
         dataSource={dataSource}

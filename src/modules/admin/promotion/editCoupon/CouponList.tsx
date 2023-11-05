@@ -144,7 +144,7 @@ const CouponList: React.FC<CouponListProps> = ({
     <ScrollAuto>
       <Table
         pagination={false}
-        scroll={{ y: "76vh" }}
+        scroll={{ y: "calc(100vh - 320px)" }}
         style={{ width: "99%" }}
         rowKey={"_id"}
         dataSource={dataSource}
