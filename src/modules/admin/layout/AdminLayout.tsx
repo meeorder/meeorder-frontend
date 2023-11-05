@@ -1,4 +1,5 @@
 import AdminSideNav from "@/modules/admin/layout/AdminSideNav";
+import { useUser } from "@/modules/common/hooks/useUserStore";
 import WireFrame from "@/modules/mock/components/WireFrame";
 import { type PageId } from "@/modules/pageConfig";
 
@@ -14,6 +15,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   mainNode = <WireFrame contentNode="MainContent" cardColor="red" />,
   currentPageId,
 }) => {
+  const { data: user } = useUser();
   return (
     <Layout
       style={{
@@ -30,7 +32,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             overflow: "auto",
           }}
         >
-          {mainNode}
+          {user && mainNode}
         </Layout.Content>
       </Layout>
     </Layout>

@@ -43,6 +43,7 @@ export const useLogout = (params: UseLogoutParams = {}) => {
     onSuccess: () => {
       localStorage.removeItem("jwt-meeorder");
       void queryClient.clear();
+      void queryClient.removeQueries();
       params.onSuccess?.();
     },
   });
