@@ -26,7 +26,7 @@ const OrderManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [modalData, setModalData] = useState<GetAllOrdersResponse[number]>();
-  const {isClientLoaded} = useClient();
+  const { isClientLoaded } = useClient();
   const [filterStatus] = useFilterStatus((state) => [state.filterStatus]);
   const [filterCategory] = useFilterCategory((state) => [state.filterCategory]);
   const [allOrderSource, setAllOrderSource] = useState<AllOrdersData>();
@@ -39,9 +39,7 @@ const OrderManagement = () => {
       <Container>
         <PageHeader>
           <H1>ออเดอร์ภายในร้าน</H1>
-          <PopOverFilter
-            options={options}
-          />
+          <PopOverFilter options={options} />
         </PageHeader>
         <OrderContainer>
           {allOrderStatus
@@ -118,6 +116,7 @@ const OrderContainer = styled.div`
   display: flex;
   flex: 1;
   gap: 24px;
+  height: 0vh;
 `;
 
 export type OrderStatus = OrdersWithPriceData["orders"][number]["status"];

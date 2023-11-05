@@ -65,9 +65,7 @@ const OrderListCard: React.FC<OrderListCardProps> = ({
           })}
         </ul>
         {order.additional_info && (
-          <StyledAddInfo>
-            Note: {order.additional_info}
-          </StyledAddInfo>
+          <StyledAddInfo>Note: {order.additional_info}</StyledAddInfo>
         )}
         {order.status === "CANCELLED" &&
           order.cancel?.ingredients.length != 0 && (

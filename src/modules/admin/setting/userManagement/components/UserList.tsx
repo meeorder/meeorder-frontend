@@ -360,7 +360,7 @@ const UserList: React.FC<UserListProps> = ({ setIdUserToDelete }) => {
               }}
               content={
                 <ResetPasswordContainer>
-                  <ResetPassworContentContainer>
+                  <ResetPasswordContentContainer>
                     <ResetPasswordIconWrapper>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -388,7 +388,7 @@ const UserList: React.FC<UserListProps> = ({ setIdUserToDelete }) => {
                         รหัสที่ถูกรีเซ็ตเป็นไปตามที่ MeeOrder กำหนด
                       </Text>
                     </ResetPasswordTextContainer>
-                  </ResetPassworContentContainer>
+                  </ResetPasswordContentContainer>
                   <ResetPasswordButtonContainer>
                     <Button onClick={() => setOpenResetPasswordModalId(null)}>
                       ไม่
@@ -427,7 +427,7 @@ const UserList: React.FC<UserListProps> = ({ setIdUserToDelete }) => {
     <UserListContainer>
       <Table
         pagination={false}
-        scroll={{ y: "76vh" }}
+        scroll={{ y: "100vh" }}
         rowKey={"_id"}
         columns={columns}
         dataSource={dataSource}
@@ -441,6 +441,7 @@ export default UserList;
 const UserListContainer = styled.div`
   .ant-table-body {
     overflow-y: auto !important;
+    height: calc(100vh - 240px);
   }
 `;
 
@@ -504,7 +505,7 @@ const ResetPasswordContainer = styled.div`
   gap: 8px;
 `;
 
-const ResetPassworContentContainer = styled.div`
+const ResetPasswordContentContainer = styled.div`
   display: flex;
   gap: 8px;
 `;

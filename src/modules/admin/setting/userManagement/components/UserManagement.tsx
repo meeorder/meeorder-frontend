@@ -22,6 +22,7 @@ export default UserManagement;
 const UserManagementContainer = styled(Card)`
   width: 100%;
   height: 100%;
+  overflow: hidden;
   padding: 20px 24px;
   .ant-card-head {
     min-height: 64px;
