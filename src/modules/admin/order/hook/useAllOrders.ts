@@ -10,6 +10,7 @@ const useAllOrders = () => {
   return useQuery({
     queryKey: ["useAllOrders"],
     queryFn: getAllOrders,
+    refetchInterval: 1000,
   });
 };
 
