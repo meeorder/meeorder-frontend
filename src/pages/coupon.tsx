@@ -7,7 +7,7 @@ import { useUpdateCouponInSession } from "@/modules/user/coupon/hooks/useUpdateC
 import { type Coupon } from "@/modules/user/coupon/types";
 import { useSession } from "@/modules/user/order/hooks/useSession";
 import styled from "@emotion/styled";
-import { Drawer } from "antd";
+import { Button, Drawer } from "antd";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -68,6 +68,25 @@ const Orders = () => {
     }
   };
 
+  const onClickChangeHeadTable = () => {
+    if (!session) return;
+
+    if (!user) {
+      void router.push({
+        pathname: "/signin",
+      });
+      return;
+    }
+
+    const isHeadTable = user?._id === session?.user?._id;
+    if (!isHeadTable) {
+      setDrawerOpen(false);
+      setModalType("changeHeadTable");
+      setModalOpen(true);
+      return;
+    }
+  };
+
   return (
     <CouponLayoutContainer>
       <Head>
@@ -77,6 +96,17 @@ const Orders = () => {
       </Head>
       <CouponHeader />
       <CouponContainer>
+        {user?._id !== session?.user?._id && (
+          <Button
+            type="link"
+            style={{
+              marginBottom: "10px",
+            }}
+            onClick={onClickChangeHeadTable}
+          >
+            คุณยังไม่ได้เป็นหัวโต๊ะ ต้องการเป็นหัวโต๊ะและสะสมแต้มของคุณ?
+          </Button>
+        )}
         <CouponList
           onClickCoupon={onClickCoupon}
           onClickCouponButton={onClickCouponButton}
@@ -120,6 +150,7 @@ const CouponLayoutContainer = styled.div`
 `;
 
 const CouponContainer = styled.div`
+  text-align: center;
   min-height: calc(100dvh - 128px);
   height: 100%;
   padding: 20px;
