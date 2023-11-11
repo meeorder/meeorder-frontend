@@ -1,45 +1,72 @@
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    padding: 0;
+    margin: 0;
+    background-color: rgb(255, 255, 255);
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
+
 
 /* Works on Firefox */
+
 * {
-  scrollbar-width: thin;
-  scrollbar-color: blue orange;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(0, 0, 0, 20%) rgb(0, 0, 0, 10%);
 }
 
+
 /* Works on Chrome, Edge, and Safari */
+
 *::-webkit-scrollbar {
-  width: 12px;
+    width: 10px;
+    border-radius: 10px;
 }
 
 *::-webkit-scrollbar-track {
-  background: orange;
+    background: rgb(0, 0, 0, 10%);
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: blue;
-  border-radius: 20px;
-  border: 3px solid orange;
+    background-color: rgb(0, 0, 0, 20%);
+    border-radius: 10px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: red;
+    background: rgb(0, 0, 0, 30%);
 }
 
 *::-webkit-scrollbar-thumb:active {
-  background-color: darkred;
+    background-color: rgb(0, 0, 0, 40%);
+}
+
+li,
+dl,
+dt,
+dd,
+blockquote,
+figure,
+fieldset,
+legend,
+textarea,
+pre,
+iframe,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding: 0;
 }

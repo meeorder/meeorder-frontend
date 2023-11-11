@@ -2,34 +2,43 @@
   "name": "meeorder-frontend",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "npm": "please-use-yarn",
-    "node": ">= 16.0.0",
-    "yarn": ">= 1.22.19"
-  },
   "scripts": {
+    "gen:types": "npx openapi-typescript https://meeorder.github.io/meeorder-backend/swagger.json -o ./src/schemas/schema.d.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/charts": "^1.4.2",
+    "@dnd-kit/core": "^6.0.8",
+    "@dnd-kit/modifiers": "^6.0.1",
+    "@dnd-kit/sortable": "^7.0.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@phosphor-icons/react": "^2.0.10",
     "@t3-oss/env-nextjs": "^0.3.1",
-    "antd": "^5.7.0",
+    "@tanstack/react-query": "^4.32.0",
+    "antd": "^5.8.0",
+    "axios": "^1.4.0",
+    "js-cookie": "^3.0.5",
+    "moment": "^2.29.4",
     "next": "^13.4.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-highlight-words": "^0.20.0",
+    "sharp": "^0.32.5",
     "zod": "^3.21.4",
     "zustand": "^4.3.9"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^4.29.25",
     "@types/eslint": "^8.37.0",
+    "@types/js-cookie": "^3.0.3",
     "@types/node": "^18.16.0",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
+    "@types/react-highlight-words": "^0.16.5",
     "@typescript-eslint/eslint-plugin": "^5.59.6",
     "@typescript-eslint/parser": "^5.59.6",
     "eslint": "^8.40.0",
@@ -37,6 +46,14 @@
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^3.0.0",
     "typescript": "^5.0.4"
+  },
+  "resolutions": {
+    "@antv/g-base": "0.5.11",
+    "@antv/path-util": "2.0.15"
+  },
+  "overrides": {
+    "@antv/g-base": "0.5.11",
+    "@antv/path-util": "2.0.15"
   },
   "ct3aMetadata": {
     "initVersion": "7.15.0"

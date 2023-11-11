@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  backend:
+    image: ghcr.io/meeorder/meeorder-backend-dev:latest
+    ports:
+      - "4000:80"
+    environment:
+      MONGO_URI: mongodb://database/meeorder
+      NODE_ENV: development
+    links:
+      - "mongo:database"
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
