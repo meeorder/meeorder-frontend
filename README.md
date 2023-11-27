@@ -1,6 +1,11 @@
 # MeeOrder Project
 
-This readme provides an overview of the MeeOrder project, which is a Next.js web application designed to facilitate the management of restaurants and streamline the ordering process for customers. The project focuses on the following key features and functionalities:
+MeeOrder, a Next.js app, simplifies restaurant management with a rich dashboard. Customers enjoy an intuitive interface for effortless ordering.
+
+[See a Demo](https://meeorder-frontend.vercel.app?session-id=65566cc1a9162a10d8bc28e3)
+
+![Startup Pitch Deck (1)](https://github.com/meeorder/meeorder-frontend/assets/90249534/b49b2f46-f952-4e95-9f91-08e7559621d9)
+
 
 ## Getting Started
 
