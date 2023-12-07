@@ -133,5 +133,3 @@ yarn dev
 
 - Customers can view the restaurant's menu without the need for login.
 - Customers can also view coupons offered by the restaurant after login.
-
-This readme provides an overview of the MeeOrder project and instructions for getting started with the application. The project leverages the Next.js framework for web development.
